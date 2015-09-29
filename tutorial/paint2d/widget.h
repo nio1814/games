@@ -3,13 +3,22 @@
 
 #include <QWidget>
 
+#include "helper.h"
+
 class Widget : public QWidget
 {
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = 0);
+    Widget(Helper *helper, QWidget *parent);
     ~Widget();
+public slots:
+    void animate();
+protected:
+    void paintEvent(QPaintEvent *event);
+private:
+    Helper *helper;
+    int elapsed;
 };
 
 #endif // WIDGET_H

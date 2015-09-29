@@ -13,6 +13,11 @@ public:
 signals:
 
 public slots:
+
+public:
+    QBrush background;
+    QBrush circleBrush;
+
 };
 
 #endif // HELPER_H

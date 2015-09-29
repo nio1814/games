@@ -14,7 +14,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         widget.cpp \
-    helper.cpp
+    helper.cpp \
+    window.cpp
 
 HEADERS  += widget.h \
-    helper.h
+    helper.h \
+    window.h
