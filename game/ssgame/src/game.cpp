@@ -5,6 +5,7 @@
 //#include <gl\gl.h>								// Header File For The OpenGL32 Library
 //#include <gl\glu.h>
 //#include <gl\glaux.h>
+#include <GL/glu.h>
 //#include <fmod\fmod.h>
 #include <string.h>
 
@@ -14,31 +15,22 @@
 #include "world.h"
 #include "masking.h"
 #include "screen.h"
-#include "TGA.h"
+//#include "TGA.h"
 #include "keys.h"
-#include "sound.h"
+//#include "sound.h"
 #include "movement.h"
-#include "text.h"
-#include "globalvar.h"
+//#include "text.h"
+//#include "globalvar.h"
 #include "datastructs.h"
 #include "animation.h"
 #include "functions.h"
 //#include "Texture Code.h"
 
-HGLRC           hRC=NULL;							// Permanent Rendering Context
-HDC             hDC=NULL;							// Private GDI Device Context
-HWND            hWnd=NULL;							// Holds Our Window Handle
-HINSTANCE       hInstance;							// Holds The Instance Of The Application
+#include <QTime>
 
-int WindowSizeX = 640;
-int WindowSizeY = 480;
-
-bool	active=TRUE;								// Window Active Flag Set To TRUE By Default
-bool	fullscreen=TRUE;						// Fullscreen Flag Set To Fullscreen Mode By Default
-
-DWORD cTime, lTime;
 GLfloat fps;
 GLfloat MAXDELTA = .003f;
+GLfloat THROTTLE = 1;
 
 game_c game;
 
@@ -68,10 +60,10 @@ level_c level1c(1);
 level_c level0c(0);
 int curLevelNum;
 
-joystick_s *joystick;
+//joystick_s *joystick;
 pointerTree debug;
 
-struct			 							// Create A Structure For The Timer Information
+/*struct			 							// Create A Structure For The Timer Information
 {
   __int64       frequency;							// Timer Frequency
   float         resolution;							// Timer Resolution
@@ -81,71 +73,15 @@ struct			 							// Create A Structure For The Timer Information
   __int64       performance_timer_start;					// Performance Timer Start Value
   __int64       performance_timer_elapsed;					// Performance Timer Elapsed Time
 } timer;									// Structure Is Named timer
-
+*/
 int		steps[6]={ 1, 2, 4, 5, 10, 20 };				// Stepping Values For Slow Video Adjustment
 
 
-LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);				// Declaration For WndProc
 float CalculateFrameRate();
 void doLevel();
 void setupObjects();
 void updateObjects();
 void gamepadlogic();
-
-
-GLvoid ReSizeGLScene(GLsizei width, GLsizei height)				// Resize And Initialize The GL Window
-{
-	if (height==0)								// Prevent A Divide By Zero By
-	{
-		height=1;							// Making Height Equal One
-	}
-
-	glViewport(0, 0, width, height);					// Reset The Current Viewport
-
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();							// Reset The Projection Matrix
-
-	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
-
-	glMatrixMode(GL_MODELVIEW);						// Select The Modelview Matrix
-	glLoadIdentity();							// Reset The Modelview Matrix
-}
-
-
-int InitGL(GLvoid)								// All Setup For OpenGL Goes Here
-{
-
-	doLevel();
-	setupObjects();
-	
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);			// Enable Alpha Blending (disable alpha testing)
-	glEnable(GL_BLEND);							// Enable Blending       (disable alpha testing)
-
-	//glAlphaFunc(GL_GREATER,0.0f);						// Set Alpha Testing     (disable blending)
-	//glEnable(GL_ALPHA_TEST);						// Enable Alpha Testing  (disable blending)
-
-	glEnable(GL_TEXTURE_2D);
-	glShadeModel(GL_SMOOTH);						// Enables Smooth Shading
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);					// Black Background
-	glClearDepth(1.0f);							// Depth Buffer Setup
-	glEnable(GL_DEPTH_TEST);						// Enables Depth Testing
-	glDepthFunc(GL_LEQUAL);							// The Type Of Depth Test To Do
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Really Nice Perspective Calculations
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);			// Position The Light
-
-	glEnable(GL_LIGHT1);							// Enable Light One
-
-	LoadGLTextures(fontTexture, "Data/font.bmp");
-    BuildFont(&hDC);						// Build The Font
-	initScreen();
-	light = true;
-	
-	return TRUE;								// Initialization Went OK
-}
 
 void doLevel()
 {
@@ -169,7 +105,7 @@ void doLevel()
 	makeLevel(*nowLevel);
 	nowLevel->cameras->cpoints[0].followDist = 15.0f;
 	
-	joystick = new joystick_s;
+//	joystick = new joystick_s;
 
 	//set debug parameters
 	debug.addLeaf(NULL, tpBOOL, "Movement");
@@ -256,7 +192,7 @@ void setupObjects()
 	
 	//"Data/img/nonAnimated/ball.tga"
 	//LoadGLTextures(ball.texture, ball.picFile);
-	TGA_Texture(ball->texture, "Data/img/objects/ball.tga" , 0);
+//	TGA_Texture(ball->texture, "Data/img/objects/ball.tga" , 0);
 	//TGA_Texture(shot.texture, shot.picFile , 0);
 	//TGA_Texture(mShot->texture, mShot->picFile , 0);
 	//TGA_Texture(mShot->texture, "Data/img/characters/mmx/mmxShot1.tga" , 0);
@@ -324,13 +260,18 @@ void runObjects()
 	GLfloat delta;
 	static GLfloat lastNonZeroDelta = MAXDELTA;		//used in case delta = 0
 	int numOfIterations = 1;
+    QTime time;
+    GLfloat cTime = time.msecsSinceStartOfDay();
+    GLfloat lTime = cTime;
+
 
 	delta = CalculateFrameRate();
 
 	//find time inbetween runs
 	if(nowLevel->levelStarted)
 	{
-		cTime = GetTickCount();
+//		cTime = GetTickCount();
+        cTime = time.msecsSinceStartOfDay();
 		delta = (cTime - lTime) / 1000.0f;
 		
 		if(delta == 0.0f)
@@ -347,12 +288,13 @@ void runObjects()
 	else
 	{
 		delta = 0;
-		cTime = lTime = GetTickCount();
+//		cTime = lTime = GetTickCount();
+        cTime = lTime = time.msecsSinceStartOfDay();
 	}
 
 	nowLevel->run(delta*THROTTLE, numOfIterations);
 	//nowLevel->run(.002);
-	runKeys(nowLevel, joystick, &debug);
+//	runKeys(nowLevel, joysOpetick, &debug);
 	
 	return;
 }
@@ -362,7 +304,7 @@ void initSound()
 {
 	int musicChannel = 0;
 	
-	FSOUND_SetOutput(FSOUND_OUTPUT_DSOUND);
+    /*FSOUND_SetOutput(FSOUND_OUTPUT_DSOUND);
 	FSOUND_Init(44100, 16, FSOUND_INIT_GLOBALFOCUS);
 
 	doSounds();
@@ -373,14 +315,16 @@ void initSound()
 	
 	//revcrash = FSOUND_Sample_Load(FSOUND_FREE , "Data/revcrash.wav", 0x00002000, 0, 0);
 	//FSOUND_Sample_SetMode(revcrash, FSOUND_2D);
-	
+    */
 	return;
 }
 
-int DrawGLScene(GLvoid)								// Here's Where We Do All The Drawing
+int DrawGLScene()								// Here's Where We Do All The Drawing
 {
+    QTime clock;
 	static GLfloat lastTime = 0.0f;
-	GLfloat thisTime = GetTickCount();
+//	GLfloat thisTime = GetTickCount();
+    GLfloat thisTime = clock.msecsSinceStartOfDay();
 	bool longEnough = (thisTime - lastTime) > 100.0f;
 	static bool hasDied = false;
 		
@@ -400,7 +344,8 @@ int DrawGLScene(GLvoid)								// Here's Where We Do All The Drawing
 		
 		runObjects();
 		
-		lastTime = GetTickCount();
+//		lastTime = GetTickCount();
+        lastTime = clock.msecsSinceStartOfDay();
 	}
 	
 	if(player->health == 0.0f)
@@ -408,21 +353,21 @@ int DrawGLScene(GLvoid)								// Here's Where We Do All The Drawing
 		player->active = false;
 		if(!hasDied)
 		{
-			setMusic(sngGameOver);
-			FSOUND_PlaySound(FSOUND_FREE, revcrash);
+//			setMusic(sngGameOver);
+//			FSOUND_PlaySound(FSOUND_FREE, revcrash);
 			//FSOUND_SetVolume(FSOUND_ALL, 200);
 		}
 			
 		hasDied = true;
-		glPrint(200,240,"Game Over. Press Esc to end.",1);
-		glPrint(200,210,"Press 'R' to restart.",1);
+//		glPrint(200,240,"Game Over. Press Esc to end.",1);
+//		glPrint(200,210,"Press 'R' to restart.",1);
 		if(isKeys('R') && hasDied)
 		{
 				/*xMov[PLAYER1] = player->pos.x = player->posOld.x = currentLevel->playerStartX;
 				yMov[PLAYER1] = player->pos.y = player->posOld.y = currentLevel->playerStartY;*/
 			player->active = true;
 			player->health = 1.0f;
-			setMusic(sngN);
+//			setMusic(sngN);
 			hasDied = false;
 		}
 	}
@@ -539,12 +484,12 @@ int DrawGLScene(GLvoid)								// Here's Where We Do All The Drawing
 	glEnd();*/
 
 	// tried replacing in world.cpp
-	if(cameraMode)
+/*	if(cameraMode)
 		glPrint(3,4,"Camera Mode",1);
 	else if(debugMode)
 	{
 		glPrint(3,20,"Debug Mode",1);
-	}
+    }*/
 		
 	printScreen(player->health);
 
@@ -566,10 +511,10 @@ int DrawGLScene(GLvoid)								// Here's Where We Do All The Drawing
 			xrot -= .1f;
 	}
 
-	return TRUE;								// Everything Went OK
+    return true;								// Everything Went OK
 }
 
-GLvoid KillGLWindow(GLvoid)							// Properly Kill The Window
+/*GLvoid KillGLWindow()							// Properly Kill The Window
 {
 	if (fullscreen)								// Are We In Fullscreen Mode?
 	{
@@ -925,11 +870,11 @@ int WINAPI WinMain(	HINSTANCE	hInstance,				// Instance
 	MSG	msg;								// Windows Message Structure
 	BOOL	done=FALSE;							// Bool Variable To Exit Loop
 
-	/*// Ask The User Which Screen Mode They Prefer
+    // Ask The User Which Screen Mode They Prefer
 	if (MessageBox(NULL,"Would You Like To Run In Fullscreen Mode?", "Start FullScreen?",MB_YESNO|MB_ICONQUESTION)==IDNO)
 	{
 		fullscreen=FALSE;						// Windowed Mode
-	}*/
+    }
 
 	fullscreen = false;
 
@@ -986,7 +931,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,				// Instance
 	// Shutdown
 	KillGLWindow();								    // Kill The Window
 	return (msg.wParam);							// Exit The Program
-}
+}*/
 
 
 float CalculateFrameRate()
@@ -1001,10 +946,12 @@ float CalculateFrameRate()
     static float currentTime		= 0.0f;
     static float lastTime			= 0.0f;							// This will hold the time from the last frame						
 	static char strFrameRate[50] = {0};								// We will store the string here for the window title
+    QTime clock;
 
 	// Here we get the current tick count and multiply it by 0.001 to convert it from milliseconds to seconds.
 	// GetTickCount() returns milliseconds (1000 ms = 1 second) so we want something more intuitive to work with.
-    currentTime = GetTickCount() * 0.001f;				
+//    currentTime = GetTickCount() * 0.001f;
+    currentTime = clock.msecsSinceStartOfDay() * 0.001f;
 
 	// Increase the frame counter
     ++framesPerSecond;
@@ -1022,14 +969,14 @@ float CalculateFrameRate()
 		sprintf(strFrameRate, "Current Frames Per Second: %d", int(framesPerSecond));
 
 		// Set the window title bar to our string
-		SetWindowText(hWnd, strFrameRate);
+//		SetWindowText(hWnd, strFrameRate);
 
 		// Reset the frames per second
         framesPerSecond = 0;
 
 		// Here we set the lastTime to the currentTime.  This will be used as the starting point for the next second.
 		// This is because GetTickCount() counts up, so we need to create a delta that subtract the current time from.
-	    lastTime = GetTickCount() * 0.001f;;
+        lastTime = clock.msecsSinceStartOfDay() * 0.001f;;
     }
     
     fps = framesPerSecond;

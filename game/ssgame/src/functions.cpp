@@ -1,7 +1,14 @@
+#include<qglobal.h>
+
+#ifdef Q_OS_WIN32
 #include <windows.h>		// Header File For Windows
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>
+#elif defined(Q_OS_LINUX)
+#include <GL/gl.h>
+#endif
+
 #include <math.h>
 
 #include "functions.h"

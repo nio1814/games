@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include <string.h>
-#include "globalvar.h"
 
 using namespace std;
 
 #define MAXLEAF 20
+enum dataType{tpOBJECT, tpMASS, tpSHAPE, tpTEXTURE, tpBOOL, tpVECTOR3D, tpVECTOR2D, tpOBJP, tpFLOAT, tpINT};
 
 template < class T >
 class NodeClass;

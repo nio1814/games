@@ -13,6 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        openglwindow.cpp
+        openglwindow.cpp \
+    trianglewindow.cpp
 
-HEADERS  += openglwindow.h
+HEADERS  += openglwindow.h \
+    trianglewindow.h

@@ -1,3 +1,6 @@
+#include<qglobal.h>
+
+#ifdef Q_OS_WIN32
 #include	<windows.h>							// Header File For Windows
 #include	<stdio.h>							// Header File For Standard Input/Output ( ADD )
 #include	<gl\gl.h>							// Header File For The OpenGL32 Library
@@ -118,7 +121,6 @@ int LoadGLTextures()								// Load Bitmaps And Convert To Textures
 }
 */
 
-
 //KEYS
 void runKeys(bool keyStatus[])
 {
@@ -189,3 +191,4 @@ void runKeys(bool keyStatus[])
 
 	return;
 }
+#endif

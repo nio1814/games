@@ -1,9 +1,15 @@
+#include<qglobal.h>
+
+#ifdef Q_OS_WIN32
 #include <windows.h>								// Header File For Windows
 #include <gl\gl.h>								// Header File For The OpenGL32 Library
 #include <gl\glu.h>
+#elif defined(Q_OS_LINUX)
+#include <GL/gl.h>
+#endif
 
 #include "screen.h"
-#include "TGA.h"
+//#include "TGA.h"
 #include "masking.h"
 
 GLuint healthTexture[1];

@@ -36,7 +36,7 @@ bool isBtns(const int btnIn);
 bool isHeldBtn(const int btnIn);
 bool canToggleBtn(const int btnIn);
 
-void runKeys(level_c* lvl, joystick_s *joy, pointerTree* tP);
+//void runKeys(level_c* lvl, joystick_s *joy, pointerTree* tP);
 int getKey(playerNum numPlayer, actions act);
 void getKeys(playerNum numPlayer, int pKeys[]);
 void getBtns(playerNum numPlayer, int pBtns[]);

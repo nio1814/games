@@ -1,12 +1,12 @@
-#include <windows.h>
+//#include <windows.h>
 #include <stdarg.h>						// Header File For Variable Argument Routines	( ADD )
-#include <gl\gl.h>							// Header File For The OpenGL32 Library
-#include <gl\glu.h>
+//#include <gl\gl.h>							// Header File For The OpenGL32 Library
+//#include <gl\glu.h>
 
 #include <Vector3d.h>
 
 #include "objects.h"
-#include "text.h"
+//#include "text.h"
 #include "masking.h"
 #include "functions.h"
 #include "math.h"

@@ -11,9 +11,11 @@
 
 #include "animation.h"
 #include "objects.h"
-#include "TGA.h"
+//#include "TGA.h"
 #include "masking.h"
 #include "movement.h"
+
+#include "QTime"
 
 extern int DEFRUNFRAMESPD = 17;
 
@@ -249,7 +251,7 @@ void doTextures()
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot2.tga", 22);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot3.tga", 23);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot4.tga", 24);
-	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot5.tga", 25);
+    TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot5.tga", 25);*/
 
 	playerTextures[MMX]->frameData[actRUNATK][animSTART] = 25;
 	playerTextures[MMX]->frameData[actRUNATK][numFRAMES] = 1;
@@ -259,20 +261,20 @@ void doTextures()
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot2.tga", 28);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot3.tga", 29);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot4.tga", 30);
-	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot5.tga", 31);
+    TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot5.tga", 31);*/
 
 	playerTextures[MMX]->frameData[actWALL][animSTART] = 32;
 	playerTextures[MMX]->frameData[actWALL][numFRAMES] = 1;
 	playerTextures[MMX]->frameData[actWALL][lastFRAME] = 32;
 	playerTextures[MMX]->canWallClimb = true;
-	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxWall1.tga", 32);
+//	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxWall1.tga", 32);
 
 	playerTextures[MMX]->frameData[actHURT][animSTART] = 33;
 	playerTextures[MMX]->frameData[actHURT][numFRAMES] = 3;
 	playerTextures[MMX]->frameData[actHURT][minstopFRAME] = 35;
 	/*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt1.tga", 33);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt2.tga", 34);
-	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt3.tga", 35);
+    TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt3.tga", 35);*/
 
 	playerTextures[MMX]->lastFrame = 35;
 
@@ -307,7 +309,7 @@ void doTextures()
 	playerTextures[SPIDEY]->frameData[actJUMP][repeatFRAME] = 16;
 	playerTextures[SPIDEY]->frameData[actJUMP][animSPEED] = 90;
 	playerTextures[SPIDEY]->jumpStrength = 1.8f;
-	/*TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump1.tga", 10);
+/*	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump1.tga", 10);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump2.tga", 11);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump3.tga", 12);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump4.tga", 13);
@@ -315,18 +317,18 @@ void doTextures()
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump6.tga", 15);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump7.tga", 16);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump8.tga", 17);
-	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump9.tga", 18);
+    TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyJump9.tga", 18);*/
 
 	playerTextures[SPIDEY]->frameData[actATTACK1][animSTART] = 19;
 	playerTextures[SPIDEY]->frameData[actATTACK1][numFRAMES] = 7;
 	playerTextures[SPIDEY]->frameData[actATTACK1][animSPEED] = 130;
 	playerTextures[SPIDEY]->frameData[actATTACK1][minstopFRAME] = 25;
-	/*TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk1.tga", 19, 0.68f);
+    /*TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk1.tga", 19, 0.68f);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk2.tga", 20, 0.5625f);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk3.tga", 21, 0.301470f);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk4.tga", 22, 0.290322f);
 	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk5.tga", 23, 0.42857f);
-	TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk6.tga", 24, 0.276315f);*/
+    TGA_Texture(playerTextures[SPIDEY], "Data/img/characters/spidey/spideyAtk6.tga", 24, 0.276315f);*/
 
 	playerTextures[SPIDEY]->lastFrame = 25;
 
@@ -339,7 +341,7 @@ void doTextures()
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tails5.tga", 4);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tails6.tga", 5);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tails7.tga", 6);
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tails8.tga", 7);*/
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tails8.tga", 7);*/
 	
 	playerTextures[TAILS]->frameData[actATTACK1][animSTART] = 8;
 	playerTextures[TAILS]->frameData[actATTACK1][numFRAMES] = 9;
@@ -353,7 +355,7 @@ void doTextures()
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsAtk6.tga", 13);playerTextures[TAILS]->centers[13] = 0.2666666f;
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsAtk7.tga", 14);playerTextures[TAILS]->centers[14] = 0.2666666f;
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsAtk8.tga", 15);playerTextures[TAILS]->centers[15] = 0.2666666f;
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsAtk9.tga", 16);playerTextures[TAILS]->centers[16] = 0.65625f;*/
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsAtk9.tga", 16);playerTextures[TAILS]->centers[16] = 0.65625f;*/
 
 	playerTextures[TAILS]->frameData[actJUMP][animSTART] = 17;
 	playerTextures[TAILS]->frameData[actJUMP][numFRAMES] = 8;
@@ -365,13 +367,13 @@ void doTextures()
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsJumpAtk5.tga", 21);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsJumpAtk6.tga", 22);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsJumpAtk7.tga", 23);
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsJumpAtk8.tga", 24);*/
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsJumpAtk8.tga", 24);*/
 
 	playerTextures[TAILS]->frameData[actDUCK][animSTART] = 25;
 	playerTextures[TAILS]->frameData[actDUCK][numFRAMES] = 3;
 	/*TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsDuck1.tga", 25);playerTextures[TAILS]->centers[25] = 0.71875f;
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsDuck2.tga", 26);playerTextures[TAILS]->centers[26] = 0.67567f;
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsDuck3.tga", 27);playerTextures[TAILS]->centers[27] = 0.69767f;*/
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsDuck3.tga", 27);playerTextures[TAILS]->centers[27] = 0.69767f;*/
 
 	playerTextures[TAILS]->frameData[actRUN][animSTART] = 28;
 	playerTextures[TAILS]->frameData[actRUN][numFRAMES] = 22;
@@ -398,7 +400,7 @@ void doTextures()
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsRun19.tga", 46);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsRun20.tga", 47);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsRun21.tga", 48);
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsRun22.tga", 49);
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsRun22.tga", 49);*/
 
 	playerTextures[TAILS]->frameData[actPUSH][animSTART] = 50;
 	playerTextures[TAILS]->frameData[actPUSH][numFRAMES] = 8;
@@ -410,7 +412,7 @@ void doTextures()
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsPush5.tga", 54);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsPush6.tga", 55);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsPush7.tga", 56);
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsPush8.tga", 57);
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsPush8.tga", 57);*/
 
 	playerTextures[TAILS]->frameData[actHURT][animSTART] = 58;
 	playerTextures[TAILS]->frameData[actHURT][numFRAMES] = 5;
@@ -419,7 +421,7 @@ void doTextures()
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsHurt2.tga", 59, 0.6842105263f);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsHurt3.tga", 60, 0.62857142f);
 	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsHurt4.tga", 61, 0.60606060f);
-	TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsHurt5.tga", 62, 0.56666666f);*/
+    TGA_Texture(playerTextures[TAILS], "Data/img/characters/tails/tailsHurt5.tga", 62, 0.56666666f);*/
 
 	playerTextures[TAILS]->lastFrame = 52;
 
@@ -434,13 +436,13 @@ void doTextures()
 	TGA_Texture(&tailsT, "Data/img/characters/tails/tail/tail5.tga", 4);
 	TGA_Texture(&tailsT, "Data/img/characters/tails/tail/tail6.tga", 5);
 	TGA_Texture(&tailsT, "Data/img/characters/tails/tail/tail7.tga", 6);
-	TGA_Texture(&tailsT, "Data/img/characters/tails/tail/tail8.tga", 7);*/
+    TGA_Texture(&tailsT, "Data/img/characters/tails/tail/tail8.tga", 7);*/
 
 	tailsT.lastFrame = 7;
 
 	//SONIC
 	playerTextures[SONIC]->person = SONIC;
-	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonic.tga", 0);
+//	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonic.tga", 0);
 
 	playerTextures[SONIC]->frameData[actRUN][animSTART] = 1;
 	playerTextures[SONIC]->frameData[actRUN][numFRAMES] = 11;
@@ -457,7 +459,7 @@ void doTextures()
 	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicRun8.tga", 8);
 	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicRun9.tga", 9);
 	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicRun10.tga", 10);
-	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicRun11.tga", 11);*/
+    TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicRun11.tga", 11);*/
 
 	playerTextures[SONIC]->frameData[actJUMP][animSTART] = 12;
 	playerTextures[SONIC]->frameData[actJUMP][numFRAMES] = 5;
@@ -479,7 +481,7 @@ void doTextures()
 	playerTextures[SONIC]->frameData[actHURT][numFRAMES] = 2;
 	playerTextures[SONIC]->frameData[actHURT][minstopFRAME] = 20;
 	/*TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicHurt1.tga", 19);
-	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicHurt2.tga", 20);*/
+    TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicHurt2.tga", 20);*/
 
 	playerTextures[SONIC]->frameData[actPUSH][animSTART] = 21;
 	playerTextures[SONIC]->frameData[actPUSH][numFRAMES] = 1;
@@ -487,13 +489,13 @@ void doTextures()
 	/*TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicPush1.tga", 21);
 	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicPush2.tga", 22);
 	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicPush3.tga", 23);
-	TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicPush4.tga", 24);*/
+    TGA_Texture(playerTextures[SONIC], "Data/img/characters/sonic/sonicPush4.tga", 24);*/
 
 	playerTextures[SONIC]->lastFrame = 24;
 	
 	//PETER
 	playerTextures[PETER]->person = PETER;
-	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peter3.tga", 0);
+//	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peter3.tga", 0);
 	
 	playerTextures[PETER]->frameData[actRUN][animSTART] = 1;
 	playerTextures[PETER]->frameData[actRUN][numFRAMES] = 9;
@@ -522,15 +524,15 @@ void doTextures()
 	
 	playerTextures[PETER]->frameData[actWALL][animSTART] = 17;
 	playerTextures[PETER]->frameData[actWALL][numFRAMES] = 1;
-	playerTextures[PETER]->canWallClimb = true;
-	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterWall.tga", 17);
+    playerTextures[PETER]->canWallClimb = true;
+//	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterWall.tga", 17);
 	
 	playerTextures[PETER]->frameData[actHURT][animSTART] = 18;
 	playerTextures[PETER]->frameData[actHURT][numFRAMES] = 4;
-	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterMatrix1.tga", 18);
+	/*TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterMatrix1.tga", 18);
 	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterMatrix2.tga", 19);
 	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterMatrix3.tga", 20);
-	TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterMatrix4.tga", 21);
+    TGA_Texture(playerTextures[PETER], "Data/img/characters/peter/peterMatrix4.tga", 21);*/
 	
 	playerTextures[PETER]->frameData[actDUCK][animSTART] = 22;
 	playerTextures[PETER]->frameData[actDUCK][numFRAMES] = 4;
@@ -560,12 +562,12 @@ void doTextures()
 	playerTextures[GOOMBA]->frameData[actRUN][repeatFRAME] = 1;
 	playerTextures[GOOMBA]->frameData[actRUN][animSPEED] = 50;
 	playerTextures[GOOMBA]->maxSpeed = 2.0f;
-	TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba2.tga", 1);
-	TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba1.tga", 2);
+	/*TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba2.tga", 1);
+    TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba1.tga", 2);*/
 	
 	//DONKEY KONG
 	playerTextures[DK]->person = DK;
-	TGA_Texture(playerTextures[DK], "Data/img/characters/DK/dk.tga", 0);
+//	TGA_Texture(playerTextures[DK], "Data/img/characters/DK/dk.tga", 0);
 	
 	playerTextures[DK]->frameData[actRUN][animSTART] = 1;
 	playerTextures[DK]->frameData[actRUN][numFRAMES] = 14;
@@ -642,7 +644,7 @@ void doTextures()
 	
 	//NES MARIO
 	playerTextures[MARIONES]->person = MARIONES;
-	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/mario.tga", 0);
+//	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/mario.tga", 0);
 	
 	playerTextures[MARIONES]->frameData[actRUN][animSTART] = 1;
 	playerTextures[MARIONES]->frameData[actRUN][numFRAMES] = 2;
@@ -650,20 +652,20 @@ void doTextures()
 	playerTextures[MARIONES]->frameData[actRUN][animSPEED] = 20;
 	playerTextures[MARIONES]->maxSpeed = 5.3f;
 	/*TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioRun1.tga", 1);
-	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioRun2.tga", 2);
+	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioRun2.tga", 2);*/
 	
 	playerTextures[MARIONES]->frameData[actJUMP][animSTART] = 3;
 	playerTextures[MARIONES]->frameData[actJUMP][numFRAMES] = 1;
 	playerTextures[MARIONES]->frameData[actJUMP][repeatFRAME] = 3;
-	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioJump1.tga", 3);
+//	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioJump1.tga", 3);
 	
 	playerTextures[MARIONES]->frameData[actDUCK][animSTART] = 4;
 	playerTextures[MARIONES]->frameData[actDUCK][numFRAMES] = 1;
-	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioDuck.tga", 4);
+//	TGA_Texture(playerTextures[MARIONES], "Data/img/characters/mario1/marioDuck.tga", 4);
 
 	//CAPE MARIO
 	playerTextures[CAPEMARIO]->person = CAPEMARIO;
-	TGA_Texture(playerTextures[CAPEMARIO], "Data/img/characters/cmario/mariow.tga", 0);
+//	TGA_Texture(playerTextures[CAPEMARIO], "Data/img/characters/cmario/mariow.tga", 0);
 	
 	playerTextures[CAPEMARIO]->frameData[actRUN][animSTART] = 1;
 	playerTextures[CAPEMARIO]->frameData[actRUN][numFRAMES] = 8;
@@ -770,7 +772,7 @@ void doTextures()
 	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloRun2.tga", 6);playerTextures[MICHAELANGELO]->centers[6] = 0.26666f;
 	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloRun3.tga", 7);playerTextures[MICHAELANGELO]->centers[7] = 0.32352f;
 	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloRun4.tga", 8);playerTextures[MICHAELANGELO]->centers[8] = 0.26666f;
-	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloRun5.tga", 9);playerTextures[MICHAELANGELO]->centers[9] = 0.29268f;*/
+    TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloRun5.tga", 9);playerTextures[MICHAELANGELO]->centers[9] = 0.29268f;*/
 
 	playerTextures[MICHAELANGELO]->frameData[actATTACK1][animSTART] = 10;
 	playerTextures[MICHAELANGELO]->frameData[actATTACK1][numFRAMES] = 4;
@@ -779,7 +781,7 @@ void doTextures()
 	/*TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloAtk1.tga", 10);playerTextures[MICHAELANGELO]->centers[10] = 0.450980f;
 	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloAtk2.tga", 11);playerTextures[MICHAELANGELO]->centers[11] = 0.2417582f;
 	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloAtk3.tga", 12);playerTextures[MICHAELANGELO]->centers[12] = 0.253521f;
-	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloAtk4.tga", 13);playerTextures[MICHAELANGELO]->centers[13] = 0.4736842f;
+	TGA_Texture(playerTextures[MICHAELANGELO], "Data/img/characters/michaelangelo/michaelangeloAtk4.tga", 13);playerTextures[MICHAELANGELO]->centers[13] = 0.4736842f;*/
 
 	playerTextures[MICHAELANGELO]->frameData[actJUMPATK][animSTART] = 15;
 	playerTextures[MICHAELANGELO]->frameData[actJUMPATK][numFRAMES] = 4;
@@ -808,7 +810,7 @@ void doTextures()
 
 	//LIU KANG
 	playerTextures[LIUKANG]->person = LIUKANG;
-	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lk1.tga", 0);
+//	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lk1.tga", 0);
 	
 	playerTextures[LIUKANG]->frameData[actRUN][animSTART] = 1;
 	playerTextures[LIUKANG]->frameData[actRUN][numFRAMES] = 8;
@@ -821,7 +823,7 @@ void doTextures()
 	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkWalk5.tga", 5);
 	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkWalk6.tga", 6);
 	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkWalk7.tga", 7);
-	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkWalk8.tga", 8);*/
+    TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkWalk8.tga", 8);*/
 
 	playerTextures[LIUKANG]->frameData[actJUMP][animSTART] = 9;
 	playerTextures[LIUKANG]->frameData[actJUMP][numFRAMES] = 4;
@@ -833,11 +835,11 @@ void doTextures()
 
 	playerTextures[LIUKANG]->frameData[actDUCK][animSTART] = 13;
 	playerTextures[LIUKANG]->frameData[actDUCK][numFRAMES] = 5;
-	/*TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck1.tga", 13);
+    /*TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck1.tga", 13);
 	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck2.tga", 14);
 	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck3.tga", 15);
 	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck4.tga", 16);
-	TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck5.tga", 17);*/
+    TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck5.tga", 17);*/
 	
 	objectTextures[BLOCK1]->blk = BLOCK1;
 	LoadGLTextures(objectTextures[BLOCK1], "Data/Gesture.bmp", 0);
@@ -923,6 +925,7 @@ bool sendAnimation(object_c &obj, actions act, GLfloat dt)
 
 	return didAnimation;
 }
+
 bool animate(object_c &obj, actions act, const animData_s *animData, GLfloat dt)
 {
 	int frame;
@@ -931,7 +934,9 @@ bool animate(object_c &obj, actions act, const animData_s *animData, GLfloat dt)
 
 	bool didAnimation = true;
 	
-	GLfloat currentTime = GetTickCount();
+//	GLfloat currentTime = GetTickCount();
+    QTime time;
+    time.msecsSinceStartOfDay();
 
 	switch(act)
 	{

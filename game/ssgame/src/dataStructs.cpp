@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include "dataStructs.h"
-#include "vector3D.h"
+#include "vector3d.h"
 #include "mass.h"
 #include "objects.h"
 using namespace std;

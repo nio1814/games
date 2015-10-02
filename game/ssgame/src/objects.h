@@ -1,13 +1,20 @@
 #ifndef OBJECTS
 #define OBJECTS
 
+#include "qglobal.h"
+
+#ifdef Q_OS_LINUX
+#include <GL/gl.h>
+#elif Q_OS_WIN32
 //#include <windows.h>
 #include <stdarg.h>						// Header File For Variable Argument Routines	( ADD )
-//#include <gl\gl.h>						// Header File For The OpenGL32 Library
-//#include <gl\glu.h>
+#include <gl\gl.h>						// Header File For The OpenGL32 Library
+#include <gl\glu.h>
+#endif
+
 
 #include <vector3d.h>
-#include "text.h"
+//#include "text.h"
 
 enum touch{LSIDE, BSIDE, RSIDE, TSIDE};
 enum type{tpPLAYER, tpGROUND, tpENEMY, tpOBJ, tpSHOT, tpWATER, tpBACKGROUND, tpMOVGROUND};

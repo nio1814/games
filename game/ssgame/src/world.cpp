@@ -1,13 +1,20 @@
 #include <vector3d.h>
 
+
 #include "world.h"
 #include "movement.h"
 #include "objects.h"
 #include "masking.h"
-#include "TGA.h"
+//#include "TGA.h"
 #include "math.h"
-#include "text.h"
+//#include "text.h"
 #include "camera.h"
+#include "tga.h"
+
+#include <QTime>
+
+#include <string.h>
+#include <stdio.h>
 
 object_c *level1[9];
 GLuint gestureBlockTexture[1];
@@ -36,6 +43,7 @@ void makeLevel(level_s &level)
 	TGA_Texture(waterbTexture, "Data/img/waterb2.tga", 0);
 	LoadGLTextures(desertTexture, "Data/img/background/desert.bmp");
 	LoadGLTextures(underworldTexture, "Data/img/ground/marioUnderground.bmp");
+
 
 	switch(level.levelNum)
 	{
@@ -345,7 +353,7 @@ level_c::level_c()
 	lvlObjects = new object_c[MAXOBJECTS];
 	players = new object_c[MAXPLAYERS];
 	enemies = new object_c[MAXENEMIES];
-	cameras = new cameraPoints[MAXCAMERAS];
+    cameras = new CameraPoints[MAXCAMERAS];
 }
 
 level_c::level_c(int lnum)
@@ -579,8 +587,8 @@ void level_c::fixSizes()
 
 Vector3D level_c::setCam(object_c* obj, GLfloat dt)
 {
-	cameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
-	cameraPoint* nextcam;
+    CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
+    CameraPoint* nextcam;
 	Vector3D cam2cam, cam2obj, cam2look;
 	Vector3D pos, look, alongv, movepos;
 	Vector3D objpos;
@@ -602,10 +610,10 @@ Vector3D level_c::setCam(object_c* obj, GLfloat dt)
 	{
 		case DEBUGMODE:
 			glTranslatef(0.0f, 0.0f, -5.1f);
-			glPrint(3,10,"Debug Mode",1);
+//			glPrint(3,10,"Debug Mode",1);
 			glTranslatef(0.0f, 0.0f,5.1f);
 		case FOLLOW:
-			cam->loassdzcszdasok += (objpos - cam->pos)*CAMLOOKSPEED*dt;
+            cam->look += (objpos - cam->pos)*CAMLOOKSPEED*dt;
 			cam->pos += ((objpos + Vector3D(0,0,cam->followDist)) - cam->pos)*CAMMOVESPEED*dt;	//need to work on z distance
 			break;
 		case LOCKED:
@@ -613,7 +621,7 @@ Vector3D level_c::setCam(object_c* obj, GLfloat dt)
 			break;
 		case CAMERAMODE:
 			glTranslatef(0.0f, 0.0f, -5.1f);
-			glPrint(3,4,"Camera Mode",1);
+//			glPrint(3,4,"Camera Mode",1);
 			glTranslatef(0.0f, 0.0f,5.1f);
 			break;
 		default:
@@ -624,7 +632,7 @@ Vector3D level_c::setCam(object_c* obj, GLfloat dt)
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
 	//glLoadIdentity();												// Reset The Current Modelview Matrix
 
-	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
+//TODO	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
 	cam2look = cam->look - cam->pos;
 
 	return cam2look;
@@ -642,17 +650,18 @@ CameraView level_c::cycleCam()
 }
 void level_c::run(GLfloat dt, int numRuns)
 {
+    QTime clock;
 	char timetext[100];
 	
 	if(!levelStarted)
 	{
 		levelStarted = true;
-		startTime = GetTickCount();
+        startTime = clock.msecsSinceStartOfDay();
 		currentTime = startTime;
 	}
 	else
 	{
-		currentTime = GetTickCount();
+        currentTime = clock.msecsSinceStartOfDay();
 		timer = (currentTime-startTime)/1000;
 		sprintf(timetext, "%.2f", timer);
 	}
