@@ -1,21 +1,18 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QtOpenGL/QGLWidget>
-
-class Helper;
-
+#if QT_MAJOR_VERSION>4
+class GLWidget : public QOpenGLWidget
+#else
 class GLWidget : public QGLWidget
+#endif
 {
-	Q_OBJECT
 public:
 	GLWidget(Helper *helper, QWidget *parent);
 
 signals:
 
 public slots:
-private:
-	Helper *helper;
 };
 
 #endif // GLWIDGET_H
