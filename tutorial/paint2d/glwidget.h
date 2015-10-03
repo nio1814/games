@@ -5,7 +5,9 @@
 
 class Helper;
 
-#if QT_VERSION>0x050400
+
+#if QT_VERSION>=0x050400
+#include <qopenglwidget.h>
 class GLWidget : public QOpenGLWidget
 #else
 #include <QGLWidget>
@@ -17,6 +19,7 @@ public:
     GLWidget(Helper *helper, QWidget *parent);
 protected:
     void paintEvent(QPaintEvent *event);
+
 private:
     Helper *helper;
     int elapsed;

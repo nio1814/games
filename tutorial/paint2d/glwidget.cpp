@@ -6,7 +6,11 @@
 #include "helper.h"
 
 GLWidget::GLWidget(Helper *helper, QWidget *parent)
+#if QT_VERSION>=0x050400
+    : QOpenGLWidget(parent), helper(helper)
+#else
 	: QGLWidget(QGLFormat(QGL::SampleBuffers), parent), helper(helper)
+#endif
 {
     setFixedSize(200, 200);
     setAutoFillBackground(false);

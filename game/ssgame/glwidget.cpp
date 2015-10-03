@@ -1,5 +1,7 @@
 #include "glwidget.h"
 
+#include <qtimer.h>
+
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
     : QOpenGLWidget(parent)
@@ -7,12 +9,11 @@ GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 #endif
 {
-
+    m_elapsed = 0;
 }
 
 void GLWidget::initializeGL()
 {
-
     return;
 }
 
@@ -35,4 +36,27 @@ void GLWidget::resizeGL(int w, int h)
     glLoadIdentity();							// Reset The Modelview Matrix
 
     return;
+}
+
+void GLWidget::paintGL()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glEnable(GL_DEPTH_TEST);
+
+    glBegin(GL_TRIANGLES);
+//    glColor3f(.3, .1, .7);
+    glColor3f(qrand()/(float)RAND_MAX, qrand()/(float)RAND_MAX, qrand()/(float)RAND_MAX);
+    glVertex3f(0,0,0);
+    glVertex3f(1,m_elapsed/10000.0,0);
+    glVertex3f(0,1,0);
+    glEnd();
+
+    return;
+}
+
+void GLWidget::animate()
+{
+    m_elapsed += qobject_cast<QTimer*>(sender())->interval();
+    update();
 }

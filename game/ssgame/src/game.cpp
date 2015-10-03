@@ -289,7 +289,7 @@ void runObjects()
 	{
 		delta = 0;
 //		cTime = lTime = GetTickCount();
-        cTime = lTime = time.ms();
+        cTime = lTime = time.msec();
 	}
 
 	nowLevel->run(delta*THROTTLE, numOfIterations);
