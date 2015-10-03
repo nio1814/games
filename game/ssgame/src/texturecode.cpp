@@ -1,10 +1,12 @@
-#include <windows.h>								// Header File For Windows
+//#include <windows.h>								// Header File For Windows
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <math.h>								// Header File For Windows Math Library
-#include <gl\gl.h>								// Header File For The OpenGL32 Library
-#include <gl\glu.h>
+#include <stdlib.h>
+//#include <gl\gl.h>								// Header File For The OpenGL32 Library
+//#include <gl\glu.h>
+#include <qopengl.h>
 
-#include	"Texture Code.h"
+#include	"texturecode.h"
 #include	"error.h"
 
 p_texdata Tex_Alloc(int size)
@@ -14,7 +16,7 @@ p_texdata Tex_Alloc(int size)
 	//retr = VirtualAlloc(NULL, size, MEM_RESERVE, PAGE_READWRITE);
 	//tr = (p_texdata )GlobalAlloc(GMEM_FIXED, size);
 
-	if (retr == NULL) Error("Tex_Alloc() failed - tried to allocate %d bytes", size);
+//	if (retr == NULL) Error("Tex_Alloc() failed - tried to allocate %d bytes", size);
 
 	return retr;
 }
@@ -105,7 +107,7 @@ typedef struct tagBITMAPCOREHEADER { // bmch
 
 bool TextureLoadBMP(texture_t *tex, char *filename)			// Loads A TGA File Into Memory
 {
-	BITMAPFILEHEADER	bmfh;
+/*	BITMAPFILEHEADER	bmfh;
 
 	unsigned int		src_extraDataSize = 0;
 	p_texdata			src_extraData = NULL;
@@ -371,6 +373,6 @@ bool TextureLoadBMP(texture_t *tex, char *filename)			// Loads A TGA File Into M
 	CloseHandle(hFile);
 
 	//tex->flags |= TEXTURE_FLAG_BGR;
-
+*/
 	return true;
 }

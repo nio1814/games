@@ -3,7 +3,7 @@
 //#include <gl\gl.h>							// Header File For The OpenGL32 Library
 //#include <gl\glu.h>
 
-#include <Vector3d.h>
+#include "vector3d.h"
 
 #include "objects.h"
 //#include "text.h"

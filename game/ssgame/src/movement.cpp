@@ -1,16 +1,18 @@
-#include <windows.h>								// Header File For Windows
+//#include <windows.h>								// Header File For Windows
 #include <stdio.h>			// Header File For Standard Input/Output
-#include <gl\gl.h>								// Header File For The OpenGL32 Library
-#include <gl\glu.h>
+//#include <gl\gl.h>								// Header File For The OpenGL32 Library
+//#include <gl\glu.h>
 #include <math.h>
 
 #include "movement.h"
 #include "objects.h"
-#include "keys.h"
+#include "playerkeys.h"
 #include "functions.h"
 #include "world.h"
 #include "animation.h"
 #include "sound.h"
+
+#include <QTime>
 
 GLfloat	xrot;									// X Rotation
 GLfloat	yrot;									// Y Rotation
@@ -317,6 +319,7 @@ void clearTouches(object_c &obj)
 
 void updatePlayerMove(object_c &moveObj, GLfloat dt)
 {
+    QTime clock;
 	GLfloat currentTime;
 	actions thisAct;
 	bool doneAction[20];		//used for loop of actions
@@ -460,7 +463,7 @@ void updatePlayerMove(object_c &moveObj, GLfloat dt)
 	if(moveObj.objshots != NULL)
 		moveObj.objshots->updateShots();
 
-	currentTime = GetTickCount();
+    currentTime = clock.currentTime().msec();
 	//do all actions
 	do
 	{
@@ -514,7 +517,7 @@ void updatePlayerMove(object_c &moveObj, GLfloat dt)
 		}
 	}while(!couldAnimate);
 	
-	currentTime = GetTickCount();
+    currentTime = clock.msec();
 	if(!moveObj.actionTime[thisAct].started)
 	{
 		moveObj.actionTime[thisAct].startTime = currentTime;
@@ -534,16 +537,17 @@ void updatePlayerMove(object_c &moveObj, GLfloat dt)
 
 	//cycle character
 	static int playerNum = moveObj.person;
-	if(canToggle('P') || canToggleBtn(xbRTRIGGER))
+//	if(canToggle('P') || canToggleBtn(xbRTRIGGER))
+    if(canToggle('P'))
 	{
 		playerNum = mod(++playerNum, NUMCHARACTERS);
 		assignTextures(moveObj, playerTextures[playerNum]);
 	}
-	else if(canToggleBtn(xbLTRIGGER))
+    /*else if(canToggleBtn(xbLTRIGGER))
 	{
 		playerNum = mod(--playerNum, NUMCHARACTERS);
 		assignTextures(moveObj, playerTextures[playerNum]);
-	}
+    }*/
 
 	//store old values
 	moveObj.posOld = moveObj.pos;
@@ -567,6 +571,7 @@ void updateEnemyMove(object_c &moveObj, const object_c &target, GLfloat dt)
 	bool doneAction[20];
 	GLfloat currentTime;
 	GLfloat yMoveTo;
+    QTime clock;
 	
 	for(int ac=0; ac<NUMACTIONS; ac++)
 		doneAction[ac] = 0;
@@ -663,7 +668,7 @@ void updateEnemyMove(object_c &moveObj, const object_c &target, GLfloat dt)
 		thisAct = actSHOOT;
 	}
 	
-	currentTime = GetTickCount();
+    currentTime = clock.msec();
 	int loops = 0;
 	do
 	{
@@ -706,7 +711,7 @@ void updateEnemyMove(object_c &moveObj, const object_c &target, GLfloat dt)
 			int j = 5+5;
 	}while(!couldAnimate);
 	
-	currentTime = GetTickCount();
+    currentTime = clock.msec();
 
 	if(!moveObj.actionTime[thisAct].started)
 	{
@@ -1025,6 +1030,7 @@ void collide(object_c &obj1, const object_c &obj2, touch side)
 	Vector2D v2;
 	bool movingTowardsLR;	//left right
 	bool movingTowardsUD;	//up down
+    QTime clock;
 
 	movingTowardsLR = ((side == LSIDE) && (obj1.velOld.x < 0.0f)) || ((side == RSIDE) && (obj1.velOld.x > 0.0f));
 	movingTowardsUD = ((side == BSIDE) && (obj1.velOld.y < 0.0f)) || ((side == TSIDE) && (obj1.velOld.y > 0.0f));
@@ -1068,7 +1074,7 @@ void collide(object_c &obj1, const object_c &obj2, touch side)
 			if(obj1.state[actATTACK1])
 			{
 				obj2ptr->vel.x = -obj2ptr->vel.x;
-				obj2ptr->vel.y = sin(static_cast<GLfloat>(GetTickCount()));
+                obj2ptr->vel.y = sin(static_cast<GLfloat>(clock.msec()));
 				obj1.health -= fabs(obj2.vel.x/80);
 			}
 			else
@@ -1110,7 +1116,7 @@ void collide(object_c &obj1, const object_c &obj2, touch side)
 			if(obj1.state[actATTACK1])
 			{
 				obj2ptr->vel.y = -obj2ptr->vel.y;
-				obj2ptr->vel.y = sin(static_cast<float>(GetTickCount()));
+                obj2ptr->vel.y = sin(static_cast<float>(clock.msec()));
 				//obj1.health -= fabs(obj2.yVel/80);
 			}
 			else
@@ -1137,13 +1143,14 @@ void collide(object_c &obj1, const object_c &obj2)
 {
 	GLfloat initHealth = obj1.health;
 	object_c* obj2ptr = getObject(obj2.index);
+    QTime clock;
 	
 	if(obj2.objType == tpSHOT)
 	{
 		if(obj1.state[actATTACK1])
 		{
 			obj2ptr->vel.x = -obj2ptr->vel.x;
-			obj2ptr->vel.y = sin(static_cast<float>(GetTickCount()));
+            obj2ptr->vel.y = sin(static_cast<float>(clock.msec()));
 			obj1.health -= fabs(obj2.vel.x/80);
 		}
 		else

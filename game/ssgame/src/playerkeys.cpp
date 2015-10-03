@@ -1,117 +1,24 @@
-#include "keys.h"
+#include "playerkeys.h"
 
-#include <windows.h>								// Header File For Windows
+//#include <windows.h>								// Header File For Windows
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <math.h>
 
-#include <dataStructs.h>
+#include "datastructs.h"
 
 #include "masking.h"
 #include "movement.h"
 #include "sound.h"
 #include "objects.h"
 #include "functions.h"
+#include "keys.h"
 
-
-bool	keys[512][2] = {false};								// Array Used For The Keyboard Routine
-bool	btns[12][2] = {false};
 int		controlsK[2][8];	//keyboard controls
 int		controlsB[2][8];	//joystick controls
 
-bool	sp;									// Space Pressed?	
-
-void keyDown(const int keyIn)
-{
-	if(keys[keyIn][DOWN])
-		keys[keyIn][HOLD] = true;
-	else
-		keys[keyIn][DOWN] = true;
-
-	return;
-}
-
-
-void keyUp(const int keyIn)
-{
-		keys[keyIn][HOLD] = false;
-		keys[keyIn][DOWN] = false;
-
-	return;
-}
-
-bool isKeys(const int keyIn)
-{
-	bool isDown;
-	isDown = keys[keyIn][DOWN];
-
-	return isDown;
-}
-
-bool isHeld(const int keyIn)
-{
-	bool isHeld;
-	isHeld = keys[keyIn][HOLD];
-
-	return isHeld;
-}
-
-bool canToggle(const int keyIn)
-{
-	bool ct = false;
-
-	if (keys[keyIn][DOWN] && !keys[keyIn][HOLD])				// L Key Being Pressed Not Held?
-	{
-		keys[keyIn][HOLD] = true;
-		ct = true;
-	}
-
-	return ct;
-}
-
-void btnDown(const int btnIn)
-{
-	if(btns[btnIn][DOWN])
-		btns[btnIn][HOLD] = true;
-	else
-		btns[btnIn][DOWN] = true;
-
-	return;
-}
-
-void btnUp(const int btnIn)
-{
-		btns[btnIn][HOLD] = false;
-		btns[btnIn][DOWN] = false;
-
-	return;
-}
-
-bool isBtns(const int btnIn)
-{
-	bool isDown;
-	isDown = btns[btnIn][DOWN];
-
-	return isDown;
-}
-
-bool isHeldBtn(const int btnIn);
-
-bool canToggleBtn(const int btnIn)
-{
-	bool ct = false;
-
-	if (btns[btnIn][DOWN] && !btns[btnIn][HOLD])				// L Key Being Pressed Not Held?
-	{
-		btns[btnIn][HOLD] = true;
-		ct = true;
-	}
-
-	return ct;
-}
-
 void assignControls()
 {
-	controlsK[PLAYER1][btnLEFT] = VK_LEFT;
+    /*controlsK[PLAYER1][btnLEFT] = VK_LEFT;
 	controlsK[PLAYER1][btnRIGHT] = VK_RIGHT;
 	controlsK[PLAYER1][btnUP] = VK_UP;
 	controlsK[PLAYER1][btnDOWN] = VK_DOWN;
@@ -140,15 +47,15 @@ void assignControls()
 	
 	int lb = MK_LBUTTON;
 	int rb = MK_RBUTTON;
-	int mb = MK_MBUTTON;
+    int mb = MK_MBUTTON;*/
 	
 	return;
 }
 
-void runKeys(level_c* lvl, joystick_s *joy, pointerTree* treeIn)
+void runKeys(level_c* lvl, pointerTree* treeIn)
 {
 	CameraView view = lvl->cameras->camview;
-	cameraPoint* cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
+    CameraPoint* cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
 	object_c* moveobj = &lvl->players[lvl->playerFocus];
 	static CameraView lastCam = FOLLOW;
 	static pointerTree* tP = treeIn;
@@ -197,7 +104,8 @@ void runKeys(level_c* lvl, joystick_s *joy, pointerTree* treeIn)
 		toggleMusic();
 	}
 	//debug mode	
-	if (canToggle('G') || canToggleBtn(xbBACK))				// Is J Key Being Pressed?
+//	if (canToggle('G') || canToggleBtn(xbBACK))				// Is J Key Being Pressed?
+    if (canToggle('G'))				// Is J Key Being Pressed?
 	{
 		debugMode = !debugMode;
 		if (!debugMode)
@@ -211,7 +119,7 @@ void runKeys(level_c* lvl, joystick_s *joy, pointerTree* treeIn)
 			lvl->cameras->camview = DEBUGMODE;
 		}
 	}
-
+/*
 	//update joystick positions
 	if(joy->activated)
 	{
@@ -300,12 +208,12 @@ void runKeys(level_c* lvl, joystick_s *joy, pointerTree* treeIn)
 			default:
 				break;
 		}
-	}
+    }*/
 
 //REPATABLE BUTTONS
     if(cameraMode)
 	{
-		if (keys[VK_PRIOR][DOWN])				// Is Page Up Being Pressed?
+/*		if (keys[VK_PRIOR][DOWN])				// Is Page Up Being Pressed?
 		{
 			cam->pos.z -= 0.05f;				// If So, Move Into The Screen
 		}
@@ -333,11 +241,11 @@ void runKeys(level_c* lvl, joystick_s *joy, pointerTree* treeIn)
 		if (keys[VK_LEFT][DOWN])				// Is Left Arrow Being Pressed?
 		{
 			yspeed-=0.01f;				// If So, Decrease yspeed
-		}
+        }*/
 	}
 	else if(debugMode)
 	{
-		if(joy->activated)
+        /*if(joy->activated)
 		{
 			if((canToggleBtn(xbUP) || canToggleBtn(xbDOWN)) && tP->parent != NULL)
 			{
@@ -408,7 +316,7 @@ void runKeys(level_c* lvl, joystick_s *joy, pointerTree* treeIn)
 				floatPtr = static_cast<float*>(tP->val);
 				glPrintHead(150,50, *floatPtr, DEFAULT, 8);
 			}
-		}
+        }*/
 	}
 	else
 	{

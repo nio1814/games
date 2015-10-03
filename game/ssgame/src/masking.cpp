@@ -1,21 +1,23 @@
-#include	<windows.h>							// Header File For Windows
-#include	<gl\gl.h>							// Header File For The OpenGL32 Library
-#include	<gl\glu.h>							// Header File For The GLu32 Library
+//#include	<windows.h>							// Header File For Windows
+//#include	<gl\gl.h>							// Header File For The OpenGL32 Library
+//#include	<gl\glu.h>							// Header File For The GLu32 Library
 
 #include	"masking.h"
-#include	"Texture Code.h"
+
+#include <qopengl.h>
+#include <cstring>
 
 //GLfloat LightAmbient[]= { 0.9f, 0.9f, 0.9f, 1.0f }; 				// Ambient Light Values ( NEW )
 GLfloat LightAmbient[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 				// Ambient Light Values ( NEW )
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };				 // Diffuse Light Values ( NEW )
 GLfloat LightPosition[]= { 5.0f, 10.0f, 2.0f, 1.0f };				 // Light Position ( NEW )
 
-BOOL	light;									// Lighting ON / OFF
+bool	light;									// Lighting ON / OFF
 
 GLuint	texture[5];								// Storage for 3 textures
 GLuint	filter;	
 
-bool	masking=TRUE;								// Masking On/Off
+bool	masking=true;								// Masking On/Off
 bool	scene;	
 
 GLuint	loop;									// Generic Loop Variable
@@ -26,7 +28,7 @@ int sss = 5;
 
 int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And Convert To Textures
 {
-	int Status=FALSE;							// Status Indicator
+    int Status=false;							// Status Indicator
 	texture_t TextureImage[1];
 	//GLuint texture[12];
 	
@@ -38,7 +40,7 @@ int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And 
 	    //TextureLoadBMP(&TextureImage[3],"Data/FollowMask.bmp")) //&&			// Second Mask
 	    //(TextureImage[4]=LoadBMP("Data/image2.bmp")))			// Second Image
 	{
-		Status=TRUE;							// Set The Status To TRUE
+        Status=true;							// Set The Status To TRUE
 		glGenTextures(1, &texture[0]);					// Create Five Textures
 //GL_BGR_EXT
 //GL_RGB
@@ -49,8 +51,8 @@ int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And 
 				glBindTexture(GL_TEXTURE_2D, texture[loop]);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-				gluBuild2DMipmaps(GL_TEXTURE_2D, 3, TextureImage[loop].width, TextureImage[loop].height,
-				 GL_BGR_EXT, GL_UNSIGNED_BYTE, TextureImage[loop].data);
+//				gluBuild2DMipmaps(GL_TEXTURE_2D, 3, TextureImage[loop].width, TextureImage[loop].height,
+//				 GL_BGR_EXT, GL_UNSIGNED_BYTE, TextureImage[loop].data);
 				//glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[loop].width, TextureImage[loop].height,
 				//	0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[loop].data);
 
@@ -76,7 +78,7 @@ int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And 
 
 int LoadGLTextures(animData_s *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
 {
-	int Status = FALSE;
+    int Status = false;
 	GLuint *tpointer;
 	tpointer = &aData->textures[ID];
 	
