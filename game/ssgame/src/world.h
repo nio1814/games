@@ -1,6 +1,8 @@
 #ifndef WORLD
 #define WORLD
 
+#include <QtOpenGL/QtOpenGL>
+
 #include <camera.h>
 
 #include "objects.h"

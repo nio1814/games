@@ -1,7 +1,8 @@
 #ifndef OBJECTS
 #define OBJECTS
 
-#include "qglobal.h"
+#include <qglobal.h>
+
 
 #ifdef Q_OS_LINUX
 #include <GL/gl.h>
@@ -11,7 +12,6 @@
 #include <gl\gl.h>						// Header File For The OpenGL32 Library
 #include <gl\glu.h>
 #endif
-
 
 #include <vector3d.h>
 //#include "text.h"

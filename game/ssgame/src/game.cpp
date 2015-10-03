@@ -5,7 +5,7 @@
 //#include <gl\gl.h>								// Header File For The OpenGL32 Library
 //#include <gl\glu.h>
 //#include <gl\glaux.h>
-#include <GL/glu.h>
+//#include <GL/glu.h>
 //#include <fmod\fmod.h>
 #include <string.h>
 
@@ -261,7 +261,7 @@ void runObjects()
 	static GLfloat lastNonZeroDelta = MAXDELTA;		//used in case delta = 0
 	int numOfIterations = 1;
     QTime time;
-    GLfloat cTime = time.msecsSinceStartOfDay();
+    GLfloat cTime = time.elapsed();
     GLfloat lTime = cTime;
 
 
@@ -271,7 +271,7 @@ void runObjects()
 	if(nowLevel->levelStarted)
 	{
 //		cTime = GetTickCount();
-        cTime = time.msecsSinceStartOfDay();
+        cTime = time.elapsed();
 		delta = (cTime - lTime) / 1000.0f;
 		
 		if(delta == 0.0f)
@@ -289,7 +289,7 @@ void runObjects()
 	{
 		delta = 0;
 //		cTime = lTime = GetTickCount();
-        cTime = lTime = time.msecsSinceStartOfDay();
+        cTime = lTime = time.ms();
 	}
 
 	nowLevel->run(delta*THROTTLE, numOfIterations);
@@ -324,7 +324,7 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
     QTime clock;
 	static GLfloat lastTime = 0.0f;
 //	GLfloat thisTime = GetTickCount();
-    GLfloat thisTime = clock.msecsSinceStartOfDay();
+    GLfloat thisTime = clock.elapsed();
 	bool longEnough = (thisTime - lastTime) > 100.0f;
 	static bool hasDied = false;
 		
@@ -345,7 +345,7 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
 		runObjects();
 		
 //		lastTime = GetTickCount();
-        lastTime = clock.msecsSinceStartOfDay();
+        lastTime = clock.elapsed();
 	}
 	
 	if(player->health == 0.0f)

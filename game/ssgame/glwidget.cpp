@@ -1,7 +1,11 @@
 #include "glwidget.h"
 
 GLWidget::GLWidget(QWidget *parent)
+#if (QT_VERSION >= 0x050500)
     : QOpenGLWidget(parent)
+#else
+    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+#endif
 {
 
 }
