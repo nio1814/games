@@ -9,7 +9,7 @@
 #endif
 
 #include "screen.h"
-//#include "TGA.h"
+#include "tga.h"
 #include "masking.h"
 
 GLuint healthTexture[1];

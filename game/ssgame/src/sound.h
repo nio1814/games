@@ -11,8 +11,8 @@
 #define SOUND
 
 //#include <windows.h>
-//#include <fmod\fmod.h>
-//#include <fmod\fmod_errors.h>    /* optional */
+#include <fmod/fmod.h>
+#include <fmod/fmod_errors.h>    /* optional */
 
 #include "animation.h"
 

@@ -6,12 +6,14 @@
 #include <gl\gl.h>						// Header File For The OpenGL32 Library
 #include <gl\glu.h>*/
 
+#include <GL/glu.h>
+
 #include <3ds.h>
 
 #include "mass.h"
 #include <texture.h>
 #include "camera.h"
-#include "dataStructs.h"
+#include "datastructs.h"
 
 extern GLfloat dt;
 extern bool bGravityOn;

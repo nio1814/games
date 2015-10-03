@@ -11,7 +11,7 @@
 #include <GL/gl.h>
 #endif
 
-extern bool pause;
+//extern bool pause;
 extern bool	gameOver;
 
 extern GLfloat THROTTLE;								//time throttle
