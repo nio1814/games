@@ -1,10 +1,7 @@
-//#include	<windows.h>							// Header File For Windows
-//#include	<gl\gl.h>							// Header File For The OpenGL32 Library
-//#include	<gl\glu.h>							// Header File For The GLu32 Library
-
 #include	"masking.h"
 
-#include <qopengl.h>
+#include "qtgl.h"
+
 #include <cstring>
 
 //GLfloat LightAmbient[]= { 0.9f, 0.9f, 0.9f, 1.0f }; 				// Ambient Light Values ( NEW )

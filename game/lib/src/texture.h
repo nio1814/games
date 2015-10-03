@@ -6,7 +6,7 @@
 //#include <gl\glu.h>										// Header File For The GLu32 Library
 //#include <gl\glaux.h>									// Header File For The Glaux Library
 #include <stdio.h>										// Header File For Standard Input / Output
-#include <qopengl.h>
+#include "qtgl.h"
 
 #include "vector3d.h"
 

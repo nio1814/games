@@ -21,9 +21,9 @@ struct tImageTGA
 
 
 tImageTGA *Load_TGA(const char *filename);
-void TGA_Texture(UINT textureArray[], LPSTR strFileName, int textureID);
-void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID);
-void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID, GLfloat center);
+void TGA_Texture(unsigned int textureArray[], const char* strFileName, int textureID);
+void TGA_Texture(animData_s *aData, const char* strFileName, int ID);
+void TGA_Texture(animData_s *aData, const char* strFileName, int ID, GLfloat center);
 
 
 

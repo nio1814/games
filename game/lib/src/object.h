@@ -6,7 +6,7 @@
 #include <gl\gl.h>						// Header File For The OpenGL32 Library
 #include <gl\glu.h>*/
 
-#include <GL/glu.h>
+//#include <GL/glu.h>
 
 #include <3ds.h>
 
@@ -147,7 +147,7 @@ class object_sphere : public Object
 {
 public:
 	float radius;
-	GLUquadricObj	*quad;						// Quadratic For Drawing A Sphere
+//	GLUquadricObj	*quad;						// Quadratic For Drawing A Sphere
 
 	object_sphere();
 	object_sphere(float mass, float radius);

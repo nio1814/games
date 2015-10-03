@@ -1,12 +1,12 @@
+#include	"texturecode.h"
+
 //#include <windows.h>								// Header File For Windows
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <math.h>								// Header File For Windows Math Library
 #include <stdlib.h>
-//#include <gl\gl.h>								// Header File For The OpenGL32 Library
-//#include <gl\glu.h>
-#include <qopengl.h>
+#include "qtgl.h"
 
-#include	"texturecode.h"
+
 #include	"error.h"
 
 p_texdata Tex_Alloc(int size)

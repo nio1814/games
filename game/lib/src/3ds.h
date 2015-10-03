@@ -5,7 +5,7 @@
 #include <vector>	
 #include <vector3d.h>									
 
-#include <qopengl.h>
+#include "qtgl.h"
 
 #include <stdio.h>
 

@@ -14,7 +14,7 @@
 
 #include "constants.h"
 
-#include <qopengl.h>
+#include "qtgl.h"
 
 #define EPS 1e-1
 

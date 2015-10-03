@@ -951,7 +951,7 @@ float CalculateFrameRate()
 	// Here we get the current tick count and multiply it by 0.001 to convert it from milliseconds to seconds.
 	// GetTickCount() returns milliseconds (1000 ms = 1 second) so we want something more intuitive to work with.
 //    currentTime = GetTickCount() * 0.001f;
-    currentTime = clock.msecsSinceStartOfDay() * 0.001f;
+    currentTime = clock.msec() * 0.001f;
 
 	// Increase the frame counter
     ++framesPerSecond;
@@ -976,7 +976,7 @@ float CalculateFrameRate()
 
 		// Here we set the lastTime to the currentTime.  This will be used as the starting point for the next second.
 		// This is because GetTickCount() counts up, so we need to create a delta that subtract the current time from.
-        lastTime = clock.msecsSinceStartOfDay() * 0.001f;;
+        lastTime = clock.msec() * 0.001f;;
     }
     
     fps = framesPerSecond;

@@ -24,7 +24,6 @@ SOURCES += main.cpp\
     src/objects.cpp \
     ../lib/src/keys.cpp \
     ../lib/src/vector3d.cpp \
-    ../lib/src/tga.cpp \
     ../lib/src/constants.cpp \
     src/text.cpp \
     src/screen.cpp \
@@ -46,7 +45,6 @@ HEADERS  += mainwindow.h \
     src/objects.h \
     ../lib/src/keys.h \
     ../lib/src/vector3d.h \
-    ../lib/src/tga.h \
     ../lib/src/constants.h \
     src/text.h \
     src/screen.h \
@@ -55,7 +53,8 @@ HEADERS  += mainwindow.h \
     src/masking.h \
     src/functions.h \
     src/playerkeys.h \
-    src/sound.h
+    src/sound.h \
+    ../lib/src/qtgl.h
 
 FORMS    += mainwindow.ui
 

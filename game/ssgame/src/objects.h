@@ -3,15 +3,7 @@
 
 #include <qglobal.h>
 
-
-#ifdef Q_OS_LINUX
-#include <GL/gl.h>
-#elif Q_OS_WIN32
-//#include <windows.h>
-#include <stdarg.h>						// Header File For Variable Argument Routines	( ADD )
-#include <gl\gl.h>						// Header File For The OpenGL32 Library
-#include <gl\glu.h>
-#endif
+#include "qtgl.h"
 
 #include <vector3d.h>
 //#include "text.h"

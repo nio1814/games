@@ -19,7 +19,7 @@ public:
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
-    void paintGL(); Q_DECL_OVERRIDE;
+    void paintGL();
 private:
     int m_elapsed;
     QMatrix4x4 m_projection;

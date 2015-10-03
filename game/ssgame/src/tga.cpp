@@ -1,6 +1,4 @@
-#include <windows.h>								// Header File For Windows
-#include <gl\gl.h>								// Header File For The OpenGL32 Library
-#include <gl\glu.h>
+#include "qtgl.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //										TGA TEXTURE LOADER
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void TGA_Texture(GLuint textureArray[], LPSTR strFileName, int ID)
+void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 {
 	if(!strFileName)	return;
 
@@ -23,17 +21,16 @@ void TGA_Texture(GLuint textureArray[], LPSTR strFileName, int ID)
 	glGenTextures(1, &textureArray[ID]);
 	glBindTexture(GL_TEXTURE_2D, textureArray[ID]);
 	int textureType = GL_RGB;
-	if(pBitMap->channels == 4)	textureType = GL_RGBA;
-	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+	if(pBitMap->channels == 4)
+		textureType = GL_RGBA;
+	//gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);	
 	
 	if (pBitMap)									
 	{
 		if (pBitMap->data)						
-		{
-			free(pBitMap->data);	
-		}
+			free(pBitMap->data);
 		free(pBitMap);							
 	}
 }
@@ -51,7 +48,7 @@ void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID)
 	glBindTexture(GL_TEXTURE_2D, aData->textures[ID]);
 	int textureType = GL_RGB;
 	if(pBitMap->channels == 4)	textureType = GL_RGBA;
-	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+//	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
@@ -99,15 +96,15 @@ void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID, GLfloat center)
 tImageTGA *Load_TGA(const char *strfilename)
 {
 	tImageTGA *pImgData	= NULL;		
-	FILE *pFile			= NULL;	
-	WORD width			= 0;
-	WORD height			= 0;			
-	byte length			= 0;					
-	byte imgType		= 0;					
-	byte bits			= 0;						
-	int channels		= 0;					
-	int stride			= 0;						
-	int i				= 0;							
+	FILE *pFile			= NULL;
+	short width			= 0;
+	short height			= 0;
+	quint8 length			= 0;
+	quint8 imgType		= 0;	    
+	quint8 bits			= 0;
+	int channels		= 0;	    
+	int stride			= 0;
+	int i				= 0;
 	static int timecalled=0;
 	char angletext[100];
 	sprintf(angletext, "%i", timecalled++);
@@ -134,9 +131,9 @@ tImageTGA *Load_TGA(const char *strfilename)
 	
 	fseek(pFile, 9, SEEK_CUR); 
 	
-	fread(&width,  sizeof(WORD), 1, pFile);
-	fread(&height, sizeof(WORD), 1, pFile);
-	fread(&bits,   sizeof(byte), 1, pFile);
+	fread(&width,  sizeof(short), 1, pFile);
+	fread(&height, sizeof(short), 1, pFile);
+	fread(&bits,   sizeof(quint8), 1, pFile);
 	
 	fseek(pFile, length + 1, SEEK_CUR); 
 	
@@ -196,18 +193,18 @@ tImageTGA *Load_TGA(const char *strfilename)
 	else
 	{
 		
-		byte rleID = 0;
+		quint8 rleID = 0;
 		int colorsRead = 0;
 		channels = bits / 8;
 		stride = channels * width;
 		
 		pImgData->data = new unsigned char[stride * height];
-		byte *pColors = new byte [channels];
+		quint8 *pColors = new quint8 [channels];
 		
 		while(i < width*height)
 		{
 			
-			fread(&rleID, sizeof(byte), 1, pFile);
+			fread(&rleID, sizeof(quint8), 1, pFile);
 			
 			
 			if(rleID < 128)
@@ -216,7 +213,7 @@ tImageTGA *Load_TGA(const char *strfilename)
 				
 				while(rleID)
 				{
-					fread(pColors, sizeof(byte) * channels, 1, pFile);
+					fread(pColors, sizeof(quint8) * channels, 1, pFile);
 					
 					pImgData->data[colorsRead + 0] = pColors[2];
 					pImgData->data[colorsRead + 1] = pColors[1];
@@ -234,7 +231,7 @@ tImageTGA *Load_TGA(const char *strfilename)
 			{
 				rleID -= 127;
 				
-				fread(pColors, sizeof(byte) * channels, 1, pFile);
+				fread(pColors, sizeof(quint8) * channels, 1, pFile);
 				
 				while(rleID)
 				{

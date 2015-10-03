@@ -7,7 +7,7 @@
 
 #include <vector3d.h>
 
-#include <qopengl.h>
+#include "qtgl.h"
 
 #define DEFFOLLOWDIST	10
 #define DEFNUMCAMS	20

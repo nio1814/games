@@ -656,12 +656,12 @@ void level_c::run(GLfloat dt, int numRuns)
 	if(!levelStarted)
 	{
 		levelStarted = true;
-        startTime = clock.msecsSinceStartOfDay();
+        startTime = clock.msec();
 		currentTime = startTime;
 	}
 	else
 	{
-        currentTime = clock.msecsSinceStartOfDay();
+        currentTime = clock.msec();
 		timer = (currentTime-startTime)/1000;
 		sprintf(timetext, "%.2f", timer);
 	}

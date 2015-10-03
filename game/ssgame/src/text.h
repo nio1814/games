@@ -3,12 +3,9 @@
 
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <stdarg.h>						// Header File For Variable Argument Routines	( ADD )
-//#include <windows.h>								// Header File For Windows
-#include <GL/gl.h>							// Header File For The OpenGL32 Library
+#include "qtgl.h"
 //#include <gl\glu.h>
 #include <string>
-
-#include <qopengl.h>
 
 extern GLuint	base;							// Base Display List For The Font Set
 extern GLfloat	cnt1;							// 1st Counter Used To Move Text & For Coloring

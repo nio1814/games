@@ -936,7 +936,7 @@ bool animate(object_c &obj, actions act, const animData_s *animData, GLfloat dt)
 	
 //	GLfloat currentTime = GetTickCount();
     QTime time;
-    time.msecsSinceStartOfDay();
+    GLfloat currentTime = time.msec();
 
 	switch(act)
 	{
