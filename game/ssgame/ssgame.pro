@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     src/functions.cpp \
     src/playerkeys.cpp \
     src/sound.cpp \
-    ../lib/src/fmod/fmod.cpp
+    ../lib/src/fmod/fmod.cpp \
+    src/TGA.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
