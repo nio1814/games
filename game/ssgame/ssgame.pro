@@ -11,13 +11,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = ssgame
 TEMPLATE = app
 
-INCLUDEPATH += ../lib/src
+INCLUDEPATH += ../lib/src src
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     glwidget.cpp \
-    src/game.cpp \
-    src/world.cpp \
     ../lib/src/datastructs.cpp \
     src/movement.cpp \
     src/animation.cpp \
@@ -34,11 +32,12 @@ SOURCES += main.cpp\
     src/playerkeys.cpp \
     src/sound.cpp \
     ../lib/src/fmod/fmod.cpp \
-    src/TGA.cpp
+    src/tga.cpp \
+    src/level.cpp \
+    src/game.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
-    src/world.h \
     ../lib/src/datastructs.h \
     src/movement.h \
     src/animation.h \
@@ -54,7 +53,9 @@ HEADERS  += mainwindow.h \
     src/functions.h \
     src/playerkeys.h \
     src/sound.h \
-    ../lib/src/qtgl.h
+    ../lib/src/qtgl.h \
+    src/game.h \
+    src/level.h
 
 FORMS    += mainwindow.ui
 

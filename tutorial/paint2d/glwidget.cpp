@@ -27,6 +27,6 @@ void GLWidget::paintEvent(QPaintEvent *event)
 
 void GLWidget::animate()
 {
-    elapsed = (elapsed + qobject_cast<QTimer*>(sender())->interval()) % 1000;
+    elapsed = (elapsed + qobject_cast<QTimer*>(sender())->interval()) % 6000;
     update();
 }

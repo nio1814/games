@@ -1,10 +1,10 @@
+#include "tga.h"
+
 #include "qtgl.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "tga.h"
 #include "animation.h"
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 {
-	if(!strFileName)	return;
+	if(!strFileName)
+		return;
 
 	tImageTGA *pBitMap = Load_TGA(strFileName);
 
@@ -36,7 +37,7 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 }
 
 
-void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID)
+void TGA_Texture(animData_s *aData, const char* strFileName, int ID)
 {
 	if(!strFileName)	return;
 
@@ -84,14 +85,13 @@ void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID)
 		aData->animates = true;					//need more than one frame to animate
 }
 
-void TGA_Texture(animData_s *aData, LPSTR strFileName, int ID, GLfloat center)
+void TGA_Texture(animData_s *aData, const char* strFileName, int ID, GLfloat center)
 {
 	TGA_Texture(aData, strFileName, ID);
 	aData->centers[19] = center;
 
 	return;
 }
-
 
 tImageTGA *Load_TGA(const char *strfilename)
 {
@@ -116,18 +116,18 @@ tImageTGA *Load_TGA(const char *strfilename)
 		
 	if((pFile = fopen(strfilename, "rb")) == NULL) 
 	{
-		MessageBox(NULL, "Error loading tga file.", "ERROR", MB_OK);
-		MessageBox(NULL, angletext, "ERROR", MB_OK);
+//		MessageBox(NULL, "Error loading tga file.", "ERROR", MB_OK);
+//		MessageBox(NULL, angletext, "ERROR", MB_OK);
 		return NULL;
 	}
 
 	pImgData = (tImageTGA*)malloc(sizeof(tImageTGA));
 	
-	fread(&length, sizeof(byte), 1, pFile);
+	fread(&length, sizeof(quint8), 1, pFile);
 	
 	fseek(pFile,1,SEEK_CUR); 
 	
-	fread(&imgType, sizeof(byte), 1, pFile);
+	fread(&imgType, sizeof(quint8), 1, pFile);
 	
 	fseek(pFile, 9, SEEK_CUR); 
 	

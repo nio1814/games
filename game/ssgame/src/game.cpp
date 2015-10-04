@@ -1,18 +1,15 @@
-//#include <windows.h>								// Header File For Windows
+#include "game.h"
+
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <stdarg.h>						// Header File For Variable Argument Routines	( ADD )
 #include <math.h>								// Header File For Windows Math Library
-//#include <gl\gl.h>								// Header File For The OpenGL32 Library
-//#include <gl\glu.h>
-//#include <gl\glaux.h>
-//#include <GL/glu.h>
 //#include <fmod\fmod.h>
 #include <string.h>
 
 //#include <joystick\joystick.h>
 
 #include "objects.h"
-#include "world.h"
+#include "level.h"
 #include "masking.h"
 #include "screen.h"
 #include "tga.h"
@@ -32,32 +29,45 @@ GLfloat fps;
 GLfloat MAXDELTA = .003f;
 GLfloat THROTTLE = 1;
 
-game_c game;
+Game::Game()
+{
+    m_numLevels = 0;
+    m_numPlayers = 0;
+    m_currentLevel = NULL;
+    m_players = NULL;
+}
+
+Game::~Game()
+{
+    delete[] m_levels;
+    delete m_currentLevel;
+    delete m_players;
+}
 
 extern objectHolder_c movingObjects2;
 objectHolder_c movingObjects2;
 
-object_c* player = new object_c(1.5f, 2.25f,0.0f, 4.0f, tpPLAYER, ZERO);
-object_c* player2 = new object_c(1.5f, 2.25f,3.0f, 4.0f, tpPLAYER, ZERO);
-//object_c* gokuShot = new object_c (1.0f, 1.0f, tpSHOT, GOKUSHOT, player);
-//object_c shot = object_c (1.0f, 1.0f, "Data/img/star2.tga", tpSHOT, player);							// Player Information
-object_c* ball = new object_c(1.0f, 1.0f, 2.0f, 5.0f, tpOBJ, ZERO);
-object_c* enemy = new object_c(1.5f, 2.25f,13.0f, 8.0f, tpENEMY, MMX);
-//object_c* mShot = new object_c (1.0f, 1.0f, tpSHOT, MMXSHOT, enemy);
-object_c* enemy2 = new object_c(1.75f, 2.75f,4.0f, -4.0f, tpENEMY, GOKU);
-object_c* spid = new object_c(3.00f, 1.97f, 23.0f, 24.0f, tpENEMY, SPIDEY);
-object_c* tails = new object_c(1.00f, 1.5f, 23.0f, 24.0f, tpENEMY, TAILS);
-object_c* goomba1 = new object_c(.70f, .70f, 12.0f, -24.0f, tpENEMY, GOOMBA);
-object_c* goomba2 = new object_c(.70f, .70f, 23.0f, -24.0f, tpENEMY, GOOMBA);
-object_c* goomba3 = new object_c(.70f, .70f, 34.0f, -24.0f, tpENEMY, GOOMBA);
+//Object player = new object_c(1.5f, 2.25f,0.0f, 4.0f, tpPLAYER, ZERO);
+//Object player2 = new object_c(1.5f, 2.25f,3.0f, 4.0f, tpPLAYER, ZERO);
+////object_c* gokuShot = new object_c (1.0f, 1.0f, tpSHOT, GOKUSHOT, player);
+////object_c shot = object_c (1.0f, 1.0f, "Data/img/star2.tga", tpSHOT, player);							// Player Information
+//Object ball = new object_c(1.0f, 1.0f, 2.0f, 5.0f, tpOBJ, ZERO);
+//Object enemy = new object_c(1.5f, 2.25f,13.0f, 8.0f, tpENEMY, MMX);
+////object_c* mShot = new object_c (1.0f, 1.0f, tpSHOT, MMXSHOT, enemy);
+//Object enemy2 = new object_c(1.75f, 2.75f,4.0f, -4.0f, tpENEMY, GOKU);
+//Object spid = new object_c(3.00f, 1.97f, 23.0f, 24.0f, tpENEMY, SPIDEY);
+//Object tails = new object_c(1.00f, 1.5f, 23.0f, 24.0f, tpENEMY, TAILS);
+//Object goomba1 = new object_c(.70f, .70f, 12.0f, -24.0f, tpENEMY, GOOMBA);
+//Object goomba2 = new object_c(.70f, .70f, 23.0f, -24.0f, tpENEMY, GOOMBA);
+//Object goomba3 = new Object(.70f, .70f, 34.0f, -24.0f, tpENEMY, GOOMBA);
 
-level_s level1s;
-level_s level2s;
-level_s level3s;
-level_s *currentLevel;
-level_c *nowLevel;
-level_c level1c(1);
-level_c level0c(0);
+//level_s level1s;
+//level_s level2s;
+//level_s level3s;
+//level_s *currentLevel;
+//Level *nowLevel;
+//Level level1c(1);
+//Level level0c(0);
 int curLevelNum;
 
 //joystick_s *joystick;
@@ -83,27 +93,11 @@ void setupObjects();
 void updateObjects();
 void gamepadlogic();
 
-void doLevel()
+/*void doLevel()
 {
 	curLevelNum = 0;
 	
-	level1s.levelNum = 1;
-	level2s.levelNum = 2;
-	level3s.levelNum = 3;
-
-	makeLevel(level2s);
-	//makeLevel(level2s);
-	//makeLevel(level3s);
-	currentLevel = &level1s;
-	
-	//makeLevel(level1c);
-	//makeLevel(level0c);
-	
-	//nowLevel = &level1c;
-	nowLevel = &game.levels[0];
-	nowLevel->levelNum = 2;
-	makeLevel(*nowLevel);
-	nowLevel->cameras->cpoints[0].followDist = 15.0f;
+    nowLevel->cameras->cpoints[0].followDist = 15.0f;
 	
 //	joystick = new joystick_s;
 
@@ -119,9 +113,9 @@ void doLevel()
 	debug.ptr[0].addLeaf(&WALLFRIC, tpFLOAT, "Wall Friction");
 	
 	return;
-}
+}*/
 
-
+#if 0
 void setupObjects()
 {
 	nowLevel->addPlayer(1.5f, 2.25f,0.0f, 14.0f, MMX);
@@ -200,7 +194,7 @@ void setupObjects()
 	return;
 }
 
-
+#endif
 
 
 
@@ -215,19 +209,18 @@ void drawObjects(int mobjects[], int numObjects)
 	return;
 }
 
-
-void drawObjects(objectHolder_c mobjects)
+void drawObjects(ObjectList objs)
 {
-	for(int i=0; i<mobjects.numObjects; i++)
-	{
-		if(mobjects.getObject(i)->active)
-			mobjects.getObject(i)->drawRec();
-	}
-
-	return;
+    ObjectList::iterator obj;
+    for(obj=objs.begin(); obj!=objs.end(); obj++)
+    {
+        if((*obj)->active)
+            (*obj)->drawRec();
+    }
+    return;
 }
 
-void runObjects()
+void Game::run()
 {	
 	/*//updateMoves(movingObjects, numMovingObjects);
 	//checkTouch(movingObjects, numMovingObjects, level);
@@ -268,7 +261,7 @@ void runObjects()
 	delta = CalculateFrameRate();
 
 	//find time inbetween runs
-	if(nowLevel->levelStarted)
+    if(level().levelStarted)
 	{
 //		cTime = GetTickCount();
         cTime = time.elapsed();
@@ -292,7 +285,7 @@ void runObjects()
         cTime = lTime = time.msec();
 	}
 
-	nowLevel->run(delta*THROTTLE, numOfIterations);
+    level().run(delta*THROTTLE, numOfIterations);
 	//nowLevel->run(.002);
 //	runKeys(nowLevel, joysOpetick, &debug);
 	
@@ -319,6 +312,21 @@ void initSound()
 	return;
 }
 
+Level& Game::level()
+{
+    return *m_currentLevel;
+}
+
+void Game::update(float dt)
+{
+    return;
+}
+
+void Game::draw()
+{
+    return;
+}
+
 int DrawGLScene()								// Here's Where We Do All The Drawing
 {
     QTime clock;
@@ -342,12 +350,12 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
 		glRotatef(xrot,1.0f,0.0f,0.0f);						// Rotate On The X Axis By xrot
 		glRotatef(yrot,0.0f,1.0f,0.0f);						// Rotate On The Y Axis By yrot
 		
-		runObjects();
+//		runObjects();
 		
 //		lastTime = GetTickCount();
         lastTime = clock.elapsed();
 	}
-	
+    ObjectPointer player;
 	if(player->health == 0.0f)
 	{
 		player->active = false;
@@ -496,6 +504,7 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
 	xrot+=xspeed;								// Add xspeed To xrot
 	yrot+=yspeed;								// Add yspeed To yrot
 
+    Level* currentLevel;
 	if(!currentLevel->cameraLock)
 	{
 		xrot += (player->pos.x -player->posOld.x)/2.4;

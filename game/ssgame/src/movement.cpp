@@ -8,7 +8,7 @@
 #include "objects.h"
 #include "playerkeys.h"
 #include "functions.h"
-#include "world.h"
+#include "level.h"
 #include "animation.h"
 #include "sound.h"
 
@@ -50,7 +50,7 @@ bool cameraMode = false;
 bool debugMode = false;
 
 //actual function
-void checkTouch(object_c &moveObj, const object_c &obj2)
+void checkTouch(Object &moveObj, const Object &obj2)
 {
 	GLfloat moveVal;
 	GLfloat distance;
@@ -226,7 +226,7 @@ void checkTouch(object_c &moveObj, const object_c &obj2)
 
 
 //between player and level
-void checkTouch(object_c &moveObj, level_s level)
+void checkTouch(Object &moveObj, level_s level)
 {
 	for(int i=level.solidObjIdx; i<level.numObjects; i++)
 	{
@@ -289,24 +289,24 @@ void checkTouch(objectHolder_c mobjects, const level_s &level)
 }
 
 
-void checkTouch(object_c &moveObj, object_c objs[], int nobjs, int nocheck)
+void checkTouch(Object &moveObj, ObjectList objs, int nobjs, int nocheck)
 {
 	if(nocheck==-1)
-		nocheck = nobjs+1;
+        nocheck = objs.size()+1;
 	
 		//if((getObject(mobjects[i]]->objType != tpSHOT) && getObject(mobjects[i]]->active)
 		//{
 		;//}
-	for(int j=0; j < nobjs; j++)
+    for(int j=0; j < objs.size(); j++)
 	{
-			checkTouch(moveObj, objs[j]);
+            checkTouch(moveObj, *objs[j]);
 	}
 
 	return;
 }
 
 
-void clearTouches(object_c &obj)
+void clearTouches(Object &obj)
 {
 	obj.isTouching[RSIDE] = false;
 	obj.isTouching[BSIDE] = false;
@@ -317,7 +317,7 @@ void clearTouches(object_c &obj)
 }
 
 
-void updatePlayerMove(object_c &moveObj, GLfloat dt)
+void updatePlayerMove(Object &moveObj, GLfloat dt)
 {
     QTime clock;
 	GLfloat currentTime;
@@ -328,7 +328,7 @@ void updatePlayerMove(object_c &moveObj, GLfloat dt)
 
 	playerNum numPlayer = moveObj.numPlayer;
 	bool couldAnimate = true;
-	object_c* shot = NULL;
+	Object* shot = NULL;
 
 	for(int ac=0; ac<NUMACTIONS; ac++)
 		doneAction[ac] = false;
@@ -563,7 +563,7 @@ void updatePlayerMove(object_c &moveObj, GLfloat dt)
 }
 
 
-void updateEnemyMove(object_c &moveObj, const object_c &target, GLfloat dt)
+void updateEnemyMove(Object &moveObj, const Object &target, GLfloat dt)
 {
 	actions thisAct = actNONE;
 	bool couldAnimate = true;
@@ -750,7 +750,7 @@ void updateEnemyMove(object_c &moveObj, const object_c &target, GLfloat dt)
 }
 
 
-actions runEnemyAI(object_c &thisEnemy, const object_c &target)
+actions runEnemyAI(Object &thisEnemy, const Object &target)
 {
 	GLfloat floorLeft, floorRight;
 	actions thisAct = actNONE;
@@ -797,7 +797,7 @@ actions runEnemyAI(object_c &thisEnemy, const object_c &target)
 }
 
 
-bool touchExists(const object_c &moveObj, const object_c &obj2)
+bool touchExists(const Object &moveObj, const Object &obj2)
 {
 	Vector2D posMin, posMax;
 	bool tE;
@@ -816,7 +816,7 @@ bool touchExists(const object_c &moveObj, const object_c &obj2)
 }
 
 
-void updateObjectMove(object_c &moveObj, GLfloat dt)
+void updateObjectMove(Object &moveObj, GLfloat dt)
 {
 	GLfloat resetVal;
 	resetVal = 0.05f;
@@ -985,7 +985,7 @@ void updateMoves(objectHolder_c mobjects)
 	return;
 }
 
-bool resetPos(object_c &Obj, const object_c &obj2)
+bool resetPos(Object &Obj, const Object &obj2)
 {
 	bool didReset = false;
 	GLfloat leftSpace, rightSpace, bottomSpace, topSpace, smallSpace;
@@ -1022,10 +1022,10 @@ bool resetPos(object_c &Obj, const object_c &obj2)
 }
 
 
-void collide(object_c &obj1, const object_c &obj2, touch side)
+void collide(Object &obj1, const Object &obj2, touch side)
 {
 	GLfloat initHealth = obj1.health;
-	object_c* obj2ptr = getObject(obj2.index);
+	Object* obj2ptr = getObject(obj2.index);
 	Vector2D v1  = obj1.velOld;
 	Vector2D v2;
 	bool movingTowardsLR;	//left right
@@ -1139,10 +1139,10 @@ void collide(object_c &obj1, const object_c &obj2, touch side)
 }
 
 
-void collide(object_c &obj1, const object_c &obj2)
+void collide(Object &obj1, const Object &obj2)
 {
 	GLfloat initHealth = obj1.health;
-	object_c* obj2ptr = getObject(obj2.index);
+	Object* obj2ptr = getObject(obj2.index);
     QTime clock;
 	
 	if(obj2.objType == tpSHOT)
@@ -1174,7 +1174,7 @@ void collide(object_c &obj1, const object_c &obj2)
 }
 
 
-void clearStates(object_c &obj)
+void clearStates(Object &obj)
 {
 	for(int i=0; i<20; i++)
 	{
@@ -1196,9 +1196,9 @@ void oscillate()
 
 
 
-void moveShots(object_c *sh)
+void moveShots(Object *sh)
 {
-	object_c* parent = sh->parent;
+	Object* parent = sh->parent;
 
 	sh->vel.y = 0.0f;
 	sh->velOld.y = 0.0f;

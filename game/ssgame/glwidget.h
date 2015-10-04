@@ -4,6 +4,8 @@
 #include <QtGlobal>
 #include <qmatrix4x4.h>
 
+class Game;
+
 #if (QT_VERSION >= 0x050500)
 #include "qopenglwidget.h"
 class GLWidget : public QOpenGLWidget
@@ -21,6 +23,7 @@ protected:
     void resizeGL(int w, int h);
     void paintGL();
 private:
+    Game *m_game;
     int m_elapsed;
     QMatrix4x4 m_projection;
 signals:

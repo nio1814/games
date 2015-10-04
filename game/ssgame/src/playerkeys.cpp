@@ -52,11 +52,12 @@ void assignControls()
 	return;
 }
 
-void runKeys(level_c* lvl, pointerTree* treeIn)
+void runKeys(Level* lvl, pointerTree* treeIn)
 {
 	CameraView view = lvl->cameras->camview;
     CameraPoint* cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
-	object_c* moveobj = &lvl->players[lvl->playerFocus];
+//	Object* moveobj = &lvl->players[lvl->playerFocus];
+    ObjectPointer moveobj = lvl->getPlayer(lvl->playerFocus);
 	static CameraView lastCam = FOLLOW;
 	static pointerTree* tP = treeIn;
 	

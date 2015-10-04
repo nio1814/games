@@ -862,7 +862,7 @@ void doTextures()
 	return;
 }
 
-void assignTextures(object_c &obj, animData_s *animData)
+void assignTextures(Object &obj, animData_s *animData)
 {
 	for(int i=0; i<NUMACTIONS; i++)
 	{
@@ -888,7 +888,7 @@ void assignTextures(object_c &obj, animData_s *animData)
 	return;
 }
 
-bool sendAnimation(object_c &obj, actions act, GLfloat dt)
+bool sendAnimation(Object &obj, actions act, GLfloat dt)
 {
 	bool didAnimation;
 
@@ -926,7 +926,7 @@ bool sendAnimation(object_c &obj, actions act, GLfloat dt)
 	return didAnimation;
 }
 
-bool animate(object_c &obj, actions act, const animData_s *animData, GLfloat dt)
+bool animate(Object &obj, actions act, const animData_s *animData, GLfloat dt)
 {
 	int frame;
 	GLfloat rx, ry;
@@ -1105,7 +1105,7 @@ void setDefaults(animData_s **animData, int numobjs)
 }
 
 
-void fixSize(object_c &animObj)
+void fixSize(Object &animObj)
 {
 	Vector2D minOld = Vector2D(animObj.posMin.x, animObj.posMin.y);
 	Vector2D maxOld = Vector2D(animObj.posMax.x, animObj.posMax.y);

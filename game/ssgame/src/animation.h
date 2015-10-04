@@ -96,11 +96,11 @@ extern animData_s **objectTextures;
 extern animData_s **shotTextures;
 
 void doTextures();
-void assignTextures(object_c &obj, animData_s *animData);
+void assignTextures(Object &obj, animData_s *animData);
 void setDefaults(animData_s **animData, int numobjs);	//last frame and minstop frame
-bool animate(object_c &obj, actions act, const animData_s *animData, GLfloat dt);
-bool sendAnimation(object_c &obj, actions act, GLfloat dt);
-void fixSize(object_c &animObj);
+bool animate(Object &obj, actions act, const animData_s *animData, GLfloat dt);
+bool sendAnimation(Object &obj, actions act, GLfloat dt);
+void fixSize(Object &animObj);
 
 
 #endif

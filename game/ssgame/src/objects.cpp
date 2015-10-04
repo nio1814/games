@@ -22,7 +22,7 @@ GLfloat DEFRICTION = 1.0f;
 int objectIndex = 0;
 objectHolder_c AllObjects;
 
-object_c::object_c()
+Object::Object()
 {
     init();
 	
@@ -30,7 +30,7 @@ object_c::object_c()
 }
     
     
-object_c::object_c(GLfloat wid, GLfloat hei, type oType, int ident)
+Object::Object(GLfloat wid, GLfloat hei, type oType, int ident)
 {
 	init(wid, hei, oType, ident);
 
@@ -38,7 +38,7 @@ object_c::object_c(GLfloat wid, GLfloat hei, type oType, int ident)
 	AllObjects.setObject(this, index);
 }
 
-object_c::object_c(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, type oType, int ident)
+Object::Object(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, type oType, int ident)
 {
     init(wid, hei, oType, ident);
    
@@ -49,7 +49,7 @@ object_c::object_c(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, typ
 	AllObjects.setObject(this, index);
 }
 
-void object_c::init()
+void Object::init()
 {
 	posOld	= Vector2D(0.0f, 0.0f);
 	pos		= Vector2D(0.0f, 0.0f);
@@ -106,7 +106,7 @@ void object_c::init()
 	return;
 }
 
-void object_c::init(GLfloat wid, GLfloat hei, type oType, int ident)
+void Object::init(GLfloat wid, GLfloat hei, type oType, int ident)
 {
 	init();
 
@@ -135,7 +135,7 @@ void object_c::init(GLfloat wid, GLfloat hei, type oType, int ident)
 
 	return;
 }
-object_c& object_c::operator= (object_c obj)				// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
+Object& Object::operator= (Object obj)				// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
 {
 	this->pos = obj.pos;
 	this->posOld = obj.posOld;
@@ -219,14 +219,14 @@ object_c& object_c::operator= (object_c obj)				// operator= sets values of v to
 	//char picFile = obj.picFile;
 	//char ID = obj.ID;
 
-/*object_c::~object_c()
+/*Object::~Object()
 {
 	delete [] texture;
 }*/
 	return *this;
 }
 
-void object_c::drawRec()
+void Object::drawRec()
 {
 
 	glBindTexture(GL_TEXTURE_2D, texture[animFrame]);				// Select A Texture Based On filter
@@ -281,7 +281,7 @@ void object_c::drawRec()
 }
 
 
-void object_c::drawCube()
+void Object::drawCube()
 {
 	calcBoundaries();
 
@@ -356,7 +356,7 @@ void object_c::drawCube()
 }
 
 
-void object_c::calcBoundaries()
+void Object::calcBoundaries()
 {
 	//width = wScale[animFrame]*oWidth;
 	//height = hScale[animFrame]*oHeight;
@@ -382,7 +382,7 @@ void object_c::calcBoundaries()
 	return;
 }
 
-bool object_c::addShots(int numS, GLfloat wid, GLfloat hei, shots sType)
+bool Object::addShots(int numS, GLfloat wid, GLfloat hei, shots sType)
 {
 	bool couldAdd = false;
 
@@ -395,7 +395,7 @@ bool object_c::addShots(int numS, GLfloat wid, GLfloat hei, shots sType)
 	return couldAdd;
 }
 
-bool object_c::isTouched()
+bool Object::isTouched()
 {
 	bool isTouched = false;
 	isTouched = isTouching[BSIDE] || isTouching[RSIDE] || isTouching[TSIDE] || isTouching[LSIDE];
@@ -404,7 +404,7 @@ bool object_c::isTouched()
 }
 
 //OBJECT HOLDER
-void objectHolder_c::setObject(object_c *obj, int index)
+void objectHolder_c::setObject(Object *obj, int index)
 {
 	objects[index] = obj;
 	numObjects++;
@@ -413,7 +413,7 @@ void objectHolder_c::setObject(object_c *obj, int index)
 }
 
 
-void objectHolder_c::setObject(object_c *obj)
+void objectHolder_c::setObject(Object *obj)
 {
 	objects[numObjects] = obj;
 	numObjects++;
@@ -422,9 +422,9 @@ void objectHolder_c::setObject(object_c *obj)
 }
 
 
-object_c* objectHolder_c::getObject(int index)
+Object* objectHolder_c::getObject(int index)
 {
-	object_c *obj;
+    Object *obj;
 	obj = objects[index];
 	
 	return obj;
@@ -440,13 +440,13 @@ shotList_c::shotList_c()
 	slist = NULL;
 }
 
-shotList_c::shotList_c(int numS, GLfloat wid, GLfloat hei, shots shotType, object_c *pnt)
+shotList_c::shotList_c(int numS, GLfloat wid, GLfloat hei, shots shotType, Object *pnt)
 {
 	numShots = numS;
 	numActive = 0;
 	numFree = numS;
 	maxDist = 20.0f;
-	slist = new object_c[numS];
+    slist = new Object[numS];
 	
 	for(int i=0; i<numS; i++)
 	{
@@ -457,9 +457,9 @@ shotList_c::shotList_c(int numS, GLfloat wid, GLfloat hei, shots shotType, objec
 	}
 }
 
-object_c* shotList_c::nextShot()
+Object* shotList_c::nextShot()
 {
-	object_c* nshot = NULL;
+    Object* nshot = NULL;
 	int i=0;
 
 	do{
@@ -493,11 +493,11 @@ void shotList_c::updateShots()
 	return;
 }
 
-//object_c* shotList_c::currentShot();
+//Object* shotList_c::currentShot();
 
-object_c* getObject(int index)
+Object* getObject(int index)
 {
-	object_c *obj;
+    Object *obj;
 	obj = AllObjects.getObject(index);
 	
 	return obj;

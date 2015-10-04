@@ -40,7 +40,7 @@ GLfloat Min(GLfloat num1, GLfloat num2)
 }
 
 
-GLfloat dist(const object_c *obj1, const object_c *obj2)
+GLfloat dist(const Object *obj1, const Object *obj2)
 {
 	GLfloat distance = static_cast<GLfloat>(sqrt((obj1->pos.x - obj2->pos.x)*(obj1->pos.x - obj2->pos.x) + (obj1->pos.y - obj2->pos.y)*(obj1->pos.y - obj2->pos.y)));
 

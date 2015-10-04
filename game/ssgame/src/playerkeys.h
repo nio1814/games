@@ -6,7 +6,7 @@
 
 #include "objects.h"
 #include "animation.h"
-#include "world.h"
+#include "level.h"
 
 extern bool	keys[512][2];								// Array Used For The Keyboard Routine
 extern bool	btns[12][2];								// Array Used For The Keyboard Routine
@@ -36,7 +36,7 @@ bool isBtns(const int btnIn);
 bool isHeldBtn(const int btnIn);
 bool canToggleBtn(const int btnIn);
 
-//void runKeys(level_c* lvl, joystick_s *joy, pointerTree* tP);
+//void runKeys(Level* lvl, joystick_s *joy, pointerTree* tP);
 int getKey(playerNum numPlayer, actions act);
 void getKeys(playerNum numPlayer, int pKeys[]);
 void getBtns(playerNum numPlayer, int pBtns[]);

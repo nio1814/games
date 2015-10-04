@@ -1,13 +1,9 @@
 #ifndef	MOVEMENT
 #define MOVEMENT
 
-//#include	<windows.h>							// Header File For Windows
-//#include	<gl\gl.h>							// Header File For The OpenGL32 Library
-//#include	<gl\glu.h>							// Header File For The GLu32 Library
-
 #include "animation.h"
 #include "objects.h"
-#include "world.h"
+#include "level.h"
 
 extern GLfloat xrot;									// X Rotation
 extern GLfloat	yrot;									// Y Rotation
@@ -41,29 +37,29 @@ extern GLfloat oscillator;
 extern bool cameraMode;
 extern bool debugMode;
 
-void checkTouch(object_c &moveObj, const object_c &obj2);
-void checkTouch(object_c &moveObj, level_s level);
+void checkTouch(Object &moveObj, const Object &obj2);
+void checkTouch(Object &moveObj, level_s level);
 void checkTouch(int mobjects[], int numObjects, const level_s &level);
 void checkTouch(objectHolder_c mobjects, const level_s &level);
-void checkTouch(object_c &moveObj, object_c objs[], int nobjs, int nocheck);
+void checkTouch(Object &moveObj, ObjectList objs, int nobjs, int nocheck);
 
-bool touchExists(const object_c &moveObj, const object_c &obj2);
-void clearTouches(object_c &obj);
-void clearStates(object_c &obj);
+bool touchExists(const Object &moveObj, const Object &obj2);
+void clearTouches(Object &obj);
+void clearStates(Object &obj);
 
-void updatePlayerMove(object_c &moveObj, GLfloat dt);
-void updateObjectMove(object_c &moveObj, GLfloat dt);
-void updateEnemyMove(object_c &moveObj, const object_c &target, GLfloat dt);
-actions runEnemyAI(object_c &thisEnemy, const object_c &target);
+void updatePlayerMove(Object &moveObj, GLfloat dt);
+void updateObjectMove(Object &moveObj, GLfloat dt);
+void updateEnemyMove(Object &moveObj, const Object &target, GLfloat dt);
+actions runEnemyAI(Object &thisEnemy, const Object &target);
 void updateMoves(int mobjects[], int numObjects);
 void updateMoves(objectHolder_c mobjects);
 
-bool resetPos(object_c &Obj, const object_c &obj2);
-void collide(object_c &obj1, const object_c &obj2, touch side);
-void collide(object_c &obj1, const object_c &obj2);
-void objInteract(object_c &obj1, object_c &obj2);
+bool resetPos(Object &Obj, const Object &obj2);
+void collide(Object &obj1, const Object &obj2, touch side);
+void collide(Object &obj1, const Object &obj2);
+void objInteract(Object &obj1, Object &obj2);
 
 void oscillate();
 
-void moveShots(object_c *sh);
+void moveShots(Object  *sh);
 #endif

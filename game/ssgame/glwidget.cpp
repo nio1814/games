@@ -2,6 +2,9 @@
 
 #include <qtimer.h>
 
+#include "game.h"
+#include "level.h"
+
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
     : QOpenGLWidget(parent)
@@ -10,6 +13,8 @@ GLWidget::GLWidget(QWidget *parent)
 #endif
 {
     m_elapsed = 0;
+    m_game = new Game();
+    Level lvl1(1);
 }
 
 void GLWidget::initializeGL()
@@ -52,11 +57,17 @@ void GLWidget::paintGL()
     glVertex3f(0,1,0);
     glEnd();
 
+    m_game->draw();
+
     return;
 }
 
 void GLWidget::animate()
 {
-    m_elapsed += qobject_cast<QTimer*>(sender())->interval();
+    int dt = qobject_cast<QTimer*>(sender())->interval();
+
+    m_game->update(dt*1e-3);
+
+    m_elapsed += dt;
     update();
 }

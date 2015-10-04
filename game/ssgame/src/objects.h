@@ -33,32 +33,32 @@ struct actionTiming
 	}
 };
 
-class object_c;
+class Object;
 
 class shotList_c
 {
 public:
 	shotList_c();
-	shotList_c(int numS, GLfloat wid, GLfloat hei, shots sType, object_c *pnt);
+    shotList_c(int numS, GLfloat wid, GLfloat hei, shots sType, Object *pnt);
 
-	object_c* nextShot();
-	object_c* lastShot();
+    Object* nextShot();
+    Object* lastShot();
 	void updateShots();
 
 	int numShots;
 	int numActive;
 	int numFree;
 	GLfloat maxDist;
-	object_c* slist;
+    Object* slist;
 };
 
-class object_c								// Create A Structure For Our Player
+class Object								// Create A Structure For Our Player
 {
     public:
-	object_c();
-    object_c(GLfloat wid, GLfloat hei, type oType, int ident);		//ident is general identifier for the object type
-	object_c(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, type oType, int ident);
-	object_c& operator= (object_c obj);
+    Object();
+    Object(GLfloat wid, GLfloat hei, type oType, int ident);		//ident is general identifier for the object type
+    Object(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, type oType, int ident);
+    Object& operator= (Object obj);
 	
 	void init();
 	void init(GLfloat wid, GLfloat hei, type oType, int ident);
@@ -99,11 +99,11 @@ class object_c								// Create A Structure For Our Player
 	GLfloat dirSign;
 	bool isTouching[4];
 	int isTouchIndex[4];
-	const object_c* touchObj[4];
+    const Object* touchObj[4];
 	bool inFront;
 	
 	int index;
-	object_c* parent;
+    Object* parent;
 	shotList_c* objshots;			//dynamic(only created if needed)
 	int numShots;
 
@@ -136,25 +136,28 @@ class object_c								// Create A Structure For Our Player
 	char picFile[255];			//picture filename
 	char ID[255];
 	
-	//~object_c();
+    //~Object();
 };
 
 
 class objectHolder_c
 {
 	public:
-		void setObject(object_c *obj, int index);
-		void setObject(object_c *obj);
-		object_c* getObject(int index);
+        void setObject(Object *obj, int index);
+        void setObject(Object *obj);
+        Object* getObject(int index);
 		int numObjects;
 		
 	private:
-		object_c* objects[100];
+        Object* objects[100];
 };
 
-void setObject(object_c *obj, int index);
-void setObject(object_c *obj);
-object_c* getObject(int index);
+void setObject(Object *obj, int index);
+void setObject(Object *obj);
+Object* getObject(int index);
+
+typedef Object* ObjectPointer;
+typedef QList<ObjectPointer> ObjectList;
 
 #endif
 
