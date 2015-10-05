@@ -5,6 +5,8 @@
 #include "game.h"
 #include "level.h"
 
+#include <glu.h>
+
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
     : QOpenGLWidget(parent)
@@ -14,11 +16,14 @@ GLWidget::GLWidget(QWidget *parent)
 {
     m_elapsed = 0;
     m_game = new Game();
-    Level lvl1(1);
+    m_game->addLevel(0);
 }
 
 void GLWidget::initializeGL()
 {
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearDepth(1.0f);
+
     return;
 }
 
@@ -36,6 +41,9 @@ void GLWidget::resizeGL(int w, int h)
 //    qgluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
     m_projection.setToIdentity();
     m_projection.perspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
+    m_aspectRatio = (qreal)w / (qreal)(h ? h : 1);
+//    gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
+//    glFrustum(-m_aspectRatio, m_aspectRatio, -1.0f, 1.0f, 4.0f, 15.0f);
 
     glMatrixMode(GL_MODELVIEW);						// Select The Modelview Matrix
     glLoadIdentity();							// Reset The Modelview Matrix
@@ -45,19 +53,78 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::paintGL()
 {
+     GLfloat T = 10000;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glEnable(GL_DEPTH_TEST);
+//    glEnable(GL_DEPTH_TEST);
+
+    GLfloat x = 0.1*m_elapsed/10000.0f;
+    GLfloat y = 0.03*m_elapsed/10000.0f;
+    GLfloat z = 1*m_elapsed/10000.0f;
+//    m_model.translate(x,y,0);
+
+     glTranslatef(x,y,-z);
+
+//    glRotatef(10*m_elapsed/T,0,1,0);
+
 
     glBegin(GL_TRIANGLES);
 //    glColor3f(.3, .1, .7);
-    glColor3f(qrand()/(float)RAND_MAX, qrand()/(float)RAND_MAX, qrand()/(float)RAND_MAX);
-    glVertex3f(0,0,0);
+    glColor3f(cos(m_elapsed/T), sin(m_elapsed/T*1.53), sin(m_elapsed/T*.42));
+    glVertex3f(0,0,-1);
     glVertex3f(1,m_elapsed/10000.0,0);
     glVertex3f(0,1,0);
     glEnd();
 
+    // draw a cube (6 quadrilaterals)
+    glBegin(GL_QUADS);				// start drawing the cube.
+
+    // top of cube
+    glColor3f(0.0f,1.0f,0.0f);			// Set The Color To Blue
+    glVertex3f( 1.0f, 1.0f,-1.0f);		// Top Right Of The Quad (Top)
+    glVertex3f(-1.0f, 1.0f,-1.0f);		// Top Left Of The Quad (Top)
+    glVertex3f(-1.0f, 1.0f, 1.0f);		// Bottom Left Of The Quad (Top)
+    glVertex3f( 1.0f, 1.0f, 1.0f);		// Bottom Right Of The Quad (Top)
+
+    // bottom of cube
+    glColor3f(1.0f,0.5f,0.0f);			// Set The Color To Orange
+    glVertex3f( 1.0f,-1.0f, 1.0f);		// Top Right Of The Quad (Bottom)
+    glVertex3f(-1.0f,-1.0f, 1.0f);		// Top Left Of The Quad (Bottom)
+    glVertex3f(-1.0f,-1.0f,-1.0f);		// Bottom Left Of The Quad (Bottom)
+    glVertex3f( 1.0f,-1.0f,-1.0f);		// Bottom Right Of The Quad (Bottom)
+
+    // front of cube
+    glColor3f(1.0f,0.0f,0.0f);			// Set The Color To Red
+    glVertex3f( 1.0f, 1.0f, 1.0f);		// Top Right Of The Quad (Front)
+    glVertex3f(-1.0f, 1.0f, 1.0f);		// Top Left Of The Quad (Front)
+    glVertex3f(-1.0f,-1.0f, 1.0f);		// Bottom Left Of The Quad (Front)
+    glVertex3f( 1.0f,-1.0f, 1.0f);		// Bottom Right Of The Quad (Front)
+
+    // back of cube.
+    glColor3f(1.0f,1.0f,0.0f);			// Set The Color To Yellow
+    glVertex3f( 1.0f,-1.0f,-1.0f);		// Top Right Of The Quad (Back)
+    glVertex3f(-1.0f,-1.0f,-1.0f);		// Top Left Of The Quad (Back)
+    glVertex3f(-1.0f, 1.0f,-1.0f);		// Bottom Left Of The Quad (Back)
+    glVertex3f( 1.0f, 1.0f,-1.0f);		// Bottom Right Of The Quad (Back)
+
+    // left of cube
+    glColor3f(0.0f,0.0f,1.0f);			// Blue
+    glVertex3f(-1.0f, 1.0f, 1.0f);		// Top Right Of The Quad (Left)
+    glVertex3f(-1.0f, 1.0f,-1.0f);		// Top Left Of The Quad (Left)
+    glVertex3f(-1.0f,-1.0f,-1.0f);		// Bottom Left Of The Quad (Left)
+    glVertex3f(-1.0f,-1.0f, 1.0f);		// Bottom Right Of The Quad (Left)
+
+    // Right of cube
+    glColor3f(1.0f,0.0f,1.0f);			// Set The Color To Violet
+    glVertex3f( 1.0f, 1.0f,-1.0f);	        // Top Right Of The Quad (Right)
+    glVertex3f( 1.0f, 1.0f, 1.0f);		// Top Left Of The Quad (Right)
+    glVertex3f( 1.0f,-1.0f, 1.0f);		// Bottom Left Of The Quad (Right)
+    glVertex3f( 1.0f,-1.0f,-1.0f);		// Bottom Right Of The Quad (Right)
+    glEnd();
+
+
     m_game->draw();
+
 
     return;
 }

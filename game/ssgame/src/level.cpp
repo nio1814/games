@@ -57,6 +57,11 @@ void makeLevel(level_s &level)
 	return;
 }
 
+bool Level::started()
+{
+    return levelStarted;
+}
+
 bool Level::create(int index)
 {
     bool status = false;
@@ -376,10 +381,9 @@ void Level::addPlayer(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, 
 {
     int index = m_objects.size();
 
-    Object player = Object(wid, hei, xStart, yStart, tpPLAYER, cter);
-    player.numPlayer = static_cast<playerNum>(numPlayers());
+    m_objects.append(new Object(wid, hei, xStart, yStart, tpPLAYER, cter));
+    m_objects[index]->numPlayer = static_cast<playerNum>(numPlayers());
 
-    m_objects.append(&player);
     m_playerIdx.append(index);
 	
 	return;
@@ -393,6 +397,11 @@ ObjectPointer Level::getPlayer(int index)
 ObjectPointer Level::getEnemy(int index)
 {
     return m_objects[m_enemyIdx[index]];
+}
+
+ObjectPointer Level::getStructure(int index)
+{
+    return m_objects[m_structureIdx[index]];
 }
 
 ObjectList Level::structures()
@@ -541,17 +550,16 @@ void Level::draw()
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
 	//glLoadIdentity();							// Reset The Current Modelview Matrix
 	//gluLookAt(-x, -y, -20, -x, -y, 0.0, 0.0, 1.0, 0.0);
-	
+
     for(int s=0; s<numStructures(); s++)
     {
-        int n = objectIndex(tpOBJ, s);
-        if(m_objects[n]->active)
-            m_objects[n]->drawRec();
+        ObjectPointer structure = getStructure(s);
+        if(structure->active)
+            structure->drawRec();
 	}
     for(int p=0; p<numPlayers(); p++)
     {
-        int n = objectIndex(tpPLAYER, p);
-        Object* player = m_objects[n];
+        ObjectPointer player = getPlayer(p);
         if(player->active)
 		{
             player->drawRec();
@@ -567,9 +575,9 @@ void Level::draw()
 	}
     for(int e=0; e<numEnemies(); e++)
 	{
-        int n = objectIndex(tpENEMY, e);
-        if(m_objects[n]->active)
-            m_objects[n]->drawRec();
+        ObjectPointer enemy = getEnemy(e);
+        if(enemy->active)
+            enemy->drawRec();
 	}
 
 	return;

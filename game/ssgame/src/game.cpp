@@ -39,8 +39,6 @@ Game::Game()
 
 Game::~Game()
 {
-    delete[] m_levels;
-    delete m_currentLevel;
     delete m_players;
 }
 
@@ -312,9 +310,20 @@ void initSound()
 	return;
 }
 
-Level& Game::level()
+bool Game::addLevel(int index)
 {
-    return *m_currentLevel;
+    bool status = false;
+
+    m_levels.append(Level(index));
+    if(m_levels.size()==1)
+        m_currentLevel = 0;
+
+    return status;
+}
+
+Level &Game::level()
+{
+    return m_levels[m_currentLevel];
 }
 
 void Game::update(float dt)
@@ -324,6 +333,8 @@ void Game::update(float dt)
 
 void Game::draw()
 {
+    level().draw();
+
     return;
 }
 

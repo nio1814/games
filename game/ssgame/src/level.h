@@ -78,10 +78,13 @@ public:
 
     Object* getEnemy(int index);
     ObjectPointer getPlayer(int index);
+    ObjectPointer getStructure(int index);
 
     ObjectList structures();
     ObjectList players();
     ObjectList enemies();
+
+    bool started();
 
 //private:
     int m_index;

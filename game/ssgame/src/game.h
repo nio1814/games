@@ -1,7 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-class Level;
+#include "level.h"
+
+//class Level;
 class Object;
 
 class Game
@@ -13,20 +15,21 @@ public:
     void update(float dt);
     void draw();
     void run();
+
+    bool addLevel(int index);
     Level& level();
 
 private:
     int m_numPlayers;
     int m_playerFocus;
     int m_numLevels;
-    Level *m_levels;
 
-    bool addLevel();
     bool loadLevel();
     bool addPlayer();
 
     Object *m_players;
-    Level *m_currentLevel;
+    int m_currentLevel;
+    QList<Level> m_levels;
 };
 
 #endif // GAME_H

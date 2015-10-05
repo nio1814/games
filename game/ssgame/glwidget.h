@@ -26,6 +26,8 @@ private:
     Game *m_game;
     int m_elapsed;
     QMatrix4x4 m_projection;
+    QMatrix4x4 m_model;
+    GLfloat m_aspectRatio;
 signals:
 
 public slots:
