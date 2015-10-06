@@ -7,6 +7,8 @@
 
 struct Geometry
 {
+	void appendFaceted(const QVector3D &a, const QVector3D& n);
+
     QVector<GLushort> faces;
     QVector<QVector3D> vertices;
     QVector<QVector3D> normals;
@@ -16,10 +18,12 @@ struct Geometry
 class Patch
 {
 public:
+	enum Smoothing {Faceted, Smooth};
     Patch(Geometry* geo);
 
     void draw() const;
     void addTri(const QVector3D& a, const QVector3D& b, const QVector3D& c, const QVector3D &n);
+    void addQuad(const QVector3D& a, const QVector3D& b, const QVector3D& c, const QVector3D &d);
     void translate(const QVector3D& t);
     void rotate(qreal deg, QVector3D axis);
 

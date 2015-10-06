@@ -1,5 +1,27 @@
 #include "qtlogo.h"
 
+void Patch::addTri(const QVector3D &a, const QVector3D &b, const QVector3D &c, const QVector3D &n)
+{
+	QVector3D norm = n.isNull() ? QVector3D::normal(a,b,c) : n;
+
+	geom->appendFaceted(a, norm);
+	geom->appendFaceted(b, norm);
+	geom->appendFaceted(c, norm);
+
+	count += 3;
+
+	return;
+}
+
+void Patch::addQuad(const QVector3D &a, const QVector3D &b, const QVector3D &c, const QVector3D &d)
+{
+	QVector3D norm = QVector3D::normal(a,b,c);
+	addTri(a,b,c, norm);
+	int k = geom->vertices.count();
+	count += 3;
+
+	return;
+}
 
 void Patch::draw() const
 {
@@ -19,6 +41,21 @@ void Patch::translate(const QVector3D &t)
 void Patch::rotate(qreal deg, QVector3D axis)
 {
     mat.rotate(deg, axis);
+}
+
+RectTorus::RectTorus(Geometry *g, qreal iRad, qreal oRad, qreal depth, int numSections)
+{
+	QVector<QVector3D> inside;
+	QVector<QVector3D> outside;
+
+	Patch* front = new Patch(g);
+
+	for(int i=0; i<numSections; i++)
+	{
+		front->addQuad(outside[i], inside[i], inside[(i+1)%numSections], outside[(i+1)%numSections]);
+	}
+
+	parts << front;
 }
 
 QtLogo::QtLogo(QObject *parent, int d, qreal s) : QObject(parent)

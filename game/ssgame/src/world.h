@@ -108,7 +108,7 @@ public:
     CameraPoints* cameras;
 };
 
-class game_c
+class Game
 {
 public:
 	int numPlayers;
@@ -116,8 +116,8 @@ public:
 	int numLevels;
 	level_c levels[MAXLEVELS];
 
-	game_c();
-	~game_c();
+	Game();
+	~Game();
 
 	bool addLevel();
 	bool loadLevel();

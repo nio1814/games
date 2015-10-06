@@ -1,14 +1,11 @@
 #ifndef _TGA_H
 #define _TGA_H
 
-//#include <windows.h>
-//#include <gl/gl.h>
-
 #include <qopengl.h>
 
-#define TGA_RGB		2
+#define TGA_RGB	2
 #define TGA_A		3
-#define TGA_RLE		10
+#define TGA_RLE	10
 
 struct ImageTGA
 {
