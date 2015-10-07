@@ -29,6 +29,8 @@ void GLWidget::paintGL()
     glLoadIdentity();
 
     glRotatef(xRot/scale, 1, 0, 0);
+    glRotatef(yRot/scale, 0, 1, 0);
+    glRotatef(zRot/scale, 0, 0, 1);
 
     logo->draw();
 }
@@ -41,4 +43,32 @@ void GLWidget::setXRotation(int angle)
         emit xRotationChanged(angle);
         updateGL();
     }
+}
+
+void GLWidget::setYRotation(int angle)
+{
+    if(angle!=yRot)
+    {
+	   yRot = angle;
+	   emit yRotationChanged(angle);
+	   updateGL();
+    }
+}
+
+void GLWidget::mousePressEvent(QMouseEvent *event)
+{
+	lastPos = event->pos();
+
+	return;
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent *event)
+{
+	int dx = event->x() - lastPos.x();
+
+	if (event->buttons() & Qt::LeftButton) {
+		setYRotation(yRot + .5*scale*dx);
+	}
+
+	lastPos = event->pos();
 }

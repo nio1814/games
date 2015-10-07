@@ -19,17 +19,22 @@ public:
 protected:
     void initializeGL();
     void paintGL();
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
 
 signals:
     void xRotationChanged(int angle);
+    void yRotationChanged(int angle);
 public slots:
     void setXRotation(int angle);
+    void setYRotation(int angle);
 private:
     QSlider* createSlider();
     QtLogo *logo;
     int xRot;
     int yRot;
     int zRot;
+    QPoint lastPos;
 };
 
 #endif // GLWIDGET_H
