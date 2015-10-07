@@ -18,6 +18,9 @@ Window::Window(QWidget *parent)
     mainLayout->addWidget(ySlider);
     mainLayout->addWidget(zSlider);
     setLayout(mainLayout);
+
+    connect(xSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setXRotation(int)));
+    connect(glWidget, SIGNAL(xRotationChanged(int)), xSlider, SLOT(setValue(int)));
 }
 
 Window::~Window()
@@ -27,7 +30,8 @@ Window::~Window()
 
 QSlider* Window::createSlider()
 {
-    int scale = 16;
+    GLfloat scale = glWidget->scale;
+
     QSlider* slider = new QSlider(Qt::Vertical);
     slider->setRange(0, 360*scale);
     slider->setSingleStep(scale);

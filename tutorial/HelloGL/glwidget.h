@@ -14,6 +14,8 @@ public:
 
     QSize minimumSizeHint() const;
 
+    float scale;
+
 protected:
     void initializeGL();
     void paintGL();

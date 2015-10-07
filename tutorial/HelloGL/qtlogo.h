@@ -8,6 +8,10 @@
 struct Geometry
 {
 	void appendFaceted(const QVector3D &a, const QVector3D& n);
+	void appendSmooth(const QVector3D &a, const QVector3D& n, int from);
+
+	void finalize();
+	void loadArrays();
 
     QVector<GLushort> faces;
     QVector<QVector3D> vertices;
@@ -31,6 +35,7 @@ public:
     GLushort count;
     QMatrix4x4 mat;
     Geometry* geom;
+    GLfloat faceColor[4];
 };
 
 class Rectoid

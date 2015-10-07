@@ -3,7 +3,7 @@
 #include "qtlogo.h"
 
 GLWidget::GLWidget(QWidget *parent)
-    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent), scale(16)
 {
 }
 
@@ -19,12 +19,16 @@ QSize GLWidget::minimumSizeHint() const
 void GLWidget::initializeGL()
 {
     qglClearColor(Qt::blue);
+
+    logo = new QtLogo(this, 64);
 }
 
 void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
+
+    glRotatef(xRot/scale, 1, 0, 0);
 
     logo->draw();
 }
