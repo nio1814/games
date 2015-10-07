@@ -326,10 +326,6 @@ Level &Game::level()
     return m_levels[m_currentLevel];
 }
 
-void Game::update(float dt)
-{
-    return;
-}
 
 void Game::draw()
 {
@@ -338,19 +334,19 @@ void Game::draw()
     return;
 }
 
-int DrawGLScene()								// Here's Where We Do All The Drawing
+void Game::update(float dt)
 {
     QTime clock;
-	static GLfloat lastTime = 0.0f;
+    /*static GLfloat lastTime = 0.0f;
 //	GLfloat thisTime = GetTickCount();
     GLfloat thisTime = clock.elapsed();
-	bool longEnough = (thisTime - lastTime) > 100.0f;
+    bool longEnough = (thisTime - lastTime) > 100.0f;*/
 	static bool hasDied = false;
 		
 	//if(longEnough)
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
-		glLoadIdentity();							// Reset The Current Modelview Matrix
+    /*	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
+        glLoadIdentity();							// Reset The Current Modelview Matrix*/
 
 			//if(!currentLevel->cameraLock)
 				//moveScreen(*player);
@@ -362,11 +358,12 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
 		glRotatef(yrot,0.0f,1.0f,0.0f);						// Rotate On The Y Axis By yrot
 		
 //		runObjects();
+        level().run(dt, 1);
 		
 //		lastTime = GetTickCount();
-        lastTime = clock.elapsed();
+//        lastTime = clock.elapsed();
 	}
-    ObjectPointer player;
+    ObjectPointer player = level().getPlayer(0);
 	if(player->health == 0.0f)
 	{
 		player->active = false;
@@ -515,8 +512,8 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
 	xrot+=xspeed;								// Add xspeed To xrot
 	yrot+=yspeed;								// Add yspeed To yrot
 
-    Level* currentLevel;
-	if(!currentLevel->cameraLock)
+    Level currentLevel = level();
+    if(!currentLevel.cameraLock)
 	{
 		xrot += (player->pos.x -player->posOld.x)/2.4;
 		yrot += (player->pos.y-player->posOld.y)/2.4;
@@ -531,7 +528,7 @@ int DrawGLScene()								// Here's Where We Do All The Drawing
 			xrot -= .1f;
 	}
 
-    return true;								// Everything Went OK
+    return;								// Everything Went OK
 }
 
 /*GLvoid KillGLWindow()							// Properly Kill The Window

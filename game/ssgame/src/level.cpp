@@ -384,6 +384,8 @@ void Level::addPlayer(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, 
     m_objects.append(new Object(wid, hei, xStart, yStart, tpPLAYER, cter));
     m_objects[index]->numPlayer = static_cast<playerNum>(numPlayers());
 
+    if(m_playerIdx.size()==0)
+        playerFocus = 0;
     m_playerIdx.append(index);
 	
 	return;
@@ -421,24 +423,24 @@ ObjectList Level::players()
 {
     ObjectList objs;
 
-    ObjectList::iterator o;
     for(int n=0; n<numPlayers(); n++)
     {
-        if (o[n]->objType==tpPLAYER)
-            objs.append(o[n]);
+        ObjectPointer obj = m_objects[m_playerIdx[n]];
+        if (obj->objType==tpPLAYER)
+            objs.append(obj);
     }
     return objs;
 }
 
 ObjectList Level::enemies()
 {
-    QList<Object*> objs;
+    ObjectList objs;
 
-    QList<Object>::iterator o;
     for(int n=0; n<numEnemies(); n++)
     {
-        if (o[n].objType==tpENEMY)
-            objs.append(&(o[n]));
+        ObjectPointer obj = m_objects[m_enemyIdx[n]];
+        if (obj->objType==tpENEMY)
+            objs.append(obj);
     }
     return objs;
 }
@@ -763,6 +765,7 @@ CameraView Level::cycleCam()
 		
 	return cameras->camview;
 }
+
 void Level::run(GLfloat dt, int numRuns)
 {
     QTime clock;
@@ -780,8 +783,8 @@ void Level::run(GLfloat dt, int numRuns)
 		timer = (currentTime-startTime)/1000;
 		sprintf(timetext, "%.2f", timer);
 	}
-	fixSizes();
-    setCam(getPlayer(playerFocus), dt);
+//	fixSizes();
+//    setCam(getPlayer(playerFocus), dt);
 
 	for(int i=0; i<numRuns; i++)
 	{

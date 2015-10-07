@@ -5,7 +5,7 @@
 #include "game.h"
 #include "level.h"
 
-#include <glu.h>
+//#include <glu.h>
 
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
@@ -22,7 +22,15 @@ GLWidget::GLWidget(QWidget *parent)
 void GLWidget::initializeGL()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0f);
+//    glClearDepth(1.0f);
+
+    glEnable(GL_DEPTH_TEST);
+
+//    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    static GLfloat lightPosition[4] = {.5, 5, 7, 1};
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
     return;
 }
@@ -44,9 +52,12 @@ void GLWidget::resizeGL(int w, int h)
     m_aspectRatio = (qreal)w / (qreal)(h ? h : 1);
 //    gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
 //    glFrustum(-m_aspectRatio, m_aspectRatio, -1.0f, 1.0f, 4.0f, 15.0f);
+//    glOrtho(-.5, .5, -.5, .5, 4, 15);
+//    glOrtho();
+    glFrustum(-2,2,-2,2,1.5,20);
 
     glMatrixMode(GL_MODELVIEW);						// Select The Modelview Matrix
-    glLoadIdentity();							// Reset The Modelview Matrix
+//    glLoadIdentity();							// Reset The Modelview Matrix
 
     return;
 }
@@ -56,16 +67,17 @@ void GLWidget::paintGL()
      GLfloat T = 10000;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-//    glEnable(GL_DEPTH_TEST);
 
     GLfloat x = 0.1*m_elapsed/10000.0f;
     GLfloat y = 0.03*m_elapsed/10000.0f;
     GLfloat z = 1*m_elapsed/10000.0f;
 //    m_model.translate(x,y,0);
 
-     glTranslatef(x,y,-z);
+//     glTranslatef(x,y,-z);
+    glTranslatef(0,0,-15);
 
 //    glRotatef(10*m_elapsed/T,0,1,0);
+//    glRotatef(100*m_elapsed/T,1,1,0);
 
 
     glBegin(GL_TRIANGLES);
@@ -81,6 +93,7 @@ void GLWidget::paintGL()
 
     // top of cube
     glColor3f(0.0f,1.0f,0.0f);			// Set The Color To Blue
+    glNormal3f(0,1,0);
     glVertex3f( 1.0f, 1.0f,-1.0f);		// Top Right Of The Quad (Top)
     glVertex3f(-1.0f, 1.0f,-1.0f);		// Top Left Of The Quad (Top)
     glVertex3f(-1.0f, 1.0f, 1.0f);		// Bottom Left Of The Quad (Top)
@@ -88,13 +101,15 @@ void GLWidget::paintGL()
 
     // bottom of cube
     glColor3f(1.0f,0.5f,0.0f);			// Set The Color To Orange
+    glNormal3f(0,-1,0);
     glVertex3f( 1.0f,-1.0f, 1.0f);		// Top Right Of The Quad (Bottom)
     glVertex3f(-1.0f,-1.0f, 1.0f);		// Top Left Of The Quad (Bottom)
     glVertex3f(-1.0f,-1.0f,-1.0f);		// Bottom Left Of The Quad (Bottom)
     glVertex3f( 1.0f,-1.0f,-1.0f);		// Bottom Right Of The Quad (Bottom)
 
     // front of cube
-    glColor3f(1.0f,0.0f,0.0f);			// Set The Color To Red
+    glColor3f(1.0f,0.0f,0.0f);
+    glNormal3f(0,0,1);// Set The Color To Red
     glVertex3f( 1.0f, 1.0f, 1.0f);		// Top Right Of The Quad (Front)
     glVertex3f(-1.0f, 1.0f, 1.0f);		// Top Left Of The Quad (Front)
     glVertex3f(-1.0f,-1.0f, 1.0f);		// Bottom Left Of The Quad (Front)
@@ -102,6 +117,7 @@ void GLWidget::paintGL()
 
     // back of cube.
     glColor3f(1.0f,1.0f,0.0f);			// Set The Color To Yellow
+    glNormal3f(0,0,-1);
     glVertex3f( 1.0f,-1.0f,-1.0f);		// Top Right Of The Quad (Back)
     glVertex3f(-1.0f,-1.0f,-1.0f);		// Top Left Of The Quad (Back)
     glVertex3f(-1.0f, 1.0f,-1.0f);		// Bottom Left Of The Quad (Back)
@@ -125,7 +141,6 @@ void GLWidget::paintGL()
 
     m_game->draw();
 
-
     return;
 }
 
@@ -137,4 +152,6 @@ void GLWidget::animate()
 
     m_elapsed += dt;
     update();
+
+    return;
 }
