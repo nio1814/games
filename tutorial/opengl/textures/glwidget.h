@@ -16,10 +16,11 @@ public:
 protected:
     void initializeGL();
     void paintGL();
-    void resizeGL();
+    void resizeGL(int width, int height);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent *event);
 //    bool event(QEvent *event);
 
 signals:
@@ -31,12 +32,16 @@ private:
     int xRot;
     int yRot;
     int zRot;
+    GLfloat zPos;
     float scale;
     QPoint lastPos;
 
     GLuint textures[6];
     QVector<QVector3D> vertices;
     QVector<QVector2D> texCoords;
+
+    QMatrix4x4 m_projection;
+    QMatrix4x4 m_view;
 };
 
 #endif // GLWIDGET_H
