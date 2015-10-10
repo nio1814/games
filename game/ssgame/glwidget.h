@@ -22,6 +22,10 @@ protected:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
+
+    void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
+    void mousePressEvent(QMouseEvent *);
 private:
     Game *m_game;
     int m_elapsed;

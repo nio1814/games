@@ -1,6 +1,5 @@
 #include "playerkeys.h"
 
-//#include <windows.h>								// Header File For Windows
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <math.h>
 
@@ -18,16 +17,16 @@ int		controlsB[2][8];	//joystick controls
 
 void assignControls()
 {
-    /*controlsK[PLAYER1][btnLEFT] = VK_LEFT;
-	controlsK[PLAYER1][btnRIGHT] = VK_RIGHT;
-	controlsK[PLAYER1][btnUP] = VK_UP;
-	controlsK[PLAYER1][btnDOWN] = VK_DOWN;
-	controlsK[PLAYER1][btnJUMP] = 'A';
-	controlsK[PLAYER1][btnATTACK] = 'D';
-	controlsK[PLAYER1][btnSHOOT] = 'F';
-	controlsK[PLAYER1][btnDASH] = 'S';
+    controlsK[PLAYER1][btnLEFT] = Qt::Key_Left;
+	controlsK[PLAYER1][btnRIGHT] = Qt::Key_Right;
+	controlsK[PLAYER1][btnUP] = Qt::Key_Up;
+	controlsK[PLAYER1][btnDOWN] = Qt::Key_Down;
+	controlsK[PLAYER1][btnJUMP] = Qt::Key_A;
+	controlsK[PLAYER1][btnATTACK] = Qt::Key_D;
+	controlsK[PLAYER1][btnSHOOT] = Qt::Key_F;
+	controlsK[PLAYER1][btnDASH] = Qt::Key_S;
 
-	controlsB[PLAYER1][btnLEFT] = xbLEFT;
+	/*controlsB[PLAYER1][btnLEFT] = xbLEFT;
 	controlsB[PLAYER1][btnRIGHT] = xbRIGHT;
 	controlsB[PLAYER1][btnUP] = xbUP;
 	controlsB[PLAYER1][btnDOWN] = xbDOWN;
@@ -54,8 +53,8 @@ void assignControls()
 
 void runKeys(Level* lvl, pointerTree* treeIn)
 {
-	CameraView view = lvl->cameras->camview;
-    CameraPoint* cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
+	CameraView view = lvl->cameras.camview;
+    CameraPoint* cam = &lvl->cameras.cpoints[lvl->cameras.currentPoint];
 //	Object* moveobj = &lvl->players[lvl->playerFocus];
     ObjectPointer moveobj = lvl->getPlayer(lvl->playerFocus);
 	static CameraView lastCam = FOLLOW;
@@ -91,12 +90,12 @@ void runKeys(Level* lvl, pointerTree* treeIn)
 		if (!cameraMode)
 		{
 			xspeed = yspeed = 0;
-			lvl->cameras->camview = lastCam;
+			lvl->cameras.camview = lastCam;
 		}
 		else
 		{
-			lastCam = lvl->cameras->camview;
-			lvl->cameras->camview = CAMERAMODE;
+			lastCam = lvl->cameras.camview;
+			lvl->cameras.camview = CAMERAMODE;
 		}
 	}
 	//toggles music
@@ -112,12 +111,12 @@ void runKeys(Level* lvl, pointerTree* treeIn)
 		if (!debugMode)
 		{
 			xspeed = yspeed = 0;
-			lvl->cameras->camview = lastCam;
+			lvl->cameras.camview = lastCam;
 		}
 		else
 		{
-			lastCam = lvl->cameras->camview;
-			lvl->cameras->camview = DEBUGMODE;
+			lastCam = lvl->cameras.camview;
+			lvl->cameras.camview = DEBUGMODE;
 		}
 	}
 /*

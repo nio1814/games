@@ -4,8 +4,8 @@
 
 #include "game.h"
 #include "level.h"
-
-//#include <glu.h>
+#include "keys.h"
+#include "playerkeys.h"
 
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
@@ -17,6 +17,7 @@ GLWidget::GLWidget(QWidget *parent)
     m_elapsed = 0;
     m_game = new Game();
     m_game->addLevel(0);
+    assignControls();
 }
 
 void GLWidget::initializeGL()
@@ -142,6 +143,21 @@ void GLWidget::paintGL()
     m_game->draw();
 
     return;
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
+	return keyDown(event->key());
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+	return keyUp(event->key());
+}
+
+void GLWidget::mousePressEvent(QMouseEvent *event)
+{
+//	return keyDown(event->button()+255);
 }
 
 void GLWidget::animate()

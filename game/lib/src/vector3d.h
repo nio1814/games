@@ -11,6 +11,8 @@
 
 #include <math.h>
 
+class QVector3D;
+
 class Vector2D
 {
 public:
@@ -90,6 +92,7 @@ public:
 	void unitize();								// unitize() normalizes this Vector3D that its direction remains the same but its length is 1.
 	Vector3D unit() const;								// unit() returns a new Vector3D. The returned value is a unitized version of this Vector3D.
 	float* toArray() const;						//converts vector to a array of floats
+	QVector3D toQVector3D() const;
 };	
 
 class Vector4D		//---> An object to represent a 3D vector or a 3D point in space
@@ -121,7 +124,7 @@ public:
 	Vector3D A[3];								//matrix rows
 
 	matrix2D3(){}
-	matrix2D3(const Vector3D *r1, const  Vector3D *r2,const  Vector3D *r3);
+	matrix2D3(const Vector3D &r1, const  Vector3D &r2, const  Vector3D &r3);
 	matrix2D3& operator= (matrix2D3 m);
 	
 	Vector3D transform(const Vector3D* vec);

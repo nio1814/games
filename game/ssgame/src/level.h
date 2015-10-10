@@ -102,6 +102,7 @@ public:
 	void addPlayer(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, character cter);
 	void addEnemy(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, character cter);
     Object &addBlock(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, type tp, block blk);
+
 	void setMass(type objType, int index, float mass);
 	void setPos(type objType, int index, Vector2D pos);
 	void setVel(type objType, int index, Vector2D vel);
@@ -126,7 +127,7 @@ public:
     QVector<int> m_playerIdx;
     QVector<int> m_enemyIdx;
     ObjectList m_objects;
-    CameraPoints* cameras;
+    CameraPoints cameras;
 };
 
 

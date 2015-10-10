@@ -1,7 +1,7 @@
 #ifndef KEYS
 #define KEYS
 
-extern bool	keys[512][2];								// Array Used For The Keyboard Routine(down,held)
+//extern bool	keys[512][2];								// Array Used For The Keyboard Routine(down,held)
 extern bool	btns[12][2];								// Array Used For The Keyboard Routine
 extern int controls[2][8];
 

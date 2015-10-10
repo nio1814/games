@@ -3,6 +3,9 @@
 //#include <gl\glu.h>										// Header File For The GLu32 Library
 
 #include "camera.h"
+
+#include <QtGui>
+
 #include "vector3d.h"
 
 
@@ -62,8 +65,8 @@ Vector3D CameraPoint::dir2RSide()
 
 CameraPoints::CameraPoints()
 {
-	cpoints = new CameraPoint[DEFNUMCAMS];
-	numPoints = 0;
+//	cpoints = new CameraPoint[DEFNUMCAMS];
+//	numPoints = 0;
 	currentPoint = 0;
 	camview = FOLLOW;
 }
@@ -74,17 +77,14 @@ CameraPoints::CameraPoints(Vector3D campos, Vector3D lookpos, Vector3D upin, GLf
 	addPoint(campos, lookpos, upin, dist);
 }
 
-void CameraPoints::addPoint(Vector3D campos, Vector3D lookpos, Vector3D upin, GLfloat dist)
-{	
-	if(numPoints<DEFNUMCAMS)
-	{
-		cpoints[numPoints].pos = campos;
-		cpoints[numPoints].look = lookpos;
-		cpoints[numPoints].up = upin;
-		cpoints[numPoints++].followDist = dist;
-	}
+int CameraPoints::numPoints()
+{
+	return cpoints.size();
+}
 
-	return;
+void CameraPoints::addPoint(Vector3D campos, Vector3D lookpos, Vector3D up, GLfloat dist)
+{	
+	return cpoints.append(CameraPoint(campos, lookpos, up, dist));
 }
 
 void CameraPoints::cycleView()
@@ -118,17 +118,17 @@ void setCam(CameraPoints* cameras, Vector3D* objpos, CameraView view)
 
 	cameras->camview = view;
 	
-	if(cameras->currentPoint == cameras->numPoints-1)
-	{
-		nextcam = cam;
-	}
-	else
-		nextcam = &cameras->cpoints[cameras->currentPoint+1];
+	int nextCamIdx = qMin(cameras->cpoints.size()-1, cameras->currentPoint+1);
+
+	nextcam = &cameras->cpoints[nextCamIdx];
 
 	if(view == FOLLOW)
 	{
 		look = objpos->proj(&nextcam->oldLook, &cam->oldLook);
 //		gluLookAt(cam->pos.x, cam->pos.y,cam->pos.z, objpos->x, objpos->y, 0, cam->up.x, cam->up.y, cam->up.z);
+		QMatrix4x4 camMatrix;
+		camMatrix.lookAt(cam->pos.toQVector3D(), objpos->toQVector3D(), cam->up.toQVector3D());
+		glMultMatrixf(camMatrix.constData());
 	}
 
 	return;

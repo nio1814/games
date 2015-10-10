@@ -1,55 +1,76 @@
-//#include <windows.h>								// Header File For Windows
-#include <stdio.h>									// Header File For Standard Input/Output
-
 #include "keys.h"
 
-bool	keys[512][2] = {false};								// Array Used For The Keyboard Routine
+//#include <windows.h>								// Header File For Windows
+#include <stdio.h>									// Header File For Standard Input/Output
+#include <qhash.h>
+#include <Qt>
+
+//bool	keys[512][2] = {false};								// Array Used For The Keyboard Routine
 bool	btns[12][2] = {false};
 int		controls[2][8];
 
 bool	sp;									// Space Pressed?	
 
+struct KeyState {
+	bool down;
+	bool held;
+
+	KeyState() : down(false), held(false){};
+};
+
+QHash<int,KeyState> keys;
+
 void keyDown(const int keyIn)
 {
-	if(keys[keyIn][DOWN])
+	KeyState* state = &keys[keyIn];
+	state->held = state->down;
+	state->down = true;
+
+	/*if(keys[keyIn][DOWN])
 		keys[keyIn][HOLD] = true;
 	else
-		keys[keyIn][DOWN] = true;
+		keys[keyIn][DOWN] = true;*/
 
 	return;
 }
 
 void keyUp(const int keyIn)
 {
-		keys[keyIn][HOLD] = false;
-		keys[keyIn][DOWN] = false;
+	KeyState* state = &keys[keyIn];
+	state->down = false;
+	state->held = false;
+
+		/*keys[keyIn][HOLD] = false;
+		keys[keyIn][DOWN] = false;*/
 
 	return;
 }
 
 bool isKeys(const int keyIn)
 {
-	bool isDown;
-	isDown = keys[keyIn][DOWN];
+//	bool isDown;
+//	isDown = keys[keyIn][DOWN];
 
-	return isDown;
+	return keys[keyIn].down;
 }
 
 bool isHeld(const int keyIn)
 {
-	bool isHeld;
-	isHeld = keys[keyIn][HOLD];
+//	bool isHeld;
+//	isHeld = keys[keyIn][HOLD];
 
-	return isHeld;
+	return keys[keyIn].held;
 }			
 
 bool canToggle(const int keyIn)
 {
 	bool ct = false;
 
-	if (keys[keyIn][DOWN] && !keys[keyIn][HOLD])				// L Key Being Pressed Not Held?
+//	if (keys[keyIn][DOWN] && !keys[keyIn][HOLD])				// L Key Being Pressed Not Held?
+	if (keys[keyIn].down && !keys[keyIn].held)
 	{
-		keys[keyIn][HOLD] = true;
+//		keys[keyIn][HOLD] = true;
+		keys[keyIn].held = true;
 		ct = true;
 	}
 

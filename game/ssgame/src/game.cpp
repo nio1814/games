@@ -13,6 +13,7 @@
 #include "masking.h"
 #include "screen.h"
 #include "tga.h"
+#include "keys.h"
 #include "playerkeys.h"
 //#include "sound.h"
 #include "movement.h"

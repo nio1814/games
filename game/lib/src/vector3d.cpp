@@ -203,20 +203,20 @@ Vector3D Vector3D::rotate3D(const Vector3D *vin, float angle) const
 	sinang = sin(angrad);
 	v = vin->unit();
 	if(v.length() < EPS)
-		T = matrix2D3(&X, &Y, &Z);
+		T = matrix2D3(X, Y, Z);
 	else if(v == X)
-		T = matrix2D3(&X, &Vector3D(0,cosang,-sinang), &Vector3D(0,sinang,cosang));
+		T = matrix2D3(X, Vector3D(0,cosang,-sinang), Vector3D(0,sinang,cosang));
 	else if(v == Y)
-		T = matrix2D3(&Vector3D(cosang,0,sinang), &Y, &Vector3D(-sinang,0,cosang));
+		T = matrix2D3(Vector3D(cosang,0,sinang), Y, Vector3D(-sinang,0,cosang));
 	else if(v == Z)
-		T = matrix2D3(&Vector3D(cosang,-sinang,0), &Vector3D(sinang,cosang,0), &Z);
+		T = matrix2D3(Vector3D(cosang,-sinang,0), Vector3D(sinang,cosang,0), Z);
 	else
 	{
 		arbitrary = true;
 		t = 1 - cosang;
-		T = matrix2D3(&Vector3D(t*v.x*v.x+cosang, t*v.x*v.y-sinang*v.z, t*v.x*v.z+sinang*v.y),
-			&Vector3D(t*v.x*v.y+sinang*v.z, t*v.y*v.y+cosang, t*v.y*v.z-sinang*v.x),
-			&Vector3D(t*v.x*v.z-sinang*v.y, t*v.y*v.z+sinang*v.x, t*v.z*v.z+cosang));
+		T = matrix2D3(Vector3D(t*v.x*v.x+cosang, t*v.x*v.y-sinang*v.z, t*v.x*v.z+sinang*v.y),
+			Vector3D(t*v.x*v.y+sinang*v.z, t*v.y*v.y+cosang, t*v.y*v.z-sinang*v.x),
+			Vector3D(t*v.x*v.z-sinang*v.y, t*v.y*v.z+sinang*v.x, t*v.z*v.z+cosang));
 		//T = matrix2D3(&Vector3D(cosang,0,-sinang), &Vector3D(0,1,0), &Vector3D(sinang,0,cosang));
 	}
 
@@ -355,6 +355,11 @@ float* Vector3D::toArray() const
 	out[2] = z;
 
 	return out;
+}
+
+QVector3D Vector3D::toQVector3D() const
+{
+	return QVector3D(x,y,z);
 }
 
 //VECTOR2D
@@ -606,11 +611,11 @@ VectorND::~VectorND()
 }
 
 //MATRIX
-matrix2D3::matrix2D3(const Vector3D *r1, const Vector3D *r2, const Vector3D *r3)
+matrix2D3::matrix2D3(const Vector3D &r1, const Vector3D &r2, const Vector3D &r3)
 {
-	A[0] = *r1;
-	A[1] = *r2;
-	A[2] = *r3;
+	A[0] = r1;
+	A[1] = r2;
+	A[2] = r3;
 }
 	
 Vector3D matrix2D3::transform(const Vector3D* in)

@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->centralWidget->setFocus();
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), ui->centralWidget, SLOT(animate()));
     timer->start(50);

@@ -72,6 +72,7 @@ bool Level::create(int index)
         case 0:
             obj = addBlock(500.0f, 2.0f, 0.0f, -2.0f, tpGROUND, BLOCK1);
             obj.wraps.x = 50;
+		cameras.addPoint(Vector3D(0,0,5), Vector3D(0,0,0), Vector3D(0,1,0), 6);
             break;
         case 1:
             addBlock(7.0f, .75f, 0.0f, -2.0f, tpGROUND, BLOCK1);//0
@@ -364,7 +365,7 @@ Level::Level()
 	playerFocus = 0;
 	levelStarted = false;
 
-    cameras = new CameraPoints[MAXCAMERAS];
+//    cameras = new CameraPoints[MAXCAMERAS];
 }
 
 Level::Level(int index)
@@ -704,20 +705,20 @@ void Level::fixSizes()
 
 Vector3D Level::setCam(Object* obj, GLfloat dt)
 {
-    CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
+    CameraPoint* cam = &cameras.cpoints[cameras.currentPoint];
     CameraPoint* nextcam;
 	Vector3D cam2cam, cam2obj, cam2look;
 	Vector3D pos, look, alongv, movepos;
 	Vector3D objpos;
 	GLfloat camdist, objvel, camRotate;
-	CameraView view = cameras->camview;
+	CameraView view = cameras.camview;
 
-	if(cameras->currentPoint == cameras->numPoints-1)
+	if(cameras.currentPoint == cameras.numPoints()-1)
 	{
 		nextcam = cam;
 	}
 	else
-		nextcam = &cameras->cpoints[cameras->currentPoint+1];
+		nextcam = &cameras.cpoints[cameras.currentPoint+1];
 
 	objpos = obj->pos;
 	objvel = obj->vel.length();
@@ -758,12 +759,12 @@ Vector3D Level::setCam(Object* obj, GLfloat dt)
 
 CameraView Level::cycleCam()
 {
-	if(cameras->camview >= NUMCAMVIEWS-1)
-		cameras->camview = static_cast<CameraView>(0);
+	if(cameras.camview >= NUMCAMVIEWS-1)
+		cameras.camview = static_cast<CameraView>(0);
 	else
-		cameras->camview =  static_cast<CameraView>(cameras->camview + 1);
+		cameras.camview =  static_cast<CameraView>(cameras.camview + 1);
 		
-	return cameras->camview;
+	return cameras.camview;
 }
 
 void Level::run(GLfloat dt, int numRuns)
@@ -784,7 +785,7 @@ void Level::run(GLfloat dt, int numRuns)
 		sprintf(timetext, "%.2f", timer);
 	}
 //	fixSizes();
-//    setCam(getPlayer(playerFocus), dt);
+    setCam(getPlayer(playerFocus), dt);
 
 	for(int i=0; i<numRuns; i++)
 	{

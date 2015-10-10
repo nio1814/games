@@ -33,8 +33,9 @@ public:
 class CameraPoints
 {
 public:
-	CameraPoint* cpoints;
-	int numPoints;
+	int numPoints();
+
+	QList<CameraPoint> cpoints;
 	int currentPoint;
 	CameraView camview;
 

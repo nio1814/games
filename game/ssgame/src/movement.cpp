@@ -6,6 +6,7 @@
 
 #include "movement.h"
 #include "objects.h"
+#include "keys.h"
 #include "playerkeys.h"
 #include "functions.h"
 #include "level.h"
