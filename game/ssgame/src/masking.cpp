@@ -3,6 +3,7 @@
 #include "qtgl.h"
 
 #include <cstring>
+#include <QGLWidget>
 
 //GLfloat LightAmbient[]= { 0.9f, 0.9f, 0.9f, 1.0f }; 				// Ambient Light Values ( NEW )
 GLfloat LightAmbient[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 				// Ambient Light Values ( NEW )
@@ -72,6 +73,21 @@ int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And 
 	return Status;								// Return The Status
 }
 
+bool loadGLTexture(GLuint* texture, QString filename)
+{
+	bool status = false;
+
+//	texture = QGLWidget::bindTexture(QImage(filename), GL_TEXTURE_2D);
+	QImage image = QGLWidget::convertToGLFormat(QImage(filename));
+	glGenTextures(1, texture);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return status;
+}
+
 
 int LoadGLTextures(animData_s *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
 {
@@ -79,7 +95,8 @@ int LoadGLTextures(animData_s *aData, char filePath[], int ID)								// Load Bi
 	GLuint *tpointer;
 	tpointer = &aData->textures[ID];
 	
-	Status = LoadGLTextures(tpointer, filePath);
+//	Status = LoadGLTextures(tpointer, filePath);
+	Status = loadGLTexture(tpointer, filePath);
 	aData->scale[aData->numTextures] = Vector2D(1,1);
 		//aData->hScale[aData->numTextures] = 1;
 		//aData->wScale[aData->numTextures] = 1;
