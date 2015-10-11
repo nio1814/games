@@ -126,9 +126,11 @@ void setCam(CameraPoints* cameras, Vector3D* objpos, CameraView view)
 	{
 		look = objpos->proj(&nextcam->oldLook, &cam->oldLook);
 //		gluLookAt(cam->pos.x, cam->pos.y,cam->pos.z, objpos->x, objpos->y, 0, cam->up.x, cam->up.y, cam->up.z);
-		QMatrix4x4 camMatrix;
-		camMatrix.lookAt(cam->pos.toQVector3D(), objpos->toQVector3D(), cam->up.toQVector3D());
-		glMultMatrixf(camMatrix.constData());
+//        QMatrix4x4 camMatrix;
+//        camMatrix.
+//		camMatrix.lookAt(cam->pos.toQVector3D(), objpos->toQVector3D(), cam->up.toQVector3D());
+//		glMultMatrixf(camMatrix.constData());
+        glLookAt(cam->pos.toQVector3D(), objpos->toQVector3D(), cam->up.toQVector3D());
 	}
 
 	return;

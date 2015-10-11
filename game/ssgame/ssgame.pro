@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     ../lib/src/fmod/fmod.cpp \
     src/tga.cpp \
     src/level.cpp \
-    src/game.cpp
+    src/game.cpp \
+    ../lib/src/qtgl.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \

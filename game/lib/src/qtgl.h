@@ -10,3 +10,5 @@
 
 #endif // QTGL_H
 
+void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDirection);
+

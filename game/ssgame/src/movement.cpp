@@ -25,10 +25,10 @@ GLfloat depth = 2.0f;
 GLfloat leftScreen, rightScreen; 
 GLfloat bottomScreen = -6.0f;
 GLfloat topScreen = 4.5f;
-GLfloat acceleration = -9.0f;
+GLfloat acceleration = 0;
 GLfloat timeStep = .025f;
 
-GLfloat XSCALE = 35.0f;
+GLfloat XSCALE = 20.0f;
 GLfloat GROUNDFRIC = 9.0f;
 GLfloat WALLFRIC = 4.0f;
 GLfloat airFric = 0.0f;
@@ -363,7 +363,7 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 	moveObj.mov.x = 0;
 	if(playerPress(numPlayer, btnLEFT))
 		moveObj.mov.x += -1;
-	if(playerPress(numPlayer, btnRIGHT))
+    else if(playerPress(numPlayer, btnRIGHT))
 		moveObj.mov.x += 1;
 
 	if(canPlayerToggle(numPlayer, btnJUMP))

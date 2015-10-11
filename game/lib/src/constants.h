@@ -6,7 +6,7 @@
 #define PI 3.1415926535
 #define DEG2RAD 0.0174532
 #define RAD2DEG 57.2957795
-#define gravity -9.81
+#define GRAVITY -9.81
 #define MAXDELTA .08f
 
 extern const Vector3D X;
