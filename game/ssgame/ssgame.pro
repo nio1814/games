@@ -64,3 +64,6 @@ DISTFILES += \
     src/fmodvc.lib \
     src/fmod.dll \
     src/pspbrwse.jbf
+
+RESOURCES += \
+    ssgame.qrc

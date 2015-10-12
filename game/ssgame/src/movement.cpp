@@ -542,7 +542,7 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
     if(canToggle('P'))
 	{
 		playerNum = mod(++playerNum, NUMCHARACTERS);
-		assignTextures(moveObj, playerTextures[playerNum]);
+        assignTextures(moveObj, &playerTextures[playerNum]);
 	}
     /*else if(canToggleBtn(xbLTRIGGER))
 	{

@@ -453,7 +453,7 @@ shotList_c::shotList_c(int numS, GLfloat wid, GLfloat hei, shots shotType, Objec
 		slist[i].init(wid, hei, tpSHOT, shotType);
 		slist[i].parent = pnt;
 		slist[i].active = false;
-		assignTextures(slist[i], shotTextures[shotType]);
+        assignTextures(slist[i], &shotTextures[shotType]);
 	}
 }
 

@@ -23,7 +23,7 @@ extern int DEFRUNFRAMESPD;
 #define DEFJUMPSTRENGTH 1.0f
 #define DEFMAXSPEED 5.0f
 
-struct animData_s
+struct Animation
 {
 	Vector2D scale[100];			//scaling factors for texture
 	Vector2D pixels;
@@ -55,7 +55,7 @@ struct animData_s
 	GLfloat jumpStrength;
 	GLfloat maxSpeed;
 
-	animData_s()
+    Animation()
 	{
 		for(int i=0; i<NUMACTIONS; i++)
 		{
@@ -91,14 +91,14 @@ struct animData_s
 
 };
 
-extern animData_s **playerTextures;
-extern animData_s **objectTextures;
-extern animData_s **shotTextures;
+extern QList<Animation> playerTextures;
+extern QList<Animation> objectTextures;
+extern QList<Animation> shotTextures;
 
 void doTextures();
-void assignTextures(Object &obj, animData_s *animData);
-void setDefaults(animData_s **animData, int numobjs);	//last frame and minstop frame
-bool animate(Object &obj, actions act, const animData_s *animData, GLfloat dt);
+void assignTextures(Object &obj, Animation *animData);
+void setDefaults(QList<Animation> animData, int numobjs);	//last frame and minstop frame
+bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt);
 bool sendAnimation(Object &obj, actions act, GLfloat dt);
 void fixSize(Object &animObj);
 

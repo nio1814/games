@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/characters/mmx/mmx.tga</file>
+    </qresource>
+</RCC>

@@ -17,6 +17,7 @@ GLWidget::GLWidget(QWidget *parent)
     m_elapsed = 0;
     m_game = new Game();
     m_game->addLevel(0);
+    doTextures();
     assignControls();
 }
 

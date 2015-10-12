@@ -37,7 +37,7 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 }
 
 
-void TGA_Texture(animData_s *aData, const char* strFileName, int ID)
+void TGA_Texture(Animation *aData, const char* strFileName, int ID)
 {
 	if(!strFileName)	return;
 
@@ -85,7 +85,7 @@ void TGA_Texture(animData_s *aData, const char* strFileName, int ID)
 		aData->animates = true;					//need more than one frame to animate
 }
 
-void TGA_Texture(animData_s *aData, const char* strFileName, int ID, GLfloat center)
+void TGA_Texture(Animation *aData, const char* strFileName, int ID, GLfloat center)
 {
 	TGA_Texture(aData, strFileName, ID);
 	aData->centers[19] = center;
@@ -118,6 +118,7 @@ tImageTGA *Load_TGA(const char *strfilename)
 	{
 //		MessageBox(NULL, "Error loading tga file.", "ERROR", MB_OK);
 //		MessageBox(NULL, angletext, "ERROR", MB_OK);
+        qErrnoWarning("Failed to open file %s\n", strfilename);
 		return NULL;
 	}
 

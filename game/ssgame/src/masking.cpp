@@ -89,7 +89,7 @@ bool loadGLTexture(GLuint* texture, QString filename)
 }
 
 
-int LoadGLTextures(animData_s *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
+int LoadGLTextures(Animation *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
 {
     int Status = false;
 	GLuint *tpointer;
