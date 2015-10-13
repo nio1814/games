@@ -79,6 +79,8 @@ bool loadGLTexture(GLuint* texture, QString filename)
 
 //	texture = QGLWidget::bindTexture(QImage(filename), GL_TEXTURE_2D);
 	QImage image = QGLWidget::convertToGLFormat(QImage(filename));
+    if(image.isNull())
+        qErrnoWarning("Failed to open file %s\n", filename.toLatin1().constData());
 	glGenTextures(1, texture);
 	glBindTexture(GL_TEXTURE_2D, *texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());

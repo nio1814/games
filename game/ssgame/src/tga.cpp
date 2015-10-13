@@ -3,9 +3,10 @@
 #include "qtgl.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <qfile.h>
+#include <qdatastream.h>
 
 #include "animation.h"
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //										TGA TEXTURE LOADER
@@ -45,8 +46,10 @@ void TGA_Texture(Animation *aData, const char* strFileName, int ID)
 	tImageTGA pBitMap = loadTGA(strFileName);
 
 	if(pBitMap.data == NULL)	
-		exit(0);
-		qErrnoWarning("Failed to load TGA data from %s\n", strFileName);
+    {
+        qErrnoWarning("Failed to load TGA data from %s\n", strFileName);
+        exit(0);
+    }
 
 	glGenTextures(1, &aData->textures[ID]);
 	glBindTexture(GL_TEXTURE_2D, aData->textures[ID]);
@@ -127,7 +130,7 @@ tImageTGA *Load_TGA(const char *strfilename)
 
 	pImgData = (tImageTGA*)malloc(sizeof(tImageTGA));
 	
-	fread(&length, sizeof(quint8), 1, pFile);
+    fread(&length, sizeof(quint8), 1, pFile);
 	
 	fseek(pFile,1,SEEK_CUR); 
 	
@@ -265,9 +268,8 @@ tImageTGA *Load_TGA(const char *strfilename)
 
 tImageTGA loadTGA(QString filename)
 {
-	tImageTGA pImgData;
-	FILE* pFile;
-	short width			= 0;
+    tImageTGA pImgData;
+    short width			= 0;
 	short height			= 0;
 	quint8 length			= 0;
 	quint8 imgType		= 0;
@@ -277,7 +279,7 @@ tImageTGA loadTGA(QString filename)
 	int i				= 0;
 
 	QFile file(filename);
-	if (file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
 	{
 		qErrnoWarning("Error opening tga file %s\n", filename.toLatin1().data());
 //		MessageBox(NULL, angletext, "ERROR", MB_OK);
@@ -285,9 +287,10 @@ tImageTGA loadTGA(QString filename)
 	else
 	{
 		QDataStream fileData(&file);
+        fileData.setByteOrder(QDataStream::LittleEndian);
 
-		fileData >> length;
 //		fread(&length, sizeof(quint8), 1, pFile);
+        fileData >> length;
 
 //		fseek(pFile,1,SEEK_CUR);
 		fileData.skipRawData(1);
@@ -298,10 +301,9 @@ tImageTGA loadTGA(QString filename)
 //		fseek(pFile, 9, SEEK_CUR);
 		fileData.skipRawData(9);
 
-		fread(&width,  sizeof(short), 1, pFile);
+        /*fread(&width,  sizeof(short), 1, pFile);
 		fread(&height, sizeof(short), 1, pFile);
-		fread(&bits,   sizeof(quint8), 1, pFile);
-
+        fread(&bits,   sizeof(quint8), 1, pFile);*/
 		fileData >> width >> height >> bits;
 
 //		fseek(pFile, length + 1, SEEK_CUR);
@@ -362,7 +364,6 @@ tImageTGA loadTGA(QString filename)
 		}
 		else
 		{
-
 			quint8 rleID = 0;
 			int colorsRead = 0;
 			channels = bits / 8;
@@ -376,7 +377,6 @@ tImageTGA loadTGA(QString filename)
 
 //				fread(&rleID, sizeof(quint8), 1, pFile);
 				fileData >> rleID;
-
 
 				if(rleID < 128)
 				{
@@ -423,9 +423,6 @@ tImageTGA loadTGA(QString filename)
 			}
 			delete[] pColors;
 		}
-
-		fclose(pFile);
-
 
 		pImgData.channels  = channels;
 		pImgData.size_x    = width;

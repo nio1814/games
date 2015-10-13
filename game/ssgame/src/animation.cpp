@@ -839,19 +839,19 @@ void doTextures()
     TGA_Texture(playerTextures[LIUKANG], "Data/img/characters/liukang/lkDuck5.tga", 17);*/
 	
     objectTextures[BLOCK1].blk = BLOCK1;
-    LoadGLTextures(&objectTextures[BLOCK1], "Data/Gesture.bmp", 0);
+    LoadGLTextures(&objectTextures[BLOCK1], ":img/Gesture.bmp", 0);
 	
     objectTextures[BLOCK2].blk = BLOCK2;
-    LoadGLTextures(&objectTextures[BLOCK2], "Data/Crystal.bmp", 0);
+    LoadGLTextures(&objectTextures[BLOCK2], ":img/Crystal.bmp", 0);
 	
     objectTextures[PORTLAND].blk = PORTLAND;
     objectTextures[PORTLAND].isSolid = false;
-    LoadGLTextures(&objectTextures[PORTLAND], "Data/port.bmp", 0);
+    LoadGLTextures(&objectTextures[PORTLAND], ":img/port.bmp", 0);
 		
     objectTextures[WATER1].blk = WATER1;
     objectTextures[WATER1].isSolid = false;
-    /*TGA_Texture(objectTextures[WATER1], "Data/img/watera2.tga", 0);
-    TGA_Texture(objectTextures[WATER1], "Data/img/waterb2.tga", 1);*/
+    TGA_Texture(&objectTextures[WATER1], ":img/watera2.tga", 0);
+    TGA_Texture(&objectTextures[WATER1], ":img/waterb2.tga", 1);
 
 	setDefaults(playerTextures, NUMCHARACTERS);
 	setDefaults(shotTextures, NUMSHOTTYPES);

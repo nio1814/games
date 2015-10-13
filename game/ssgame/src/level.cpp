@@ -36,7 +36,7 @@ int numMovingObj = 1;
 
 void makeLevel(level_s &level)
 {
-	LoadGLTextures(gestureBlockTexture, "Data/Gesture.bmp");
+    LoadGLTextures(gestureBlockTexture, "Data/Gesture.bmp");
 	LoadGLTextures(portlandBackTexture, "Data/port.bmp");
 	LoadGLTextures(crystalTexture, "Data/Crystal.bmp");
 	TGA_Texture(wateraTexture, "Data/img/watera2.tga", 0);
@@ -64,6 +64,14 @@ bool Level::started()
 
 bool Level::create(int index)
 {
+    /*loadGLTexture(gestureBlockTexture, ":img/Gesture.bmp");
+    loadGLTexture(portlandBackTexture, ":img/port.bmp");
+    loadGLTexture(crystalTexture, ":img/Crystal.bmp");
+    TGA_Texture(wateraTexture, "Data/img/watera2.tga", 0);
+    TGA_Texture(waterbTexture, "Data/img/waterb2.tga", 0);
+    LoadGLTextures(desertTexture, "Data/img/background/desert.bmp");
+    LoadGLTextures(underworldTexture, "Data/img/ground/marioUnderground.bmp");*/
+
     bool status = false;
     m_index = index;
     int objectIndex;
