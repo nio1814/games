@@ -195,8 +195,8 @@ void doTextures()
 	//MMX
     playerTextures[MMX].person = MMX;
     Animation anim;
-//    TGA_Texture(&playerTextures[MMX], "Data/img/characters/mmx/mmx.tga", 0);
-    TGA_Texture(&anim, ":img/characters/mmx/mmx.tga", 0);
+    TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga", 0);
+    //TGA_Texture(&anim, ":img/characters/mmx/mmx.tga", 0);
 	
     playerTextures[MMX].frameData[actDUCK][animSTART] = 1;
     playerTextures[MMX].frameData[actDUCK][numFRAMES] = 1;

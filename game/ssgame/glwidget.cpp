@@ -34,6 +34,8 @@ void GLWidget::initializeGL()
     static GLfloat lightPosition[4] = {.5, 5, 7, 1};
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
+    glEnable(GL_TEXTURE);
+
     return;
 }
 

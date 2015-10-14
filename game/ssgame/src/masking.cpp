@@ -83,9 +83,11 @@ bool loadGLTexture(GLuint* texture, QString filename)
         qErrnoWarning("Failed to open file %s\n", filename.toLatin1().constData());
 	glGenTextures(1, texture);
 	glBindTexture(GL_TEXTURE_2D, *texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	/*QGLWidget *qgl;
+	*texture = qgl->bindTexture(QImage(filename), GL_TEXTURE_2D);*/
 
 	return status;
 }
