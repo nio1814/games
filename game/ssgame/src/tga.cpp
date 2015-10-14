@@ -38,7 +38,7 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 }
 
 
-void TGA_Texture(Animation *aData, const char* strFileName)
+void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
 {
 	if(!strFileName)	return;
 
@@ -57,12 +57,17 @@ void TGA_Texture(Animation *aData, const char* strFileName)
     glBindTexture(GL_TEXTURE_2D, texture);
 	int textureType = GL_RGB;
     if(pBitMap.channels == 4)
-        textureType = GL_RGBA;
+	   textureType = GL_RGBA;
 //	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+    glTexImage2D(GL_TEXTURE_2D, 0, textureType, pBitMap.size_x, pBitMap.size_y, 0, textureType, GL_UNSIGNED_BYTE, pBitMap.data);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+
+//    QImage image(strFileName);
+//    QGLWidget qgl;
+//    texture = qgl.bindTexture(image, GL_TEXTURE_2D);
 	
     if(aData->numTextures()==0)
 	{
@@ -79,6 +84,8 @@ void TGA_Texture(Animation *aData, const char* strFileName)
 			//aData->hScale[ID] = pBitMap->size_y / static_cast<GLfloat>(aData->pixelsH);
 			//aData->wScale[ID] = pBitMap->size_x / static_cast<GLfloat>(aData->pixelsW);
 	}
+
+    aData->centers.append(center);
 
 	/*if (pBitMap)									
 	{

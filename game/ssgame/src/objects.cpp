@@ -228,10 +228,8 @@ Object& Object::operator= (Object obj)				// operator= sets values of v to this 
 
 void Object::drawRec()
 {
-
 	glBindTexture(GL_TEXTURE_2D, texture[animFrame]);				// Select A Texture Based On filter
 	glEnable(GL_TEXTURE_2D);
-	
 	calcBoundaries();
 	
 	glPushMatrix();

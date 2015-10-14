@@ -25,10 +25,10 @@ GLfloat depth = 2.0f;
 GLfloat leftScreen, rightScreen; 
 GLfloat bottomScreen = -6.0f;
 GLfloat topScreen = 4.5f;
-GLfloat acceleration = 0;
+GLfloat acceleration = -9.8;
 GLfloat timeStep = .025f;
 
-GLfloat XSCALE = 20.0f;
+GLfloat XSCALE = 2a5.0f;
 GLfloat GROUNDFRIC = 9.0f;
 GLfloat WALLFRIC = 4.0f;
 GLfloat airFric = 0.0f;
@@ -42,7 +42,7 @@ GLfloat STRONGJUMPFACTOR = 1.3f;
 GLfloat duckJumpFactor = 1.5f;
 Vector2D wallJump;
 
-GLfloat TOUCHNBHD = .03f;		//distance to be withing to be touching
+GLfloat TOUCHNBHD = 1.03f;		//distance to be withing to be touching
 GLfloat xP;
 GLfloat yP;
 GLfloat oscillator;
@@ -300,6 +300,7 @@ void checkTouch(Object &moveObj, ObjectList objs, int nobjs, int nocheck)
 		;//}
     for(int j=0; j < objs.size(); j++)
 	{
+	    if(&moveObj!=objs[j])
             checkTouch(moveObj, *objs[j]);
 	}
 

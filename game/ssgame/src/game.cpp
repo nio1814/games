@@ -318,6 +318,7 @@ bool Game::addLevel(int index)
     m_levels.append(Level(index));
     if(m_levels.size()==1)
         m_currentLevel = 0;
+    m_numPlayers = level().numPlayers();
 
     return status;
 }

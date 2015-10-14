@@ -12,12 +12,14 @@ GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 #else
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+//    : QGLWidget(parent)
 #endif
 {
     m_elapsed = 0;
     m_game = new Game();
-    m_game->addLevel(0);
     doTextures();
+    m_game->addLevel(0);
+    m_game->level().initTextures();
     assignControls();
 }
 

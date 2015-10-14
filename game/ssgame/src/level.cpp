@@ -532,6 +532,19 @@ void Level::initTextures()
 	{
 		assignTextures(enemies[e], playerTextures[enemies[e].person]);
     }*/
+	for(int n=0; n<numObjects(); n++)
+	{
+		ObjectPointer obj = m_objects[n];
+		switch (m_objects[n]->objType)
+		{
+			case tpPLAYER:
+			case tpENEMY:
+				assignTextures(*obj, &playerTextures[obj->person]);
+				break;
+			default:
+				assignTextures(*obj, &objectTextures[obj->blkType]);
+		}
+	}
 	
 	return;
 }
@@ -792,7 +805,7 @@ void Level::run(GLfloat dt, int numRuns)
 		timer = (currentTime-startTime)/1000;
 		sprintf(timetext, "%.2f", timer);
 	}
-//	fixSizes();
+	fixSizes();
     setCam(getPlayer(playerFocus), dt);
 
 	for(int i=0; i<numRuns; i++)
