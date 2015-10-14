@@ -28,7 +28,7 @@ GLfloat topScreen = 4.5f;
 GLfloat acceleration = -9.8;
 GLfloat timeStep = .025f;
 
-GLfloat XSCALE = 2a5.0f;
+GLfloat XSCALE = 25.0f;
 GLfloat GROUNDFRIC = 9.0f;
 GLfloat WALLFRIC = 4.0f;
 GLfloat airFric = 0.0f;

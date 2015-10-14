@@ -17,9 +17,8 @@ GLWidget::GLWidget(QWidget *parent)
 {
     m_elapsed = 0;
     m_game = new Game();
-    doTextures();
     m_game->addLevel(0);
-    m_game->level().initTextures();
+
     assignControls();
 }
 
@@ -37,6 +36,9 @@ void GLWidget::initializeGL()
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
     glEnable(GL_TEXTURE);
+
+    doTextures();
+    m_game->level().initTextures();
 
     return;
 }
