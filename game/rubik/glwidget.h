@@ -1,13 +1,19 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QGLWidget>
+#include <QtGlobal>
 
+#if (QT_VERSION >= 0x050500)
+#include "qopenglwidget.h"
+class GLWidget : public QOpenGLWidget
+#else
+#include "QtOpenGL/QGLWidget"
 class GLWidget : public QGLWidget
+#endif
 {
 	Q_OBJECT
 public:
-	explicit GLWidget(QObject *parent = 0);
+    GLWidget(QWidget *parent);
 
 signals:
 
