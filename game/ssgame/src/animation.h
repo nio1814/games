@@ -5,6 +5,8 @@
 //#include <gl\gl.h>									// Header File For The OpenGL32 Library
 //#include <gl\glu.h>
 
+#include <qvector.h>
+
 #include "objects.h"
 
 enum actions{actNONE, actRUN, actATTACK1, actJUMP, actWALL, actFLY, actDUCK, actSHOOT, actBLOCK, actJUMPATK, actJUMPSHOOT, actPUSH, actHURT, actRUNATK};
@@ -25,16 +27,15 @@ extern int DEFRUNFRAMESPD;
 
 struct Animation
 {
-	Vector2D scale[100];			//scaling factors for texture
+    QVector<Vector2D> scale;			//scaling factors for texture
 	Vector2D pixels;
 		//GLfloat hScale[100];
 		//int pixelsW;
 		//GLfloat wScale[100];
 		//int pixelsH;
 
-	int numTextures;				//number of textures in the object
-	GLuint textures[100];
-	GLfloat centers[100];			//center coords for texture
+    QVector<GLuint> textures;
+    QVector<GLfloat> centers;			//center coords for texture
 	
 	int frameData[20][7];			//make sure NUMACTIONS=20
 
@@ -73,10 +74,8 @@ struct Animation
 		frameData[actWALL][canHOLD] = 1;
 		frameData[actSHOOT][canHOLD] = 1;
 		
-		for(int i=0; i<MAXTEXTURES; i++)
-			centers[i] = .5f;
-		
-		numTextures = 0;
+//		for(int i=0; i<MAXTEXTURES; i++)
+//			centers[i] = .5f;
 
 		canWallClimb = false;
 		canGrabWall = false;
@@ -89,15 +88,16 @@ struct Animation
 		maxSpeed = DEFMAXSPEED;
 	}
 
+    int numTextures();
 };
 
-extern QList<Animation> playerTextures;
-extern QList<Animation> objectTextures;
-extern QList<Animation> shotTextures;
+extern Animation playerTextures[NUMCHARACTERS];
+extern Animation objectTextures[NUMBLOCKTYPES];
+extern Animation shotTextures[NUMSHOTTYPES];
 
 void doTextures();
 void assignTextures(Object &obj, Animation *animData);
-void setDefaults(QList<Animation> animData, int numobjs);	//last frame and minstop frame
+void setDefaults(Animation animData[], int numobjs);	//last frame and minstop frame
 bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt);
 bool sendAnimation(Object &obj, actions act, GLfloat dt);
 void fixSize(Object &animObj);

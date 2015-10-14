@@ -101,11 +101,11 @@ int LoadGLTextures(Animation *aData, char filePath[], int ID)								// Load Bit
 	
 //	Status = LoadGLTextures(tpointer, filePath);
 	Status = loadGLTexture(tpointer, filePath);
-	aData->scale[aData->numTextures] = Vector2D(1,1);
+    aData->scale[aData->numTextures()] = Vector2D(1,1);
 		//aData->hScale[aData->numTextures] = 1;
 		//aData->wScale[aData->numTextures] = 1;
-	aData->numTextures++;	
-	if(aData->numTextures>1)
+//	aData->numTextures++;
+    if(aData->numTextures()>1)
 		aData->animates = true;					//need more than one frame to animate
 		
 	return Status;								// Return The Status

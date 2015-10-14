@@ -92,7 +92,7 @@ void Object::init()
 	currentAct = 0;
 	isAttacking = false;
 
-	texture = new GLuint[20];
+//	texture = new GLuint[20];
 	wraps = Vector2D(1,1);
 	WrapMove = Vector2D(0.0f, 0.0f);
 

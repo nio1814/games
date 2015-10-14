@@ -2,6 +2,7 @@
 #define OBJECTS
 
 #include <qglobal.h>
+#include <qvector.h>
 
 #include "qtgl.h"
 
@@ -109,9 +110,9 @@ class Object								// Create A Structure For Our Player
 
 	//animation properties
 	GLfloat center;
-	Vector2D *scale;				//scaling factors for texture
-	GLuint *texture;
-	GLfloat *centers;				//center coords for texture
+    QVector<Vector2D> scale;				//scaling factors for texture
+    QVector<GLuint> texture;
+    QVector<GLfloat> centers;				//center coords for texture
 	GLfloat rotate;
 
 	bool animated;					//object is animated

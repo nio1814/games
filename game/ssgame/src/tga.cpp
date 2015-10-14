@@ -38,7 +38,7 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 }
 
 
-void TGA_Texture(Animation *aData, const char* strFileName, int ID)
+void TGA_Texture(Animation *aData, const char* strFileName)
 {
 	if(!strFileName)	return;
 
@@ -51,19 +51,22 @@ void TGA_Texture(Animation *aData, const char* strFileName, int ID)
         exit(0);
     }
 
-	glGenTextures(1, &aData->textures[ID]);
-	glBindTexture(GL_TEXTURE_2D, aData->textures[ID]);
+//	glGenTextures(1, &aData->textures[ID]);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 	int textureType = GL_RGB;
-	if(pBitMap.channels == 4)	textureType = GL_RGBA;
+    if(pBitMap.channels == 4)
+        textureType = GL_RGBA;
 //	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	
-	if(ID ==0)
+    if(aData->numTextures()==0)
 	{
-		aData->scale[ID] = Vector2D(1.0f,1.0f);
+        aData->scale.append(Vector2D(1.0f,1.0f));
 			//aData->hScale[ID] = 1.0f;
 			//aData->wScale[ID] = 1.0f;
 		aData->pixels = Vector2D(pBitMap.size_x, pBitMap.size_y);
@@ -72,7 +75,7 @@ void TGA_Texture(Animation *aData, const char* strFileName, int ID)
 	}
 	else
 	{
-		aData->scale[ID] = Vector2D(pBitMap.size_x / static_cast<GLfloat>(aData->pixels.x), pBitMap.size_y / static_cast<GLfloat>(aData->pixels.y));
+        aData->scale.append(Vector2D(pBitMap.size_x / static_cast<GLfloat>(aData->pixels.x), pBitMap.size_y / static_cast<GLfloat>(aData->pixels.y)));
 			//aData->hScale[ID] = pBitMap->size_y / static_cast<GLfloat>(aData->pixelsH);
 			//aData->wScale[ID] = pBitMap->size_x / static_cast<GLfloat>(aData->pixelsW);
 	}
@@ -86,15 +89,16 @@ void TGA_Texture(Animation *aData, const char* strFileName, int ID)
 		free(pBitMap);							
 	}*/
 	
-	aData->numTextures++;
-	if(aData->numTextures>1)
+//	aData->numTextures++;
+    aData->textures.append(texture);
+    if(aData->numTextures()>1)
 		aData->animates = true;					//need more than one frame to animate
 }
 
 void TGA_Texture(Animation *aData, const char* strFileName, int ID, GLfloat center)
 {
-	TGA_Texture(aData, strFileName, ID);
-	aData->centers[19] = center;
+    TGA_Texture(aData, strFileName);
+    aData->centers[19] = center;
 
 	return;
 }

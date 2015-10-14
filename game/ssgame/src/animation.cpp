@@ -20,9 +20,14 @@ extern int DEFRUNFRAMESPD = 17;
 
 Animation tailsT;
 
-QList<Animation> playerTextures;
-QList<Animation> objectTextures;
-QList<Animation> shotTextures;
+Animation playerTextures[NUMCHARACTERS];
+Animation objectTextures[NUMBLOCKTYPES];
+Animation shotTextures[NUMSHOTTYPES];
+
+int Animation::numTextures()
+{
+    return textures.size();
+}
 
 void doTextures()
 {
@@ -31,14 +36,14 @@ void doTextures()
     shotTextures = new Animation*[5];*/
 
 	//create animdata for each type of object
-	for(int i=0; i<NUMCHARACTERS; i++)
+    /*for(int i=0; i<NUMCHARACTERS; i++)
        playerTextures.append(Animation());
 	for(int i=0; i<NUMSHOTTYPES; i++)
 //        shotTextures[i] = new Animation;
         shotTextures.append(Animation());
 	for(int i=0; i<NUMBLOCKTYPES; i++)
 //        objectTextures[i] = new Animation;
-        objectTextures.append(Animation());
+        objectTextures.append(Animation());*/
 
 	//load pics for each animdata
 	//ZERO
@@ -194,8 +199,8 @@ void doTextures()
 
 	//MMX
     playerTextures[MMX].person = MMX;
-    Animation anim;
-    TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga", 0);
+//    Animation anim;
+    TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga");
     //TGA_Texture(&anim, ":img/characters/mmx/mmx.tga", 0);
 	
     playerTextures[MMX].frameData[actDUCK][animSTART] = 1;
@@ -850,8 +855,8 @@ void doTextures()
 		
     objectTextures[WATER1].blk = WATER1;
     objectTextures[WATER1].isSolid = false;
-    TGA_Texture(&objectTextures[WATER1], ":img/watera2.tga", 0);
-    TGA_Texture(&objectTextures[WATER1], ":img/waterb2.tga", 1);
+    TGA_Texture(&objectTextures[WATER1], ":img/watera2.tga");
+    TGA_Texture(&objectTextures[WATER1], ":img/waterb2.tga");
 
 	setDefaults(playerTextures, NUMCHARACTERS);
 	setDefaults(shotTextures, NUMSHOTTYPES);
@@ -1082,7 +1087,7 @@ bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt)
 	return didAnimation;
 }
 
-void setDefaults(QList<Animation> animData, int numobjs)
+void setDefaults(Animation animData[], int numobjs)
 {
 	for(int i=0; i<numobjs; i++)
 	{
