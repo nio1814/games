@@ -6,5 +6,38 @@
         <file>img/port.bmp</file>
         <file>img/watera2.tga</file>
         <file>img/waterb2.tga</file>
+        <file>img/characters/mmx/mmxDuck.tga</file>
+        <file>img/characters/mmx/mmxRun1.tga</file>
+        <file>img/characters/mmx/mmxRun2.tga</file>
+        <file>img/characters/mmx/mmxRun3.tga</file>
+        <file>img/characters/mmx/mmxRun4.tga</file>
+        <file>img/characters/mmx/mmxRun5.tga</file>
+        <file>img/characters/mmx/mmxRun6.tga</file>
+        <file>img/characters/mmx/mmxRun7.tga</file>
+        <file>img/characters/mmx/mmxRun8.tga</file>
+        <file>img/characters/mmx/mmxRun9.tga</file>
+        <file>img/characters/mmx/mmxRun10.tga</file>
+        <file>img/characters/mmx/mmxRun11.tga</file>
+        <file>img/characters/mmx/mmxJump1.tga</file>
+        <file>img/characters/mmx/mmxJump2.tga</file>
+        <file>img/characters/mmx/mmxJump3.tga</file>
+        <file>img/characters/mmx/mmxJump4.tga</file>
+        <file>img/characters/mmx/mmxJump5.tga</file>
+        <file>img/characters/mmx/mmxAtk1.tga</file>
+        <file>img/characters/mmx/mmxShoot1.tga</file>
+        <file>img/characters/mmx/mmxShoot2.tga</file>
+        <file>img/characters/mmx/mmxJumpShoot1.tga</file>
+        <file>img/characters/mmx/mmxJumpShoot2.tga</file>
+        <file>img/characters/mmx/mmxJumpShoot3.tga</file>
+        <file>img/characters/mmx/mmxJumpShoot4.tga</file>
+        <file>img/characters/mmx/mmxJumpShoot5.tga</file>
+        <file>img/characters/mmx/mmxRunShoot1.tga</file>
+        <file>img/characters/mmx/mmxRunShoot2.tga</file>
+        <file>img/characters/mmx/mmxRunShoot3.tga</file>
+        <file>img/characters/mmx/mmxRunShoot4.tga</file>
+        <file>img/characters/mmx/mmxRunShoot5.tga</file>
+        <file>img/characters/mmx/mmxHurt1.tga</file>
+        <file>img/characters/mmx/mmxHurt2.tga</file>
+        <file>img/characters/mmx/mmxHurt3.tga</file>
     </qresource>
 </RCC>

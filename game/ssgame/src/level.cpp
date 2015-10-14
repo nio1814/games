@@ -574,6 +574,7 @@ void Level::draw()
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
 	//glLoadIdentity();							// Reset The Current Modelview Matrix
 	//gluLookAt(-x, -y, -20, -x, -y, 0.0, 0.0, 1.0, 0.0);
+    setCam(getPlayer(playerFocus), 0);
 
     for(int s=0; s<numStructures(); s++)
     {
@@ -769,9 +770,10 @@ Vector3D Level::setCam(Object* obj, GLfloat dt)
 	
 	
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
-	//glLoadIdentity();												// Reset The Current Modelview Matrix
+//    glLoadIdentity();												// Reset The Current Modelview Matrix
 
 //TODO	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
+    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 	cam2look = cam->look - cam->pos;
 
 	return cam2look;
@@ -813,12 +815,12 @@ void Level::run(GLfloat dt, int numRuns)
 		if(!cameraMode && !debugMode)
 		{
 			runCheckTouch();
-			if(i == (numRuns -1))
-                draw();
+//			if(i == (numRuns -1))
+//                draw();
 			runMoveWorld(dt);
 		}
-		else
-            draw();
+//		else
+//            draw();
 	}
 
 	return;

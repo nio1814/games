@@ -60,12 +60,12 @@ void GLWidget::resizeGL(int w, int h)
     m_aspectRatio = (qreal)w / (qreal)(h ? h : 1);
 //    gluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
 //    glFrustum(-m_aspectRatio, m_aspectRatio, -1.0f, 1.0f, 4.0f, 15.0f);
-//    glOrtho(-.5, .5, -.5, .5, 4, 15);
+//    glOrtho(-2, 2, -2, 2, 1.5, 20);
 //    glOrtho();
     glFrustum(-2,2,-2,2,1.5,20);
 
     glMatrixMode(GL_MODELVIEW);						// Select The Modelview Matrix
-//    glLoadIdentity();							// Reset The Modelview Matrix
+    glLoadIdentity();							// Reset The Modelview Matrix
 
     return;
 }
@@ -146,7 +146,8 @@ void GLWidget::paintGL()
     glVertex3f( 1.0f,-1.0f,-1.0f);		// Bottom Right Of The Quad (Right)
     glEnd();
 
-
+//    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0f,1.0f,1.0f);
     m_game->draw();
 
     return;

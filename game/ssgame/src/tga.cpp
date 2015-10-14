@@ -25,9 +25,9 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 	int textureType = GL_RGB;
 	if(pBitMap->channels == 4)
 		textureType = GL_RGBA;
-	//gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);	
+    //gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	
 	if (pBitMap)									
 	{
@@ -40,12 +40,16 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 
 void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
 {
-	if(!strFileName)	return;
+    if(!strFileName)
+    {
+        qErrnoWarning("Invaid tga filename");
+        return;
+    }
 
 //	tImageTGA *pBitMap = Load_TGA(strFileName);
-	tImageTGA pBitMap = loadTGA(strFileName);
+    tImageTGA* pBitMap = loadTGA(strFileName);
 
-	if(pBitMap.data == NULL)	
+    if(pBitMap->data == NULL)
     {
         qErrnoWarning("Failed to load TGA data from %s\n", strFileName);
         exit(0);
@@ -56,14 +60,16 @@ void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 	int textureType = GL_RGB;
-    if(pBitMap.channels == 4)
+    if(pBitMap->channels == 4)
 	   textureType = GL_RGBA;
 //	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
-    glTexImage2D(GL_TEXTURE_2D, 0, textureType, pBitMap.size_x, pBitMap.size_y, 0, textureType, GL_UNSIGNED_BYTE, pBitMap.data);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+    glTexImage2D(GL_TEXTURE_2D, 0, textureType, pBitMap->size_x, pBitMap->size_y, 0, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 //    QImage image(strFileName);
 //    QGLWidget qgl;
@@ -74,13 +80,13 @@ void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
         aData->scale.append(Vector2D(1.0f,1.0f));
 			//aData->hScale[ID] = 1.0f;
 			//aData->wScale[ID] = 1.0f;
-		aData->pixels = Vector2D(pBitMap.size_x, pBitMap.size_y);
+        aData->pixels = Vector2D(pBitMap->size_x, pBitMap->size_y);
 			//aData->pixelsW = pBitMap->size_x;
 			//aData->pixelsH = pBitMap->size_y;
 	}
 	else
 	{
-        aData->scale.append(Vector2D(pBitMap.size_x / static_cast<GLfloat>(aData->pixels.x), pBitMap.size_y / static_cast<GLfloat>(aData->pixels.y)));
+        aData->scale.append(Vector2D(pBitMap->size_x / static_cast<GLfloat>(aData->pixels.x), pBitMap->size_y / static_cast<GLfloat>(aData->pixels.y)));
 			//aData->hScale[ID] = pBitMap->size_y / static_cast<GLfloat>(aData->pixelsH);
 			//aData->wScale[ID] = pBitMap->size_x / static_cast<GLfloat>(aData->pixelsW);
 	}
@@ -108,6 +114,17 @@ void TGA_Texture(Animation *aData, const char* strFileName, int ID, GLfloat cent
     aData->centers[19] = center;
 
 	return;
+}
+
+void tgaTextures(Animation *aData, QStringList filenames)
+{
+//    QStringListIterator filename;
+    foreach (QString filename, filenames)
+    {
+        TGA_Texture(aData, filename.toLatin1().constData());
+    }
+
+    return;
 }
 
 tImageTGA *Load_TGA(const char *strfilename)
@@ -277,9 +294,9 @@ tImageTGA *Load_TGA(const char *strfilename)
 	return pImgData;
 }
 
-tImageTGA loadTGA(QString filename)
+tImageTGA *loadTGA(QString filename)
 {
-    tImageTGA pImgData;
+    tImageTGA* pImgData = NULL;
     short width			= 0;
 	short height			= 0;
 	quint8 length			= 0;
@@ -297,6 +314,7 @@ tImageTGA loadTGA(QString filename)
 	}
 	else
 	{
+        pImgData = new tImageTGA;
 		QDataStream fileData(&file);
         fileData.setByteOrder(QDataStream::LittleEndian);
 
@@ -328,11 +346,11 @@ tImageTGA loadTGA(QString filename)
 
 				channels = bits / 8;
 				stride = channels * width;
-				pImgData.data = new unsigned char[stride * height];
+                pImgData->data = new unsigned char[stride * height];
 
 				for(int y = 0; y < height; y++)
 				{
-					unsigned char *pLine = &(pImgData.data[stride * y]);
+                    unsigned char *pLine = &(pImgData->data[stride * y]);
 
 //					fread(pLine, stride, 1, pFile);
 					fileData.readRawData((char*)pLine, stride);
@@ -354,7 +372,7 @@ tImageTGA loadTGA(QString filename)
 
 				channels = 3;
 				stride = channels * width;
-				pImgData.data = new unsigned char[stride * height];
+                pImgData->data = new unsigned char[stride * height];
 
 				for(int i = 0; i < width*height; i++)
 				{
@@ -365,9 +383,9 @@ tImageTGA loadTGA(QString filename)
 					g = ((pixels >> 5) & 0x1f) << 3;
 					r = ((pixels >> 10) & 0x1f) << 3;
 
-					pImgData.data[i * 3 + 0] = r;
-					pImgData.data[i * 3 + 1] = g;
-					pImgData.data[i * 3 + 2] = b;
+                    pImgData->data[i * 3 + 0] = r;
+                    pImgData->data[i * 3 + 1] = g;
+                    pImgData->data[i * 3 + 2] = b;
 				}
 			}
 //			else
@@ -380,8 +398,8 @@ tImageTGA loadTGA(QString filename)
 			channels = bits / 8;
 			stride = channels * width;
 
-			pImgData.data = new unsigned char[stride * height];
-			quint8 *pColors = new quint8 [channels];
+            pImgData->data = new unsigned char[stride * height];
+            quint8 *pColors = new quint8 [channels];
 
 			while(i < width*height)
 			{
@@ -398,19 +416,18 @@ tImageTGA loadTGA(QString filename)
 //						fread(pColors, sizeof(quint8) * channels, 1, pFile);
 						fileData.readRawData((char*)pColors, sizeof(quint8)*channels);
 
-						pImgData.data[colorsRead + 0] = pColors[2];
-						pImgData.data[colorsRead + 1] = pColors[1];
-						pImgData.data[colorsRead + 2] = pColors[0];
+                        pImgData->data[colorsRead + 0] = pColors[2];
+                        pImgData->data[colorsRead + 1] = pColors[1];
+                        pImgData->data[colorsRead + 2] = pColors[0];
 
 						if(bits == 32)
-							pImgData.data[colorsRead + 3] = pColors[3];
+                            pImgData->data[colorsRead + 3] = pColors[3];
 
 						i++;
 						rleID--;
 						colorsRead += channels;
 					}
 				}
-
 				else
 				{
 					rleID -= 127;
@@ -420,11 +437,12 @@ tImageTGA loadTGA(QString filename)
 
 					while(rleID)
 					{
-						pImgData.data[colorsRead + 0] = pColors[2];
-						pImgData.data[colorsRead + 1] = pColors[1];
-						pImgData.data[colorsRead + 2] = pColors[0];
+                        pImgData->data[colorsRead + 0] = pColors[2];
+                        pImgData->data[colorsRead + 1] = pColors[1];
+                        pImgData->data[colorsRead + 2] = pColors[0];
 
-						if(bits == 32)	pImgData.data[colorsRead + 3] = pColors[3];
+                        if(bits == 32)
+                            pImgData->data[colorsRead + 3] = pColors[3];
 
 						i++;
 						rleID--;
@@ -435,9 +453,9 @@ tImageTGA loadTGA(QString filename)
 			delete[] pColors;
 		}
 
-		pImgData.channels  = channels;
-		pImgData.size_x    = width;
-		pImgData.size_y    = height;
+        pImgData->channels  = channels;
+        pImgData->size_x    = width;
+        pImgData->size_y    = height;
 	}
 
 	return pImgData;

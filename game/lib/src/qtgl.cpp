@@ -6,6 +6,7 @@ void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDire
 {
     QMatrix4x4 matrix;
     matrix.setToIdentity();
+    matrix.lookAt(cameraPosition, lookPosition, upDirection);
 #if QT_VERSION == 0x050500
     const GLfloat* multMatrixData = static_cast<const GLfloat*>(matrix.constData());
 #elif QT_VERSION > 0x050000
@@ -18,5 +19,6 @@ void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDire
         multMatrixData[n] = matrixData[n];
 #endif
 
+    glLoadIdentity();												// Reset The Current Modelview Matrix
     glMultMatrixf(multMatrixData);
 }

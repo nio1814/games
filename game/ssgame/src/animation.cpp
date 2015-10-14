@@ -29,6 +29,18 @@ int Animation::numTextures()
     return textures.size();
 }
 
+QStringList filenameList(QString baseDir, QString baseName, int length, QString extension)
+{
+    QStringList filenames;
+
+    for(int n=1; n<=length; n++)
+    {
+        filenames << baseDir+baseName+QString("%1").arg(n)+"."+extension;
+    }
+
+    return filenames;
+}
+
 void doTextures()
 {
     /*playerTextures = new Animation*[20];
@@ -197,21 +209,25 @@ void doTextures()
 
     shotTextures[GOKUSHOT].lastFrame = 1;
 
+    QString characterImgDir = ":img/characters/";
+
 	//MMX
+    QString currentDir = characterImgDir+"mmx/";
     playerTextures[MMX].person = MMX;
-//    Animation anim;
     TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga");
-    //TGA_Texture(&anim, ":img/characters/mmx/mmx.tga", 0);
 	
     playerTextures[MMX].frameData[actDUCK][animSTART] = 1;
     playerTextures[MMX].frameData[actDUCK][numFRAMES] = 1;
     playerTextures[MMX].frameData[actDUCK][lastFRAME] = 1;
-//	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxDuck.tga", 1);
+    TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmxDuck.tga");
 
-    playerTextures[MMX].frameData[actRUN][animSTART] = 2;
+    playerTextures[MMX].frameData[actRUN][animSTART] = playerTextures[MMX].textures.size();
     playerTextures[MMX].frameData[actRUN][numFRAMES] = 11;
     playerTextures[MMX].frameData[actRUN][repeatFRAME] = 3;
     playerTextures[MMX].frameData[actRUN][lastFRAME] = 12;
+    QStringList filenames;
+    filenames = filenameList(currentDir, "mmxRun", 11, "tga");
+    tgaTextures(&playerTextures[MMX], filenames);
     /*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRun1.tga", 2);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRun2.tga", 3);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRun3.tga", 4);
@@ -224,31 +240,38 @@ void doTextures()
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRun10.tga", 11);
     TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRun11.tga", 12);*/
 
-    playerTextures[MMX].frameData[actJUMP][animSTART] = 13;
+    playerTextures[MMX].frameData[actJUMP][animSTART] = playerTextures[MMX].textures.size();
     playerTextures[MMX].frameData[actJUMP][numFRAMES] = 5;
     playerTextures[MMX].frameData[actJUMP][repeatFRAME] = 16;
     playerTextures[MMX].frameData[actJUMP][lastFRAME] = 17;
+    filenames = filenameList(currentDir, "mmxJump", 5, "tga");
+    filenames.swap(3,4);
+    tgaTextures(&playerTextures[MMX], filenames);
     /*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJump1.tga", 13);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJump2.tga", 14);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJump3.tga", 15);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJump5.tga", 16);
     TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJump4.tga", 17);*/
 
-    /*playerTextures[MMX].frameData[actATTACK1][animSTART] = 18;
+    playerTextures[MMX].frameData[actATTACK1][animSTART] = 18;
     playerTextures[MMX].frameData[actATTACK1][numFRAMES] = 1;
-	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxAtk1.tga", 18);*/
+    TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmxAtk1.tga");
 
-    playerTextures[MMX].frameData[actSHOOT][animSTART] = 19;
+    playerTextures[MMX].frameData[actSHOOT][animSTART] = playerTextures[MMX].textures.size();
     playerTextures[MMX].frameData[actSHOOT][numFRAMES] = 2;
     playerTextures[MMX].frameData[actSHOOT][lastFRAME] = 20;
+    filenames = filenameList(currentDir, "mmxShoot", 2, "tga");
+    tgaTextures(&playerTextures[MMX], filenames);
     /*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxShoot1.tga", 19);
     TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxShoot2.tga", 20);*/
 
-    playerTextures[MMX].frameData[actJUMPSHOOT][animSTART] = 21;
+    playerTextures[MMX].frameData[actJUMPSHOOT][animSTART] = playerTextures[MMX].textures.size();
     playerTextures[MMX].frameData[actJUMPSHOOT][numFRAMES] = 5;
     playerTextures[MMX].frameData[actJUMPSHOOT][repeatFRAME] = 25;
     playerTextures[MMX].frameData[actJUMPSHOOT][lastFRAME] = 17;
     playerTextures[MMX].canShoot = true;
+    filenames = filenameList(currentDir, "mmxJumpShoot", 5, "tga");
+    tgaTextures(&playerTextures[MMX], filenames);
 	/*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot1.tga", 21);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot2.tga", 22);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxJumpShoot3.tga", 23);
@@ -258,6 +281,8 @@ void doTextures()
     playerTextures[MMX].frameData[actRUNATK][animSTART] = 25;
     playerTextures[MMX].frameData[actRUNATK][numFRAMES] = 1;
     playerTextures[MMX].frameData[actRUNATK][lastFRAME] = 31;
+    filenames = filenameList(currentDir, "mmxRunShoot", 5, "tga");
+    tgaTextures(&playerTextures[MMX], filenames);
 	/*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot1.tga", 26);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot1.tga", 27);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRunShoot2.tga", 28);
@@ -274,6 +299,8 @@ void doTextures()
     playerTextures[MMX].frameData[actHURT][animSTART] = 33;
     playerTextures[MMX].frameData[actHURT][numFRAMES] = 3;
     playerTextures[MMX].frameData[actHURT][minstopFRAME] = 35;
+    filenames = filenameList(currentDir, "mmxHurt", 3, "tga");
+    tgaTextures(&playerTextures[MMX], filenames);
 	/*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt1.tga", 33);
 	TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt2.tga", 34);
     TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxHurt3.tga", 35);*/
