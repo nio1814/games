@@ -41,6 +41,7 @@ GLWidget::GLWidget(QWidget *parent)
     for (int n=0; n<20; n++)
     {
         rcube.rotationAxis = axes[qrand()%3];
+        rcube.rotationIndex = qrand()%3;
         rcube.rotationDirection = directions[qrand()%2];
         rcube.moveCubes();
     }
@@ -193,8 +194,19 @@ void GLWidget::runMouse()
 	Vector3D mouseMove;
     bool wasRotating = rcube.isRotating;
 
-    if(mos->isBtns(Qt::RightButton))
+    if(mos->isBtns(Qt::LeftButton) && !isKeys(Qt::Key_Control))
 	{
+        mouseMove = Vector3D(mos->x-mos->xOld, mos->yOld-mos->y, 0);	//find movement in screen coords
+		GLfloat len = mouseMove.length();
+		if(mouseMove.length() > 2.0f)
+		{
+			mouseMove.unitize();
+			mouseMove = cam->up*mouseMove.y + cam->dir2RSide()*mouseMove.x;
+			rcube.twistCube(cam->pos, moslook, mouseMove);
+		}
+    }
+    else if(mos->isBtns(Qt::RightButton) || mos->isBtns(Qt::LeftButton))
+    {
         if(mos->y != mos->yOld)
 		{
             look2cam = look2cam.rotate3D(&toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
@@ -212,20 +224,9 @@ void GLWidget::runMouse()
 			cam->pos = cam->look + look2cam;
 		}
 	}
-    else if(mos->isBtns(Qt::LeftButton))
-	{
-        mouseMove = Vector3D(mos->x-mos->xOld, mos->yOld-mos->y, 0);	//find movement in screen coords
-		GLfloat len = mouseMove.length();
-		if(mouseMove.length() > 2.0f)
-		{
-			mouseMove.unitize();
-			mouseMove = cam->up*mouseMove.y + cam->dir2RSide()*mouseMove.x;
-			rcube.twistCube(cam->pos, moslook, mouseMove);
-		}
-    }
 
 	static GLfloat origFollowDist = cam->followDist;
-    cam->followDist = origFollowDist*exp(-mos->wheel*.07f);
+    cam->followDist = origFollowDist*exp(-mos->wheel*.0007f);
 	cam->pos = cam->look + look2cam.unit()*cam->followDist;
 
     Vector2D screenDimGL;
@@ -374,6 +375,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
     mos->wheel += event->delta();
 
     emit runMouse();
+    emit animate();
 
     return;
 }
