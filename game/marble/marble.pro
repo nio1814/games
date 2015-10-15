@@ -11,9 +11,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = marble
 TEMPLATE = app
 
+INCLUDEPATH += ../lib/src
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    glwidget.cpp
+    glwidget.cpp \
+    ../lib/src/gameobject.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    ../lib/src/gameobject.h
