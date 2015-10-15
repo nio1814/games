@@ -1,5 +1,5 @@
 #include <keys.h>
-#include <Vector3D.h>
+#include <vector3d.h>
 #include <camera.h>
 #include <mouse.h>
 #include "gameobject.h"

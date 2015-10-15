@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,10 +18,8 @@ SOURCES += main.cpp\
     glwidget.cpp \
     ../lib/src/gameobject.cpp \
     commands.cpp \
-    ../lib/src/text.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
     commands.h \
-    ../lib/src/text.h \
     glwidget.h
