@@ -6,6 +6,7 @@
 #include "shape.h"
 
 class CameraPoint;
+class QTimer;
 
 #if (QT_VERSION >= 0x050500)
 #include "qopenglwidget.h"
@@ -24,15 +25,18 @@ protected:
     void paintGL();
 
     void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
 
 signals:
 
 public slots:
     void animate();
+    void runKeys();
 
 private:
     int runControls();
 	void rotateLR(GLfloat angle);
+	void rotateUD(GLfloat angle);
 
     bool lightActive;
 //    light_c light;
@@ -42,6 +46,7 @@ private:
     int m_windowSizeX;
     int m_windowSizeY;
     Vector3D moslook;
+    QTimer *m_timer;
 };
 
 #endif // GLWIDGET_H

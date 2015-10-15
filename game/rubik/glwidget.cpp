@@ -8,7 +8,8 @@ GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
         : QOpenGLWidget(parent)
 #else
-        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+	   : QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
+		m_timer(NULL)
 #endif
 {
 	fovAngle = Vector2D(0.0f,45.0f);
@@ -208,15 +209,29 @@ void GLWidget::rotateLR(GLfloat angle)
 	cam->pos = cam->look + look2cam;
 }
 
-void GLWidget::keyPressEvent(QKeyEvent *event)
+void GLWidget::rotateUD(GLfloat angle)
 {
-	keyDown(event->key());
+	Vector3D look2cam = -cam->cam2look();
+	Vector3D toSideDir = cam->dir2RSide();
 
-	GLfloat lrRotateAngle = 5;
+	look2cam = look2cam.rotate3D(&toSideDir, angle);
+	cam->up = cam->up.rotate3D(&toSideDir, angle);
+//	camposOld = cam->pos;
+	cam->pos = cam->look + look2cam;
+}
+
+void GLWidget::runKeys()
+{
+	GLfloat rotateAngle = 5;
 	if(isKeys(Qt::Key_Left))
-		rotateLR(lrRotateAngle);
+		rotateLR(-rotateAngle);
 	else if(isKeys(Qt::Key_Right))
-		rotateLR(lrRotateAngle);
+		rotateLR(rotateAngle);
+
+	if(isKeys(Qt::Key_Up))
+		rotateUD(-rotateAngle);
+	else if(isKeys(Qt::Key_Down))
+		rotateUD(rotateAngle);
 
 	if(canToggle(Qt::Key_L))
 		lightActive = !lightActive;
@@ -224,6 +239,23 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
 		int pause = 5;
 
 	updateGL();
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
+	keyDown(event->key());
+
+	if(!m_timer)
+	{
+		m_timer = new QTimer;
+		connect(m_timer, SIGNAL(timeout()), this, SLOT(runKeys()));
+		m_timer->start(50);
+	}
 
 	return;
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+	return keyUp(event->key());
 }
