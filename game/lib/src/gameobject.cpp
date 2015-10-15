@@ -402,7 +402,7 @@ void gameObj::addPlayer(object_plane* plane)
 }
 
 
-void gameObj::run(mouse_s* ms, void (*commandFcn)(gameObj* gm, mouse_s* ms), GLfloat delta)
+void gameObj::run(Mouse *ms, (*commandFcn)(gameObj *, Mouse *), GLfloat delta)
 {
 	switch(gMode)
 	{

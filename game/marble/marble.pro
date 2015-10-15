@@ -17,8 +17,11 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     glwidget.cpp \
     ../lib/src/gameobject.cpp \
-    commands.cpp
+    commands.cpp \
+    ../lib/src/text.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
-    commands.h
+    commands.h \
+    ../lib/src/text.h \
+    glwidget.h

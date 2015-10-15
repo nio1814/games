@@ -51,7 +51,7 @@ public:
 	object_holder allObj;
 	//Object *player1, *player2;
 	//texture_s *alltexture;
-	cameraPoints* cameras;
+    CameraPoints* cameras;
 	light_c* lights;
 };
 
@@ -105,7 +105,7 @@ public:
 	texture_s* addTexture(char *filename, char *ID);
 	void setPlayerShape(Shape pShape);
 	void addPlayer(object_plane *plane);
-	void run(mouse_s* ms, void (*commandFcn)(gameObj* gm, mouse_s* ms), GLfloat delta);
+    void run(Mouse* ms, void (*commandFcn)(gameObj* gm, Mouse* ms), GLfloat delta);
 	bool addMenu(char* mTitle);
 };
 

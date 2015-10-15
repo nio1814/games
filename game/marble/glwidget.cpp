@@ -24,18 +24,11 @@
 
 #include "commands.h"
 
-HDC			hDC=NULL;									// Private GDI Device Context
-HGLRC		hRC=NULL;									// Permanent Rendering Context
-HWND		hWnd=NULL;									// Holds Our Window Handle
-HINSTANCE	hInstance = NULL;							// Holds The Instance Of The Application
-DWORD		tickCount;										// Used For The Tick Counter
-DWORD		lastTickCount;										// Used For The Tick Counter
-
 //bool		keys[256];									// Array Used For The Keyboard Routine
-bool		active=TRUE;								// Window Active Flag Set To TRUE By Default
-bool		fullscreen=TRUE;							// Fullscreen Flag Set To Fullscreen Mode By Default
+bool		active=true;								// Window Active Flag Set To TRUE By Default
+bool		fullscreen=true;							// Fullscreen Flag Set To Fullscreen Mode By Default
 
-mouse_s* mos;
+Mouse* mos;
 gameObj game;
 //object_holder allObjects;
 object_holder menu;
@@ -77,17 +70,17 @@ GLfloat currentgravity = 9.8f;
 
 GLuint		texture[3];									// 3 Textures
 
-LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
+//LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 void process();
 
-GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize The GL Window
+void GLWidget::ReSizeGLScene(GLsizei w, GLsizei h)		// Resize And Initialize The GL Window
 {
 	if (height==0)										// Prevent A Divide By Zero By
 	{
 		height=1;										// Making Height Equal One
 	}
 
-	glViewport(0,0,width,height);						// Reset The Current Viewport
+    glViewport(0,0,w,h);						// Reset The Current Viewport
 
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
@@ -100,7 +93,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 }
 
 
-int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
+int initializeGL()										// All Setup For OpenGL Goes Here
 {
 	/*if (!LoadGLTextures())								// If Loading The Textures Failed
 	{
@@ -129,14 +122,14 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);	// Set Up Sphere Mapping
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);	// Set Up Sphere Mapping
 
-	BuildFont(&hDC);
+//	BuildFont(&hDC);
 
 	return TRUE;										// Initialization Went OK
 }
 
 void initializeObjects()
 {
-	mos = new mouse_s(WindowSize.x,WindowSize.y);
+    mos = new Mouse(WindowSize.x,WindowSize.y);
 	nullTexture.ID = "null texture";
 
 	//MAKE MENU
@@ -430,7 +423,7 @@ void ProcessKeyboard()									// Process Keyboard Results
 	forward.y = 0;
 	toleft = forward.rotate3D(&Y, 90);
 
-	if (isKeys('H'))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
+    if (isKeys(Qt::Key_H))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
 	if (keys['K'])		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
 	if (keys['U'])		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
 	if (keys['J'])		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
@@ -524,7 +517,7 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
  *	bits			- Number Of Bits To Use For Color (8/16/24/32)			*
  *	fullscreenflag	- Use Fullscreen Mode (TRUE) Or Windowed Mode (FALSE)	*/
  
-BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscreenflag)
+/*BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscreenflag)
 {
 	GLuint		PixelFormat;							// Holds The Results After Searching For A Match
 	WNDCLASS	wc;										// Windows Class Structure
@@ -837,4 +830,4 @@ int WINAPI WinMain(	HINSTANCE	hInstance,				// Instance
 	// Shutdown
 	KillGLWindow();										// Kill The Window
 	return (msg.wParam);								// Exit The Program
-}
+}*/
