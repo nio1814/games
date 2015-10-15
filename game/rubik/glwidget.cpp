@@ -9,11 +9,12 @@ GLWidget::GLWidget(QWidget *parent)
         : QOpenGLWidget(parent)
 #else
 	   : QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
-		m_timer(NULL)
+		m_twisting(false), m_timer(NULL)
 #endif
 {
 	fovAngle = Vector2D(0.0f,45.0f);
 	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
+	m_timer = new QTimer;
 
 	for(int i=0; i<3; i++)
 	{
@@ -48,6 +49,11 @@ GLWidget::GLWidget(QWidget *parent)
 //	SetCursorPos(m_windowSizeX/2, m_windowSizeY/2);
 }
 
+GLWidget::~GLWidget()
+{
+	delete cam;
+}
+
 void GLWidget::initializeGL()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -69,6 +75,9 @@ void GLWidget::resizeGL(int w, int h)
 {
 	if (h==0)										// Prevent A Divide By Zero By
 		h=1;										// Making Height Equal One
+
+	m_windowSizeX = w;
+	m_windowSizeY = h;
 
 	glViewport(0,0,w,h);						// Reset The Current Viewport
 
@@ -143,6 +152,11 @@ void GLWidget::paintGL()
 
 void GLWidget::animate()
 {
+	if(!rcube.isRotating)
+		disconnect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
+
+	updateGL();
+
 	return;
 }
 
@@ -207,6 +221,8 @@ void GLWidget::rotateLR(GLfloat angle)
 	look2cam = look2cam.rotate3D(&cam->up,-angle);
 //	camposOld = cam->pos;
 	cam->pos = cam->look + look2cam;
+
+	emit animate();
 }
 
 void GLWidget::rotateUD(GLfloat angle)
@@ -218,10 +234,14 @@ void GLWidget::rotateUD(GLfloat angle)
 	cam->up = cam->up.rotate3D(&toSideDir, angle);
 //	camposOld = cam->pos;
 	cam->pos = cam->look + look2cam;
+
+	emit animate();
 }
 
 void GLWidget::runKeys()
 {
+	bool wasRotating = rcube.isRotating;
+
 	GLfloat rotateAngle = 5;
 	if(isKeys(Qt::Key_Left))
 		rotateLR(-rotateAngle);
@@ -238,24 +258,52 @@ void GLWidget::runKeys()
 	if(canToggle(Qt::Key_P))
 		int pause = 5;
 
-	updateGL();
+	if(!rcube.isRotating)
+	{
+		if(canToggle(Qt::Key_Y))
+			rcube.rotateCube(cam->up, 2, 1);
+		else if(canToggle(Qt::Key_W))
+			rcube.rotateCube(cam->up, 2, -1);
+		else if(canToggle(Qt::Key_G))
+			rcube.rotateCube(cam->up, 1, 1);
+		else if(canToggle(Qt::Key_D))
+			rcube.rotateCube(cam->up, 1, -1);
+		else if(canToggle(Qt::Key_N))
+			rcube.rotateCube(cam->up, 0, 1);
+		else if(canToggle(Qt::Key_X))
+			rcube.rotateCube(cam->up, 0, -1);
+		else if(canToggle(Qt::Key_T))
+			rcube.rotateCube(cam->dir2RSide(), 2, -1);
+	}
+
+	if(!wasRotating && rcube.isRotating)
+	{
+		connect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
+		m_timer->start(30);
+	}
+
+//	emit animate();
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *event)
 {
 	keyDown(event->key());
 
-	if(!m_timer)
-	{
-		m_timer = new QTimer;
-		connect(m_timer, SIGNAL(timeout()), this, SLOT(runKeys()));
-		m_timer->start(50);
-	}
+//	if(m_timer.isNull())
+//	{
+//		m_timer = new QTimer;
+//		connect(m_timer, SIGNAL(timeout()), this, SLOT(runKeys()));
+//		m_timer->start(50);
+//	}
+	emit runKeys();
 
 	return;
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-	return keyUp(event->key());
+	keyUp(event->key());
+//	delete m_timer;
+
+	return;
 }

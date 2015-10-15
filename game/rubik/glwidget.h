@@ -19,6 +19,8 @@ class GLWidget : public QGLWidget
 	Q_OBJECT
 public:
     GLWidget(QWidget *parent);
+    ~GLWidget();
+
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -43,10 +45,11 @@ private:
     CameraPoint* cam;
     Vector2D fovAngle;
     rcube_c rcube;
+    bool m_twisting;
     int m_windowSizeX;
     int m_windowSizeY;
     Vector3D moslook;
-    QTimer *m_timer;
+    QPointer<QTimer> m_timer;
 };
 
 #endif // GLWIDGET_H

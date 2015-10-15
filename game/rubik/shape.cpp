@@ -282,6 +282,62 @@ void rcube_c::rotateCube(char axis, int index, int direction)
 	return;
 }
 
+void rcube_c::rotateCube(Vector3D axis, int index, int direction)
+{
+	int axisSign;
+	char axisName;
+
+	Vector3D absAxis = axis;
+	absAxis.x = fabsf(absAxis.x);
+	absAxis.y = fabsf(absAxis.y);
+	absAxis.z = fabsf(absAxis.z);
+
+	float maxComponent;
+
+	if (absAxis.x>absAxis.y)
+	{
+//		y<x
+		if(absAxis.x>absAxis.z)
+		{
+//			y<x z<x
+			axisName = 'X';
+			maxComponent = axis.x;
+		}
+		else//(absAxis.y>absAxis.z)
+		{
+//			y<x<z
+			axisName = 'Z';
+			maxComponent = axis.z;
+		}
+	}
+	else
+	{
+//		x<y
+		if (absAxis.y>absAxis.z)
+		{
+//			x<y z<y
+			axisName = 'Y';
+			maxComponent = axis.y;
+		}
+		else
+		{
+//			x<y<z
+			axisName = 'Z';
+			maxComponent = axis.z;
+		}
+	}
+
+	if(maxComponent<0)
+	{
+		axisSign = -1;
+		index = 2-index;
+	}
+	else
+		axisSign = 1;
+
+	rotateCube(axisName, index, axisSign*direction);
+}
+
 void rcube_c::updateCube()
 {
 	if((fabs(rotationAngle) <(90.0f+5*ROTATESPEED)) && (fabs(rotationAngle) > (90.0f-5*ROTATESPEED)))

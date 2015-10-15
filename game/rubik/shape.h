@@ -17,7 +17,7 @@ extern int BLUEub[3];
 extern int WHITEub[3];
 
 #define CUBELENGTH 1.0f
-#define ROTATESPEED .15f
+#define ROTATESPEED .25f
 
 class cube_c
 {
@@ -41,6 +41,7 @@ public:
 	rcube_c();
 	void drawCube();
 	void rotateCube(char axis, int index, int direction);
+	void rotateCube(Vector3D axis, int index, int direction);
 	void updateCube();
 	//move cubes to new positions following rotation
 	void moveCubes();
