@@ -17,10 +17,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     glwidget.cpp \
     Lesson5.cpp \
-    shape.cpp
+    shape.cpp \
+    ../lib/src/vector3d.cpp \
+    ../lib/src/camera.cpp \
+    ../lib/src/keys.cpp \
+    ../lib/src/qtgl.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
-    shape.h
+    shape.h \
+    ../lib/src/vector3d.h \
+    ../lib/src/camera.h \
+    ../lib/src/keys.h \
+    ../lib/src/qtgl.h
 
 FORMS    += mainwindow.ui

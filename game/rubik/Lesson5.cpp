@@ -16,9 +16,6 @@
 
 #include "shape.h"
 
-GLfloat LightAmbient[]=		{ 0.1f, 0.1f, 0.1f, 1.0f };
-GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
-GLfloat LightPosition[]=	{ 5.0f, 5.0f, 6.0f, 1.0f };
 
 bool	active=true;		// Window Active Flag Set To TRUE By Default
 bool	fullscreen=true;	// Fullscreen Flag Set To Fullscreen Mode By Default
@@ -38,7 +35,7 @@ cube_c cube(CORNER, YELLOW, WHITE, RED, ORANGE, GREEN, BLUE);				//cube object f
 Vector3D majAxis = Y;
 
 //light_c light(0, Vector3D(rand(),3,-6), Vector;
-light_c light;
+
 bool blight;
 
 #define CAMOVESPEED 2.0f

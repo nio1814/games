@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "keys.h"
+#include "constants.h"
 
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
@@ -25,21 +26,25 @@ GLWidget::GLWidget(QWidget *parent)
 		}
 	}
 
-	light.pos = Vector3D(rand()*3.0f/RAND_MAX+2,rand()*3.0f/RAND_MAX+2,rand()*3.0f/RAND_MAX+2);
+	/*light.pos = Vector3D(rand()*3.0f/RAND_MAX+2,rand()*3.0f/RAND_MAX+2,rand()*3.0f/RAND_MAX+2);
 	light.ambient = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
 	light.diffuse = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
-	light.specular = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
+	light.specular = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);*/
 	/*light.ambient = Vector3D(.10f,.10f,.10f);
 	light.diffuse = Vector3D(1,1,1);
 	light.specular = Vector3D(1,1,1);*/
 
+
+	GLfloat LightAmbient[]=		{ 0.1f, 0.1f, 0.1f, 1.0f };
+	GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat LightPosition[]=	{ 5.0f, 5.0f, 6.0f, 1.0f };
 
 	//glEnable(GL_LIGHT1);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
 	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
 
-	SetCursorPos(WindowSizeX/2, WindowSizeY/2);
+//	SetCursorPos(m_windowSizeX/2, m_windowSizeY/2);
 }
 
 void GLWidget::initializeGL()
@@ -54,7 +59,7 @@ void GLWidget::initializeGL()
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_LIGHTING);
 
-	light = false;
+	lightActive = false;
 
 	return;
 }
@@ -82,16 +87,17 @@ void GLWidget::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 
-	if(light)
+	if(lightActive)
 	{
 		glEnable(GL_LIGHTING);
-		light.enable();
+//		light.enable();
 	}
 	else
 		glDisable(GL_LIGHTING);
 
 	runControls();
-	glLookAt(cam.pos.x, cam.pos.y+.001f, cam.pos.z, cam.look.x, cam.look.y, cam.look.z, cam.up.x,cam.up.y,cam.up.z);
+//	gluLookAt(cam.pos.x, cam.pos.y+.001f, cam.pos.z, cam.look.x, cam.look.y, cam.look.z, cam.up.x,cam.up.y,cam.up.z);
+	glLookAt(cam.pos.toQVector3D(), cam.look.toQVector3D(), cam.up.toQVector3D());
 
 	static int tan = 0;
 	/*switch(tan)
@@ -147,7 +153,7 @@ int GLWidget::runControls()
 	Vector3D camposOld;
 	Vector3D mouseMove;
 
-	if(isBtnsM(mbRBTN, &mos))
+	/*if(isBtnsM(mbRBTN, &mos))
 	{
 		if(mos.y != mos.yOld)
 		{
@@ -175,20 +181,21 @@ int GLWidget::runControls()
 			mouseMove = cam.up*mouseMove.y + cam.dir2RSide()*mouseMove.x;
 			rcube.twistCube(cam.pos, moslook, mouseMove);
 		}
-	}
+	}*/
 	static GLfloat origFollowDist = cam.followDist;
-	cam.followDist = origFollowDist*exp(-mos.wheel*.07f);
+//	cam.followDist = origFollowDist*exp(-mos.wheel*.07f);
 	cam.pos = cam.look + look2cam.unit()*cam.followDist;
 
+	Vector2D screenDimGL;
 	screenDimGL.x = 2*cam.followDist*tan(fovAngle.x*DEG2RAD/2.0f);
 	screenDimGL.y = 2*cam.followDist*tan(fovAngle.y*DEG2RAD/2.0f);
 
-	mousePtInSpace.x = ((mos.x-WindowSizeX/2)/(float)WindowSizeX)*screenDimGL.x;
-	mousePtInSpace.y = ((WindowSizeY/2-mos.y)/(float)WindowSizeY)*screenDimGL.y;
-	moslook = cam.dir2RSide()*mousePtInSpace.x+cam.up*mousePtInSpace.y;
+//	mousePtInSpace.x = ((mos.x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;
+//	mousePtInSpace.y = ((m_windowSizeY/2-mos.y)/(float)m_windowSizeY)*screenDimGL.y;
+//	moslook = cam.dir2RSide()*mousePtInSpace.x+cam.up*mousePtInSpace.y;
 
 	if(canToggle('L'))
-		light = !light;
+		lightActive = !lightActive;
 	if(canToggle('P'))
 		int pause = 5;
 

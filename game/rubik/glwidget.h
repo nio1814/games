@@ -3,8 +3,8 @@
 
 #include <QtGlobal>
 
-//#include "vector3d.h"
 #include "shape.h"
+#include "camera.h"
 
 #if (QT_VERSION >= 0x050500)
 #include "qopenglwidget.h"
@@ -29,7 +29,9 @@ public slots:
 private:
     int runControls();
 
-    bool light;
+    bool lightActive;
+//    light_c light;
+    CameraPoint cam;
     Vector2D fovAngle;
     rcube_c rcube;
     int m_windowSizeX;
