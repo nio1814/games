@@ -1,7 +1,8 @@
 #ifndef MOUSE
 #define MOUSE
 
-#include <windows.h>
+#include <qpoint.h>
+#include <qhash.h>
 
 #ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL WM_MOUSELAST+1 
@@ -11,40 +12,34 @@
 #define DEFMOUSETHROTTLEX .07f
 #define DEFMOUSETHROTTLEY .12f
 
-enum btnStat{bsDOWN, bsHOLD};
-enum mouseBtns{mbLBTN, mbRBTN, mbMBTN};
+struct ButtonState{
+    bool down;
+    bool held;
 
-struct mouse_s
+    ButtonState() : down(false), held(false) {};
+};
+
+class Mouse
 {
-	POINT msPoint;
+public:
+    Mouse(int width, int height);
+
+    void btnDown(const int btnIn);
+    void btnUp(const int btnIn);
+    bool isBtns(const int btnIn);
+    bool isHeldBtn(const int btnIn);
+    bool canToggleBtn(const int btnIn);
+    void updatePos(int xnew, int ynew);
+    void updatePos(QPoint pos);
+    bool checkMouseMove();
+
+    QPoint msPoint;
 	int numButtons;
 	int x,y,xOld,yOld;
 	int wheel, wheelOld;
-	bool btns[3][2];
+    QHash<int,ButtonState> m_btns;
 	bool movedLastTime;
 	int screenWidth, screenHeight;
-	
-	mouse_s(int width, int height)
-	{
-		numButtons = 0;
-		x = 0;
-		y = 0;
-		xOld = 0;
-		yOld = 0;
-		wheel = 0;
-		wheelOld = 0;
-		movedLastTime = false;
-		screenWidth = width;
-		screenHeight = height;
-	}
 };
-
-void btnDownM(const int btnIn, mouse_s* ms);
-void btnUpM(const int btnIn, mouse_s* ms);
-bool isBtnsM(const int btnIn, mouse_s* ms);
-bool isHeldBtnM(const int btnIn, mouse_s* ms);
-bool canToggleBtnM(const int btnIn, mouse_s* ms);
-void updatePosM(int xnew, int ynew, mouse_s* ms);
-bool checkMouseMove(mouse_s* ms);
 
 #endif

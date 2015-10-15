@@ -1,84 +1,118 @@
 #include "mouse.h"
 
-void btnDownM(const int btnIn, mouse_s* ms)
+Mouse::Mouse(int width, int height)
 {
-	if(ms->btns[btnIn][bsDOWN])
-		ms->btns[btnIn][bsHOLD] = true;
+    numButtons = 0;
+    x = 0;
+    y = 0;
+    xOld = 0;
+    yOld = 0;
+    wheel = 0;
+    wheelOld = 0;
+    movedLastTime = false;
+    screenWidth = width;
+    screenHeight = height;
+}
+
+void Mouse::btnDown(const int btnIn)
+{
+    ButtonState* state = &m_btns[btnIn];
+    state->held = state->down;
+    state->down = true;
+
+    /*if(m_btns[btnIn][bsDOWN])
+        m_btns[btnIn][bsHOLD] = true;
 	else
-		ms->btns[btnIn][bsDOWN] = true;
+        m_btns[btnIn][bsDOWN] = true;*/
 
 	return;
 }
 
-void btnUpM(const int btnIn, mouse_s* ms)
+void Mouse::btnUp(const int btnIn)
 {
-		ms->btns[btnIn][bsHOLD] = false;
-		ms->btns[btnIn][bsDOWN] = false;
+    ButtonState* state = &m_btns[btnIn];
+    state->held = false;
+    state->down = false;
+
+    /*m_btns[btnIn][bsHOLD] = false;
+    m_btns[btnIn][bsDOWN] = false;*/
 
 	return;
 }
 
-bool isBtnsM(const int btnIn, mouse_s* ms)
+bool Mouse::isBtns(const int btnIn)
 {
-	bool isDown;
-	isDown = ms->btns[btnIn][bsDOWN];
+    /*bool isDown;
+    isDown = m_btns[btnIn][bsDOWN];
 
-	return isDown;
+    return isDown;*/
+    return m_btns[btnIn].down;
 }
 
-bool isHeldBtnM(const int btnIn, mouse_s* ms)
+bool Mouse::isHeldBtn(const int btnIn)
 {
-	bool ih = false;
+    /*bool ih = false;
 	
-	ih = ms->btns[btnIn][bsHOLD];
+    ih = m_btns[btnIn][bsHOLD];
 	
-	return ih;
+    return ih;*/
+    return m_btns[btnIn].held;
 }
 
-bool canToggleBtnM(const int btnIn, mouse_s* ms)
+bool Mouse::canToggleBtn(const int btnIn)
 {
 	bool ct = false;
+    ButtonState* state = &m_btns[btnIn];
 
-	if (ms->btns[btnIn][bsDOWN] && !ms->btns[btnIn][bsHOLD])				// L Key Being Pressed Not Held?
+//    if (m_btns[btnIn][bsDOWN] && !m_btns[btnIn][bsHOLD])				// L Key Being Pressed Not Held?
+    if(state->down && !state->held)
 	{
-		ms->btns[btnIn][bsHOLD] = true;
+//        m_btns[btnIn][bsHOLD] = true;
+        state->down = true;
 		ct = true;
 	}
 
 	return ct;
 }
 
-void updatePosM(int xnew, int ynew, mouse_s* ms)
+void Mouse::updatePos(int xnew, int ynew)
 {
-	ms->xOld = ms->x;
-	ms->yOld = ms->y;
-	ms->x = xnew;
-	ms->y = ynew;
+    xOld = x;
+    yOld = y;
+    x = xnew;
+    y = ynew;
 	
-	ms->movedLastTime = true;
+    movedLastTime = true;
 	
 	return;
 }
 
-bool checkMouseMove(mouse_s* ms)
+void Mouse::updatePos(QPoint pos)
 {
-	int screenMiddleX = ms->screenWidth  >> 1;				// This is a binary shift to get half the width
-	int screenMiddleY = ms->screenHeight >> 1;				// This is a binary shift to get half the height
+    updatePos(pos.x(), pos.y());
+
+    return;
+}
+
+bool Mouse::checkMouseMove()
+{
+    int screenMiddleX = screenWidth  >> 1;				// This is a binary shift to get half the width
+    int screenMiddleY = screenHeight >> 1;				// This is a binary shift to get half the height
 	
 	bool didMove = false;
 	
-	if(!ms->movedLastTime)
+    if(!movedLastTime)
 	{
-		ms->x = ms->xOld;
-		ms->y = ms->yOld;
-		SetCursorPos(screenMiddleX, screenMiddleY);
-		ms->xOld = ms->x = screenMiddleX;
-		ms->yOld = ms->y = screenMiddleY;
+        x = xOld;
+        y = yOld;
+//		SetCursorPos(screenMiddleX, screenMiddleY);
+        xOld = x = screenMiddleX;
+        yOld = y = screenMiddleY;
 	}
 	else
 		didMove = true;
 	
-	ms->movedLastTime = false;	
+    movedLastTime = false;
 	
 	return didMove;
 }

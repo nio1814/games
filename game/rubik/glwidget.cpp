@@ -1,8 +1,13 @@
 #include "glwidget.h"
 
+#include <QKeyEvent>
+
 #include "camera.h"
 #include "keys.h"
 #include "constants.h"
+#include "mouse.h"
+
+#define CAMOVESPEED 2.0f
 
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
@@ -12,8 +17,11 @@ GLWidget::GLWidget(QWidget *parent)
 		m_twisting(false), m_timer(NULL)
 #endif
 {
+    setMouseTracking(true);
+
 	fovAngle = Vector2D(0.0f,45.0f);
 	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
+    mos = new Mouse(m_windowSizeX,m_windowSizeY);
 	m_timer = new QTimer;
 
 	for(int i=0; i<3; i++)
@@ -28,25 +36,34 @@ GLWidget::GLWidget(QWidget *parent)
 		}
 	}
 
-	/*light.pos = Vector3D(rand()*3.0f/RAND_MAX+2,rand()*3.0f/RAND_MAX+2,rand()*3.0f/RAND_MAX+2);
+    char axes[] = "XYZ";
+    int directions[] = {-1,1};
+    for (int n=0; n<20; n++)
+    {
+        rcube.rotationAxis = axes[qrand()%3];
+        rcube.rotationDirection = directions[qrand()%2];
+        rcube.moveCubes();
+    }
+    rcube.rotationAxis = '\0';
+
+    light.pos = Vector3D(rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2);
 	light.ambient = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
 	light.diffuse = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
-	light.specular = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);*/
+    light.specular = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
 	/*light.ambient = Vector3D(.10f,.10f,.10f);
 	light.diffuse = Vector3D(1,1,1);
 	light.specular = Vector3D(1,1,1);*/
-
 
 	GLfloat LightAmbient[]=		{ 0.1f, 0.1f, 0.1f, 1.0f };
 	GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat LightPosition[]=	{ 5.0f, 5.0f, 6.0f, 1.0f };
 
 	//glEnable(GL_LIGHT1);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
+//	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
+//	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
+//	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
 
-//	SetCursorPos(m_windowSizeX/2, m_windowSizeY/2);
+//    SetCursorPos(m_windowSizeX/2, m_windowSizeY/2);
 }
 
 GLWidget::~GLWidget()
@@ -66,7 +83,8 @@ void GLWidget::initializeGL()
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_LIGHTING);
 
-	lightActive = false;
+    light.enable();
+    lightActive = false;
 
 	return;
 }
@@ -77,7 +95,9 @@ void GLWidget::resizeGL(int w, int h)
 		h=1;										// Making Height Equal One
 
 	m_windowSizeX = w;
-	m_windowSizeY = h;
+    m_windowSizeY = h;
+    mos->screenWidth = w;
+    mos->screenHeight = h;
 
 	glViewport(0,0,w,h);						// Reset The Current Viewport
 
@@ -101,12 +121,12 @@ void GLWidget::paintGL()
 	if(lightActive)
 	{
 		glEnable(GL_LIGHTING);
-//		light.enable();
+//        light.enable();
 	}
 	else
 		glDisable(GL_LIGHTING);
 
-	runControls();
+//	runControls();
 //	gluLookAt(cam->pos.x, cam->pos.y+.001f, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x,cam->up.y,cam->up.z);
 	glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 
@@ -155,40 +175,46 @@ void GLWidget::animate()
 	if(!rcube.isRotating)
 		disconnect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
 
-	updateGL();
+#if (QT_VERSION >= 0x050500)
+    update();
+#else
+    updateGL();
+#endif
 
 	return;
 }
 
-int GLWidget::runControls()
+void GLWidget::runMouse()
 {
 	Vector3D cam2look = cam->cam2look();
 	Vector3D toSideDir = cam->dir2RSide();
 	Vector3D look2cam = -cam2look;
 	Vector3D camposOld;
 	Vector3D mouseMove;
+    bool wasRotating = rcube.isRotating;
 
-	/*if(isBtnsM(mbRBTN, &mos))
+    if(mos->isBtns(Qt::RightButton))
 	{
-		if(mos.y != mos.yOld)
+        if(mos->y != mos->yOld)
 		{
-			look2cam = look2cam->rotate3D(&toSideDir,(mos.yOld-mos.y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
-			cam->up = cam->up.rotate3D(&toSideDir,(mos.yOld-mos.y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+            look2cam = look2cam.rotate3D(&toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+            cam->up = cam->up.rotate3D(&toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
 			camposOld = cam->pos;
 			cam->pos = cam->look + look2cam;
 		}
+
 		cam2look = cam->cam2look();
 		toSideDir = cam->dir2RSide();
-		if(mos.x != mos.xOld)
+        if(mos->x != mos->xOld)
 		{
-			look2cam = look2cam->rotate3D(&cam->up,-(mos.x-mos.xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
+            look2cam = look2cam.rotate3D(&cam->up,-(mos->x-mos->xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
 			camposOld = cam->pos;
 			cam->pos = cam->look + look2cam;
 		}
 	}
-	if(isBtnsM(mbLBTN, &mos))
+    else if(mos->isBtns(Qt::LeftButton))
 	{
-		mouseMove = Vector3D(mos.x-mos.xOld, mos.yOld-mos.y, 0);	//find movement in screen coords
+        mouseMove = Vector3D(mos->x-mos->xOld, mos->yOld-mos->y, 0);	//find movement in screen coords
 		GLfloat len = mouseMove.length();
 		if(mouseMove.length() > 2.0f)
 		{
@@ -196,22 +222,28 @@ int GLWidget::runControls()
 			mouseMove = cam->up*mouseMove.y + cam->dir2RSide()*mouseMove.x;
 			rcube.twistCube(cam->pos, moslook, mouseMove);
 		}
-	}*/
+    }
+
 	static GLfloat origFollowDist = cam->followDist;
-//	cam->followDist = origFollowDist*exp(-mos.wheel*.07f);
+    cam->followDist = origFollowDist*exp(-mos->wheel*.07f);
 	cam->pos = cam->look + look2cam.unit()*cam->followDist;
 
-	Vector2D screenDimGL;
-	screenDimGL.x = 2*cam->followDist*tan(fovAngle.x*DEG2RAD/2.0f);
-	screenDimGL.y = 2*cam->followDist*tan(fovAngle.y*DEG2RAD/2.0f);
+    Vector2D screenDimGL;
+    screenDimGL.x = 2*cam->followDist*tan(fovAngle.x*DEG2RAD/2.0f);
+    screenDimGL.y = 2*cam->followDist*tan(fovAngle.y*DEG2RAD/2.0f);
 
-//	mousePtInSpace.x = ((mos.x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;
-//	mousePtInSpace.y = ((m_windowSizeY/2-mos.y)/(float)m_windowSizeY)*screenDimGL.y;
-//	moslook = cam->dir2RSide()*mousePtInSpace.x+cam->up*mousePtInSpace.y;
+    Vector2D mousePtInSpace;
+    mousePtInSpace.x = ((mos->x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;
+    mousePtInSpace.y = ((m_windowSizeY/2-mos->y)/(float)m_windowSizeY)*screenDimGL.y;
+    moslook = cam->dir2RSide()*mousePtInSpace.x+cam->up*mousePtInSpace.y;
 
+    if(!wasRotating && rcube.isRotating)
+    {
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
+        m_timer->start(30);
+    }
 
-
-	return 0;
+    return;
 }
 
 void GLWidget::rotateLR(GLfloat angle)
@@ -254,7 +286,10 @@ void GLWidget::runKeys()
 		rotateUD(rotateAngle);
 
 	if(canToggle(Qt::Key_L))
+    {
 		lightActive = !lightActive;
+        emit animate();
+    }
 	if(canToggle(Qt::Key_P))
 		int pause = 5;
 
@@ -306,4 +341,39 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 //	delete m_timer;
 
 	return;
+}
+
+void GLWidget::mousePressEvent(QMouseEvent *event)
+{
+    mos->btnDown(event->button());
+//    mos->updatePos(event->pos());
+
+    return;
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    mos->updatePos(event->pos());
+
+    emit runMouse();
+    emit animate();
+
+    return;
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    mos->btnUp(event->button());
+
+    return;
+}
+
+void GLWidget::wheelEvent(QWheelEvent *event)
+{
+    mos->wheelOld = mos->wheel;
+    mos->wheel += event->delta();
+
+    emit runMouse();
+
+    return;
 }

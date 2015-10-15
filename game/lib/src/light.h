@@ -1,9 +1,7 @@
 #ifndef LIGHT
 #define LIGHT
 
-#include <windows.h>									// Header File For Windows
-#include <gl\gl.h>										// Header File For The OpenGL32 Library
-
+#include "qtgl.h"
 #include "vector3d.h"
 
 class light_c

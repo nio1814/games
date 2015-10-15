@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     ../lib/src/vector3d.cpp \
     ../lib/src/camera.cpp \
     ../lib/src/keys.cpp \
-    ../lib/src/qtgl.cpp
+    ../lib/src/qtgl.cpp \
+    ../lib/src/light.cpp \
+    ../lib/src/mouse.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -29,6 +31,8 @@ HEADERS  += mainwindow.h \
     ../lib/src/vector3d.h \
     ../lib/src/camera.h \
     ../lib/src/keys.h \
-    ../lib/src/qtgl.h
+    ../lib/src/qtgl.h \
+    ../lib/src/light.h \
+    ../lib/src/mouse.h
 
 FORMS    += mainwindow.ui

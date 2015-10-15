@@ -25,18 +25,15 @@ int WindowSizeY = 480;
 Vector2D windowSize;
 
 Vector2D screenDimGL;
-Vector2D mousePtInSpace;
+
 
 cube_c cube(CORNER, YELLOW, WHITE, RED, ORANGE, GREEN, BLUE);				//cube object for testing
 
-//mouse_s mos(WindowSizeX,WindowSizeY);
 Vector3D majAxis = Y;
 
 //light_c light(0, Vector3D(rand(),3,-6), Vector;
 
 bool blight;
-
-#define CAMOVESPEED 2.0f
 
 /*GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
