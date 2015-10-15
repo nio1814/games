@@ -1,17 +1,13 @@
 #ifndef GAMEOBJECT
 #define GAMEOBJECT
 
-
-#include <windows.h>									// Header File For Windows
-#include <gl\gl.h>										// Header File For The OpenGL32 Library
-#include <gl\glu.h>										// Header File For The GLu32 Library
 #include <math.h>
 #include <stdio.h>										// Header File For Standard Input / Output
 
 #include <camera.h>
-#include <3dsGT\3dsLoader.h>
+#include <3dsGT/3dsLoader.h>
 #include <mouse.h>
-#include <text.h>
+//#include <text.h>
 #include <light.h>
 
 #include <menu.h>

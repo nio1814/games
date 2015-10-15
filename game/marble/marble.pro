@@ -16,7 +16,9 @@ INCLUDEPATH += ../lib/src
 SOURCES += main.cpp\
         mainwindow.cpp \
     glwidget.cpp \
-    ../lib/src/gameobject.cpp
+    ../lib/src/gameobject.cpp \
+    commands.cpp
 
 HEADERS  += mainwindow.h \
-    ../lib/src/gameobject.h
+    ../lib/src/gameobject.h \
+    commands.h
