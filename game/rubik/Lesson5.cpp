@@ -24,8 +24,6 @@ int WindowSizeX = 640;
 int WindowSizeY = 480;
 Vector2D windowSize;
 
-GLfloat clipClose = 0.01f;
-GLfloat clipFar = 100.0f;
 Vector2D screenDimGL;
 Vector2D mousePtInSpace;
 

@@ -4,7 +4,8 @@
 #include <QtGlobal>
 
 #include "shape.h"
-#include "camera.h"
+
+class CameraPoint;
 
 #if (QT_VERSION >= 0x050500)
 #include "qopenglwidget.h"
@@ -21,6 +22,9 @@ protected:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
+
+    void keyPressEvent(QKeyEvent *);
+
 signals:
 
 public slots:
@@ -28,10 +32,11 @@ public slots:
 
 private:
     int runControls();
+	void rotateLR(GLfloat angle);
 
     bool lightActive;
 //    light_c light;
-    CameraPoint cam;
+    CameraPoint* cam;
     Vector2D fovAngle;
     rcube_c rcube;
     int m_windowSizeX;

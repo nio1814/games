@@ -12,7 +12,7 @@ GLWidget::GLWidget(QWidget *parent)
 #endif
 {
 	fovAngle = Vector2D(0.0f,45.0f);
-	CameraPoint cam(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
+	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
 
 	for(int i=0; i<3; i++)
 	{
@@ -72,11 +72,12 @@ void GLWidget::resizeGL(int w, int h)
 	glViewport(0,0,w,h);						// Reset The Current Viewport
 
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
+										// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
 //	gluPerspective(fovAngle.y,(GLfloat)w/(GLfloat)h,clipClose,clipFar);
 	fovAngle.x = (GLfloat)w/(GLfloat)h*fovAngle.y;
+	glPerspective(fovAngle.y, (GLfloat)w/(GLfloat)h, 0.01f, 100.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();
@@ -96,8 +97,8 @@ void GLWidget::paintGL()
 		glDisable(GL_LIGHTING);
 
 	runControls();
-//	gluLookAt(cam.pos.x, cam.pos.y+.001f, cam.pos.z, cam.look.x, cam.look.y, cam.look.z, cam.up.x,cam.up.y,cam.up.z);
-	glLookAt(cam.pos.toQVector3D(), cam.look.toQVector3D(), cam.up.toQVector3D());
+//	gluLookAt(cam->pos.x, cam->pos.y+.001f, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x,cam->up.y,cam->up.z);
+	glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 
 	static int tan = 0;
 	/*switch(tan)
@@ -121,16 +122,15 @@ void GLWidget::paintGL()
 		break;
 	}*/
 
-	//rcube.drawCube();
+	rcube.drawCube();
 
 	glColor3ub(255, 255, 205);		// Set Color To White
 	glPushMatrix();
 	glLineWidth(10);
 	glBegin(GL_LINES);
-		glVertex3f(.9f*cam.pos.x, .9f*cam.pos.y, .9f*cam.pos.z); // origin of the line
+		glVertex3f(.9f*cam->pos.x, .9f*cam->pos.y, .9f*cam->pos.z); // origin of the line
 		glVertex3f(moslook.x,moslook.y , moslook.z); // ending point of the line
 	glEnd( );
-
 
 	glPopMatrix();
 
@@ -147,8 +147,8 @@ void GLWidget::animate()
 
 int GLWidget::runControls()
 {
-	Vector3D cam2look = cam.cam2look();
-	Vector3D toSideDir = cam.dir2RSide();
+	Vector3D cam2look = cam->cam2look();
+	Vector3D toSideDir = cam->dir2RSide();
 	Vector3D look2cam = -cam2look;
 	Vector3D camposOld;
 	Vector3D mouseMove;
@@ -157,18 +157,18 @@ int GLWidget::runControls()
 	{
 		if(mos.y != mos.yOld)
 		{
-			look2cam = look2cam.rotate3D(&toSideDir,(mos.yOld-mos.y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
-			cam.up = cam.up.rotate3D(&toSideDir,(mos.yOld-mos.y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
-			camposOld = cam.pos;
-			cam.pos = cam.look + look2cam;
+			look2cam = look2cam->rotate3D(&toSideDir,(mos.yOld-mos.y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+			cam->up = cam->up.rotate3D(&toSideDir,(mos.yOld-mos.y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+			camposOld = cam->pos;
+			cam->pos = cam->look + look2cam;
 		}
-		cam2look = cam.cam2look();
-		toSideDir = cam.dir2RSide();
+		cam2look = cam->cam2look();
+		toSideDir = cam->dir2RSide();
 		if(mos.x != mos.xOld)
 		{
-			look2cam = look2cam.rotate3D(&cam.up,-(mos.x-mos.xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
-			camposOld = cam.pos;
-			cam.pos = cam.look + look2cam;
+			look2cam = look2cam->rotate3D(&cam->up,-(mos.x-mos.xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
+			camposOld = cam->pos;
+			cam->pos = cam->look + look2cam;
 		}
 	}
 	if(isBtnsM(mbLBTN, &mos))
@@ -178,26 +178,52 @@ int GLWidget::runControls()
 		if(mouseMove.length() > 2.0f)
 		{
 			mouseMove.unitize();
-			mouseMove = cam.up*mouseMove.y + cam.dir2RSide()*mouseMove.x;
-			rcube.twistCube(cam.pos, moslook, mouseMove);
+			mouseMove = cam->up*mouseMove.y + cam->dir2RSide()*mouseMove.x;
+			rcube.twistCube(cam->pos, moslook, mouseMove);
 		}
 	}*/
-	static GLfloat origFollowDist = cam.followDist;
-//	cam.followDist = origFollowDist*exp(-mos.wheel*.07f);
-	cam.pos = cam.look + look2cam.unit()*cam.followDist;
+	static GLfloat origFollowDist = cam->followDist;
+//	cam->followDist = origFollowDist*exp(-mos.wheel*.07f);
+	cam->pos = cam->look + look2cam.unit()*cam->followDist;
 
 	Vector2D screenDimGL;
-	screenDimGL.x = 2*cam.followDist*tan(fovAngle.x*DEG2RAD/2.0f);
-	screenDimGL.y = 2*cam.followDist*tan(fovAngle.y*DEG2RAD/2.0f);
+	screenDimGL.x = 2*cam->followDist*tan(fovAngle.x*DEG2RAD/2.0f);
+	screenDimGL.y = 2*cam->followDist*tan(fovAngle.y*DEG2RAD/2.0f);
 
 //	mousePtInSpace.x = ((mos.x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;
 //	mousePtInSpace.y = ((m_windowSizeY/2-mos.y)/(float)m_windowSizeY)*screenDimGL.y;
-//	moslook = cam.dir2RSide()*mousePtInSpace.x+cam.up*mousePtInSpace.y;
+//	moslook = cam->dir2RSide()*mousePtInSpace.x+cam->up*mousePtInSpace.y;
 
-	if(canToggle('L'))
-		lightActive = !lightActive;
-	if(canToggle('P'))
-		int pause = 5;
+
 
 	return 0;
+}
+
+void GLWidget::rotateLR(GLfloat angle)
+{
+	Vector3D look2cam = -cam->cam2look();
+
+	look2cam = look2cam.rotate3D(&cam->up,-angle);
+//	camposOld = cam->pos;
+	cam->pos = cam->look + look2cam;
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
+	keyDown(event->key());
+
+	GLfloat lrRotateAngle = 5;
+	if(isKeys(Qt::Key_Left))
+		rotateLR(lrRotateAngle);
+	else if(isKeys(Qt::Key_Right))
+		rotateLR(lrRotateAngle);
+
+	if(canToggle(Qt::Key_L))
+		lightActive = !lightActive;
+	if(canToggle(Qt::Key_P))
+		int pause = 5;
+
+	updateGL();
+
+	return;
 }

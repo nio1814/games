@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class GLWidget;
+
 namespace Ui {
 class MainWindow;
 }
@@ -16,6 +18,7 @@ public:
 	~MainWindow();
 
 private:
+	GLWidget *gl;
 	Ui::MainWindow *ui;
 };
 
