@@ -1,6 +1,7 @@
 #ifndef SHAPE
 #define SHAPE
 
+#include "qtgl.h"
 #include <vector3d.h>
 
 enum cubis{CORNER, EDGE, CENTER};

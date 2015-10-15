@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = rubik
 TEMPLATE = app
 
+INCLUDEPATH += ../lib/src
 
 SOURCES += main.cpp\
         mainwindow.cpp \
