@@ -74,7 +74,8 @@ void GLWidget::resizeGL(int width, int height)
 	m_projection.setToIdentity();
 	GLfloat aspect = width/height;
 	m_projection.perspective(60, aspect, .3, 1000);
-	glMultMatrixf(m_projection.constData());
+    glMultMatrixf(m_projection.constData());
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

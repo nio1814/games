@@ -77,8 +77,8 @@ void playActionSound(const Object &obj, actions act)
 				break;
 		}
 		
-		if(soundData.sounds[act] != NULL && (act != actNONE))
-			FSOUND_PlaySound(FSOUND_FREE, soundData.sounds[act]);
+//		if(soundData.sounds[act] != NULL && (act != actNONE))
+//			FSOUND_PlaySound(FSOUND_FREE, soundData.sounds[act]);
 	}
 	else if(obj.objType == tpSHOT)
 	{

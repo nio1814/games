@@ -25,7 +25,8 @@ void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDire
     matrix.lookAt(cameraPosition, lookPosition, upDirection);
 
     glLoadIdentity();												// Reset The Current Modelview Matrix
-    glMultMatrixf(matrixData(matrix));
+//    glMultMatrixf(matrixData(matrix));
+    glMultMatrixf(reinterpret_cast<const GLfloat*>(matrix.constData()));
 
     return;
 }
@@ -37,7 +38,9 @@ void glPerspective(GLfloat viewAngle, GLfloat aspectRatio, GLfloat clipClose, GL
 	matrix.perspective(viewAngle, aspectRatio, clipClose, clipFar);
 
 	glLoadIdentity();
-	glMultMatrixf(matrixData(matrix));
+//	glMultMatrixf(matrixData(matrix));
+    glMultMatrixf(reinterpret_cast<const GLfloat*>(matrix.constData()));
+
 
 	return;
 }
