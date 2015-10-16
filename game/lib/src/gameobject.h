@@ -89,8 +89,8 @@ public:
 	int currentMenu;
 	menuTree menus[MAXMENUS];
 	
-	font_s font;
-	font3d_s font3d;
+//	font_s font;
+//	font3d_s font3d;
 	
 	texture_s alltexture[MAXTEXTURE];
 	int numTextures;

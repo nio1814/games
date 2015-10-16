@@ -4,7 +4,7 @@
 #include <mouse.h>
 #include "gameobject.h"
 
-void runKeys(level* lvl, mouse_s* ms)
+void runKeys(level* lvl, Mouse *ms)
 {
 	cameraPoint *cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
 	Vector3D cam2look;

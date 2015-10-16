@@ -22,4 +22,5 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
     commands.h \
-    glwidget.h
+    glwidget.h \
+    ../lib/src/3dsGT/3ds.h

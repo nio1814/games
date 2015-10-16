@@ -1,3 +1,5 @@
+#include "glwidget.h"
+
 /*		This code has been created by Banu Octavian aka Choko - 20 may 2000
  *		and uses NeHe tutorials as a starting point (window initialization,
  *		texture loading, GL initialization and code for keypresses) - very good
@@ -11,6 +13,8 @@
 
 #include <stdio.h>										// Header File For Standard Input / Output
 #include <math.h>
+
+#include <qtimer.h>
 
 #include <object.h>
 #include <gameobject.h>
@@ -43,7 +47,7 @@ static GLfloat LightAmb[] = {0.7f, 0.7f, 0.7f, 1.0f};	// Ambient Light
 static GLfloat LightDif[] = {1.0f, 1.0f, 1.0f, 1.0f};	// Diffuse Light
 static GLfloat LightPos[] = {4.0f, 4.0f, 6.0f, 1.0f};	// Light Position
 
-GLUquadricObj	*q;										// Quadratic For Drawing A Sphere
+//GLUquadricObj	*q;										// Quadratic For Drawing A Sphere
 
 Vector2D WindowSize = Vector2D(1024,768);
 GLfloat		xrot		=  0.0f;						// X Rotation
@@ -73,12 +77,9 @@ GLuint		texture[3];									// 3 Textures
 //LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 void process();
 
-void GLWidget::ReSizeGLScene(GLsizei w, GLsizei h)		// Resize And Initialize The GL Window
+void GLWidget::resizeGL(GLsizei w, GLsizei h)		// Resize And Initialize The GL Window
 {
-	if (height==0)										// Prevent A Divide By Zero By
-	{
-		height=1;										// Making Height Equal One
-	}
+    h = qMax(h,1);
 
     glViewport(0,0,w,h);						// Reset The Current Viewport
 
@@ -86,7 +87,7 @@ void GLWidget::ReSizeGLScene(GLsizei w, GLsizei h)		// Resize And Initialize The
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
+    glPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -115,16 +116,16 @@ int initializeGL()										// All Setup For OpenGL Goes Here
 	glEnable(GL_LIGHT0);								// Enable Light 0
 	glEnable(GL_LIGHTING);								// Enable Lighting
 
-	q = gluNewQuadric();								// Create A New Quadratic
-	gluQuadricNormals(q, GL_SMOOTH);					// Generate Smooth Normals For The Quad
-	gluQuadricTexture(q, GL_TRUE);						// Enable Texture Coords For The Quad
+    /*q = gluNewQuadric();								// Create A New Quadratic
+    gluQuadricNormals(q, GL_SMOOTH);					// Generate Smooth Normals For The Quad
+    gluQuadricTexture(q, GL_TRUE);*/						// Enable Texture Coords For The Quad
 
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);	// Set Up Sphere Mapping
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);	// Set Up Sphere Mapping
 
 //	BuildFont(&hDC);
 
-	return TRUE;										// Initialization Went OK
+    return true;										// Initialization Went OK
 }
 
 void initializeObjects()
@@ -293,7 +294,7 @@ void DrawObject()										// Draw Our Ball
 {
 	glColor3f(1.0f, 1.0f, 1.0f);						// Set Color To White
 	glBindTexture(GL_TEXTURE_2D, texture[1]);			// Select Texture 2 (1)
-	gluSphere(q, 0.35f, 32, 16);						// Draw First Sphere
+//	gluSphere(q, 0.35f, 32, 16);						// Draw First Sphere
 	
 	glBindTexture(GL_TEXTURE_2D, texture[2]);			// Select Texture 3 (2)
 	glColor4f(1.0f, 1.0f, 1.0f, 0.4f);					// Set Color To White With 40% Alpha
@@ -302,7 +303,7 @@ void DrawObject()										// Draw Our Ball
 	glEnable(GL_TEXTURE_GEN_S);							// Enable Sphere Mapping
 	glEnable(GL_TEXTURE_GEN_T);							// Enable Sphere Mapping
 
-	gluSphere(q, 0.35f, 32, 16);						// Draw Another Sphere Using New Texture
+//	gluSphere(q, 0.35f, 32, 16);						// Draw Another Sphere Using New Texture
 														// Textures Will Mix Creating A MultiTexture Effect (Reflection)
 	glDisable(GL_TEXTURE_GEN_S);						// Disable Sphere Mapping
 	glDisable(GL_TEXTURE_GEN_T);						// Disable Sphere Mapping
@@ -336,7 +337,7 @@ void DrawFloor()										// Draws The Floor
 	//ball.draw();
 }
 
-int DrawGLScene(GLvoid)									// Draw Everything
+void GLWidget::paintGL()									// Draw Everything
 {
 	// Clear Screen, Depth Buffer & Stencil Buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -352,7 +353,7 @@ int DrawGLScene(GLvoid)									// Draw Everything
 	//allObjects.draw();
 	//game.levels[levelnum].run(1);
 	game.currentLevel = 2;
-	game.run(mos, runKeys);
+//	game.run(mos, runKeys);
 	
 	
 	/*game.levels[levelnum].allObj.draw();
@@ -413,7 +414,7 @@ game.levels[levelnum].allObj.draw();
 	yrot += yrotspeed;									// Update Y Rotation Angle By yrotspeed
 	glFlush();											// Flush The GL Pipeline
 */
-	return TRUE;										// Everything Went OK
+    return;										// Everything Went OK
 }
 
 void ProcessKeyboard()									// Process Keyboard Results
@@ -424,36 +425,34 @@ void ProcessKeyboard()									// Process Keyboard Results
 	toleft = forward.rotate3D(&Y, 90);
 
     if (isKeys(Qt::Key_H))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
-	if (keys['K'])		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
-	if (keys['U'])		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
-	if (keys['J'])		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
+    if (isKeys['K'])		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
+    if (isKeys['U'])		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
+    if (isKeys['J'])		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
 
-	if (keys['A'])			zCam +=0.05f;				// 'A' Key Pressed ... Zoom In
-	if (keys['Z'])			zCam -=0.05f;				// 'Z' Key Pressed ... Zoom Out
+    if (isKeys['A'])			zCam +=0.05f;				// 'A' Key Pressed ... Zoom In
+    if (isKeys['Z'])			zCam -=0.05f;				// 'Z' Key Pressed ... Zoom Out
 
-	if (keys[VK_PRIOR])		height +=0.03f;				// Page Up Key Pressed Move Ball Up
-	if (keys[VK_NEXT])		height -=0.03f;				// Page Down Key Pressed Move Ball Down
+    if (isKeys[Qt::Key_PageUp])		height +=0.03f;				// Page Up Key Pressed Move Ball Up
+    if (isKeys[Qt::Key_PageDown])		height -=0.03f;				// Page Down Key Pressed Move Ball Down
 
 	/*if (keys[VK_UP])		ball->moveForce -= Vector3D(0.0, 0.0, 2.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_DOWN])		ball->moveForce += Vector3D(0.0, 0.0, 2.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_LEFT])		ball->moveForce -= Vector3D(2.0, 0.0, 0.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_RIGHT])		ball->moveForce += Vector3D(2.0, 0.0, 0.0);				// Page Down Key Pressed Move Ball Down
 	*/
-	if (keys[VK_UP])		ball->moveForce += forward;		// Page Down Key Pressed Move Ball Down
-	if (keys[VK_DOWN])		ball->moveForce -= forward;		// Page Down Key Pressed Move Ball Down
-	if (keys[VK_LEFT])		ball->moveForce += toleft;				// Page Down Key Pressed Move Ball Down
-	if (keys[VK_RIGHT])		ball->moveForce -= toleft;				// Page Down Key Pressed Move Ball Down
-	if (keys['G'])			ball->moveForce += Vector3D(0.0, 20.0, 0.0);			// Page Down Key Pressed Move Ball Down
+    if (isKeys[Qt::Key_Up])		ball->moveForce += forward;		// Page Down Key Pressed Move Ball Down
+    if (isKeys[Qt::Key_Down])		ball->moveForce -= forward;		// Page Down Key Pressed Move Ball Down
+    if (isKeys[Qt::Key_Left])		ball->moveForce += toleft;				// Page Down Key Pressed Move Ball Down
+    if (isKeys[Qt::Key_Right])		ball->moveForce -= toleft;				// Page Down Key Pressed Move Ball Down
+    if (isKeys[Qt::Key_G])			ball->moveForce += Vector3D(0.0, 20.0, 0.0);			// Page Down Key Pressed Move Ball Down
 }
 
-void process()
+void GLWidget::process()
 {
-	currentTime = GetTickCount() * 0.001f;
-	delta = (currentTime - lastTime);
-	lastTime = currentTime;
+    delta = qobject_cast<QTimer*>(sender())->interval();
 
 	//camToLook = Vector3D(xLook-xCam, yLook-yCam, zLook-zCam);
-	DrawGLScene();						// Draw The Scene
+//	DrawGLScene();						// Draw The Scene
 	//ball->operate(delta, &allObjects);
 
 	if(delta > MAXDELTA)
@@ -469,7 +468,7 @@ void process()
 	return;
 }
 
-GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
+/*GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 {
 	if (hRC)											// Do We Have A Rendering Context?
 	{
@@ -508,7 +507,7 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 		MessageBox(NULL,"Could Not Unregister Class.","SHUTDOWN ERROR",MB_OK | MB_ICONINFORMATION);
 		hInstance=NULL;									// Set hInstance To NULL
 	}
-}
+}*/
 
 /*	This Code Creates Our OpenGL Window.  Parameters Are:					*
  *	title			- Title To Appear At The Top Of The Window				*
