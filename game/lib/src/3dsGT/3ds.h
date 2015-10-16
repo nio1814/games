@@ -3,6 +3,7 @@
 
 //#include <windows.h>
 #include <vector>
+#include <stdio.h>
 
 #include <vector3d.h>
 using namespace std;

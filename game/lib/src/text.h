@@ -22,7 +22,7 @@ struct font_s
 
 struct font3d_s
 {
-	UINT g_FontListID;
+    unsigned int g_FontListID;
 	HFONT hOldFont;
 	GLYPHMETRICSFLOAT g_GlyphInfo[MAX_CHARS];
 	
@@ -41,7 +41,7 @@ GLvoid glPrintHead(GLint x, GLint y, int num, int fontSize);
 GLvoid glPrintHead(GLint x, GLint y, int num, Fonts ft, int fontSize);
 GLvoid glPrintHead(GLint x, GLint y, GLfloat num, int fontSize);
 GLvoid glPrintHead(GLint x, GLint y, const char *string, Fonts ft, int fontSize);				// Prints stationary text
-UINT CreateOpenGL3DFont(HDC& hDC, LPSTR strFontName, float extrude, font3d_s* inFont);
+unsigned int CreateOpenGL3DFont(HDC& hDC, LPSTR strFontName, float extrude, font3d_s* inFont);
 void glDraw3DText(const char *strString, font3d_s* inFont, ...);
 void DestroyFont(HDC &hDC, font_s* fontIn);
 

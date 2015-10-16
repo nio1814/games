@@ -1,14 +1,11 @@
 #include "object.h"
 
-#include <windows.h>
 #include <math.h>
-#include <gl\gl.h>								// Header File For The OpenGL32 Library
-#include <gl\glu.h>
 #include <string.h>
 #include <sstream>
 
 #include "constants.h"
-#include "text.h"
+//#include "text.h"
 #include "keys.h"
 #include "camera.h"
 #include "vector3d.h"
@@ -326,9 +323,9 @@ object_sphere::object_sphere() : Object()
 {
 	objType = SPHERE;
 	radius = 1;
-	quad = gluNewQuadric();								// Create A New Quadratic
+    /*quad = gluNewQuadric();								// Create A New Quadratic
 	gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
-	gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad
+    gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
 	bMovable = true;
 }
 
@@ -336,15 +333,15 @@ object_sphere::object_sphere(float mass, float rad) : Object(mass)
 {
 	objType = SPHERE;
 	radius = rad;
-	quad = gluNewQuadric();								// Create A New Quadratic
+    /*quad = gluNewQuadric();								// Create A New Quadratic
 	gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
-	gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad
+    gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
 	bMovable = true;
 }
 
 object_sphere::~object_sphere()
 {
-	delete quad;								// Create A New Quadratic
+//	delete quad;								// Create A New Quadratic
 }
 
 void object_sphere::solve()													//gravitational force will be applied therefore we need a "solve" method.
@@ -373,7 +370,7 @@ void object_sphere::draw()
 	//glRotatef(zrot,0.0f,0.0f,1.0f);						// Rotate On The Y Axis By yrot
 	glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 2 (1)
 	
-	gluSphere(quad, radius, 32, 16);						// Draw First Sphere
+//	gluSphere(quad, radius, 32, 16);						// Draw First Sphere
 	
 	glBindTexture(GL_TEXTURE_2D, texture->layer[1]);			// Select Texture 3 (2)
 	glColor4f(1.0f, 1.0f, 1.0f, 0.4f);					// Set Color To White With 40% Alpha
@@ -386,7 +383,7 @@ void object_sphere::draw()
 		glEnable(GL_TEXTURE_GEN_S);							// Enable Sphere Mapping
 		glEnable(GL_TEXTURE_GEN_T);							// Enable Sphere Mapping
 
-		gluSphere(quad, radius, 32, 16);					// Draw Another Sphere Using New Texture
+//		gluSphere(quad, radius, 32, 16);					// Draw Another Sphere Using New Texture
 															// Textures Will Mix Creating A MultiTexture Effect (Reflection)
 		glDisable(GL_TEXTURE_GEN_S);						// Disable Sphere Mapping
 		glDisable(GL_TEXTURE_GEN_T);						// Disable Sphere Mapping

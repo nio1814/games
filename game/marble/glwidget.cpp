@@ -131,7 +131,7 @@ int initializeGL()										// All Setup For OpenGL Goes Here
 void initializeObjects()
 {
     mos = new Mouse(WindowSize.x,WindowSize.y);
-	nullTexture.ID = "null texture";
+//	nullTexture.ID = "null texture";
 
 	//MAKE MENU
 

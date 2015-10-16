@@ -18,9 +18,24 @@ SOURCES += main.cpp\
     glwidget.cpp \
     ../lib/src/gameobject.cpp \
     commands.cpp \
+    ../lib/src/mouse.cpp \
+    ../lib/src/qtgl.cpp \
+    ../lib/src/vector3d.cpp \
+    ../lib/src/object.cpp \
+    ../lib/src/camera.cpp \
+    ../lib/src/keys.cpp \
+    ../lib/src/3dsGT/3ds.cpp \
+    ../lib/src/3dsGT/3dsLoader.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
     commands.h \
     glwidget.h \
-    ../lib/src/3dsGT/3ds.h
+    ../lib/src/3dsGT/3ds.h \
+    ../lib/src/mouse.h \
+    ../lib/src/qtgl.h \
+    ../lib/src/vector3d.h \
+    ../lib/src/object.h \
+    ../lib/src/camera.h \
+    ../lib/src/keys.h \
+    ../lib/src/3dsGT/3dsLoader.h
