@@ -5,10 +5,9 @@
 *	Web Page				: www.morrowland.com			*
 *	E-Mail					: apron@morrowland.com			*
 ************************************************************/
-#include "3dsloader.h"
-#include <gl\gl.h>
-#include <gl\glu.h>
-#include <gl\glaux.h>
+#include "3dsLoader.h"
+
+#include "qtgl.h"
 
 using namespace std;
 
@@ -86,7 +85,7 @@ void C3dsLoader::Render_3ds()
 					//if(m3DModel.pMaterials.size() < pObject->materialID) 
 					//if(msize < pObject->materialID) 
 					//{
-						BYTE *pColor = m3DModel.pMaterials[pObject->materialID].color;
+                        unsigned char *pColor = m3DModel.pMaterials[pObject->materialID].color;
 						
 						glColor3ub(pColor[0], pColor[1], pColor[2]);
 					//}
@@ -107,9 +106,9 @@ void C3dsLoader::Render_3ds()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //										TEXTURE 3DS			jpeg or bmp
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void C3dsLoader::Texture_3ds(UINT textureArray[], LPSTR strFileName, int ID)
+void C3dsLoader::Texture_3ds(unsigned int textureArray[], const char* strFileName, int ID)
 {
-	AUX_RGBImageRec *pBitMap = NULL;
+//	AUX_RGBImageRec *pBitMap = NULL;
 	FILE *pFile = NULL;									
 	unsigned char *pJpeg = NULL;
 	unsigned long width, height; 
@@ -132,12 +131,13 @@ void C3dsLoader::Texture_3ds(UINT textureArray[], LPSTR strFileName, int ID)
 		
 		if(pFile)										
 		{
-			pBitMap = auxDIBImageLoad(FilePath);		
+//			pBitMap = auxDIBImageLoad(FilePath);
 			type = 1;
 		}
 		else											
 		{											
-			MessageBox(NULL, FilePath /*"couldn't find texture!"*/, "Error!", MB_OK);
+//			MessageBox(NULL, FilePath /*"couldn't find texture!"*/, "Error!", MB_OK);
+            qErrnoWarning("couldn't find texture!");
 			exit(0);
 		}
 	} 
@@ -156,20 +156,22 @@ void C3dsLoader::Texture_3ds(UINT textureArray[], LPSTR strFileName, int ID)
 	
 	glBindTexture(GL_TEXTURE_2D, textureArray[ID]);
 	
-	if(type==1) gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pBitMap->sizeX, pBitMap->sizeY, GL_RGB, GL_UNSIGNED_BYTE, pBitMap->data);
-	if(type==2) gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, pJpeg);
+    /*if(type==1)
+        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, pBitMap->sizeX, pBitMap->sizeY, GL_RGB, GL_UNSIGNED_BYTE, pBitMap->data);
+    if(type==2)
+        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, pJpeg);*/
 	
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);	
 	
-	if (pBitMap)								
+    /*if (pBitMap)
 	{
 		if (pBitMap->data)						
 		{
 			free(pBitMap->data);				
 		}
 		free(pBitMap);							
-	}
+    }*/
 	
 	if (pJpeg) delete [] pJpeg;
 }

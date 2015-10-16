@@ -25,7 +25,9 @@ SOURCES += main.cpp\
     ../lib/src/camera.cpp \
     ../lib/src/keys.cpp \
     ../lib/src/3dsGT/3ds.cpp \
-    ../lib/src/3dsGT/3dsLoader.cpp
+    ../lib/src/3dsGT/3dsLoader.cpp \
+    ../lib/src/mass.cpp \
+    ../lib/src/menu.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
@@ -38,4 +40,6 @@ HEADERS  += mainwindow.h \
     ../lib/src/object.h \
     ../lib/src/camera.h \
     ../lib/src/keys.h \
-    ../lib/src/3dsGT/3dsLoader.h
+    ../lib/src/3dsGT/3dsLoader.h \
+    ../lib/src/mass.h \
+    ../lib/src/menu.h
