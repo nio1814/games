@@ -5,8 +5,8 @@
 //#include	<gl\gl.h>							// Header File For The OpenGL32 Library
 //#include	<gl\glu.h>							// Header File For The GLu32 Library
 
-#include	"texturecode.h"
-#include "animation.h"
+//#include	"texturecode.h"
+//#include "animation.h"
 
 extern GLfloat LightAmbient[]; 				// Ambient Light Values ( NEW )
 extern GLfloat LightDiffuse[];				 // Diffuse Light Values ( NEW )
@@ -27,7 +27,7 @@ extern int sss;
 
 //AUX_RGBImageRec *LoadBMP(char *Filename);					// Loads A Bitmap Image
 int LoadGLTextures(GLuint *texture, char filePath[]);
-int LoadGLTextures(Animation *aData, char filePath[], int ID);
+//int LoadGLTextures(Animation *aData, char filePath[], int ID);
 //int LoadGLTextures();								// Load Bitmaps And Convert To Textures
 bool loadGLTexture(GLuint* texture, QString filename);
 

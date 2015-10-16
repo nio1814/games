@@ -6,7 +6,7 @@
 
 void runKeys(level* lvl, Mouse *ms)
 {
-	cameraPoint *cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
+    CameraPoint *cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
 	Vector3D cam2look;
 	Vector3D toSideDir;
 
@@ -22,38 +22,38 @@ void runKeys(level* lvl, Mouse *ms)
 	}
 	if(isKeys('A'))
 	{
-		toSideDir =  cam->dirToRSide();
+        toSideDir =  cam->dir2RSide();
 		cam->pos -= toSideDir*.1f;
 		cam->look -= toSideDir*.1f;
 	}
 	if(isKeys('D'))
 	{
-		toSideDir =  cam->dirToRSide();
+        toSideDir =  cam->dir2RSide();
 		cam->pos += toSideDir*.1f;
 		cam->look += toSideDir*.1f;
 	}
-	if(isKeys(VK_UP) || isKeys('W'))
+    if(isKeys(Qt::Key_Up) || isKeys('W'))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();
 		cam->pos += cam2look*.1f;
 		cam->look += cam2look*.1f;
 	}
-	if(isKeys(VK_DOWN) || isKeys('S'))
+    if(isKeys(Qt::Key_Down) || isKeys('S'))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();
 		cam->pos -= cam2look*.1f;
 		cam->look -= cam2look*.1f;
 	}
-	if(isKeys(VK_LEFT))
+    if(isKeys(Qt::Key_Left))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();
 		cam2look = cam2look.rotate3D(&lvl->majAxis, 1.0f);
 		cam->look = cam->pos + cam2look;
 	}
-	if(isKeys(VK_RIGHT))
+    if(isKeys(Qt::Key_Right))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();

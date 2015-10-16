@@ -66,7 +66,7 @@ struct tMaterialInfo
 {
 	char  strName[255];			// The texture name
 	char  strFile[255];			// The texture file name (If this is set it's a texture map)
-	BYTE  color[3];				// The color of the object (R, G, B)
+    unsigned char  color[3];				// The color of the object (R, G, B)
 	int   texureId;				// the texture ID
 	float uTile;				// u tiling of texture  (Currently not used)
 	float vTile;				// v tiling of texture	(Currently not used)
@@ -173,7 +173,7 @@ private:
 
 
 // This creates a texture and stores it in the texture array with it's ID.
-void CreateTexture(UINT textureArray[], LPSTR strFileName, int textureID);
+void CreateTexture(unsigned int textureArray[], char* strFileName, int textureID);
 
 
 #endif

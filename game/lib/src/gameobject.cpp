@@ -3,11 +3,15 @@
 #include <math.h>
 #include <string.h>
 
+#include <QTime>
+
 #include <keys.h>
 #include <3dsGT/3ds.h>
 #include <3dsGT/3dsLoader.h>
 #include <mouse.h>
 #include <constants.h>
+#include "texture.h"
+#include "masking.h"
 
 //#include "commands.h"
 
@@ -21,7 +25,7 @@ level::level()
 	gravityV = majAxis*gravityM;
 	//numTextures = 0;
 
-	cameras = new cameraPoints;
+    cameras = new CameraPoints;
 	lights = NULL;
 	//alltexture = new texture_s[MAXTEXTURES];
 	//player1 = player2 = NULL;
@@ -52,7 +56,7 @@ void level::run(GLfloat dt)
 
 /*Vector3D level::setCam(Object* obj, CameraView view)
 {
-	cameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
+    cameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
 	cameraPoint* nextcam;
 	Vector3D cam2cam, cam2obj, cam2look;
 	Vector3D pos, look, alongv, movepos;
@@ -128,15 +132,15 @@ void level::addCamera(Vector3D campos, Vector3D lookpos, const Vector3D upin, GL
 
 Vector3D level::setCam(Vector3D* pos)
 {
-	cameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
-	cameraPoint* nextcam;
+    CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
+    CameraPoint* nextcam;
 	Vector3D cam2cam, cam2obj, cam2look;
 	Vector3D look, alongv, movepos;
 	GLfloat camdist, objvel, camRotate;
 
 	camRotate = 0;
 	
-	if(cameras->currentPoint == cameras->numPoints-1)
+    if(cameras->currentPoint == cameras->numPoints()-1)
 	{
 		nextcam = cam;
 	}
@@ -161,15 +165,15 @@ Vector3D level::setCam(Vector3D* pos)
 		cam2look = cam->look - cam->pos;
 		cam->pos = *pos;
 
-		if(isKeys(VK_LEFT))
+        if(isKeys(Qt::Key_Left))
 			camRotate = 100*delta;
-		else if(isKeys(VK_RIGHT))
+        else if(isKeys(Qt::Key_Right))
 			camRotate = -100*delta;
 		cam2look = cam2look.rotate3D(&majAxis, camRotate);
 		cam->look = cam2look + cam->pos;
 	}
 
-	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
+    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 	cam2look = cam->look - cam->pos;
 
 	return cam2look;
@@ -177,7 +181,7 @@ Vector3D level::setCam(Vector3D* pos)
 
 void level::updateCam()
 {
-	cameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
+    CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
 	
 	if(cam->look == cam->pos)
 	{
@@ -192,11 +196,12 @@ void level::updateCam()
 		case FOLLOW:
 			break;
 		default:
-			MessageBox(NULL,"Invalid Camera View.","ERROR",MB_OK | MB_ICONINFORMATION);
+//			MessageBox(NULL,"Invalid Camera View.","ERROR",MB_OK | MB_ICONINFORMATION);
+            qErrnoWarning("Invalid Camera View %d", cameras->camview);
 			break;
 	}
 
-	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
+    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 
 	cam->oldPos = cam->pos;
 	cam->oldLook = cam->look;
@@ -262,16 +267,18 @@ void level3ds::loadmap(GLfloat scale)
 void level3ds::run(GLfloat dt)
 {
 	char timetext[100];
+    QTime clock;
 
 	if(!started)
 	{
 		started = true;
-		startTime = GetTickCount();
+//		startTime = GetTickCount();
+        startTime = clock.msec();
 		currentTime = startTime;
 	}
 	else
 	{
-		currentTime = GetTickCount();
+        currentTime = clock.msec();
 		timer = (currentTime-startTime)/1000;
 		sprintf(timetext, "%.2f", timer);
 	}
@@ -361,13 +368,15 @@ texture_s* gameObj::addTexture(char *filename, char *ID)
 	texture_s* ptr = NULL;
 	string errString;
 
-	success = LoadGLTextures(&alltexture[numTextures++], filename);
+//	success = LoadGLTextures(&alltexture[numTextures++], filename);
+    success = LoadGLTextures(&alltexture[numTextures++].layer[0], filename);
 	if(success)
 		ptr = &alltexture[numTextures-1];
 	else
 	{
 		errString = "Texture file failed to load "+(string)filename;
-		MessageBox(NULL, errString.c_str() , TEXT("Texture Loading"), MB_ICONERROR | MB_OK);
+//		MessageBox(NULL, errString.c_str() , TEXT("Texture Loading"), MB_ICONERROR | MB_OK);
+        qErrnoWarning(errString.c_str());
 	}
 
 	return ptr;
@@ -402,30 +411,38 @@ void gameObj::addPlayer(object_plane* plane)
 }
 
 
-void gameObj::run(Mouse *ms, (*commandFcn)(gameObj *, Mouse *), GLfloat delta)
+void gameObj::run(Mouse *ms, void (*commandFcn)(gameObj *, Mouse *), GLfloat delta)
 {
+    QTime clock;
+    int timeMs = clock.msec();
+    QVector3D pos;
+    QVector3D look;
+
 	switch(gMode)
 	{
 		case gmMENU:
 			if(numMenus>0)
 				glEnable(GL_LIGHTING);
-				gluLookAt(sin(GetTickCount()/30000.5f)*2.0f*cos(GetTickCount()/30.5f), 0, 11.0f*cos(sin(GetTickCount()/3000.5f)+5.0f),     0, 0, 0,     0, 1, 0);		// This determines where the camera's position and view is
+
+                pos = QVector3D(sin(timeMs/30000.5f)*2.0f*cos(timeMs/30.5f), 0, 11.0f*cos(sin(timeMs/3000.5f)+5.0f));
+                look = QVector3D(0, 0, 0);
+                glLookAt(pos, look, Y.toQVector3D());		// This determines where the camera's position and view is
 				menus[currentMenu].display();
 			if(ms != NULL)
 			{
-				if(isBtnsM(mbLBTN,ms))
+                if(ms->isBtns(Qt::LeftButton))
 					gMode = gmPLAY;
 			}
-			if(isKeys(VK_RETURN))
+            if(isKeys(Qt::Key_Return))
 				gMode = gmPLAY;
 			break;
-		case gmPLAY:
-			if(commandFcn!=NULL)
-				commandFcn(this, ms);
-			levels[currentLevel].run(delta);
-			break;
-		default:
-			break;
+        case gmPLAY:
+            if(commandFcn!=NULL)
+                commandFcn(this, ms);
+            levels[currentLevel].run(delta);
+            break;
+        default:
+            break;
 	}	
 	
 	return;
@@ -438,8 +455,8 @@ bool gameObj::addMenu(char* mTitle)
 	if(numMenus < MAXMENUS)
 	{
 		menus[numMenus].ID = mTitle;
-		menus[numMenus].font = &font;
-		menus[numMenus].font3d = &font3d;
+//		menus[numMenus].font = &font;
+//		menus[numMenus].font3d = &font3d;
 		numMenus++;
 		
 		if(currentMenu == -1)
