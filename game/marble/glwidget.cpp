@@ -81,8 +81,7 @@ GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
         : QOpenGLWidget(parent)
 #else
-       : QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
-        m_twisting(false), m_timer(NULL)
+       : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 #endif
 {
 
@@ -428,7 +427,7 @@ game.levels[levelnum].allObj.draw();
     return;										// Everything Went OK
 }
 
-void ProcessKeyboard()									// Process Keyboard Results
+void ProcessKeyboard()							// Process Keyboard Results
 {
 	Vector3D forward, toleft;
 	forward = camToLook.unit();
