@@ -15,14 +15,20 @@ public:
     ~MainWindow();
 protected:
     void closeEvent(QCloseEvent *event);
+private slots:
+    void newFile();
 private:
     bool maybeSave();
     void writeSettings();
-    void newFile();
+
     void setCurrentFile(const QString &fileName);
+    void createActions();
+    void createMenus();
 
     QPlainTextEdit *textEdit;
     QString curFile;
+    QAction *newAct;
+    QMenu *fileMenu;
 };
 
 #endif // MAINWINDOW_H

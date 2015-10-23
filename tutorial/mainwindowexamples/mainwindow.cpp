@@ -1,10 +1,16 @@
 #include "mainwindow.h"
 
 #include <qsettings.h>
+#include <qaction.h>
+#include <qmenubar.h>
 
 MainWindow::MainWindow()
 {
     textEdit = new QPlainTextEdit();
+    setCentralWidget(textEdit);
+
+    createActions();
+    createMenus();
 }
 
 MainWindow::~MainWindow()
@@ -54,4 +60,19 @@ void MainWindow::newFile()
         textEdit->clear();
         setCurrentFile("");
     }
+}
+
+void MainWindow::createActions()
+{
+    newAct = new QAction(QIcon(":images/new.png"), tr("new"), this);
+    newAct->setShortcuts(QKeySequence::New);
+    connect(newAct, SIGNAL(triggered(bool)), this, SLOT(newFile()));
+
+}
+
+void MainWindow::createMenus()
+{
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(newAct);
+    fileMenu->addSeparator();
 }
