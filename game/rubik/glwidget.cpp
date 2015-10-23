@@ -108,7 +108,7 @@ void GLWidget::resizeGL(int w, int h)
 	// Calculate The Aspect Ratio Of The Window
 //	gluPerspective(fovAngle.y,(GLfloat)w/(GLfloat)h,clipClose,clipFar);
 	fovAngle.x = (GLfloat)w/(GLfloat)h*fovAngle.y;
-	glPerspective(fovAngle.y, (GLfloat)w/(GLfloat)h, 0.01f, 100.0f);
+    glPerspective(fovAngle.y, (GLfloat)w/(GLfloat)h, 0.01f, 100.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();
@@ -129,7 +129,7 @@ void GLWidget::paintGL()
 
 //	runControls();
 //	gluLookAt(cam->pos.x, cam->pos.y+.001f, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x,cam->up.y,cam->up.z);
-	glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
+    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 
 	static int tan = 0;
 	/*switch(tan)

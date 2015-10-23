@@ -2,7 +2,7 @@
 
 #include <qmatrix4x4.h>
 
-const GLfloat* matrixData(QMatrix4x4& matrix)
+void multMatrix(const QMatrix4x4& matrix)
 {
 #if QT_VERSION == 0x050500
     const GLfloat* multMatrixData = static_cast<const GLfloat*>(matrix.constData());
@@ -15,7 +15,11 @@ const GLfloat* matrixData(QMatrix4x4& matrix)
     for (int n=0; n<16; n++)
 	   multMatrixData[n] = matrixData[n];
 #endif
-    return multMatrixData;
+
+    glLoadIdentity();
+    glMultMatrixf(multMatrixData);
+
+    return;
 }
 
 void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDirection)
@@ -24,8 +28,9 @@ void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDire
     matrix.setToIdentity();
     matrix.lookAt(cameraPosition, lookPosition, upDirection);
 
-    glLoadIdentity();												// Reset The Current Modelview Matrix
-    glMultMatrixf(matrixData(matrix));
+    multMatrix(matrix);
+//    glMultMatrixf(matrixData(matrix));
+//    glMultMatrixf(reinterpret_cast<const GLfloat*>(matrix.constData()));
 
     return;
 }
@@ -34,10 +39,16 @@ void glPerspective(GLfloat viewAngle, GLfloat aspectRatio, GLfloat clipClose, GL
 {
 	QMatrix4x4 matrix;
 	matrix.setToIdentity();
-	matrix.perspective(viewAngle, aspectRatio, clipClose, clipFar);
+    matrix.perspective(viewAngle, aspectRatio, clipClose, clipFar);
+
+    GLfloat m[16];
+    glGetFloatv(GL_PROJECTION_MATRIX, m);
 
 	glLoadIdentity();
-	glMultMatrixf(matrixData(matrix));
+     glGetFloatv(GL_PROJECTION_MATRIX, m);
+//    glMultMatrixf(matrixData(matrix));
+     multMatrix(matrix);
+     glGetFloatv(GL_PROJECTION_MATRIX, m);
 
 	return;
 }

@@ -27,7 +27,11 @@ void AudioTest::initializeWindow()
 	m_deviceBox->addItem(defaultDeviceInfo.deviceName(), qVariantFromValue(defaultDeviceInfo));
 	foreach(const QAudioDeviceInfo &deviceInfo, QAudioDeviceInfo::availableDevices(QAudio::AudioOutput))
 	{
+#if QT_VERSION > 0x040806
 		if(deviceInfo != defaultDeviceInfo)
+#else
+        if(deviceInfo.deviceName()!=defaultDeviceInfo.deviceName())
+#endif
 			m_deviceBox->addItem(deviceInfo.deviceName(), qVariantFromValue(deviceInfo));
 	}
 
