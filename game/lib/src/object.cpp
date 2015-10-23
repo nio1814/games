@@ -107,7 +107,7 @@ Object::Object()
 	totalTouches = 0;
 	for(int i=0;i<NUMSHAPES;i++)
 		numTouches[i] = 0;
-	texture = &nullTexture;
+//	texture = &nullTexture;
 	bDraw = true;
 	bDetect = true;
 	bCollide = true;

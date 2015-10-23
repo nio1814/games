@@ -27,7 +27,10 @@ SOURCES += main.cpp\
     ../lib/src/3dsGT/3ds.cpp \
     ../lib/src/3dsGT/3dsLoader.cpp \
     ../lib/src/mass.cpp \
-    ../lib/src/menu.cpp
+    ../lib/src/menu.cpp \
+    ../lib/src/masking.cpp \
+    ../lib/src/datastructs.cpp \
+    ../lib/src/texturecode.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
@@ -42,4 +45,7 @@ HEADERS  += mainwindow.h \
     ../lib/src/keys.h \
     ../lib/src/3dsGT/3dsLoader.h \
     ../lib/src/mass.h \
-    ../lib/src/menu.h
+    ../lib/src/menu.h \
+    ../lib/src/masking.h \
+    ../lib/src/datastructs.h \
+    ../lib/src/texturecode.h

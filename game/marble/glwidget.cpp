@@ -72,10 +72,21 @@ GLfloat delta;
 Vector3D gravityV;
 GLfloat currentgravity = 9.8f;
 
-GLuint		texture[3];									// 3 Textures
+//GLuint		texture[3];									// 3 Textures
 
 //LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 void process();
+
+GLWidget::GLWidget(QWidget *parent)
+#if (QT_VERSION >= 0x050500)
+        : QOpenGLWidget(parent)
+#else
+       : QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
+        m_twisting(false), m_timer(NULL)
+#endif
+{
+
+}
 
 void GLWidget::resizeGL(GLsizei w, GLsizei h)		// Resize And Initialize The GL Window
 {
@@ -94,7 +105,7 @@ void GLWidget::resizeGL(GLsizei w, GLsizei h)		// Resize And Initialize The GL W
 }
 
 
-int initializeGL()										// All Setup For OpenGL Goes Here
+void GLWidget::initializeGL()										// All Setup For OpenGL Goes Here
 {
 	/*if (!LoadGLTextures())								// If Loading The Textures Failed
 	{
@@ -125,7 +136,7 @@ int initializeGL()										// All Setup For OpenGL Goes Here
 
 //	BuildFont(&hDC);
 
-    return true;										// Initialization Went OK
+    return;										// Initialization Went OK
 }
 
 void initializeObjects()
@@ -293,10 +304,10 @@ void initializeObjects()
 void DrawObject()										// Draw Our Ball
 {
 	glColor3f(1.0f, 1.0f, 1.0f);						// Set Color To White
-	glBindTexture(GL_TEXTURE_2D, texture[1]);			// Select Texture 2 (1)
+//	glBindTexture(GL_TEXTURE_2D, texture[1]);			// Select Texture 2 (1)
 //	gluSphere(q, 0.35f, 32, 16);						// Draw First Sphere
 	
-	glBindTexture(GL_TEXTURE_2D, texture[2]);			// Select Texture 3 (2)
+//	glBindTexture(GL_TEXTURE_2D, texture[2]);			// Select Texture 3 (2)
 	glColor4f(1.0f, 1.0f, 1.0f, 0.4f);					// Set Color To White With 40% Alpha
 	glEnable(GL_BLEND);									// Enable Blending
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);					// Set Blending Mode To Mix Based On SRC Alpha

@@ -5,4 +5,4 @@
 extern const Vector3D Y = Vector3D(0,1,0);
 extern const Vector3D Z = Vector3D(0,0,1);*/
 
-extern const float EPS = .1f;
+//extern const float EPS = .1f;

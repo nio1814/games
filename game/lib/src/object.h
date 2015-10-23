@@ -209,10 +209,10 @@ public:
 	
 	object_box();
 	object_box(float mass, float wid, float len, float hei, float ph, float th, Vector3D pos, Vector3D mAxis);
-	virtual void draw();
+//	virtual void draw();
 	//virtual bool doCollisions(const object_holder *allObjs);
-	void makeBase();
-	void flipBase();
+//	void makeBase();
+//	void flipBase();
 };
 
 //Line Container
@@ -229,7 +229,7 @@ class object_lines : public Objects<object_line>
 //Single Line
 class object_line : public Object
 {
-	public:
+public:
 	Vector3D vertex[2];										//vertices
 	float length, width;
 	float comf;												//com location(as fraction from v1 to v2)

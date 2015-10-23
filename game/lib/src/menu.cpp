@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string.h>
 
-#include "dataStructs.h"
-#include "text.h"
-#include "vector3D.h"
+#include "datastructs.h"
+//#include "text.h"
+#include "vector3d.h"
 #include "object.h"
 
 #include "menu.h"
@@ -11,8 +11,8 @@ using namespace std;
 
 menuTree::menuTree() : NodeClass<void*>()
 {
-	font = NULL;
-	font3d = NULL;
+//	font = NULL;
+//	font3d = NULL;
 }
 
 /*menuTree::~menuTree()
@@ -95,7 +95,7 @@ void menuTree::addLeaf(void* input, dataType tp, string name)
 void menuTree::display()
 {
 	//glPrintHead(150,60,tP->ptr[mod(tP->currentLeaf-1,tP->numLeaf)].ID.c_str(), 8);
-	glDraw3DText(ID.c_str(),font3d);
+//	glDraw3DText(ID.c_str(),font3d);
 
 	return;
 }

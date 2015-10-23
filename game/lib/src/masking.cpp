@@ -1,6 +1,8 @@
 #include	"masking.h"
 
 #include "qtgl.h"
+#include "texture.h"
+#include "texturecode.h"
 
 #include <cstring>
 #include <QGLWidget>
@@ -99,25 +101,3 @@ bool loadGLTexture(GLuint* texture, QString filename)
 	return status;
 }
 
-
-int LoadGLTextures(Animation *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
-{
-    int Status = false;
-//	GLuint *tpointer;
-//	tpointer = &aData->textures[ID];
-    GLuint texture;
-	
-//	Status = LoadGLTextures(tpointer, filePath);
-//	Status = loadGLTexture(tpointer, filePath);
-    Status = loadGLTexture(&texture, filePath);
-    aData->textures.append(texture);
-//    aData->scale[aData->numTextures()] = Vector2D(1,1);
-    aData->scale.append(Vector2D(1,1));
-		//aData->hScale[aData->numTextures] = 1;
-		//aData->wScale[aData->numTextures] = 1;
-//	aData->numTextures++;
-    if(aData->numTextures()>1)
-		aData->animates = true;					//need more than one frame to animate
-		
-	return Status;								// Return The Status
-}

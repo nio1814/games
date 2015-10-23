@@ -9,6 +9,7 @@ class GLWidget : public QOpenGLWidget
 public:
     GLWidget(QWidget *parent);
 protected:
+    void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
 public slots:

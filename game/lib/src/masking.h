@@ -8,6 +8,8 @@
 //#include	"texturecode.h"
 //#include "animation.h"
 
+#include "qtgl.h"
+
 extern GLfloat LightAmbient[]; 				// Ambient Light Values ( NEW )
 extern GLfloat LightDiffuse[];				 // Diffuse Light Values ( NEW )
 extern GLfloat LightPosition[];				 // Light Position ( NEW )

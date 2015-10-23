@@ -13,6 +13,7 @@ extern const Vector3D X;
 extern const Vector3D Y;
 extern const Vector3D Z;
 
-extern const float EPS;			//epsilon
+//extern const float EPS;			//epsilon
+#define EPS .1f
 
 #endif
