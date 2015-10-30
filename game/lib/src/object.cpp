@@ -858,13 +858,13 @@ Vector3D object_line::calcVertexVel(int vnum)
 	{
 		case 0:
 			armLength = comf*length;
-			velDir = Cross(&mass->axis,&(vertex[0]-vertex[1]));
+			velDir = Cross(mass->axis,vertex[0]-vertex[1]);
 			velDir.unitize();
 			rotVel = velDir*armLength*mass->avel;
 			break;
 		case 1:
 			armLength = (1.0f-comf)*length;
-			velDir = Cross(&mass->axis,&(vertex[1]-vertex[0]));
+			velDir = Cross(mass->axis, vertex[1]-vertex[0]);
 			velDir.unitize();
 			rotVel = velDir*armLength*mass->avel;
 			break;

@@ -638,13 +638,13 @@ matrix2D3& matrix2D3::operator= (matrix2D3 m)
 	return *this;
 }
 
-Vector3D Cross(const Vector3D* vVector1, const Vector3D* vVector2)
+Vector3D Cross(const Vector3D& vVector1, const Vector3D& vVector2)
 {
 	Vector3D vNormal;									
 	
-	vNormal.x = ((vVector1->y * vVector2->z) - (vVector1->z * vVector2->y));
-	vNormal.y = ((vVector1->z * vVector2->x) - (vVector1->x * vVector2->z));
-	vNormal.z = ((vVector1->x * vVector2->y) - (vVector1->y * vVector2->x));
+	vNormal.x = ((vVector1.y * vVector2.z) - (vVector1.z * vVector2.y));
+	vNormal.y = ((vVector1.z * vVector2.x) - (vVector1.x * vVector2.z));
+	vNormal.z = ((vVector1.x * vVector2.y) - (vVector1.y * vVector2.x));
 	
 	return vNormal;										
 }
