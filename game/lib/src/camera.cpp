@@ -55,7 +55,7 @@ Vector3D CameraPoint::dir2RSide()
 	Vector3D toSideDir;
 	Vector3D toLook = cam2look();
 	
-	toSideDir = Cross(&toLook,&up);
+	toSideDir = Cross(toLook,up);
 	toSideDir.unitize();
 	
 	return toSideDir;
@@ -124,7 +124,7 @@ void setCam(CameraPoints* cameras, Vector3D* objpos, CameraView view)
 
 	if(view == FOLLOW)
 	{
-		look = objpos->proj(&nextcam->oldLook, &cam->oldLook);
+		look = objpos->proj(nextcam->oldLook, cam->oldLook);
 //		gluLookAt(cam->pos.x, cam->pos.y,cam->pos.z, objpos->x, objpos->y, 0, cam->up.x, cam->up.y, cam->up.z);
 //        QMatrix4x4 camMatrix;
 //        camMatrix.

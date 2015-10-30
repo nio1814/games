@@ -32,11 +32,9 @@
 bool		active=true;								// Window Active Flag Set To TRUE By Default
 bool		fullscreen=true;							// Fullscreen Flag Set To Fullscreen Mode By Default
 
-Mouse* mos;
-gameObj game;
 //object_holder allObjects;
 object_holder menu;
-object_sphere* ball;
+
 object_plane* floors;
 //object_sphere* ball = new object_sphere(1.0f, .35f);
 //object_plane* floors = new object_plane(1,4,4,0);
@@ -55,7 +53,7 @@ GLfloat		yrot		=  0.0f;						// Y Rotation
 GLfloat		xrotspeed	=  0.0f;						// X Rotation Speed
 GLfloat		yrotspeed	=  0.0f;						// Y Rotation Speed
 GLfloat		zoom		= -7.0f;						// Depth Into The Screen
-GLfloat		height		=  2.0f;						// Height Of Ball From Floor
+GLfloat		ballHeight		=  2.0f;						// Height Of Ball From Floor
 
 GLfloat xCam = 0.0f;
 GLfloat yCam = 4.60f;
@@ -84,7 +82,25 @@ GLWidget::GLWidget(QWidget *parent)
        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 #endif
 {
+	game = new gameObj();
+	mos = new Mouse(WindowSize.x,WindowSize.y);
+	initializeObjects();
+}
 
+GLWidget::~GLWidget()
+{
+	delete game;
+	delete mos;
+}
+
+QSize GLWidget::minimumSizeHint() const
+{
+	return QSize(40,30);
+}
+
+QSize GLWidget::sizeHint() const
+{
+	return QSize(400,300);
 }
 
 void GLWidget::resizeGL(GLsizei w, GLsizei h)		// Resize And Initialize The GL Window
@@ -138,9 +154,8 @@ void GLWidget::initializeGL()										// All Setup For OpenGL Goes Here
     return;										// Initialization Went OK
 }
 
-void initializeObjects()
+void GLWidget::initializeObjects()
 {
-    mos = new Mouse(WindowSize.x,WindowSize.y);
 //	nullTexture.ID = "null texture";
 
 	//MAKE MENU
@@ -148,35 +163,16 @@ void initializeObjects()
 	//MAKE LEVEL1
 	//level1.levelNum = 1;
 	//level1.allObj = allObjects;
-	texture_s* tile1txr = game.addTexture("Data/Envwall.bmp", "tile1");
+	texture_s* tile1txr = game->addTexture("Data/Envwall.bmp", "tile1");
 	//texture_s* balltxr = level1.addTexture("Data/Ball.bmp", "Data/EnvRoll.bmp", "ball");
-	texture_s* wall1txr = game.addTexture("Data/wall.bmp", "wall");
-	int numExtraSpheres = rand()%15;
+	texture_s* wall1txr = game->addTexture("Data/wall.bmp", "wall");
+
 	//numExtraSpheres = 0;
 	//gravityON = false;
 	//currentgravity = 0;
 
-	game.addMenu("Marble Game");
-	game.addLevel();
-	game.levels[0].allObj.addSpheres(2.0f, .55f,   Vector3D(-1.0f,1.5f,0.0f));
-	game.levels[0].allObj.addSpheres(1.0f, .35f,   Vector3D(1, 2, 1.5));
-
-	for(int i=0; i<numExtraSpheres; i++)
-	{
-		game.levels[0].allObj.addSpheres(fabs(.70f*cos((float)rand())), fabs(.50f*cos((float)rand()))+.1f,  Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand())));
-		game.levels[0].allObj.setColor(SPHERE, i, Vector3D(rand()%256, rand()%256, rand()%256) );
-	}
-
-	ball = &game.levels[0].allObj.spheres->objs[1];
-	//level1.player1 = ball;
-	//ball->texture = balltxr;
-	
-	game.levels[0].allObj.addPlanes(1,1,8,8,0,  Vector3D(0,0,0));
-	game.levels[0].allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
-	game.levels[0].allObj.setTexture(PLANE, 0, tile1txr);
-	
-	game.levels[0].allObj.addPlanes(3,1,8,2,0,  Vector3D(-4,1,0));
-	game.levels[0].allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
+	game->addMenu("Marble Game");
+	game->addLevel(0);
 
 	/*game.levels[0].allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
 	game.levels[0].allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
@@ -281,21 +277,10 @@ void initializeObjects()
 	//floors->texture[0] = texture[0];
 	//level1.allObj.planes->objs[23].texture[0] = texture[0];
 
-	game.levels[0].cameras->addPoint(Vector3D(xCam, yCam, zCam), Vector3D(xLook, yLook, zLook), X, 10.0f);
-	//level1.allObj.cameras->addPoint(Vector3D(xCam, 3.60f, -14.6f), Vector3D(-11.8f, -3.0f, -13.8f), 5.0f);
-	game.levels[0].cameras->addPoint(Vector3D(0, 3.60f, 0), Vector3D(0, 3.0f, -13.8f), Y, 10.0f);
-
-	game.addLevel("data/model/myschool3.3ds",Vector3D(5,5,2),Vector3D(-5,0,3), Vector3D(0,0,1),FIRST);
-	game.levels[1].loadmap(1.5f);
-	game.levels[1].majAxis = Z;
-
-	game.addLevel("data/model/map1.3ds", Vector3D(5,5,2),Vector3D(-5,0,3), Vector3D(0,0,1),FIRST);
-	game.levels[2].loadmap(1.0f);
-	game.levels[2].majAxis = Z;
-	
 	bGravityOn = true;
 	gravityDir = -Z;
-	
+
+	ball = game->levels[game->currentLevel].ball;
 	
 	return;
 }
@@ -362,7 +347,7 @@ void GLWidget::paintGL()									// Draw Everything
 	
 	//allObjects.draw();
 	//game.levels[levelnum].run(1);
-	game.currentLevel = 2;
+	game->currentLevel = 2;
 //	game.run(mos, runKeys);
 	
 	
@@ -427,7 +412,7 @@ game.levels[levelnum].allObj.draw();
     return;										// Everything Went OK
 }
 
-void ProcessKeyboard()							// Process Keyboard Results
+void GLWidget::ProcessKeyboard()							// Process Keyboard Results
 {
 	Vector3D forward, toleft;
 	forward = camToLook.unit();
@@ -435,26 +420,26 @@ void ProcessKeyboard()							// Process Keyboard Results
 	toleft = forward.rotate3D(&Y, 90);
 
     if (isKeys(Qt::Key_H))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
-    if (isKeys['K'])		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
-    if (isKeys['U'])		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
-    if (isKeys['J'])		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
+    if (isKeys(Qt::Key_K))		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
+    if (isKeys(Qt::Key_U))		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
+    if (isKeys(Qt::Key_J))		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
 
-    if (isKeys['A'])			zCam +=0.05f;				// 'A' Key Pressed ... Zoom In
-    if (isKeys['Z'])			zCam -=0.05f;				// 'Z' Key Pressed ... Zoom Out
+    if (isKeys(Qt::Key_A))			zCam +=0.05f;				// 'A' Key Pressed ... Zoom In
+    if (isKeys(Qt::Key_Z))			zCam -=0.05f;				// 'Z' Key Pressed ... Zoom Out
 
-    if (isKeys[Qt::Key_PageUp])		height +=0.03f;				// Page Up Key Pressed Move Ball Up
-    if (isKeys[Qt::Key_PageDown])		height -=0.03f;				// Page Down Key Pressed Move Ball Down
+    if (isKeys(Qt::Key_PageUp))		ballHeight +=0.03f;				// Page Up Key Pressed Move Ball Up
+    if (isKeys(Qt::Key_PageDown))		ballHeight -=0.03f;				// Page Down Key Pressed Move Ball Down
 
 	/*if (keys[VK_UP])		ball->moveForce -= Vector3D(0.0, 0.0, 2.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_DOWN])		ball->moveForce += Vector3D(0.0, 0.0, 2.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_LEFT])		ball->moveForce -= Vector3D(2.0, 0.0, 0.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_RIGHT])		ball->moveForce += Vector3D(2.0, 0.0, 0.0);				// Page Down Key Pressed Move Ball Down
 	*/
-    if (isKeys[Qt::Key_Up])		ball->moveForce += forward;		// Page Down Key Pressed Move Ball Down
-    if (isKeys[Qt::Key_Down])		ball->moveForce -= forward;		// Page Down Key Pressed Move Ball Down
-    if (isKeys[Qt::Key_Left])		ball->moveForce += toleft;				// Page Down Key Pressed Move Ball Down
-    if (isKeys[Qt::Key_Right])		ball->moveForce -= toleft;				// Page Down Key Pressed Move Ball Down
-    if (isKeys[Qt::Key_G])			ball->moveForce += Vector3D(0.0, 20.0, 0.0);			// Page Down Key Pressed Move Ball Down
+    if (isKeys(Qt::Key_Up))		ball->moveForce += forward;		// Page Down Key Pressed Move Ball Down
+    if (isKeys(Qt::Key_Down))		ball->moveForce -= forward;		// Page Down Key Pressed Move Ball Down
+    if (isKeys(Qt::Key_Left))		ball->moveForce += toleft;				// Page Down Key Pressed Move Ball Down
+    if (isKeys(Qt::Key_Right))		ball->moveForce -= toleft;				// Page Down Key Pressed Move Ball Down
+    if (isKeys(Qt::Key_G))			ball->moveForce += Vector3D(0.0, 20.0, 0.0);			// Page Down Key Pressed Move Ball Down
 }
 
 void GLWidget::process()
@@ -468,7 +453,7 @@ void GLWidget::process()
 	if(delta > MAXDELTA)
 		delta = MAXDELTA;
 	//game.levels[0].allObj.run(delta);
-	game.levels[0].allObj.run(.03);
+	game->levels[0].allObj.run(.03);
 
 	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));
 	zCam += zc;

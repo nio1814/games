@@ -41,14 +41,9 @@ void glPerspective(GLfloat viewAngle, GLfloat aspectRatio, GLfloat clipClose, GL
 	matrix.setToIdentity();
     matrix.perspective(viewAngle, aspectRatio, clipClose, clipFar);
 
-    GLfloat m[16];
-    glGetFloatv(GL_PROJECTION_MATRIX, m);
-
 	glLoadIdentity();
-     glGetFloatv(GL_PROJECTION_MATRIX, m);
 //    glMultMatrixf(matrixData(matrix));
      multMatrix(matrix);
-     glGetFloatv(GL_PROJECTION_MATRIX, m);
 
 	return;
 }

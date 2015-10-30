@@ -183,7 +183,7 @@ Vector3D Vector3D::proj(const Vector3D *v) const
 	return projV;
 }
 
-Vector3D Vector3D::proj(const Vector3D *v1, const Vector3D *v2) const
+Vector3D Vector3D::proj(const Vector3D &v1, const Vector3D &v2) const
 {
 	Vector3D normal, inPlane;
 
@@ -289,7 +289,7 @@ Vector3D Vector3D::cart2angxyz()
 	Vector3D angles;
 
 	//z ang
-	vxy = proj(&X,&Y);
+	vxy = proj(X,Y);
 	if(vxy.y >= 0)
 		angles.z = vxy.angle(&X);		//quadrants I,II
 	else
@@ -654,7 +654,7 @@ Vector3D Normal(Vector3D vTriangle[])
 {	
 	Vector3D vVector1 = vTriangle[2] - vTriangle[0];
 	Vector3D vVector2 = vTriangle[1] - vTriangle[0];
-	Vector3D vNormal = Cross(&vVector1, &vVector2);		
+	Vector3D vNormal = Cross(vVector1, vVector2);
 	//vNormal = Normalize(vNormal);
 	vNormal.unitize();	
 	

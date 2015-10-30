@@ -26,9 +26,9 @@ GLfloat	roll;									// Rolling Texture
 
 int sss = 5;
 
-int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And Convert To Textures
+bool LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And Convert To Textures
 {
-    int Status=false;							// Status Indicator
+    bool Status = false;							// Status Indicator
 	texture_t TextureImage[1];
 	//GLuint texture[12];
 	
@@ -72,6 +72,7 @@ int LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And 
 			//free(TextureImage[loop]);				// Free The Image Structure
 		//}
 	}
+
 	return Status;								// Return The Status
 }
 

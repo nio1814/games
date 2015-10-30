@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     ../lib/src/menu.cpp \
     ../lib/src/masking.cpp \
     ../lib/src/datastructs.cpp \
-    ../lib/src/texturecode.cpp
+    ../lib/src/texturecode.cpp \
+    ../lib/src/texture.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
@@ -48,4 +49,8 @@ HEADERS  += mainwindow.h \
     ../lib/src/menu.h \
     ../lib/src/masking.h \
     ../lib/src/datastructs.h \
-    ../lib/src/texturecode.h
+    ../lib/src/texturecode.h \
+    ../lib/src/texture.h
+
+RESOURCES += \
+    marble.qrc

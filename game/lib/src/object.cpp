@@ -107,7 +107,7 @@ Object::Object()
 	totalTouches = 0;
 	for(int i=0;i<NUMSHAPES;i++)
 		numTouches[i] = 0;
-//	texture = &nullTexture;
+	texture = &nullTexture;
 	bDraw = true;
 	bDetect = true;
 	bCollide = true;
@@ -563,7 +563,7 @@ void object_plane::makeBase(const Vector3D* mAxis)
 		//msgbox('incorrect major axis');
 		;
 
-	*normal = Cross(wvec, lvec);
+	*normal = Cross(*wvec, *lvec);
 
 	return;
 }
@@ -1030,7 +1030,7 @@ void object_holder::setTexture(Shape objType, int index, texture_s* txr)
 	return;
 }
 
-void object_holder::setColor(Shape objType, int index, Vector3D color)
+void object_holder::setColor(Shape objType, int index, const Vector3D& color)
 {
 	if(objType == SPHERE)
 		spheres->objs[index].texture->color = color;

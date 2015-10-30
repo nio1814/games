@@ -278,7 +278,7 @@ class object_holder
 		void setNormal(Shape objType, int index, Vector3D norm);
 		void flipBase(Shape objType, int index);
 		void setTexture(Shape objType, int index, texture_s* txr);
-		void setColor(Shape objType, int index, Vector3D color);
+		void setColor(Shape objType, int index, const Vector3D& color);
 		NodeClass<void*>* makeTree();
 		
 		object_sphere* getSphere(int index) const;

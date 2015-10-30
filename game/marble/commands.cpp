@@ -62,7 +62,7 @@ void runKeys(level* lvl, Mouse *ms)
 	}
 	
 	cam2look =  cam->look - cam->pos;
-	toSideDir = Cross(&cam2look,&lvl->majAxis);
+	toSideDir = Cross(cam2look, lvl->majAxis);
 	toSideDir.unitize();
 	/*if(ms->y != ms->yOld)
 	{

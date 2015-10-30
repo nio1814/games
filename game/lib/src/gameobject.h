@@ -38,6 +38,8 @@ public:
 	level();
 	level(int players);
 
+	void create(int index);
+
 	void setMajAxis(Vector3D axis);
 	virtual void run(GLfloat dt);
 	//Vector3D setCam(Object* obj, CameraView view);
@@ -48,6 +50,7 @@ public:
 	//texture_s* addTexture(char *filename, char *ID);
 	//texture_s* addTexture(char *filename1, char *filename2, char *ID);
 	
+	object_sphere* ball;
 	object_holder allObj;
 	//Object *player1, *player2;
 	//texture_s *alltexture;
@@ -98,7 +101,7 @@ public:
 	gameObj();
 	~gameObj();
 	
-	bool addLevel();
+	bool addLevel(int index);
 	bool addLevel(char* file, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
 	bool loadLevel();
 	bool unloadLevel();

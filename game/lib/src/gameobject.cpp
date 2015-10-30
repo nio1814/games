@@ -48,6 +48,53 @@ void level::setMajAxis(Vector3D axis)
 	return;
 }
 
+void level::create(int index)
+{
+	int numExtraSpheres = rand()%15;
+
+	switch(index)
+	{
+		case 0:
+			allObj.addSpheres(2.0f, .55f,   Vector3D(-1.0f,1.5f,0.0f));
+			allObj.addSpheres(1.0f, .35f,   Vector3D(1, 2, 1.5));
+
+			for(int i=0; i<numExtraSpheres; i++)
+			{
+				allObj.addSpheres(fabs(.70f*cos((float)rand())), fabs(.50f*cos((float)rand()))+.1f,  Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand())));
+				allObj.setColor(SPHERE, i, Vector3D(rand()%256, rand()%256, rand()%256) );
+			}
+
+			ball = &allObj.spheres->objs[1];
+			//level1.player1 = ball;
+			//ball->texture = balltxr;
+
+			allObj.addPlanes(1,1,8,8,0,  Vector3D(0,0,0));
+			allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
+//			allObj.setTexture(PLANE, 0, tile1txr);
+
+			allObj.addPlanes(3,1,8,2,0,  Vector3D(-4,1,0));
+			allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
+
+			cameras->addPoint(Vector3D(0, 4.6, 8), Vector3D(0, 0, 0), X, 10.0f);
+			//level1.allObj.cameras->addPoint(Vector3D(xCam, 3.60f, -14.6f), Vector3D(-11.8f, -3.0f, -13.8f), 5.0f);
+			cameras->addPoint(Vector3D(0, 3.60f, 0), Vector3D(0, 3.0f, -13.8f), Y, 10.0f);
+
+			break;
+		case 1:
+//			game.addLevel("data/model/myschool3.3ds",Vector3D(5,5,2),Vector3D(-5,0,3), Vector3D(0,0,1),FIRST);
+//			loadmap(1.5f);
+			majAxis = Z;
+			break;
+		case 2:
+//			game.addLevel("data/model/map1.3ds", Vector3D(5,5,2),Vector3D(-5,0,3), Vector3D(0,0,1),FIRST);
+//			loadmap(1.0f);
+			majAxis = Z;
+			break;
+	}
+
+	return;
+}
+
 void level::run(GLfloat dt)
 {
 	return;
@@ -327,12 +374,15 @@ gameObj::gameObj()
 	numTextures = 0;
 }
 
-bool gameObj::addLevel()
+bool gameObj::addLevel(int index)
 {
 	bool success = false;
-	
+
 	if(numLevels == 0)
 		currentLevel = 0;
+
+	levels[currentLevel].create(index);
+
 	if(numLevels<MAXLEVELS)
 	{
 		numLevels++;
