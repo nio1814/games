@@ -25,9 +25,9 @@ SOURCES += main.cpp\
     ../lib/src/constants.cpp \
     src/text.cpp \
     src/screen.cpp \
-    src/texturecode.cpp \
+    ../lib/src/texturecode.cpp \
     ../lib/src/camera.cpp \
-    src/masking.cpp \
+    ../lib/src/masking.cpp \
     src/functions.cpp \
     src/playerkeys.cpp \
     src/sound.cpp \
@@ -48,9 +48,9 @@ HEADERS  += mainwindow.h \
     ../lib/src/constants.h \
     src/text.h \
     src/screen.h \
-    src/texturecode.h \
+    ../lib/src/texturecode.h \
     ../lib/src/camera.h \
-    src/masking.h \
+    ../lib/src/src/masking.h \
     src/functions.h \
     src/playerkeys.h \
     src/sound.h \
