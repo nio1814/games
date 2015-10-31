@@ -83,21 +83,27 @@ bool loadGLTexture(GLuint* texture, QString filename)
 //	texture = QGLWidget::bindTexture(QImage(filename), GL_TEXTURE_2D);
 	QImage image = QGLWidget::convertToGLFormat(QImage(filename));
     if(image.isNull())
+    {
         qErrnoWarning("Failed to open file %s\n", filename.toLatin1().constData());
-	glGenTextures(1, texture);
-	glBindTexture(GL_TEXTURE_2D, *texture);
-    int textureType;
-    if(image.hasAlphaChannel())
-        textureType = GL_RGBA;
+        status = false;
+    }
     else
-        textureType = GL_RGB;
-    glTexImage2D(GL_TEXTURE_2D, 0, textureType, image.width(), image.height(), 0, textureType, GL_UNSIGNED_BYTE, image.bits());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-	/*QGLWidget *qgl;
-	*texture = qgl->bindTexture(QImage(filename), GL_TEXTURE_2D);*/
+    {
+        glGenTextures(1, texture);
+        glBindTexture(GL_TEXTURE_2D, *texture);
+        int textureType;
+        if(image.hasAlphaChannel())
+            textureType = GL_RGBA;
+        else
+            textureType = GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, textureType, image.width(), image.height(), 0, textureType, GL_UNSIGNED_BYTE, image.bits());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+        /*QGLWidget *qgl;
+        *texture = qgl->bindTexture(QImage(filename), GL_TEXTURE_2D);*/
+    }
 
 	return status;
 }

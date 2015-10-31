@@ -1,1 +1,6 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/">
+        <file>Data/Envwall.bmp</file>
+        <file>Data/wall.bmp</file>
+    </qresource>
+</RCC>

@@ -81,7 +81,7 @@ void level::create(int index)
 
 			break;
 		case 1:
-//			game.addLevel("data/model/myschool3.3ds",Vector3D(5,5,2),Vector3D(-5,0,3), Vector3D(0,0,1),FIRST);
+//            addLevel("data/model/myschool3.3ds",Vector3D(5,5,2),Vector3D(-5,0,3), Vector3D(0,0,1),FIRST);
 //			loadmap(1.5f);
 			majAxis = Z;
 			break;
@@ -290,13 +290,13 @@ texture_s* level::addTexture(char *filename1, char *filename2, char *ID)
 
 level3ds::level3ds(char* filename):level()
 {
-	strcpy(mapFileName,filename);
+    mapFileName = filename;
 	//world3ds.Init_3ds(filename);
 }
 
 void level3ds::loadmap(GLfloat scale)
 {
-	world3ds.Init_3ds(mapFileName);
+    world3ds.Init_3ds(mapFileName.toLatin1().data());
 	for(int i=0; i<world3ds.m3DModel.numOfObjects; i++)
 	{
 		for(int j=0; j<world3ds.m3DModel.pObject[i].numOfVerts; j++)
@@ -333,9 +333,6 @@ void level3ds::run(GLfloat dt)
 	updateCam();
 	run3ds();
 	allObj.run(dt);
-	world3ds.Render_3ds();
-	allObj.draw();
-	
 
 	//msgList.display(dt);
 
@@ -360,54 +357,70 @@ void level3ds::run3ds()
 	return;
 }
 
+void level3ds::draw()
+{
+    world3ds.Render_3ds();
+    allObj.draw();
+
+    return;
+}
+
 
 gameObj::gameObj()
 {
 	numPlayers = 0;
 	players = NULL;
 	planePlayer = NULL;
-	numLevels = 0;
-	currentLevel = -1;
 	numMenus = 0;
 	currentMenu = -1;
 	gMode = gmMENU;
 	numTextures = 0;
 }
 
+int gameObj::numLevels()
+{
+    return levels.size();
+}
+
+level3ds& gameObj::currentLevel()
+{
+    return levels[m_currentLevelIndex];
+}
+
 bool gameObj::addLevel(int index)
 {
 	bool success = false;
 
-	if(numLevels == 0)
-		currentLevel = 0;
+    if(numLevels() == 0)
+        m_currentLevelIndex = 0;
 
-	levels[currentLevel].create(index);
+    level3ds level;
+    if(level.create(index))
+//	levels[currentLevel].create(index);
+        levels.append(level);
 
-	if(numLevels<MAXLEVELS)
-	{
-		numLevels++;
-		success = true;
-	} 
+    success = true;
 	
 	return success;
 }
 
-bool gameObj::addLevel(char* file, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view)
+bool gameObj::addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view)
 {
 	bool success = false;
 	
-	if(numLevels == 0)
-		currentLevel = 0;
-	if(numLevels<MAXLEVELS)
-	{
-		strcpy(levels[numLevels].mapFileName,file);
-		levels[numLevels].cameras->addPoint(initCamPos,initLookPos,upDir,DEFFOLLOWDIST);
-		levels[numLevels].cameras->camview = view;
-		levels[numLevels].majAxis = upDir;
-		numLevels++;
-		
-		success = true;
-	} 
+    if(numLevels() == 0)
+        m_currentLevelIndex = 0;
+
+    level3ds level;
+    level.mapFileName = file;
+    level.cameras->addPoint(initCamPos,initLookPos,upDir,DEFFOLLOWDIST);
+    level.cameras->camview = view;
+    level.majAxis = upDir;
+    level.loadmap(scale);
+
+    levels.append(level);
+
+    success = true;
 	
 	return success;
 }
@@ -419,7 +432,8 @@ texture_s* gameObj::addTexture(char *filename, char *ID)
 	string errString;
 
 //	success = LoadGLTextures(&alltexture[numTextures++], filename);
-    success = LoadGLTextures(&alltexture[numTextures++].layer[0], filename);
+//    success = LoadGLTextures(&alltexture[numTextures++].layer[0], filename);
+    success = loadGLTexture(&alltexture[numTextures++].layer[0], filename);
 	if(success)
 		ptr = &alltexture[numTextures-1];
 	else
@@ -477,7 +491,7 @@ void gameObj::run(Mouse *ms, void (*commandFcn)(gameObj *, Mouse *), GLfloat del
                 pos = QVector3D(sin(timeMs/30000.5f)*2.0f*cos(timeMs/30.5f), 0, 11.0f*cos(sin(timeMs/3000.5f)+5.0f));
                 look = QVector3D(0, 0, 0);
                 glLookAt(pos, look, Y.toQVector3D());		// This determines where the camera's position and view is
-				menus[currentMenu].display();
+//				menus[currentMenu].display();
 			if(ms != NULL)
 			{
                 if(ms->isBtns(Qt::LeftButton))
@@ -489,13 +503,29 @@ void gameObj::run(Mouse *ms, void (*commandFcn)(gameObj *, Mouse *), GLfloat del
         case gmPLAY:
             if(commandFcn!=NULL)
                 commandFcn(this, ms);
-            levels[currentLevel].run(delta);
+//            levels[currentLevel].run(delta);
+            currentLevel().run(delta);
             break;
         default:
             break;
 	}	
 	
 	return;
+}
+
+void gameObj::render()
+{
+    switch (gMode) {
+        case gmMENU:
+            menus[currentMenu].display();
+            break;
+        case gmPLAY:
+            currentLevel().draw();
+            break;
+        default:
+            break;
+    }
+    currentLevel().draw();
 }
 	
 bool gameObj::addMenu(char* mTitle)

@@ -7,7 +7,7 @@
 #include "qtgl.h"
 
 
-#include	"error.h"
+//#include	"error.h"
 
 p_texdata Tex_Alloc(int size)
 {

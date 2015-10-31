@@ -18,6 +18,8 @@
 #define MAXLIGHTS 10
 #define MAXPLAYERS 4
 
+#include <QString>
+
 enum gameMode{gmMENU, gmPLAY};
 
 class level
@@ -62,7 +64,7 @@ class level3ds : public level
 {
 public:
 	C3dsLoader world3ds;
-	char mapFileName[50];
+    QString mapFileName;
 
 	level3ds():level(){}
 	level3ds(char* filename);
@@ -70,20 +72,24 @@ public:
 	void loadmap(GLfloat scale);
 	virtual void run(GLfloat dt);
 	void run3ds();
+    virtual void draw();
 
 };
 
 class gameObj
 {
 public:
+    int numLevels();
+    level3ds& currentLevel();
+    void render();
+
 	int numPlayers;
 	void* players;
 	object_plane* planePlayer;
 	Shape playerShape;
 	
-	int numLevels;
-	int currentLevel;
-	level3ds levels[MAXLEVELS];
+    int m_currentLevelIndex;
+    QList<level3ds> levels;
 	
 	bool paused;
 	gameMode gMode;
@@ -102,7 +108,7 @@ public:
 	~gameObj();
 	
 	bool addLevel(int index);
-	bool addLevel(char* file, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
+    bool addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
 	bool loadLevel();
 	bool unloadLevel();
 	texture_s* addTexture(char *filename, char *ID);

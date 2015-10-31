@@ -163,9 +163,9 @@ void GLWidget::initializeObjects()
 	//MAKE LEVEL1
 	//level1.levelNum = 1;
 	//level1.allObj = allObjects;
-	texture_s* tile1txr = game->addTexture("Data/Envwall.bmp", "tile1");
+    texture_s* tile1txr = game->addTexture(":Data/Envwall.bmp", "tile1");
 	//texture_s* balltxr = level1.addTexture("Data/Ball.bmp", "Data/EnvRoll.bmp", "ball");
-	texture_s* wall1txr = game->addTexture("Data/wall.bmp", "wall");
+    texture_s* wall1txr = game->addTexture(":Data/wall.bmp", "wall");
 
 	//numExtraSpheres = 0;
 	//gravityON = false;
@@ -173,6 +173,8 @@ void GLWidget::initializeObjects()
 
 	game->addMenu("Marble Game");
 	game->addLevel(0);
+    game->addLevel(1);
+    game->addLevel(2);
 
 	/*game.levels[0].allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
 	game.levels[0].allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
@@ -280,7 +282,8 @@ void GLWidget::initializeObjects()
 	bGravityOn = true;
 	gravityDir = -Z;
 
-	ball = game->levels[game->currentLevel].ball;
+//	ball = game->levels[game->currentLevel].ball;
+    ball = game->currentLevel().ball;
 	
 	return;
 }
@@ -337,7 +340,6 @@ void GLWidget::paintGL()									// Draw Everything
 	// Clear Screen, Depth Buffer & Stencil Buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glLoadIdentity();
-
 										// Reset The Modelview Matrix
 	//yCam = zLook*cos(DEG2RAD*xrot);
 	//gluLookAt(xCam, yCam, zCam, xLook, yLook, zLook, 0.0, 1.0, 0.0);
@@ -347,9 +349,8 @@ void GLWidget::paintGL()									// Draw Everything
 	
 	//allObjects.draw();
 	//game.levels[levelnum].run(1);
-	game->currentLevel = 2;
+//	game->currentLevel = 2;
 //	game.run(mos, runKeys);
-	
 	
 	/*game.levels[levelnum].allObj.draw();
 
@@ -409,7 +410,9 @@ game.levels[levelnum].allObj.draw();
 	yrot += yrotspeed;									// Update Y Rotation Angle By yrotspeed
 	glFlush();											// Flush The GL Pipeline
 */
-    return;										// Everything Went OK
+    game->render();
+
+    return;
 }
 
 void GLWidget::ProcessKeyboard()							// Process Keyboard Results
@@ -453,7 +456,10 @@ void GLWidget::process()
 	if(delta > MAXDELTA)
 		delta = MAXDELTA;
 	//game.levels[0].allObj.run(delta);
-	game->levels[0].allObj.run(.03);
+//	game->levels[0].allObj.run(.03);
+    void (*commandFcn)(gameObj *, Mouse *);
+    commandFcn(game, mos);
+    game->run(mos, commandFcn, delta);
 
 	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));
 	zCam += zc;
