@@ -153,6 +153,8 @@ void GLWidget::paintGL()
 		break;
 	}*/
 
+	rcube.drawCube();
+
 	glColor3ub(255, 255, 205);		// Set Color To White
 	glPushMatrix();
 	glLineWidth(10);
@@ -160,8 +162,6 @@ void GLWidget::paintGL()
 		glVertex3f(.9f*cam->pos.x, .9f*cam->pos.y, .9f*cam->pos.z); // origin of the line
 		glVertex3f(moslook.x,moslook.y , moslook.z); // ending point of the line
 	glEnd( );
-
-	rcube.drawCube();
 
 	glPopMatrix();
 
