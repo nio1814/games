@@ -173,8 +173,8 @@ void GLWidget::initializeObjects()
 
 	game->addMenu("Marble Game");
 	game->addLevel(0);
-    game->addLevel(1);
-    game->addLevel(2);
+//    game->addLevel(1);
+//    game->addLevel(2);
 
 	/*game.levels[0].allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
 	game.levels[0].allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));

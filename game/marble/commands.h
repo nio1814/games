@@ -1,6 +1,9 @@
 #ifndef COMMANDS
 #define COMMANDS
 
-void runKeys(level* lvl, Mouse* ms);
+#include "level.h"
+#include "mouse.h"
+
+void runKeys(Level* lvl, Mouse* ms);
 
 #endif

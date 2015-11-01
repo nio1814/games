@@ -1,45 +1,42 @@
-#include <keys.h>
-#include <vector3d.h>
-#include <camera.h>
-#include <mouse.h>
-#include "gameobject.h"
+#include "commands.h"
+#include "keys.h"
 
-void runKeys(level* lvl, Mouse *ms)
+void runKeys(Level* lvl, Mouse *ms)
 {
     CameraPoint *cam = &lvl->cameras->cpoints[lvl->cameras->currentPoint];
 	Vector3D cam2look;
 	Vector3D toSideDir;
 
-	if(isKeys('E'))
+    if(isKeys(Qt::Key_E))
 	{
 		cam->pos += lvl->majAxis*.1f;
 		cam->look += lvl->majAxis*.1f;
 	}
-	if(isKeys('Q'))
+    if(isKeys(Qt::Key_Q))
 	{
 		cam->pos -= lvl->majAxis*.1f;
 		cam->look -= lvl->majAxis*.1f;
 	}
-	if(isKeys('A'))
+    if(isKeys(Qt::Key_A))
 	{
         toSideDir =  cam->dir2RSide();
 		cam->pos -= toSideDir*.1f;
 		cam->look -= toSideDir*.1f;
 	}
-	if(isKeys('D'))
+    if(isKeys(Qt::Key_D))
 	{
         toSideDir =  cam->dir2RSide();
 		cam->pos += toSideDir*.1f;
 		cam->look += toSideDir*.1f;
 	}
-    if(isKeys(Qt::Key_Up) || isKeys('W'))
+    if(isKeys(Qt::Key_Up) || isKeys(Qt::Key_W))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();
 		cam->pos += cam2look*.1f;
 		cam->look += cam2look*.1f;
 	}
-    if(isKeys(Qt::Key_Down) || isKeys('S'))
+    if(isKeys(Qt::Key_Down) || isKeys(Qt::Key_S))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();

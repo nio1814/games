@@ -1,17 +1,12 @@
 #ifndef GAMEOBJECT
 #define GAMEOBJECT
 
-#include <math.h>
-#include <stdio.h>										// Header File For Standard Input / Output
-
-#include <camera.h>
-#include <3dsGT/3dsLoader.h>
-#include <mouse.h>
 //#include <text.h>
 #include <light.h>
 
 #include <menu.h>
-#include <object.h>
+#include "level.h"
+#include "mouse.h"
 
 #define MAXLEVELS 5
 #define MAXMENUS 5
@@ -22,65 +17,11 @@
 
 enum gameMode{gmMENU, gmPLAY};
 
-class level
-{
-public:
-	int levelNum;
-	bool started;
-	GLfloat startTime, currentTime, timer, delta;
-	int numPlayers;
-	Vector3D playerStart;		//player starting positions
-	Vector3D majAxis;
-	bool bGravity;
-	GLfloat gravityM;
-	Vector3D gravityV;
-	//int numTextures;
-	//messageList msgList;
-
-	level();
-	level(int players);
-
-	void create(int index);
-
-	void setMajAxis(Vector3D axis);
-	virtual void run(GLfloat dt);
-	//Vector3D setCam(Object* obj, CameraView view);
-	void addCamera(Vector3D campos, Vector3D lookpos, const Vector3D upin, GLfloat dist);
-	Vector3D setCam(Vector3D* pos);
-	void updateCam();
-	void setView(CameraView view);
-	//texture_s* addTexture(char *filename, char *ID);
-	//texture_s* addTexture(char *filename1, char *filename2, char *ID);
-	
-	object_sphere* ball;
-	object_holder allObj;
-	//Object *player1, *player2;
-	//texture_s *alltexture;
-    CameraPoints* cameras;
-	light_c* lights;
-};
-
-class level3ds : public level
-{
-public:
-	C3dsLoader world3ds;
-    QString mapFileName;
-
-	level3ds():level(){}
-	level3ds(char* filename);
-
-	void loadmap(GLfloat scale);
-	virtual void run(GLfloat dt);
-	void run3ds();
-    virtual void draw();
-
-};
-
 class gameObj
 {
 public:
     int numLevels();
-    level3ds& currentLevel();
+    Level& currentLevel();
     void render();
 
 	int numPlayers;
@@ -89,7 +30,7 @@ public:
 	Shape playerShape;
 	
     int m_currentLevelIndex;
-    QList<level3ds> levels;
+    QList<Level> levels;
 	
 	bool paused;
 	gameMode gMode;
@@ -107,8 +48,8 @@ public:
 	gameObj();
 	~gameObj();
 	
-	bool addLevel(int index);
-    bool addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
+    bool addLevel(int index);
+//    bool addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
 	bool loadLevel();
 	bool unloadLevel();
 	texture_s* addTexture(char *filename, char *ID);
