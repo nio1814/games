@@ -19,7 +19,6 @@
 #include <object.h>
 #include <gameobject.h>
 //#include <mass.h>
-//#include "vector3d.h
 //#include "motion.h"
 #include <constants.h>
 #include <keys.h>

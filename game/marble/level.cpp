@@ -350,7 +350,7 @@ void Level::run3ds()
 
 void Level::draw()
 {
-    world3ds.Render_3ds();
+//    world3ds.Render_3ds();
     allObj.draw();
 
     return;

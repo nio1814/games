@@ -248,7 +248,8 @@ bool Object::detectCollision(const object_holder* objs)
 	bool detect = false;
 	const object_sphere* spherePoint;
 	
-	for(int sidx = 0; sidx < objs->spheres->numOfMasses; sidx++)
+//	for(int sidx = 0; sidx < objs->spheres->numOfMasses; sidx++)
+    for(int sidx = 0; sidx < objs->spheres.size(); sidx++)
 	{
 		spherePoint = objs->getSphere(sidx);
 		detectCollision(objs->getSphere(sidx));
@@ -881,7 +882,7 @@ object_holder::object_holder()
 {
 	numObjects = 0;
 	majorAxis = Z;
-	spheres = new object_spheres;
+//	spheres = new object_spheres;
 	planes = new object_planes;
 	lines = new object_lines;
 	tree = new pointerTree;
@@ -889,7 +890,7 @@ object_holder::object_holder()
 
 object_holder::~object_holder()
 {
-	delete spheres;
+//	delete spheres;
 	delete planes;
 	delete lines;
 	delete tree;
@@ -899,8 +900,11 @@ object_sphere* object_holder::addSpheres(int numObjs, float mass, float radius, 
 {
 	object_sphere* sphereout = NULL;
 
-	spheres->addObjects(numObjs, mass, radius, this, basePos, offsetDir);
-	sphereout = &spheres->objs[numObjects];
+//	spheres->addObjects(numObjs, mass, radius, this, basePos, offsetDir);
+    object_sphere sphere(mass, radius);
+    sphere.mass->pos = basePos;
+//	sphereout = &spheres->objs[numObjects];
+    sphereout = &spheres.last();
 	numObjects += numObjs;
 	
 	return sphereout;
@@ -910,8 +914,11 @@ object_sphere* object_holder::addSpheres(float mass, float radius, Vector3D base
 {
 	object_sphere* sphereout = NULL;
 
-	spheres->addObjects(1, mass, radius, this, basePos, Vector3D(0,0,0));
-	sphereout = &spheres->objs[numObjects];
+//	spheres->addObjects(1, mass, radius, this, basePos, Vector3D(0,0,0));
+    object_sphere sphere(mass, radius);
+    sphere.mass->pos = basePos;
+//	sphereout = &spheres->objs[numObjects];
+    sphereout = &spheres.last();
 	numObjects++;
 	
 	return sphereout;
@@ -971,7 +978,8 @@ void object_holder::draw()
 void object_holder::setMass(Shape objType, int index, float mass)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].mass->m = mass;
+//		spheres->objs[index].mass->m = mass;
+        spheres[index].mass->m = mass;
 	else if(objType == PLANE)
 		planes->objs[index].mass->m = mass;
 
@@ -980,8 +988,9 @@ void object_holder::setMass(Shape objType, int index, float mass)
 
 void object_holder::setElas(Shape objType, int index, float el)
 {
+    Mass mass;
 	if(objType == SPHERE)
-		spheres->objs[index].mass->elas = el;
+//		spheres->objs[index].mass->elas = el;
 	else if(objType == PLANE)
 		planes->objs[index].mass->elas = el;
 
@@ -1033,7 +1042,8 @@ void object_holder::setTexture(Shape objType, int index, texture_s* txr)
 void object_holder::setColor(Shape objType, int index, const Vector3D& color)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].texture->color = color;
+//		spheres->objs[index].texture->color = color;
+        spheres[index].texture->color = color;
 	else if(objType == PLANE)
 		planes->objs[index].texture->color = color;
 
@@ -1075,7 +1085,8 @@ NodeClass<void*>* object_holder::makeTree()
 
 object_sphere* object_holder::getSphere(int index) const
 {
-	return &spheres->objs[index];
+//	return &spheres->objs[index];
+    return &spheres[index];
 }
 
 object_plane* object_holder::getPlane(int index)
