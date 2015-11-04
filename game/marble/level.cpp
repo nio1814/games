@@ -55,7 +55,7 @@ bool Level::create(int index)
                 allObj.setColor(SPHERE, i, Vector3D(rand()%256, rand()%256, rand()%256) );
             }
 
-		  ball = &allObj.spheres->objs[1];
+		  ball = allObj.spheres.objs[1];
 //            ball = &allObj.spheres[1];
             //level1.player1 = ball;
             //ball->texture = balltxr;
@@ -206,7 +206,7 @@ Vector3D Level::setCam(Vector3D* pos)
             camRotate = 100*delta;
         else if(isKeys(Qt::Key_Right))
             camRotate = -100*delta;
-        cam2look = cam2look.rotate3D(&majAxis, camRotate);
+        cam2look = cam2look.rotate3D(majAxis, camRotate);
         cam->look = cam2look + cam->pos;
     }
 

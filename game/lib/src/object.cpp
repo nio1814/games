@@ -22,7 +22,7 @@ template <class T>
 Objects<T>::Objects()
 {
 	numOfMasses = 0;
-	objs = NULL;
+//	objs = NULL;
 }
 
 template <class T>
@@ -56,17 +56,19 @@ void Objects<T>::release()							// delete the masses created
 template <class T>
 void Objects<T>::init()								// this method will call the init() method of every mass
 {
-	for (int a = 0; a < numOfMasses; ++a)		// We will init() every mass
-		objs[a].mass->init();						// call init() method of the mass
+//	for (int a = 0; a < numOfMasses; ++a)		// We will init() every mass
+	for(int a=0; a<objs.size(); a++)
+		objs[a]->mass->init();						// call init() method of the mass
 }
 
 template <class T>
 void Objects<T>::draw()
 {
-	for (int a = 0; a < numOfMasses; ++a)		// We will init() every mass
+//	for (int a = 0; a < numOfMasses; ++a)		// We will init() every mass
+	for(int a=0; a<objs.size(); a++)
 	{
-		if(objs[a].bDraw)
-			objs[a].draw();
+		if(objs[a]->bDraw)
+			objs[a]->draw();
 	}
 
 	return;
@@ -75,20 +77,22 @@ void Objects<T>::draw()
 template <class T>
 void Objects<T>::simulate(float dt)					// Iterate the masses by the change in time
 {
-	for (int a = 0; a < numOfMasses; ++a)		// We will iterate every mass
-		objs[a].mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
+//	for (int a = 0; a < numOfMasses; ++a)		// We will iterate every mass
+	for(int a=0; a<objs.size(); a++)
+		objs[a]->mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
 }
 
 template <class T>
 void Objects<T>::operate(const object_holder *allObjs)					// The complete procedure of Objects
 {
-	if(objs != NULL)
-	{
-		for (int a = 0; a < numOfMasses; ++a)		// We will iterate every mass
+//	if(objs != NULL)
+//	{
+//		for (int a = 0; a < numOfMasses; ++a)		// We will iterate every mass
+		for(int a=0; a<objs.size(); a++)
 		{
-			objs[a].operate(allObjs);
+			objs[a]->operate(allObjs);
 		}
-	}
+//	}
 
 	return;
 }
@@ -107,7 +111,8 @@ Object::Object()
 	totalTouches = 0;
 	for(int i=0;i<NUMSHAPES;i++)
 		numTouches[i] = 0;
-	texture = &nullTexture;
+//	texture = &nullTexture;
+	texture = NULL;
 	bDraw = true;
 	bDetect = true;
 	bCollide = true;
@@ -116,10 +121,10 @@ Object::Object()
 	isTouching3ds = false;
 }
 
-Object::Object(float m)			// Constructor creates some masses with mass values m
+Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
 {
-	Object();
-	delete mass;
+//	Object();
+//	delete mass;
 	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
 }
 
@@ -127,7 +132,7 @@ Object::~Object()
 {
 	delete mass;				// Create a Mass as a pointer and put it in the array
 	delete touches;
-	delete texture;
+//	delete texture;
 }
 
 void Object::init()								// this method will call the init() method of every mass
@@ -248,7 +253,7 @@ bool Object::detectCollision(const object_holder* objs)
 	bool detect = false;
 	const object_sphere* spherePoint;
 	
-	for(int sidx = 0; sidx < objs->spheres->numOfMasses; sidx++)
+	for(int sidx = 0; sidx < objs->spheres.numOfMasses; sidx++)
 //    for(int sidx = 0; sidx < objs->spheres.size(); sidx++)
 	{
 		spherePoint = objs->getSphere(sidx);
@@ -268,7 +273,7 @@ object_spheres::object_spheres() : Objects<object_sphere>()
 {
 	objType = SPHERE;
 	//objs = reinterpret_cast<object_sphere*>(new object_sphere[NUMOBJECTS]);
-	objs = new object_sphere[MAXOBJECTS];
+//	objs = new object_sphere[MAXOBJECTS];
 
 }
 
@@ -276,7 +281,7 @@ object_spheres::object_spheres(int numObjs, float mass, float radius) : Objects<
 {
 	objType = SPHERE;
 	//objs = reinterpret_cast<object_sphere*>(new object_sphere[NUMOBJECTS]);
-	objs = new object_sphere[MAXOBJECTS];
+//	objs = new object_sphere[MAXOBJECTS];
 	//addObjects(numObjs, mass, radius);
 
 	/*
@@ -294,17 +299,19 @@ void object_spheres::addObjects(int numMass, float m, float radius, object_holde
 {
 	for(int i=0; i<numMass; i++)
 	{
-		if(numOfMasses < MAXOBJECTS)
-		{
-			objs[numOfMasses].self.index = numOfMasses;
-			objs[numOfMasses].self.holder = holder;
-			objs[numOfMasses].self.shape = objType;
-			objs[numOfMasses].mass->m = m;
-			objs[numOfMasses].mass->pos.x = basePos.x;
-			objs[numOfMasses].mass->pos.y = basePos.y;
-			objs[numOfMasses].mass->pos.z = basePos.z;
-			objs[numOfMasses++].radius = radius;
-		}
+//		if(numOfMasses < MAXOBJECTS)
+//		{
+		objs.append(new object_sphere(m, radius));
+		object_sphere* sphere = objs.last();
+			sphere->self.index = objs.size();
+			sphere->self.holder = holder;
+			objs[numOfMasses]->self.shape = objType;
+//			objs[numOfMasses]->mass->m = m;
+			sphere->mass->pos.x = basePos.x;
+			sphere->mass->pos.y = basePos.y;
+			sphere->mass->pos.z = basePos.z;
+//			objs[numOfMasses++].radius = radius;
+//		}
 	}
 
 	return;
@@ -314,7 +321,7 @@ void object_spheres::solve()													//gravitational force will be applied t
 {
 	for (int a = 0; a < numOfMasses; ++a)								//we will apply force to all masses (actually we have 1 mass, but we can extend it in the future)
 	{
-		objs[a].solve();
+		objs[a]->solve();
 	}
 }
 
@@ -355,7 +362,8 @@ void object_sphere::solve()													//gravitational force will be applied th
 
 void object_sphere::draw()
 {
-	int numTexture = texture->numLayers;
+	bool textureExists = texture!=NULL;
+	//int numTexture = texture->numLayers;
 
 	glColor4f(1.0f, 1.0f, 1.0f, .9f);						// Set Color To White
 	//glColor3ub(texture->color.x, texture->color.y, texture->color.z);
@@ -369,17 +377,21 @@ void object_sphere::draw()
 	//glRotatef(xrot,1.0f,0.0f,0.0f);						// Rotate On The X Axis By xrot
 	//glRotatef(yrot,0.0f,1.0f,0.0f);						// Rotate On The Y Axis By yrot
 	//glRotatef(zrot,0.0f,0.0f,1.0f);						// Rotate On The Y Axis By yrot
-	glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 2 (1)
+	if(textureExists)
+	{
+		glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 2 (1)
 	
 //	gluSphere(quad, radius, 32, 16);						// Draw First Sphere
 	
-	glBindTexture(GL_TEXTURE_2D, texture->layer[1]);			// Select Texture 3 (2)
+		glBindTexture(GL_TEXTURE_2D, texture->layer[1]);			// Select Texture 3 (2)
+	}
 	glColor4f(1.0f, 1.0f, 1.0f, 0.4f);					// Set Color To White With 40% Alpha
 	//glColor3ub(texture->color.x, texture->color.y, texture->color.z);
 	glEnable(GL_BLEND);									// Enable Blending
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);					// Set Blending Mode To Mix Based On SRC Alpha
 	//
-	if(numTexture>0)
+	//if(numTexture>0)
+	if(textureExists)
 	{
 		glEnable(GL_TEXTURE_GEN_S);							// Enable Sphere Mapping
 		glEnable(GL_TEXTURE_GEN_T);							// Enable Sphere Mapping
@@ -447,13 +459,13 @@ bool object_sphere::detectCollision(const object_sphere* obj2)
 object_planes::object_planes() : Objects<object_plane>()
 {
 	objType = PLANE;
-	objs = new object_plane[MAXOBJECTS];
+//	objs = new object_plane[MAXOBJECTS];
 }
 
 object_planes::object_planes(int numObjs, float mass, float wid, float len, float ph, float th) : Objects<object_plane>(numObjs, mass)
 {
 	objType = PLANE;
-	objs = new object_plane[MAXOBJECTS];
+//	objs = new object_plane[MAXOBJECTS];
 	//addObjects(numObjs, mass, wid, len, rot,0,0,0);
 }
 
@@ -461,21 +473,23 @@ void object_planes::addObjects(int numMass, float m, float wid, float len, float
 {
 	for(int i=0; i<numMass; i++)
 	{
-		if(numOfMasses < MAXOBJECTS)
-		{
-			objs[numOfMasses].self.index = numOfMasses;
-			objs[numOfMasses].self.holder = holder;
-			objs[numOfMasses].self.shape = objType;
-			objs[numOfMasses].mass->m = m;
-			objs[numOfMasses].mass->pos.x = basePos.x;
-			objs[numOfMasses].mass->pos.y = basePos.y;
-			objs[numOfMasses].mass->pos.z = basePos.z;
-			objs[numOfMasses].angles.x = ph;
-			objs[numOfMasses].angles.y = th;
-			objs[numOfMasses].width = wid;
-			objs[numOfMasses].length = len;
-			objs[numOfMasses++].makeBase(&mAxis);
-		}
+//		if(numOfMasses < MAXOBJECTS)
+//		{
+		objs.append(new object_plane(m, wid, len, ph, th, mAxis));
+		object_plane* plane = objs.last();
+			plane->self.index = numOfMasses;
+			plane->self.holder = holder;
+			plane->self.shape = objType;
+//			objs[numOfMasses].mass->m = m;
+			plane->mass->pos.x = basePos.x;
+			plane->mass->pos.y = basePos.y;
+			plane->mass->pos.z = basePos.z;
+//			objs[numOfMasses].angles.x = ph;
+//			objs[numOfMasses].angles.y = th;
+//			objs[numOfMasses].width = wid;
+//			objs[numOfMasses].length = len;
+//			objs[numOfMasses++].makeBase(&mAxis);
+//		}
 	}
 
 	return;
@@ -488,9 +502,9 @@ object_plane::object_plane() : Object()
 	objType = PLANE;
 	width = length = 1.0f;
 	angles = Vector2D(0,0);
-	normal = new Vector3D(0,1,0);
-	lvec = new Vector3D(1,0,0);
-	wvec = new Vector3D(0,0,1);
+	normal = Vector3D(0,1,0);
+	lvec = Vector3D(1,0,0);
+	wvec = Vector3D(0,0,1);
 	moveForce = Vector3D(0,0,0);
 }
 
@@ -507,7 +521,8 @@ object_plane::object_plane(float mass, float wid, float len, float phi, float th
 void object_plane::draw()
 {
 	Vector3D v;							//keeps coords of vertex for drawing
-	int numTexture = texture->numLayers;
+	bool textureExists = texture!=NULL;
+	//int numTexture = texture->numLayers;
 	
 	glEnable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
 	glEnable(GL_TEXTURE_2D);							// Enable 2D Texture Mapping
@@ -516,25 +531,26 @@ void object_plane::draw()
 
 	glPushMatrix();
 
-	glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 1 (0)
+	if(textureExists)
+		glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 1 (0)
 	glBegin(GL_QUADS);									// Begin Drawing A Quad
 		//glNormal3f(0.0f, 1.0f, 0.0f);						// Normal Pointing Up
-		glNormal3f(normal->x, normal->y, normal->z);						// Normal Pointing Up
+		glNormal3f(normal.x, normal.y, normal.z);						// Normal Pointing Up
 		glColor3ub(0, 59, 255);
 		glTexCoord2f(0.0f, 1.0f);					// Bottom Left Of Texture
-		v = (-*wvec*width + *lvec*length)*.5f;
+		v = (-wvec*width + lvec*length)*.5f;
 		glVertex3f(v.x, v.y, v.z);					// Bottom Left Corner Of Floor
 		
 		glTexCoord2f(0.0f, 0.0f);					// Top Left Of Texture
-		v = (-*wvec*width - *lvec*length)*.5f;
+		v = (-wvec*width - lvec*length)*.5f;
 		glVertex3f(v.x, v.y, v.z);					// Top Left Corner Of Floor
 		
 		glTexCoord2f(1.0f, 0.0f);					// Top Right Of Texture
-		v = (*wvec*width - *lvec*length)*.5f;
+		v = (wvec*width - lvec*length)*.5f;
 		glVertex3f(v.x, v.y, v.z);					// Top Right Corner Of Floor
 		
 		glTexCoord2f(1.0f, 1.0f);					// Bottom Right Of Texture
-		v = (*wvec*width + *lvec*length)*.5f;
+		v = (wvec*width + lvec*length)*.5f;
 		glVertex3f(v.x, v.y, v.z);					// Bottom Right Corner Of Floor
 	glEnd();
 
@@ -547,31 +563,31 @@ void object_plane::makeBase(const Vector3D* mAxis)
 {
 	if(*mAxis == Z)
 	{
-		*wvec = X.rotate3D(&Z, angles.x);							//rotate x by phi
-		*lvec = (Y.rotate3D(&Y, angles.x)).rotate3D(wvec,angles.y);	//rotate y down by phi then theta
+		wvec = X.rotate3D(Z, angles.x);							//rotate x by phi
+		lvec = (Y.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);	//rotate y down by phi then theta
 	}
 	else if(*mAxis == Y)
 	{
-		*wvec = Z.rotate3D(&Y, angles.x);
-		*lvec = (X.rotate3D(&Y, angles.x)).rotate3D(wvec,angles.y);
+		wvec = Z.rotate3D(Y, angles.x);
+		lvec = (X.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);
 	}
 	else if(*mAxis == X)
 	{
-		*wvec = Y.rotate3D(&X, angles.x);
-		*lvec = (Z.rotate3D(&Y, angles.x)).rotate3D(wvec,angles.y);
+		wvec = Y.rotate3D(X, angles.x);
+		lvec = (Z.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);
 	}
 	else
 		//msgbox('incorrect major axis');
 		;
 
-	*normal = Cross(*wvec, *lvec);
+	normal = Cross(wvec, lvec);
 
 	return;
 }
 
 void object_plane::flipBase()
 {
-	Vector3D* temp;
+	Vector3D temp;
 	temp = lvec;
 	lvec = wvec;
 	wvec = temp;
@@ -650,23 +666,25 @@ object_box::object_box(float mass, float wid, float len, float hei, float ph, fl
 object_lines::object_lines() : Objects<object_line>()
 {
 	objType = LINE;
-	objs = new object_line[MAXOBJECTS];
+//	objs = new object_line[MAXOBJECTS];
 }
 
 void object_lines::addObjects(int numMass, float m, Vector3D v1, Vector3D v2, float cmf, object_holder* holder, Vector3D offsetDir, float offsetDist)
 {
 	for(int i=0; i<numMass; i++)
 	{
-		if(numOfMasses < MAXOBJECTS)
-		{
-			objs[numOfMasses].self.index = numOfMasses;
-			objs[numOfMasses].self.holder = holder;
-			objs[numOfMasses].self.shape = objType;
-			objs[numOfMasses].mass->m = m;
-			objs[numOfMasses].vertex[0] = v1;
-			objs[numOfMasses].vertex[1] = v2;
-			objs[numOfMasses++].initGeo();
-		}
+//		if(numOfMasses < MAXOBJECTS)
+//		{
+		objs.append(new object_line(m, v1, v2, cmf));
+		object_line* line = objs.last();
+			line->self.index = numOfMasses;
+			line->self.holder = holder;
+			line->self.shape = objType;
+//			objs[numOfMasses].mass->m = m;
+//			objs[numOfMasses].vertex[0] = v1;
+//			objs[numOfMasses].vertex[1] = v2;
+			line->initGeo();
+//		}
 	}
 
 	return;
@@ -717,7 +735,7 @@ void object_line::initGeo()
 
 void object_line::calcGeo()
 {
-	lvec = lvec.rotate3D(&mass->axis, mass->dtheta);
+	lvec = lvec.rotate3D(mass->axis, mass->dtheta);
 	vertex[0] = mass->pos - (lvec*length*comf);
 	vertex[1] = mass->pos + (lvec*length*(1-comf));
 	normal = Z - Z.proj(&lvec);							//make normal vector starting from Z
@@ -882,17 +900,17 @@ object_holder::object_holder()
 {
 	numObjects = 0;
 	majorAxis = Z;
-	spheres = new object_spheres;
-	planes = new object_planes;
-	lines = new object_lines;
+	//spheres = new object_spheres;
+	//planes = new object_planes;
+	//lines = new object_lines;
 	tree = new pointerTree;
 }
 
 object_holder::~object_holder()
 {
-	delete spheres;
-	delete planes;
-	delete lines;
+	//delete spheres;
+	//delete planes;
+	//delete lines;
 	delete tree;
 }
 
@@ -900,11 +918,11 @@ object_sphere* object_holder::addSpheres(int numObjs, float mass, float radius, 
 {
 	object_sphere* sphereout = NULL;
 
-	spheres->addObjects(numObjs, mass, radius, this, basePos, offsetDir);
+	spheres.addObjects(numObjs, mass, radius, this, basePos, offsetDir);
 //    object_sphere sphere(mass, radius);
 //    sphere.mass->pos = basePos;
-	sphereout = &spheres->objs[numObjects];
-//    sphereout = &spheres.last();
+//	sphereout = &spheres->objs[numObjects];
+	sphereout = spheres.objs.last();
 	numObjects += numObjs;
 
 	//objects.append(new object_sphere(mass, radius));
@@ -918,11 +936,11 @@ object_sphere* object_holder::addSpheres(float mass, float radius, Vector3D base
 {
 	object_sphere* sphereout = NULL;
 
-	spheres->addObjects(1, mass, radius, this, basePos, Vector3D(0,0,0));
+	spheres.addObjects(1, mass, radius, this, basePos, Vector3D(0,0,0));
 //    object_sphere sphere(mass, radius);
 //    sphere.mass->pos = basePos;
-	sphereout = &spheres->objs[numObjects];
-//    sphereout = &spheres.last();
+//	sphereout = &spheres->objs[numObjects];
+    sphereout = spheres.objs.last();
 	numObjects++;
 	
 	return sphereout;
@@ -932,7 +950,7 @@ object_plane* object_holder::addPlanes(int numObjs, float mass, float wid, float
 {
 	object_plane* planeout = NULL;
 	
-	planes->addObjects(numObjs, mass, wid, len, ph, th, this, basePos, offDir, distBetween, majorAxis);
+	planes.addObjects(numObjs, mass, wid, len, ph, th, this, basePos, offDir, distBetween, majorAxis);
 	numObjects += numObjs;
 
 	return planeout;
@@ -942,7 +960,7 @@ object_plane* object_holder::addPlanes(float mass, float wid, float len, float p
 {
 	object_plane* planeout = NULL;
 	
-	planes->addObjects(1, mass, wid, len, ph, th, this, basePos, Vector3D(0,0,0), 0, majorAxis);
+	planes.addObjects(1, mass, wid, len, ph, th, this, basePos, Vector3D(0,0,0), 0, majorAxis);
 	numObjects++;
 
 	return planeout;
@@ -952,7 +970,7 @@ object_line* object_holder::addLines(int numObjs, float mass, Vector3D v1, Vecto
 {
 	object_line* lineout = NULL;
 	
-	lines->addObjects(numObjs, mass, v1, v2, cmf, this, offsetDir, offsetDist);
+	lines.addObjects(numObjs, mass, v1, v2, cmf, this, offsetDir, offsetDist);
 	numObjects += numObjs;
 
 	return lineout;
@@ -960,37 +978,37 @@ object_line* object_holder::addLines(int numObjs, float mass, Vector3D v1, Vecto
 
 void object_holder::run(GLfloat dt)
 {
-	spheres->operate(this);
+	spheres.operate(this);
 //	for(int s=0; s<spheres.size(); s++)
 //		spheres[s].operate(this);
-	lines->operate(this);
-	planes->operate(this);
+	lines.operate(this);
+	planes.operate(this);
 	
 //	for(int s=0; s<spheres.size(); s++)
 //		spheres[s].simulate(dt);								// Step 3: iterate the masses by the change in time
-	lines->simulate(dt);
-	planes->simulate(dt);
+	lines.simulate(dt);
+	planes.simulate(dt);
 
 	return;
 }
 
 void object_holder::draw()
 {
-	spheres->draw();
+	//spheres.draw();
 //	for(int s=0; s<spheres.size(); s++)
 //		spheres[s].draw();
-	planes->draw();
-	lines->draw();
+	planes.draw();
+	lines.draw();
 	return;
 }
 
 void object_holder::setMass(Shape objType, int index, float mass)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].mass->m = mass;
+		spheres.objs[index]->mass->m = mass;
 //        spheres[index].mass->m = mass;
 	else if(objType == PLANE)
-		planes->objs[index].mass->m = mass;
+		planes.objs[index]->mass->m = mass;
 
 	return;
 }
@@ -998,10 +1016,10 @@ void object_holder::setMass(Shape objType, int index, float mass)
 void object_holder::setElas(Shape objType, int index, float el)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].mass->elas = el;
+		spheres.objs[index]->mass->elas = el;
 //		spheres[index].mass->elas = el;
 	else if(objType == PLANE)
-		planes->objs[index].mass->elas = el;
+		planes.objs[index]->mass->elas = el;
 
 	return;
 }
@@ -1009,10 +1027,10 @@ void object_holder::setElas(Shape objType, int index, float el)
 void object_holder::setPos(Shape objType, int index, Vector3D pos)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].mass->pos = pos;
+		spheres.objs[index]->mass->pos = pos;
 //		spheres[index].mass->pos = pos;
 	else if(objType == PLANE)
-		planes->objs[index].mass->pos = pos;
+		planes.objs[index]->mass->pos = pos;
 
 	return;
 }
@@ -1021,8 +1039,8 @@ void object_holder::setNormal(Shape objType, int index, Vector3D norm)
 {
 	if(objType == PLANE)
 	{
-		*planes->objs[index].normal = norm.unit();
-		planes->objs[index].makeBase(&majorAxis);
+		planes.objs[index]->normal = norm.unit();
+		planes.objs[index]->makeBase(&majorAxis);
 	}	
 
 	return;
@@ -1032,7 +1050,7 @@ void object_holder::flipBase(Shape objType, int index)
 {
 	if(objType == PLANE)
 	{
-		planes->objs[index].flipBase();
+		planes.objs[index]->flipBase();
 	}
 
 	return;
@@ -1042,10 +1060,10 @@ void object_holder::flipBase(Shape objType, int index)
 void object_holder::setTexture(Shape objType, int index, texture_s* txr)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].texture = txr;
+		spheres.objs[index]->texture = txr;
 //		spheres[index].texture = txr;
 	else if(objType == PLANE)
-		planes->objs[index].texture = txr;
+		planes.objs[index]->texture = txr;
 
 	return;
 }
@@ -1053,10 +1071,11 @@ void object_holder::setTexture(Shape objType, int index, texture_s* txr)
 void object_holder::setColor(Shape objType, int index, const Vector3D& color)
 {
 	if(objType == SPHERE)
-		spheres->objs[index].texture->color = color;
+		if(spheres.objs[index]->texture)
+			spheres.objs[index]->texture->color = color;
 //        spheres[index].texture->color = color;
 	else if(objType == PLANE)
-		planes->objs[index].texture->color = color;
+		planes.objs[index]->texture->color = color;
 
 	return;
 }
@@ -1075,22 +1094,22 @@ NodeClass<void*>* object_holder::makeTree()
 
 	tree = new pointerTree;
 
-	for(int s = 0; s<spheres->numOfMasses; s++)
+	for(int s = 0; s<spheres.numOfMasses; s++)
 //	for(int s = 0; s<spheres.size(); s++)
 	{
 		sprintf(numtext, "%i", s+1);
-		//tree->addLeaf(&spheres->objs[s], tpOBJECT, sphere + numtext);
-		tree->addLeaf(&spheres[s], tpOBJECT, sphere + numtext);
+		tree->addLeaf(spheres.objs[s], tpOBJECT, sphere + numtext);
+		//tree->addLeaf(&spheres[s], tpOBJECT, sphere + numtext);
 	}
-	for(int p = 0; p<planes->numOfMasses; p++)
+	for(int p = 0; p<planes.numOfMasses; p++)
 	{
 		sprintf(numtext, "%i", p+1);
-		tree->addLeaf(&planes->objs[p], tpOBJECT, plane + numtext);
+		tree->addLeaf(&planes.objs[p], tpOBJECT, plane + numtext);
 	}
-	for(int l = 0; l<lines->numOfMasses; l++)
+	for(int l = 0; l<lines.numOfMasses; l++)
 	{
 		sprintf(numtext, "%i", l+1);
-		tree->addLeaf(&lines->objs[l], tpOBJECT, line + numtext);
+		tree->addLeaf(&lines.objs[l], tpOBJECT, line + numtext);
 	}
 
 	return tree;
@@ -1098,13 +1117,13 @@ NodeClass<void*>* object_holder::makeTree()
 
 object_sphere* object_holder::getSphere(int index) const
 {
-	return &spheres->objs[index];
+	return spheres.objs[index];
 //    return &spheres[index];
 }
 
 object_plane* object_holder::getPlane(int index)
 {
-	return &planes->objs[index];
+	return planes.objs[index];
 }
 
 //FUNCTION DEFINITIONS

@@ -74,6 +74,6 @@ void Mass::simulate(float dt)
 	dtheta += avel * dt * RAD2DEG;
 	theta += dtheta;			// Change in angle is added to the position.
 	theta = fmod(theta, 360.0f);
-	dir = dir.rotate3D(&axis, dtheta);
+	dir = dir.rotate3D(axis, dtheta);
 }
 

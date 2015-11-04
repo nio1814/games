@@ -82,9 +82,9 @@ public:
 	float angle(const Vector3D *v);					//calculate the angle between another vector(degrees)
 	Vector3D proj(const Vector3D *v) const;
 	Vector3D proj(const Vector3D &v1, const Vector3D &v2) const;
-	Vector3D rotate3D(const Vector3D *v, float angle) const;//rotate vector about v with given angle in degrees
+	Vector3D rotate3D(const Vector3D &v, float angle) const;//rotate vector about v with given angle in degrees
 	Vector3D rotatePhiTheta(const Vector3D *majAxis, float phi, float theta) const;//rotate vector about an axis, using phi and theta angles
-	Vector3D decompose(const Vector3D *v1, const Vector3D *v2, const Vector3D *v3)const ;	//find coordinates of vector with basis of input vectors
+	Vector3D decompose(const Vector3D &v1, const Vector3D &v2, const Vector3D &v3)const ;	//find coordinates of vector with basis of input vectors
 	Vector3D pointOnLine(float frac) const;					//find the point on the line v a fraction frac of the length along line
 	Vector3D cart2sph(Vector3D *v);				//convert vector from cartesian to spherical coordinates(r,phi,theta)
 	Vector3D cart2angxyz();						//convert vector in cartesian to x,y,z angles
