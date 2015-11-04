@@ -83,6 +83,7 @@ bool Level::create(int index)
 		cameras.addPoint(Vector3D(0,0,5), Vector3D(0,0,0), Vector3D(0,1,0), 6);
             break;
         case 1:
+		cameras.addPoint(Vector3D(0,0,5), Vector3D(0,0,0), Vector3D(0,1,0), 6);
             addBlock(7.0f, .75f, 0.0f, -2.0f, tpGROUND, BLOCK1);//0
             addBlock(170.0f, 70.0f, -10.0f, -30.0f, tpGROUND, PORTLAND);//1
             addBlock(8.0f, 1.0f, 0.0f, 0.0f, tpGROUND, BLOCK1);//2
@@ -156,6 +157,14 @@ bool Level::create(int index)
                             water1a->isSolid = false;
                             water1a->inFront = true;
                         */
+
+		  //    addEnemy(1.5f, 2.25f,13.0f, 8.0f, MMX);
+		  //    addEnemy(1.75f, 2.75f,4.0f, -4.0f, GOKU);
+		  //    addEnemy(3.00f, 1.97f, 23.0f, 24.0f, SPIDEY);
+		  //    addEnemy(1.00f, 1.5f, 23.0f, 24.0f, TAILS);
+		  //    addEnemy(.70f, .70f, 12.0f, -24.0f, GOOMBA);
+			 addEnemy(.70f, .70f, 23.0f, -24.0f, GOOMBA);
+		  //    addEnemy(.70f, .70f, 34.0f, -24.0f, GOOMBA);
 
                         player1Start = Vector2D(0.0f, 4.0f);
                         //level.numtgas = 2;
@@ -580,7 +589,8 @@ void Level::draw()
     {
         ObjectPointer structure = getStructure(s);
         if(structure->active)
-            structure->drawRec();
+//            structure->drawRec();
+		   structure->drawCube();
 	}
     for(int p=0; p<numPlayers(); p++)
     {
@@ -727,54 +737,58 @@ void Level::fixSizes()
 
 Vector3D Level::setCam(Object* obj, GLfloat dt)
 {
-    CameraPoint* cam = &cameras.cpoints[cameras.currentPoint];
-    CameraPoint* nextcam;
-	Vector3D cam2cam, cam2obj, cam2look;
-	Vector3D pos, look, alongv, movepos;
-	Vector3D objpos;
-	GLfloat camdist, objvel, camRotate;
-	CameraView view = cameras.camview;
-
-	if(cameras.currentPoint == cameras.numPoints()-1)
+	Vector3D cam2look;
+	if(cameras.numPoints())
 	{
-		nextcam = cam;
+	    CameraPoint* cam = &cameras.cpoints[cameras.currentPoint];
+	    CameraPoint* nextcam;
+		Vector3D cam2cam, cam2obj;
+		Vector3D pos, look, alongv, movepos;
+		Vector3D objpos;
+		GLfloat camdist, objvel, camRotate;
+		CameraView view = cameras.camview;
+
+		if(cameras.currentPoint == cameras.numPoints()-1)
+		{
+			nextcam = cam;
+		}
+		else
+			nextcam = &cameras.cpoints[cameras.currentPoint+1];
+
+		objpos = obj->pos;
+		objvel = obj->vel.length();
+		cam2obj = objpos - cam->pos;
+
+		switch(view)
+		{
+			case DEBUGMODE:
+				glTranslatef(0.0f, 0.0f, -5.1f);
+	//			glPrint(3,10,"Debug Mode",1);
+				glTranslatef(0.0f, 0.0f,5.1f);
+			case FOLLOW:
+			  cam->look += (objpos - cam->pos)*CAMLOOKSPEED*dt;
+				cam->pos += ((objpos + Vector3D(0,0,cam->followDist)) - cam->pos)*CAMMOVESPEED*dt;	//need to work on z distance
+				break;
+			case LOCKED:
+				cam->look += (objpos - cam->pos)*CAMLOOKSPEED*dt;
+				break;
+			case CAMERAMODE:
+				glTranslatef(0.0f, 0.0f, -5.1f);
+	//			glPrint(3,4,"Camera Mode",1);
+				glTranslatef(0.0f, 0.0f,5.1f);
+				break;
+			default:
+				break;
+		}
+
+
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
+	//    glLoadIdentity();												// Reset The Current Modelview Matrix
+
+	//TODO	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
+	    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
+		cam2look = cam->look - cam->pos;
 	}
-	else
-		nextcam = &cameras.cpoints[cameras.currentPoint+1];
-
-	objpos = obj->pos;
-	objvel = obj->vel.length();
-	cam2obj = objpos - cam->pos;
-
-	switch(view)
-	{
-		case DEBUGMODE:
-			glTranslatef(0.0f, 0.0f, -5.1f);
-//			glPrint(3,10,"Debug Mode",1);
-			glTranslatef(0.0f, 0.0f,5.1f);
-		case FOLLOW:
-            cam->look += (objpos - cam->pos)*CAMLOOKSPEED*dt;
-			cam->pos += ((objpos + Vector3D(0,0,cam->followDist)) - cam->pos)*CAMMOVESPEED*dt;	//need to work on z distance
-			break;
-		case LOCKED:
-			cam->look += (objpos - cam->pos)*CAMLOOKSPEED*dt;
-			break;
-		case CAMERAMODE:
-			glTranslatef(0.0f, 0.0f, -5.1f);
-//			glPrint(3,4,"Camera Mode",1);
-			glTranslatef(0.0f, 0.0f,5.1f);
-			break;
-		default:
-			break;
-	}
-	
-	
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
-//    glLoadIdentity();												// Reset The Current Modelview Matrix
-
-//TODO	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
-    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
-	cam2look = cam->look - cam->pos;
 
 	return cam2look;
 }

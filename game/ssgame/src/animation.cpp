@@ -604,15 +604,17 @@ void doTextures()
     playerTextures[PETER].lastFrame = 30;
 
 	//GOOMBA
+    currentDir = characterImgDir + "goomba/";
     playerTextures[GOOMBA].person = GOOMBA;
     playerTextures[GOOMBA].jumpStrength = 0.0f;
-//	TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba1.tga", 0);
+	TGA_Texture(&playerTextures[GOOMBA], ":img/characters/goomba/goomba1.tga", 0);
 	
     playerTextures[GOOMBA].frameData[actRUN][animSTART] = 1;
     playerTextures[GOOMBA].frameData[actRUN][numFRAMES] = 2;
     playerTextures[GOOMBA].frameData[actRUN][repeatFRAME] = 1;
     playerTextures[GOOMBA].frameData[actRUN][animSPEED] = 50;
     playerTextures[GOOMBA].maxSpeed = 2.0f;
+    filenames = filenameList(currentDir, "goomba", 2, "tga");
 	/*TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba2.tga", 1);
     TGA_Texture(playerTextures[GOOMBA], "Data/img/characters/goomba/goomba1.tga", 2);*/
 	
