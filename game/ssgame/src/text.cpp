@@ -13,14 +13,14 @@ using std::string;
 GLuint	base;							// Base Display List For The Font Set
 GLfloat	cnt1;							// 1st Counter Used To Move Text & For Coloring
 GLfloat	cnt2;							// 2nd Counter Used To Move Text & For Coloring
-typedef int GLYPHMETRICSFLOAT;
+//typedef int GLYPHMETRICSFLOAT;
 GLYPHMETRICSFLOAT *gmf;
 
 GLuint NUMFONT = 4;
 GLuint NUMBMAPFONTS = 2;
 GLuint NUMOUTFONTS = NUMFONT - NUMBMAPFONTS;
 
-GLuint NUMFONTS = NUMFONT;
+//GLuint NUMFONTS = NUMFONT;
 
 GLuint fontTexture[1];
 
