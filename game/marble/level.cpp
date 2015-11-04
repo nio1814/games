@@ -55,7 +55,8 @@ bool Level::create(int index)
                 allObj.setColor(SPHERE, i, Vector3D(rand()%256, rand()%256, rand()%256) );
             }
 
-            ball = &allObj.spheres->objs[1];
+		  ball = &allObj.spheres->objs[1];
+//            ball = &allObj.spheres[1];
             //level1.player1 = ball;
             //ball->texture = balltxr;
 

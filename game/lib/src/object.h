@@ -289,8 +289,9 @@ class object_holder
 		void draw();
 	
 	//private:
-//		object_spheres* spheres;
-        QList<object_sphere> spheres;
+		QList<QPointer<Object> > objects;
+		object_spheres* spheres;
+//		QList<QPointer<object_sphere> > spheres;
 		object_planes* planes;
 		object_lines* lines;
 		//object_boxes* boxes;
