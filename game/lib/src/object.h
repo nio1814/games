@@ -110,8 +110,8 @@ public:
 	bool bVisible;
 	bool bMovable;								//object can move
 	
-	Object();
-	Object(float m);							// Constructor creates some masses with mass values m
+//	Object();
+    Object(float m=1);							// Constructor creates some masses with mass values m
 	~Object();
 	virtual void init();							// this method will call the init() method of every mass
 	virtual void solve()							// no implementation because no forces are wanted in this basic container

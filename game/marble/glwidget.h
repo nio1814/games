@@ -30,6 +30,9 @@ public slots:
     void process();
     void ProcessKeyboard();
 
+    void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
+    void mousePressEvent(QMouseEvent *);
 private:
     gameObj* game;
     Mouse* mos;

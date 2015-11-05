@@ -351,6 +351,7 @@ void Level::run3ds()
 
 void Level::draw()
 {
+    glLookAt(cameras->current().pos.toQVector3D(), ball->mass->pos.toQVector3D(), majAxis.toQVector3D());
 //    world3ds.Render_3ds();
     allObj.draw();
 

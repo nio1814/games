@@ -99,7 +99,7 @@ void Objects<T>::operate(const object_holder *allObjs)					// The complete proce
 
 
 //SINGLE OBJECT----------------------------
-Object::Object()
+Object::Object(float m)
 {
 	bMovable = false;
 	mass = new Mass(1);				// Create a Mass as a pointer and put it in the array
@@ -121,13 +121,6 @@ Object::Object()
 	isTouching3ds = false;
 }
 
-Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
-{
-//	Object();
-//	delete mass;
-	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
-}
-
 Object::~Object()
 {
 	delete mass;				// Create a Mass as a pointer and put it in the array
@@ -140,7 +133,7 @@ void Object::init()								// this method will call the init() method of every m
 	mass->init();						// call init() method of the mass
 	if(bGravityOn)
 	{
-		gravityVec = 
+//		gravityVec =
 		mass->force = gravityVec*mass->m;
 		mass->forcenew = mass->force;
 	}
@@ -986,6 +979,7 @@ void object_holder::run(GLfloat dt)
 	
 //	for(int s=0; s<spheres.size(); s++)
 //		spheres[s].simulate(dt);								// Step 3: iterate the masses by the change in time
+    spheres.simulate(dt);
 	lines.simulate(dt);
 	planes.simulate(dt);
 
@@ -994,11 +988,10 @@ void object_holder::run(GLfloat dt)
 
 void object_holder::draw()
 {
-	//spheres.draw();
-//	for(int s=0; s<spheres.size(); s++)
-//		spheres[s].draw();
+    spheres.draw();
 	planes.draw();
 	lines.draw();
+
 	return;
 }
 

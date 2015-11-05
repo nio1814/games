@@ -151,8 +151,8 @@ void gameObj::run(Mouse *ms, void (*commandFcn)(gameObj *, Mouse *), GLfloat del
 				gMode = gmPLAY;
 			break;
         case gmPLAY:
-            if(commandFcn!=NULL)
-                commandFcn(this, ms);
+//            if(commandFcn!=NULL)
+//                commandFcn(this, ms);
 //            levels[currentLevel].run(delta);
             currentLevel().run(delta);
             break;

@@ -36,16 +36,17 @@ class CameraPoints
 public:
 	int numPoints();
 
-	QList<CameraPoint> cpoints;
-	int currentPoint;
-	CameraView camview;
-
 	CameraPoints();
 	CameraPoints(Vector3D campos, Vector3D lookpos, Vector3D upin, GLfloat dist);
 
 	void addPoint(Vector3D campos, Vector3D lookpos, const Vector3D upin, GLfloat dist);
 	void cycleView();
 	void setLook(Vector3D newLook);
+    CameraPoint& current();
+
+    QList<CameraPoint> cpoints;
+    int currentPoint;
+    CameraView camview;
 };
 
 void setCam(CameraPoints* cpoints, Vector3D* objpos, CameraView view);

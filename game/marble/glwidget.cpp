@@ -171,7 +171,7 @@ void GLWidget::initializeObjects()
 	//currentgravity = 0;
 
 	game->addMenu("Marble Game");
-	game->addLevel(0);
+    game->addLevel(0);
 //    game->addLevel(1);
 //    game->addLevel(2);
 
@@ -458,14 +458,35 @@ void GLWidget::process()
 //	game->levels[0].allObj.run(.03);
     void (*commandFcn)(gameObj *, Mouse *);
     //commandFcn(game, mos);
-    game->run(mos, commandFcn, delta);
+    game->run(mos, commandFcn, delta*1e-3);
 
 	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));
 	zCam += zc;
 	zLook += zc;
 	gravityV = Vector3D(0,1,0)*currentgravity;
 
+    update();
+
 	return;
+}
+
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
+	return keyDown(event->key());
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+	return keyUp(event->key());
+}
+
+
+void GLWidget::mousePressEvent(QMouseEvent *event)
+{
+    mos->btnDown(event->button());
+
+    return;
 }
 
 /*GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window

@@ -39,3 +39,4 @@ public slots:
 };
 
 #endif // GLWIDGET_H
+

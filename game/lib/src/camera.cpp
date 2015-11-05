@@ -109,6 +109,11 @@ void CameraPoints::setLook(Vector3D newLook)
 	return;
 }
 
+CameraPoint& CameraPoints::current()
+{
+    return cpoints[currentPoint];
+}
+
 void setCam(CameraPoints* cameras, Vector3D* objpos, CameraView view)
 {
 	CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
