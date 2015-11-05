@@ -19,7 +19,6 @@
 #include <object.h>
 #include <gameobject.h>
 //#include <mass.h>
-//#include "vector3d.h
 //#include "motion.h"
 #include <constants.h>
 #include <keys.h>
@@ -420,7 +419,7 @@ void GLWidget::ProcessKeyboard()							// Process Keyboard Results
 	Vector3D forward, toleft;
 	forward = camToLook.unit();
 	forward.y = 0;
-	toleft = forward.rotate3D(&Y, 90);
+	toleft = forward.rotate3D(Y, 90);
 
     if (isKeys(Qt::Key_H))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
     if (isKeys(Qt::Key_K))		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
@@ -458,7 +457,7 @@ void GLWidget::process()
 	//game.levels[0].allObj.run(delta);
 //	game->levels[0].allObj.run(.03);
     void (*commandFcn)(gameObj *, Mouse *);
-    commandFcn(game, mos);
+    //commandFcn(game, mos);
     game->run(mos, commandFcn, delta);
 
 	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));

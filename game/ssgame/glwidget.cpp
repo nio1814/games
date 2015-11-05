@@ -17,25 +17,29 @@ GLWidget::GLWidget(QWidget *parent)
 {
     m_elapsed = 0;
     m_game = new Game();
-    m_game->addLevel(0);
+    m_game->addLevel(1);
 
     assignControls();
 }
 
 void GLWidget::initializeGL()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-//    glClearDepth(1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearDepth(1.0f);
 
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 
-//    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
     static GLfloat lightPosition[4] = {.5, 5, 7, 1};
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
     glEnable(GL_TEXTURE);
+
+    glBlendFunc(GL_SRC0_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 
     doTextures();
     m_game->level().initTextures();
@@ -54,7 +58,7 @@ void GLWidget::resizeGL(int w, int h)
     glLoadIdentity();							// Reset The Projection Matrix
 
     // Calculate The Aspect Ratio Of The Window
-//    qgluPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
+//    glPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
     m_projection.setToIdentity();
     m_projection.perspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
     m_aspectRatio = (qreal)w / (qreal)(h ? h : 1);

@@ -191,7 +191,7 @@ Vector3D Vector3D::proj(const Vector3D &v1, const Vector3D &v2) const
 	return (*this - this->proj(&normal)); 
 }
 
-Vector3D Vector3D::rotate3D(const Vector3D *vin, float angle) const
+Vector3D Vector3D::rotate3D(const Vector3D &vin, float angle) const
 {
 	Vector3D v, vout;
 	matrix2D3 T;
@@ -201,7 +201,7 @@ Vector3D Vector3D::rotate3D(const Vector3D *vin, float angle) const
 	angrad = angle*DEG2RAD;
 	cosang = cos(angrad);
 	sinang = sin(angrad);
-	v = vin->unit();
+	v = vin.unit();
 	if(v.length() < EPS)
 		T = matrix2D3(X, Y, Z);
 	else if(v == X)
@@ -231,8 +231,8 @@ Vector3D Vector3D::rotatePhiTheta(const Vector3D *majAxis, float phi, float thet
 	
 	if(*majAxis == Y)
 	{
-		vout = this->rotate3D(&X, theta);
-		vout = vout.rotate3D(&Y, phi);
+		vout = this->rotate3D(X, theta);
+		vout = vout.rotate3D(Y, phi);
 	}
 	//else
 	//		MessageBox(NULL,"Invalid Major Axis.","vector3d.cpp: rotatePhiTheta",MB_OK | MB_ICONINFORMATION);
@@ -241,15 +241,15 @@ Vector3D Vector3D::rotatePhiTheta(const Vector3D *majAxis, float phi, float thet
 }
 
 
-Vector3D Vector3D::decompose(const Vector3D *v1, const Vector3D *v2, const Vector3D *v3) const
+Vector3D Vector3D::decompose(const Vector3D &v1, const Vector3D &v2, const Vector3D &v3) const
 {
 	Vector3D temp, coords;
 	Vector3D xBase,yBase,zBase;
 	temp = *this;
 
-	xBase = v1->unit();
-	yBase = v2->unit();
-	zBase = v3->unit();
+	xBase = v1.unit();
+	yBase = v2.unit();
+	zBase = v3.unit();
 
 	coords.x = temp.dot(xBase);
 	temp -= temp.proj(&xBase);
@@ -294,14 +294,14 @@ Vector3D Vector3D::cart2angxyz()
 		angles.z = vxy.angle(&X);		//quadrants I,II
 	else
 		angles.z = 360 - angle(&X);	//quadrants III, IV
-	vxz = rotate3D(&Z, -angles.z);
+	vxz = rotate3D(Z, -angles.z);
 
 	//y ang
 	if(vxz.x >= 0)
 		angles.y = vxz.angle(&Z);		//quadrants I,II
 	else
 		angles.y = 360 - vxz.angle(&Z);	//quadrants III, IV
-	vyz = vxz.rotate3D(&Y, -angles.y);
+	vyz = vxz.rotate3D(Y, -angles.y);
 
 	//x ang
 	if(vyz.y <= 0)
@@ -316,9 +316,9 @@ Vector3D Vector3D::angxyz2cart()
 {
 	Vector3D v = Z;
 
-	v = v.rotate3D(&X, x);
-	v = v.rotate3D(&Y, y);
-	v = v.rotate3D(&Z, z);
+	v = v.rotate3D(X, x);
+	v = v.rotate3D(Y, y);
+	v = v.rotate3D(Z, z);
 
 	return v;
 }

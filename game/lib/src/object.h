@@ -15,6 +15,8 @@
 #include "camera.h"
 #include "datastructs.h"
 
+#include <qpointer.h>
+
 extern GLfloat dt;
 extern bool bGravityOn;
 extern Vector3D gravityDir;
@@ -65,7 +67,8 @@ class Objects
 public:
 	int numOfMasses;								// number of masses in this container
 	Shape objType; 
-	T *objs;
+//	QVector<QPointer<T> > objs;
+	QVector<T*> objs;
 	
 	Objects();
 	Objects(int numOfMasses, float m);			// Constructor creates some masses with mass values m
@@ -179,7 +182,7 @@ class object_plane : public Object
 {
 	public:
 	float width, length;
-	Vector3D *normal, *wvec, *lvec;
+	Vector3D normal, wvec, lvec;
 	Vector2D angles;									//(phi, theta)
 	bool touching;
 	
@@ -289,9 +292,11 @@ class object_holder
 		void draw();
 	
 	//private:
-		object_spheres* spheres;
-		object_planes* planes;
-		object_lines* lines;
+//		QList<QPointer<Object> > objects;
+		object_spheres spheres;
+//		QList<QPointer<object_sphere> > spheres;
+		object_planes planes;
+		object_lines lines;
 		//object_boxes* boxes;
 		pointerTree* tree;
 };

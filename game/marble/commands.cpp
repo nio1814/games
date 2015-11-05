@@ -47,14 +47,14 @@ void runKeys(Level* lvl, Mouse *ms)
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();
-		cam2look = cam2look.rotate3D(&lvl->majAxis, 1.0f);
+		cam2look = cam2look.rotate3D(lvl->majAxis, 1.0f);
 		cam->look = cam->pos + cam2look;
 	}
     if(isKeys(Qt::Key_Right))
 	{
 		cam2look =  cam->look - cam->pos;
 		cam2look.unitize();
-		cam2look = cam2look.rotate3D(&lvl->majAxis, -1.0f);
+		cam2look = cam2look.rotate3D(lvl->majAxis, -1.0f);
 		cam->look = cam->pos + cam2look;
 	}
 	
