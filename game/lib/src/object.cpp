@@ -121,12 +121,12 @@ Object::Object()
 	isTouching3ds = false;
 }
 
-Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
-{
-//	Object();
-//	delete mass;
-	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
-}
+//Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
+//{
+////	Object();
+////	delete mass;
+//	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
+//}
 
 Object::~Object()
 {
