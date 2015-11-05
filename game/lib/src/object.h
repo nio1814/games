@@ -270,7 +270,7 @@ class object_holder
 		~object_holder();
 		object_sphere* addSpheres(int numObjs, float mass, float radius, Vector3D basePos, Vector3D offsetDir);
 		object_sphere* addSpheres(float mass, float radius, Vector3D basePos);
-		object_plane* addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir, float distBetween);
+        object_plane* addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir=Vector3D(0,0,1), float distBetween=0);
 		object_plane* addPlanes(float mass, float wid, float len, float ph, float th, Vector3D basePos);
 		object_line* addLines(int numObjs, float mass, Vector3D v1, Vector3D v2, float cmf, Vector3D offsetDir, float offsetDist);
 		void setMass(Shape objType, int index, float mass);

@@ -11,6 +11,7 @@
 #include "vector3d.h"
 #include "mass.h"
 #include "texture.h"
+#include "sphere.h"
 
 GLfloat dt;										//time between rendering used to scale movement
 bool bGravityOn = false;
@@ -384,16 +385,17 @@ void object_sphere::draw()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);					// Set Blending Mode To Mix Based On SRC Alpha
 	//
 	//if(numTexture>0)
-	if(textureExists)
-	{
 		glEnable(GL_TEXTURE_GEN_S);							// Enable Sphere Mapping
 		glEnable(GL_TEXTURE_GEN_T);							// Enable Sphere Mapping
 
 //		gluSphere(quad, radius, 32, 16);					// Draw Another Sphere Using New Texture
 															// Textures Will Mix Creating A MultiTexture Effect (Reflection)
+
+        drawSphere(2);
+
 		glDisable(GL_TEXTURE_GEN_S);						// Disable Sphere Mapping
 		glDisable(GL_TEXTURE_GEN_T);						// Disable Sphere Mapping
-	}
+
 	//
 
 	glDisable(GL_BLEND);
@@ -548,6 +550,7 @@ void object_plane::draw()
 	glEnd();
 
 	glPopMatrix();
+    glTranslatef(-mass->pos.x, -mass->pos.y, -mass->pos.z);
 	glPopMatrix();
 	glDisable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
 }
@@ -988,7 +991,7 @@ void object_holder::run(GLfloat dt)
 
 void object_holder::draw()
 {
-    spheres.draw();
+//    spheres.draw();
 	planes.draw();
 	lines.draw();
 

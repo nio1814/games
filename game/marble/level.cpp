@@ -43,6 +43,7 @@ bool Level::create(int index)
     bool status = false;
     int numExtraSpheres = rand()%15;
 
+    GLfloat sqr3 = sqrtf(3.0f);
     switch(index)
     {
         case 0:
@@ -64,22 +65,120 @@ bool Level::create(int index)
             allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
 //			allObj.setTexture(PLANE, 0, tile1txr);
 
-            allObj.addPlanes(3,1,8,2,0,  Vector3D(-4,1,0));
+            allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-4,1,0));
             allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
+
+            allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
+            allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
+
+            allObj.setPos(PLANE, 3,  Vector3D(0,1,4));
+            allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
+            allObj.flipBase(PLANE, 3);
+
+            allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
+            allObj.setPos(PLANE, 4,  Vector3D(-3,1,-4));
+            allObj.setNormal(PLANE, 4, Vector3D(0,0,1));
+
+            allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
+            allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
+
+            allObj.addPlanes(1,1,4,10,0,  Vector3D(0,-.98f,-8.9f));
+            allObj.setNormal(PLANE, 6, Vector3D(0,1,-.2));
+            allObj.flipBase(PLANE, 6);
+    //        allObj.setTexture(PLANE, 6, wall1txr);
+
+            allObj.addPlanes(1,1,4,4,0,  Vector3D(0,-1.96f,-15.8f));
+    //        allObj.setTexture(PLANE, 7, wall1txr);
+
+            allObj.addPlanes(2,1,4,2,0,0,  Vector3D(0,-.96f,-17.8f));
+            allObj.setNormal(PLANE, 8, Vector3D(0,0,1));
+            allObj.flipBase(PLANE, 8);
+
+            allObj.setPos(PLANE, 9,  Vector3D(2,-.96f,-15.8f));
+            allObj.setNormal(PLANE, 9, Vector3D(-1,0,0));
+
+            allObj.addPlanes(1,1,4,20,0,  Vector3D(-11.8f,-3.92f,-15.8f));
+            allObj.setNormal(PLANE, 10, Vector3D(-.2f,1.0f,0.0f));
+            //level1.allObj.flipBase(PLANE, 10);
+    //        allObj.setTexture(PLANE, 10, wall1txr);
+
+            allObj.addPlanes(1,1,4,4,0,  Vector3D(-23.6f,-5.88f,-15.8f));
+            allObj.setNormal(PLANE, 11, Vector3D(0.0f, 1.0f, 0.0f));
+    //        allObj.setTexture(PLANE, 11, wall1txr);
+
+            allObj.addPlanes(10,1,4,1,0,0, Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f));
+            allObj.setNormal(PLANE, 12, Vector3D(1.0f, sqrt(3), 0.0f));
+            allObj.setPos(PLANE,13,  Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
+            allObj.setNormal(PLANE, 13, Vector3D(0.0f, sqr3, 1.0f));
+            allObj.flipBase(PLANE, 13);
+
+            allObj.setPos(PLANE,14,  Vector3D(-25.6f-sqr3/2-.25f, -5.38f+sqr3/4, -15.8f));
+            allObj.setNormal(PLANE, 14, Vector3D(sqrt(3), 1.0f, 0.0f));
+            allObj.setPos(PLANE,15,  Vector3D(-23.6f, -5.38f+sqr3/4, -17.8f-sqr3/2-.25f));
+            allObj.setNormal(PLANE, 15, Vector3D(0.0f, 1.0f, sqr3));
+            allObj.flipBase(PLANE, 15);
+
+            allObj.setPos(PLANE,16,  Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));
+            allObj.setNormal(PLANE, 16, Vector3D(1.0f, 0.0f, 0.0f));
+            allObj.setPos(PLANE,17,  Vector3D(-23.6f,-5.38f+sqr3/2+.5f,-17.8f-sqr3/2-.5f));
+            allObj.setNormal(PLANE, 17, Vector3D(0.0f, 0.0f, 1.0f));
+            allObj.flipBase(PLANE, 17);
+
+            allObj.setPos(PLANE,18,  Vector3D(-25.6f-sqr3/2-.25f, -4.38f+3*sqr3/4, -15.8f));
+            allObj.setNormal(PLANE, 18, Vector3D(-sqr3, 1.0f, 0.0f));
+            allObj.setPos(PLANE,19,  Vector3D(-23.6f, -4.38f+3*sqr3/4, -17.8f-sqr3/2-.25f));
+            allObj.setNormal(PLANE, 19, Vector3D(0.0f, -1.0f, sqr3));
+            allObj.flipBase(PLANE, 19);
+
+            allObj.setPos(PLANE,20,  Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
+            allObj.setNormal(PLANE, 20, Vector3D(1.0f, -sqr3, 0.0f));
+            allObj.setPos(PLANE,21,  Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
+            allObj.setNormal(PLANE, 21, Vector3D(0.0f, -sqr3, 1.0f));
+            allObj.flipBase(PLANE, 21);
+
+            allObj.addPlanes(1,1,4,10,0,  Vector3D(-23.6f,-6.86f,-8.9f));
+            allObj.setNormal(PLANE, 22, Vector3D(0,1,.2));
+            allObj.flipBase(PLANE, 22);
+    //        allObj.setTexture(PLANE, 22, wall1txr);
+
+            allObj.addPlanes(1,1,8,8,0,  Vector3D(-23.6f,-7.84f, 0.0f));
+    //        allObj.setTexture(PLANE, 23, tile1txr);
+
+            allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-27.6f,-6.84f,0.0f));
+            allObj.setNormal(PLANE, 24, Vector3D(1,0,0));
+
+            allObj.setPos(PLANE, 25,  Vector3D(-19.6f,-6.84f,0.0f));
+            allObj.setNormal(PLANE, 25, Vector3D(-1,0,0));
+
+            allObj.setPos(PLANE, 26,  Vector3D(-23.6f,-6.84f,4.0f));
+            allObj.setNormal(PLANE, 26, Vector3D(0,0,-1));
+            allObj.flipBase(PLANE, 26);
+
+            allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
+            allObj.setPos(PLANE, 27,  Vector3D(-20.6f,-6.84f,-4));
+            allObj.setNormal(PLANE, 27, Vector3D(0,0,1));
+
+            allObj.setPos(PLANE, 28,  Vector3D(-26.6f,-6.84f,-4));
+            allObj.setNormal(PLANE, 28, Vector3D(0,0,1));
+            allObj.flipBase(PLANE, 28);
+
+    //        floors = &allObj.planes->objs[0];
 
             cameras->addPoint(Vector3D(0, 4.6, 8), Vector3D(0, 0, 0), X, 10.0f);
             //level1.allObj.cameras->addPoint(Vector3D(xCam, 3.60f, -14.6f), Vector3D(-11.8f, -3.0f, -13.8f), 5.0f);
             cameras->addPoint(Vector3D(0, 3.60f, 0), Vector3D(0, 3.0f, -13.8f), Y, 10.0f);
+            majAxis = Z;
+
             status = true;
             break;
-        case 1:
+        case 2:
             cameras->addPoint(Vector3D(5,5,2), Vector3D(-5,0,3), Z, DEFFOLLOWDIST);
             cameras->camview = FIRST;
             loadmap(":Data/model/myschool3.3ds", 1.5f);
             majAxis = Z;
             status = true;
             break;
-        case 2:
+        case 3:
             loadmap(":Data/model/map1.3ds", 1.0f);
             cameras->addPoint(Vector3D(5,5,2),Vector3D(-5,0,3), Z, DEFFOLLOWDIST);
             cameras->camview = FIRST;

@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     ../lib/src/datastructs.cpp \
     ../lib/src/texturecode.cpp \
     ../lib/src/texture.cpp \
-    level.cpp
+    level.cpp \
+    ../lib/src/sphere.cpp
 
 HEADERS  += mainwindow.h \
     ../lib/src/gameobject.h \
@@ -52,7 +53,8 @@ HEADERS  += mainwindow.h \
     ../lib/src/datastructs.h \
     ../lib/src/texturecode.h \
     ../lib/src/texture.h \
-    level.h
+    level.h \
+    ../lib/src/sphere.h
 
 RESOURCES += \
     marble.qrc

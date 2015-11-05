@@ -26,6 +26,8 @@ protected:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
+signals:
+    void keyPressed();
 public slots:
     void process();
     void ProcessKeyboard();

@@ -175,103 +175,7 @@ void GLWidget::initializeObjects()
 //    game->addLevel(1);
 //    game->addLevel(2);
 
-	/*game.levels[0].allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
-	game.levels[0].allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
 
-	game.levels[0].allObj.setPos(PLANE, 3,  Vector3D(0,1,4));
-	game.levels[0].allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
-	game.levels[0].allObj.flipBase(PLANE, 3);
-
-	game.levels[0].allObj.addPlanes(2,1,2,2,0,  Vector3D(0,0,0));
-	game.levels[0].allObj.setPos(PLANE, 4,  Vector3D(-3,1,-4));
-	game.levels[0].allObj.setNormal(PLANE, 4, Vector3D(0,0,1));
-
-	game.levels[0].allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
-	game.levels[0].allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
-
-	game.levels[0].allObj.addPlanes(1,1,4,10,0,  Vector3D(0,-.98f,-8.9f));
-	game.levels[0].allObj.setNormal(PLANE, 6, Vector3D(0,1,-.2));
-	game.levels[0].allObj.flipBase(PLANE, 6);
-	game.levels[0].allObj.setTexture(PLANE, 6, wall1txr);
-
-	game.levels[0].allObj.addPlanes(1,1,4,4,0,  Vector3D(0,-1.96f,-15.8f));
-	game.levels[0].allObj.setTexture(PLANE, 7, wall1txr);
-
-	game.levels[0].allObj.addPlanes(2,1,4,2,0,  Vector3D(0,-.96f,-17.8f));
-	game.levels[0].allObj.setNormal(PLANE, 8, Vector3D(0,0,1));
-	game.levels[0].allObj.flipBase(PLANE, 8);
-
-	game.levels[0].allObj.setPos(PLANE, 9,  Vector3D(2,-.96f,-15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 9, Vector3D(-1,0,0));
-
-	game.levels[0].allObj.addPlanes(1,1,4,20,0,  Vector3D(-11.8f,-3.92f,-15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 10, Vector3D(-.2f,1.0f,0.0f));
-	//level1.allObj.flipBase(PLANE, 10);
-	game.levels[0].allObj.setTexture(PLANE, 10, wall1txr);
-
-	game.levels[0].allObj.addPlanes(1,1,4,4,0,  Vector3D(-23.6f,-5.88f,-15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 11, Vector3D(0.0f, 1.0f, 0.0f));
-	game.levels[0].allObj.setTexture(PLANE, 11, wall1txr);
-
-	GLfloat sqr3 = sqrt(3);
-	game.levels[0].allObj.addPlanes(10,1,4,1,0, Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 12, Vector3D(1.0f, sqrt(3), 0.0f));
-	game.levels[0].allObj.setPos(PLANE,13,  Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
-	game.levels[0].allObj.setNormal(PLANE, 13, Vector3D(0.0f, sqr3, 1.0f));
-	game.levels[0].allObj.flipBase(PLANE, 13);
-
-	game.levels[0].allObj.setPos(PLANE,14,  Vector3D(-25.6f-sqr3/2-.25f, -5.38f+sqr3/4, -15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 14, Vector3D(sqrt(3), 1.0f, 0.0f));
-	game.levels[0].allObj.setPos(PLANE,15,  Vector3D(-23.6f, -5.38f+sqr3/4, -17.8f-sqr3/2-.25f));
-	game.levels[0].allObj.setNormal(PLANE, 15, Vector3D(0.0f, 1.0f, sqr3));
-	game.levels[0].allObj.flipBase(PLANE, 15);
-
-	game.levels[0].allObj.setPos(PLANE,16,  Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 16, Vector3D(1.0f, 0.0f, 0.0f));
-	game.levels[0].allObj.setPos(PLANE,17,  Vector3D(-23.6f,-5.38f+sqr3/2+.5f,-17.8f-sqr3/2-.5f));
-	game.levels[0].allObj.setNormal(PLANE, 17, Vector3D(0.0f, 0.0f, 1.0f));
-	game.levels[0].allObj.flipBase(PLANE, 17);
-
-	game.levels[0].allObj.setPos(PLANE,18,  Vector3D(-25.6f-sqr3/2-.25f, -4.38f+3*sqr3/4, -15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 18, Vector3D(-sqr3, 1.0f, 0.0f));
-	game.levels[0].allObj.setPos(PLANE,19,  Vector3D(-23.6f, -4.38f+3*sqr3/4, -17.8f-sqr3/2-.25f));
-	game.levels[0].allObj.setNormal(PLANE, 19, Vector3D(0.0f, -1.0f, sqr3));
-	game.levels[0].allObj.flipBase(PLANE, 19);
-
-	game.levels[0].allObj.setPos(PLANE,20,  Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
-	game.levels[0].allObj.setNormal(PLANE, 20, Vector3D(1.0f, -sqr3, 0.0f));
-	game.levels[0].allObj.setPos(PLANE,21,  Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
-	game.levels[0].allObj.setNormal(PLANE, 21, Vector3D(0.0f, -sqr3, 1.0f));
-	game.levels[0].allObj.flipBase(PLANE, 21);
-
-	game.levels[0].allObj.addPlanes(1,1,4,10,0,  Vector3D(-23.6f,-6.86f,-8.9f));
-	game.levels[0].allObj.setNormal(PLANE, 22, Vector3D(0,1,.2));
-	game.levels[0].allObj.flipBase(PLANE, 22);
-	game.levels[0].allObj.setTexture(PLANE, 22, wall1txr);
-	
-	game.levels[0].allObj.addPlanes(1,1,8,8,0,  Vector3D(-23.6f,-7.84f, 0.0f));
-	game.levels[0].allObj.setTexture(PLANE, 23, tile1txr);
-
-	game.levels[0].allObj.addPlanes(3,1,8,2,0,  Vector3D(-27.6f,-6.84f,0.0f));
-	game.levels[0].allObj.setNormal(PLANE, 24, Vector3D(1,0,0));
-
-	game.levels[0].allObj.setPos(PLANE, 25,  Vector3D(-19.6f,-6.84f,0.0f));
-	game.levels[0].allObj.setNormal(PLANE, 25, Vector3D(-1,0,0));
-
-	game.levels[0].allObj.setPos(PLANE, 26,  Vector3D(-23.6f,-6.84f,4.0f));
-	game.levels[0].allObj.setNormal(PLANE, 26, Vector3D(0,0,-1));
-	game.levels[0].allObj.flipBase(PLANE, 26);
-
-	game.levels[0].allObj.addPlanes(2,1,2,2,0,  Vector3D(0,0,0));
-	game.levels[0].allObj.setPos(PLANE, 27,  Vector3D(-20.6f,-6.84f,-4));
-	game.levels[0].allObj.setNormal(PLANE, 27, Vector3D(0,0,1));
-
-	game.levels[0].allObj.setPos(PLANE, 28,  Vector3D(-26.6f,-6.84f,-4));
-	game.levels[0].allObj.setNormal(PLANE, 28, Vector3D(0,0,1));
-	game.levels[0].allObj.flipBase(PLANE, 28);
-
-	floors = &game.levels[0].allObj.planes->objs[0];
-*/
 	//level1.allObj.spheres->objs[1].texture[1] = texture[1];
 	//level1.allObj.spheres->objs[1].texture[2] = texture[2];
 	//ball->numTextures = 2;
@@ -458,7 +362,7 @@ void GLWidget::process()
 //	game->levels[0].allObj.run(.03);
     void (*commandFcn)(gameObj *, Mouse *);
     //commandFcn(game, mos);
-    game->run(mos, commandFcn, delta*1e-3);
+    game->run(mos, commandFcn, delta);
 
 	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));
 	zCam += zc;

@@ -17,6 +17,7 @@ const float DEFAULTINERTIA = 1;
 
 extern bool gravityON = false;
 extern float gravityMag = 9.81;
+//extern float gravityMag = 0;
 extern Vector3D gravityVec = Y*9.81;
 
 Mass::Mass(float m)								// Constructor
