@@ -30,8 +30,9 @@ GLWidget::GLWidget(QWidget *parent)
 //    Vector3D test2 = testin.rotate3D(&Vector3D(1,1,0), 90);
 
 //    joystick = new joystick_s;
-
+    bGravityOn = true;
     gravityON = true;
+    gravityVec = -Z;
 }
 
 GLWidget::~GLWidget()

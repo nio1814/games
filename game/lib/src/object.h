@@ -65,7 +65,7 @@ template <class T>
 class Objects
 {
 public:
-	int numOfMasses;								// number of masses in this container
+    int size() const;								// number of masses in this container
 	Shape objType; 
 //	QVector<QPointer<T> > objs;
 	QVector<T*> objs;
@@ -285,7 +285,7 @@ class object_holder
 		NodeClass<void*>* makeTree();
 		
 		object_sphere* getSphere(int index) const;
-		object_plane* getPlane(int index);
+        object_plane* getPlane(int index) const;
 		object_line* getLine(int index);
 
 		void run(GLfloat dt);

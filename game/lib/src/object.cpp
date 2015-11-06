@@ -22,7 +22,7 @@ Vector3D gravityDir;
 template <class T>
 Objects<T>::Objects()
 {
-	numOfMasses = 0;
+//	numOfMasses = 0;
 //	objs = NULL;
 }
 
@@ -30,7 +30,7 @@ template <class T>
 Objects<T>::Objects(int numOfMasses, float m)		// Constructor creates some masses with mass values m
 {
 	Objects();
-	this->numOfMasses = numOfMasses;
+//	this->numOfMasses = numOfMasses;
 
 	/*movable = false;
 	masses = new Mass*[numOfMasses];			// Create an array of pointers
@@ -98,6 +98,12 @@ void Objects<T>::operate(const object_holder *allObjs)					// The complete proce
 	return;
 }
 
+template <class T>
+int Objects<T>::size() const
+{
+    return objs.size();
+}
+
 
 //SINGLE OBJECT----------------------------
 Object::Object(float m)
@@ -141,7 +147,7 @@ void Object::init()								// this method will call the init() method of every m
 	mass->init();						// call init() method of the mass
 	if(bGravityOn)
 	{
-//		gravityVec =
+        gravityVec =
 		mass->force = gravityVec*mass->m;
 		mass->forcenew = mass->force;
 	}
@@ -163,6 +169,7 @@ void Object::operate(const object_holder *allObjs)					// The complete procedure
 	}
 	
 }
+
 
 /*bool Object::doCollisions(const object_holder *allObjs)
 {
@@ -254,12 +261,16 @@ bool Object::detectCollision(const object_holder* objs)
 	bool detect = false;
 	const object_sphere* spherePoint;
 	
-	for(int sidx = 0; sidx < objs->spheres.numOfMasses; sidx++)
+    for(int sidx = 0; sidx < objs->spheres.size(); sidx++)
 //    for(int sidx = 0; sidx < objs->spheres.size(); sidx++)
 	{
 		spherePoint = objs->getSphere(sidx);
 		detectCollision(objs->getSphere(sidx));
 	}
+
+    for(int p=0; p<objs->planes.size(); p++)
+        detectCollision(objs->getPlane(p));
+
 	return detect;
 	
 }
@@ -306,7 +317,7 @@ void object_spheres::addObjects(int numMass, float m, float radius, object_holde
 		object_sphere* sphere = objs.last();
 			sphere->self.index = objs.size();
 			sphere->self.holder = holder;
-			objs[numOfMasses]->self.shape = objType;
+            sphere->self.shape = objType;
 //			objs[numOfMasses]->mass->m = m;
 			sphere->mass->pos.x = basePos.x;
 			sphere->mass->pos.y = basePos.y;
@@ -320,7 +331,7 @@ void object_spheres::addObjects(int numMass, float m, float radius, object_holde
 
 void object_spheres::solve()													//gravitational force will be applied therefore we need a "solve" method.
 {
-	for (int a = 0; a < numOfMasses; ++a)								//we will apply force to all masses (actually we have 1 mass, but we can extend it in the future)
+    for (int a = 0; a < size(); ++a)								//we will apply force to all masses (actually we have 1 mass, but we can extend it in the future)
 	{
 		objs[a]->solve();
 	}
@@ -479,7 +490,7 @@ void object_planes::addObjects(int numMass, float m, float wid, float len, float
 //		{
 		objs.append(new object_plane(m, wid, len, ph, th, mAxis));
 		object_plane* plane = objs.last();
-			plane->self.index = numOfMasses;
+            plane->self.index = objs.size();
 			plane->self.holder = holder;
 			plane->self.shape = objType;
 //			objs[numOfMasses].mass->m = m;
@@ -680,7 +691,7 @@ void object_lines::addObjects(int numMass, float m, Vector3D v1, Vector3D v2, fl
 //		{
 		objs.append(new object_line(m, v1, v2, cmf));
 		object_line* line = objs.last();
-			line->self.index = numOfMasses;
+            line->self.index = size();
 			line->self.holder = holder;
 			line->self.shape = objType;
 //			objs[numOfMasses].mass->m = m;
@@ -714,6 +725,7 @@ object_line::object_line(float mass, Vector3D v1, Vector3D v2) : Object(mass)
 	vertex[1] = v2;
 	width = 15;
 	initGeo();
+    bMovable = true;
 }
 
 object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) : Object(mass)
@@ -723,6 +735,7 @@ object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) : Obje
 	vertex[0] = v1;
 	vertex[1] = v2;
 	initGeo();
+    bMovable = true;
 }
 
 void object_line::initGeo()
@@ -1097,19 +1110,19 @@ NodeClass<void*>* object_holder::makeTree()
 
 	tree = new pointerTree;
 
-	for(int s = 0; s<spheres.numOfMasses; s++)
+    for(int s = 0; s<spheres.size(); s++)
 //	for(int s = 0; s<spheres.size(); s++)
 	{
 		sprintf(numtext, "%i", s+1);
 		tree->addLeaf(spheres.objs[s], tpOBJECT, sphere + numtext);
 		//tree->addLeaf(&spheres[s], tpOBJECT, sphere + numtext);
 	}
-	for(int p = 0; p<planes.numOfMasses; p++)
+    for(int p = 0; p<planes.size(); p++)
 	{
 		sprintf(numtext, "%i", p+1);
 		tree->addLeaf(&planes.objs[p], tpOBJECT, plane + numtext);
 	}
-	for(int l = 0; l<lines.numOfMasses; l++)
+    for(int l = 0; l<lines.size(); l++)
 	{
 		sprintf(numtext, "%i", l+1);
 		tree->addLeaf(&lines.objs[l], tpOBJECT, line + numtext);
@@ -1124,7 +1137,7 @@ object_sphere* object_holder::getSphere(int index) const
 //    return &spheres[index];
 }
 
-object_plane* object_holder::getPlane(int index)
+object_plane* object_holder::getPlane(int index) const
 {
 	return planes.objs[index];
 }
