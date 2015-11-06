@@ -6,6 +6,8 @@
 #include "object.h"
 #include "3dsGT/3dsLoader.h"
 
+#include <qstring.h>
+
 class light_c;
 
 class Level

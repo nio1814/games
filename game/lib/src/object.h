@@ -15,7 +15,7 @@
 #include "camera.h"
 #include "datastructs.h"
 
-#include <qpointer.h>
+#include <qvector.h>
 
 extern GLfloat dt;
 extern bool bGravityOn;

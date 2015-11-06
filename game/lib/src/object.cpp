@@ -122,6 +122,13 @@ Object::Object(float m)
 	isTouching3ds = false;
 }
 
+//Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
+//{
+////	Object();
+////	delete mass;
+//	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
+//}
+
 Object::~Object()
 {
 	delete mass;				// Create a Mass as a pointer and put it in the array
@@ -991,7 +998,7 @@ void object_holder::run(GLfloat dt)
 
 void object_holder::draw()
 {
-//    spheres.draw();
+	spheres.draw();
 	planes.draw();
 	lines.draw();
 
