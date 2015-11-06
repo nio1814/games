@@ -2,6 +2,8 @@
 
 #include "glwidget.h"
 
+#include <qtimer.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -11,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 	centralWidget()->setFocus();
 	
     QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), gl, SLOT(animate()));
+    connect(timer, SIGNAL(timeout()), centralWidget(), SLOT(animate()));
     timer->start(50);
 }
 

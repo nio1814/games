@@ -1,20 +1,27 @@
 #include "glwidget.h"
 
 #include "qtgl.h"
+#include "simulation.h"
 
 GLWidget::GLWidget(QWidget *parent)
+#if (QT_VERSION >= 0x050500)
+        : QOpenGLWidget(parent)
+#else
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+#endif
 {
-    sim.allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
-    sim.allObj.addSpheres(1,1,Vector3D(0,0,5));
-    sim.allObj.spheres.objs[0]->mass->elas = .5f;
-    sim.allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1, -3, 2));
+    sim = new Simulation;
+
+    sim->allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
+    sim->allObj.addSpheres(1,1,Vector3D(0,0,5));
+    sim->allObj.spheres.objs[0]->mass->elas = .5f;
+    sim->allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1, -3, 2));
     //spacesim.allObj.addPlanes(1, 10, 10, 5, 0, 20, 0, 0, 2);
     //spacesim.allObj.addPlanes(1, 10, 10, 5, 0, 90, 0, -6, 2);
-    sim.cameras->addPoint(Vector3D(10, 0, 2), Vector3D(0, -.5, 2), Vector3D(0,0,1), 5.0f);
-    sim.cameras->camview = CAMERAMODE;
-    sim.allObj.makeTree();
-    sim.allObj.tree->ID = "holder";
+    sim->cameras->addPoint(Vector3D(10, 0, 2), Vector3D(0, -.5, 2), Vector3D(0,0,1), 5.0f);
+    sim->cameras->camview = CAMERAMODE;
+    sim->allObj.makeTree();
+    sim->allObj.tree->ID = "holder";
 
 //    Vector3D test = Vector3D(1,1,1);
 //    Vector3D testang = test.cart2angxyz();
@@ -29,7 +36,7 @@ GLWidget::GLWidget(QWidget *parent)
 
 GLWidget::~GLWidget()
 {
-
+    delete sim;
 }
 
 void GLWidget::initializeGL()
@@ -80,7 +87,10 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::paintGL()
 {
-    sim.draw();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    sim->draw();
 
     return;
 }
@@ -89,7 +99,7 @@ void GLWidget::animate()
 {
     int dt = qobject_cast<QTimer*>(sender())->interval();
 
-    sim.run(dt*1e-3);
+    sim->run(dt*1e-3);
 
     update();
 

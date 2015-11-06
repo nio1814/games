@@ -1,14 +1,19 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include "simulation.h"
+class Simulation;
 
+#if (QT_VERSION >= 0x050500)
+#include "qopenglwidget.h"
+class GLWidget : public QOpenGLWidget
+#else
 #include <QtOpenGL/QGLWidget>
 class GLWidget : public QGLWidget
+#endif
 {
-//    Q_OBJECT
+    Q_OBJECT
 public:
-    GLWidget(QWidget *parent);
+    GLWidget(QWidget *parent=0);
     ~GLWidget();
 protected:
     void initializeGL();
@@ -17,8 +22,7 @@ protected:
 public slots:
     void animate();
 private:
-    Simulation sim;
-
+    Simulation* sim;
 };
 
 #endif // GLWIDGET_H

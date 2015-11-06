@@ -7,7 +7,7 @@ class Simulation
 {
 public:
     Simulation();
-	Simulation(int num);
+//	Simulation(int num);
     ~Simulation();
 	
     void run(GLfloat dt);

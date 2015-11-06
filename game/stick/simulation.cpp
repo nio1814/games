@@ -59,7 +59,9 @@ Vector3D Simulation::setCam(Object* obj)
 	alongv = cam2obj.proj(&cam2cam)*.1f;
 	cam->movepos = cam->pos + alongv;*/
 	
-	GLfloat costime = .5f*cos(GetTickCount() * 0.001f)+.5f;
+    QTime clock;
+    int ms = clock.msec();
+    GLfloat costime = .5f*cos(ms * 0.001f)+.5f;
 	glColor3ub(142*costime, 26*costime, 256*costime);
 	switch(cameras->camview)
 	{
@@ -98,7 +100,7 @@ Vector3D Simulation::setCam(Object* obj)
 			cam2look = cam->look - cam->pos;
 			cam->pos = objpos;
 			//cam->pos += (objpos - cam->pos)*1.95f*delta;
-			if(isKeys(VK_LEFT))
+            if(isKeys(Qt::Key_Left))
 				camRotate = 100*delta;
             else if(isKeys(Qt::Key_Right))
 				camRotate = -100*delta;
@@ -110,7 +112,7 @@ Vector3D Simulation::setCam(Object* obj)
 			break;
 	}
 
-	gluLookAt(cam->pos.x, cam->pos.y, cam->pos.z, cam->look.x, cam->look.y, cam->look.z, cam->up.x, cam->up.y, cam->up.z);
+    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
 	cam2look = cam->look - cam->pos;
 
 	return cam2look;
