@@ -146,4 +146,6 @@ Vector3D char2vec3(char in);
 
 extern const Vector3D X,Y,Z;
 
+
+
 #endif
