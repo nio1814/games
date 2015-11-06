@@ -16,7 +16,6 @@ Simulation::~Simulation()
 
 void Simulation::run(GLfloat dt)
 {
-    setCam(allObj.planes.objs[0]);
 	if(!paused)
 		allObj.run(dt);
 
@@ -25,6 +24,7 @@ void Simulation::run(GLfloat dt)
 
 void Simulation::draw()
 {
+    setCam(allObj.planes.objs[0]);
     allObj.draw();
 }
 
