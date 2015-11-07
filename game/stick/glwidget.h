@@ -15,6 +15,8 @@ class GLWidget : public QGLWidget
 public:
     GLWidget(QWidget *parent=0);
     ~GLWidget();
+    QSize minimumSizeHint() const;
+    QSize sizeHint() const;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

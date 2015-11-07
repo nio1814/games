@@ -124,11 +124,21 @@ public:
 	}
 
 	virtual void simulate(float dt);				// Iterate the masses by the change in time
-	//virtual bool doCollisions(const object_holder *allObjs);
+
 	virtual void operate(const object_holder *allObjs);
 	virtual void* getProperty(int idx, dataType &type);
 	virtual bool detectCollision(const object_holder* objs);
 	virtual bool detectCollision(const object_sphere* obj2){return false;};
+	virtual bool detectCollision(const object_plane* plane){return false;};
+	virtual bool detectCollision(const object_line* line){return false;};
+
+	virtual void collisions();
+	virtual void collide(const Object* otherObject){};
+	virtual void collide(const object_sphere* sphere){};
+	virtual void collide(const object_plane* plane){};
+	virtual void collide(const object_line* line){};
+
+	QVector<const Object*> m_touchedObjects;
 };
 
 
@@ -159,7 +169,10 @@ public:
 	virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
 	virtual void draw();
 	virtual bool detectCollision(const object_sphere* obj2);
+	virtual bool detectCollision(const object_plane* plane);
 	//virtual bool doCollisions(const object_holder *allObjs);
+	virtual void collide(const object_sphere *sphere2);
+	virtual void collide(const object_plane *plane);
 };
 
 
@@ -180,14 +193,14 @@ class object_planes : public Objects<object_plane>
 //Single Plane--------------------------------------------------------
 class object_plane : public Object
 {
-	public:
+public:
 	float width, length;
 	Vector3D normal, wvec, lvec;
 	Vector2D angles;									//(phi, theta)
 	bool touching;
 	
-	object_plane();
-	object_plane(float mass, float wid, float len, float phi, float theta, Vector3D mAxis);
+//	object_plane();
+	object_plane(float mass=1, float wid=1, float len=1, float phi=0, float theta=0, Vector3D mAxis=Z);
 	virtual void draw();
 	//virtual bool doCollisions(const object_holder *allObjs);
 	//make length and width vectors by rotating from major axis
@@ -286,7 +299,7 @@ class object_holder
 		
 		object_sphere* getSphere(int index) const;
         object_plane* getPlane(int index) const;
-		object_line* getLine(int index);
+		object_line* getLine(int index) const;
 
 		void run(GLfloat dt);
 		void draw();

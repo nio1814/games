@@ -98,6 +98,30 @@ void Objects<T>::operate(const object_holder *allObjs)					// The complete proce
 	return;
 }
 
+void Object::collisions()
+{
+	for(int n=0; n<m_touchedObjects.size(); n++)
+	{
+		const Object* touchedObj = m_touchedObjects[n];
+		switch(touchedObj->objType)
+		{
+			case SPHERE:
+				collide(static_cast<const object_sphere*>(m_touchedObjects[n]));
+				break;
+			case PLANE:
+				collide(static_cast<const object_plane*>(m_touchedObjects[n]));
+				break;
+		}
+	}
+/*        if(point.shape == SPHERE)
+			collide(this, &allObjs->spheres->objs[point.index]);
+		else if(point.shape == PLANE)
+			collide(this, &allObjs->planes->objs[point.index]);*/
+
+
+	return;
+}
+
 template <class T>
 int Objects<T>::size() const
 {
@@ -144,11 +168,11 @@ Object::~Object()
 
 void Object::init()								// this method will call the init() method of every mass
 {
+	m_touchedObjects.clear();
 	mass->init();						// call init() method of the mass
 	if(bGravityOn)
 	{
-        gravityVec =
-		mass->force = gravityVec*mass->m;
+		gravityVec = mass->force = gravityVec*mass->m;
 		mass->forcenew = mass->force;
 	}
 }
@@ -164,8 +188,8 @@ void Object::operate(const object_holder *allObjs)					// The complete procedure
 	{
 		init();										// Step 1: reset forces to zero(and do gravity)
 		detectCollision(allObjs);
-		//doCollisions(allObjs);
-		solve();									// Step 2: apply forces
+		collisions();
+		solve();								// Step 2: apply forces
 	}
 	
 }
@@ -270,6 +294,8 @@ bool Object::detectCollision(const object_holder* objs)
 
     for(int p=0; p<objs->planes.size(); p++)
         detectCollision(objs->getPlane(p));
+	for(int l=0; l<objs->lines.size(); l++)
+		detectCollision(objs->getLine(l));
 
 	return detect;
 	
@@ -440,12 +466,42 @@ bool object_sphere::detectCollision(const object_sphere* obj2)
 		if(dist < (radius + obj2->radius))
 		{
 			detect = true;
+			m_touchedObjects.append(obj2);
 			//p.index = sidx;
 			//p.shape = SPHERE;
 			//p.holder = allobj;
 		}
 	}
 	
+	return detect;
+}
+
+bool object_sphere::detectCollision(const object_plane *plane)
+{
+	bool detect = false;
+
+	Vector3D vecToPlane = mass->pos - plane->mass->pos;
+	GLfloat normDist = fabs(vecToPlane.dot(plane->normal));
+					//normToPlane = normToPlane.length();
+
+	if(normDist <= radius)
+	{
+	   GLfloat wDist = fabs(vecToPlane.dot(plane->wvec));
+		if(wDist<=.5f*plane->width)
+		{
+			GLfloat lDist = fabs(vecToPlane.dot(plane->lvec));
+			if(lDist<=.5f*plane->length)
+			{
+				detect = true;
+				m_touchedObjects.append(plane);
+//                p.index = pidx;
+//                p.shape = plane->objType;
+//                p.holder = allobj;
+				//p.holder = reinterpret_cast<object_holder*>(allobj);
+			}
+		}
+	}
+
 	return detect;
 }
 
@@ -467,6 +523,92 @@ bool object_sphere::detectCollision(const object_sphere* obj2)
 
 	return detect;
 }*/
+
+void object_sphere::collide(const object_sphere *sphere2)
+{
+	Mass *mass1, *mass2;
+	GLfloat m1, m2, v1normMag;
+	Vector3D v1, v2, sphereNorm;
+	Vector3D sforce = mass->force;
+
+	mass1 = mass;
+	mass2 = sphere2->mass;
+
+	m1 = mass1->m;
+	m2 = mass2->m;
+	v1 = mass1->vel;
+	v2 = mass2->vel;
+	v1normMag = fabs(v1.dot(&sphereNorm));
+	sphereNorm = (mass1->pos - mass2->pos);
+	sphereNorm/sphereNorm.length();
+
+	if(sphere2->bMovable)
+		v1 = v1*((m1-m2)/(m1+m2)) + v2*(2*m2/(m1+m2));
+	else
+		v1 += sphereNorm*(mass1->elas)*v1normMag*2;
+
+//	s1->xrotspeed = v1.dot(&Vector3D(1,0,0));
+	mass1->avelnew = v1.dot(&Vector3D(1,0,0));
+//	s1->yrotspeed = v1.dot(&Vector3D(0,1,0));
+	mass1->avelnew += v1.dot(&Vector3D(0,1,0));
+	//s1->zrotspeed = v1.dot(&Vector3D(0,0,1));
+
+	mass1->velnew = v1;
+	mass = mass1;
+	sforce += sphereNorm*(fabs(sphereNorm.dot(&sforce)));
+	mass->forcenew = sforce;
+
+	return;
+}
+
+void object_sphere::collide(const object_plane *plane)
+{
+	GLfloat MINBOUNCEVEL = .1f;
+
+	Mass *mass1, *mass2;
+	GLfloat m1, m2, v1normMag;
+	Vector3D v1, v2, vpara, planeNorm;
+	int awayDir;
+
+	Vector3D sforce = mass->force;
+
+	mass1 = mass;
+	mass2 = plane->mass;
+
+	m1 = mass1->m;
+	m2 = mass2->m;
+	v1 = mass1->vel;
+	v2 = mass2->vel;
+
+	if(plane->isAbove(&mass->pos))
+		planeNorm = plane->normal;
+	else
+		planeNorm = plane->normal*-1;
+	v1normMag = fabs(v1.dot(&planeNorm));
+
+	if(fabs(v1.length()) < MINBOUNCEVEL)
+		v1 -= v1;
+	else if(plane->bMovable)
+		v1 = v1*((m1-m2)/(m1+m2)) + v2*(2*m2/(m1+m2));
+	else
+		v1 += planeNorm*(1+mass1->elas)*v1normMag;
+
+	mass1->velnew = v1;
+	mass = mass1;
+	sforce += planeNorm*(fabs(planeNorm.dot(&sforce)));
+	mass->forcenew = sforce;
+
+	mass->pos += planeNorm*(radius - planeNorm.dot(mass1->pos-mass2->pos));
+
+	vpara = v1 - v1.proj(&Y);
+
+//	sphere->xrotspeed = vpara.dot(&Vector3D(0,0,1))/(sphere->radius*2*PI);
+	mass->avelnew = vpara.dot(&Vector3D(0,0,1))/(radius*2*PI);
+//	sphere->zrotspeed = vpara.dot(&Vector3D(-1,0,0))/(sphere->radius*2*PI);
+	mass->avelnew += vpara.dot(&Vector3D(-1,0,0))/(radius*2*PI);
+
+	return;
+}
 
 //PLANE CONTAINER---------------------------
 object_planes::object_planes() : Objects<object_plane>()
@@ -510,24 +652,11 @@ void object_planes::addObjects(int numMass, float m, float wid, float len, float
 
 
 //SINGLE PLANE----------------------------
-object_plane::object_plane() : Object()
+object_plane::object_plane(float mass, float wid, float len, float phi, float theta, Vector3D mAxis) : Object(mass),
+  width(wid), length(len), angles(Vector2D(phi, theta))
 {
+//	object_plane();
 	objType = PLANE;
-	width = length = 1.0f;
-	angles = Vector2D(0,0);
-	normal = Vector3D(0,1,0);
-	lvec = Vector3D(1,0,0);
-	wvec = Vector3D(0,0,1);
-	moveForce = Vector3D(0,0,0);
-}
-
-object_plane::object_plane(float mass, float wid, float len, float phi, float theta, Vector3D mAxis) : Object(mass)
-{
-	Object();
-	object_plane();
-	width = wid;
-	length = len;
-	angles = Vector2D(phi, theta);
 	makeBase(&mAxis);
 }
 
@@ -1140,6 +1269,11 @@ object_sphere* object_holder::getSphere(int index) const
 object_plane* object_holder::getPlane(int index) const
 {
 	return planes.objs[index];
+}
+
+object_line* object_holder::getLine(int index) const
+{
+	return lines.objs[index];
 }
 
 //FUNCTION DEFINITIONS

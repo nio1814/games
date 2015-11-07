@@ -40,6 +40,16 @@ GLWidget::~GLWidget()
     delete sim;
 }
 
+QSize GLWidget::minimumSizeHint() const
+{
+    return QSize(50, 50);
+}
+
+QSize GLWidget::sizeHint() const
+{
+    return QSize(600, 400);
+}
+
 void GLWidget::initializeGL()
 {
     glEnable(GL_BLEND);									// Enable Blending       (disable alpha testing)
