@@ -96,7 +96,7 @@ Vector3D Simulation::setCam(Object* obj)
 			break;
 		case FIRST:
 //			glPrintHead(3,3,"First Person",15);
-			cam->look += (objpos.proj(&majAxis) - cam->look.proj(&majAxis))*.95f*delta;
+			cam->look += (objpos.proj(majAxis) - cam->look.proj(majAxis))*.95f*delta;
 			cam2look = cam->look - cam->pos;
 			cam->pos = objpos;
 			//cam->pos += (objpos - cam->pos)*1.95f*delta;

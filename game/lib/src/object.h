@@ -162,8 +162,7 @@ public:
 	float radius;
 //	GLUquadricObj	*quad;						// Quadratic For Drawing A Sphere
 
-	object_sphere();
-	object_sphere(float mass, float radius);
+	object_sphere(float mass=1, float radius=1);
 	~object_sphere();
 	
 	virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
@@ -252,9 +251,9 @@ public:
 	Vector3D normal, lvec;
 	Vector2D anglesSph;										//spherical angles(phi, theta)
 	
-	object_line();
-	object_line(float mass, Vector3D v1, Vector3D v2);			//input mass and 2 vertices
-	object_line(float mass, Vector3D v1, Vector3D v2, float cmf);			//input mass and 2 vertices and 
+//	object_line();
+//	object_line(float mass, Vector3D v1, Vector3D v2);			//input mass and 2 vertices
+	object_line(float mass=1, Vector3D v1=Vector3D(0,0,0), Vector3D v2=Z, float cmf=.5);			//input mass and 2 vertices and
 	virtual void draw();
 	virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
 	//virtual bool doCollisions(const object_holder *allObjs);
@@ -262,6 +261,11 @@ public:
 	void initGeo();
 	void calcGeo();
 	Vector3D calcVertexVel(int vnum);
+
+	virtual void collide(const object_plane* plane, const Vector3D &contactPoint, const Vector3D &contactNormal);
+
+	QList<Vector3D> contactPoints;
+	QList<Vector3D> contactNormals;
 };
 
 //Single Triangle

@@ -15,10 +15,10 @@ GLWidget::GLWidget(QWidget *parent)
     sim->allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
     sim->allObj.addSpheres(1,1,Vector3D(0,0,5));
     sim->allObj.spheres.objs[0]->mass->elas = .5f;
-    sim->allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1, -3, 2));
-    //spacesim.allObj.addPlanes(1, 10, 10, 5, 0, 20, 0, 0, 2);
-    //spacesim.allObj.addPlanes(1, 10, 10, 5, 0, 90, 0, -6, 2);
-    sim->cameras->addPoint(Vector3D(10, 0, 2), Vector3D(0, -.5, 2), Vector3D(0,0,1), 5.0f);
+	sim->allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1,-3,2));
+	sim->allObj.addPlanes(1, 10, 10, 5, 0, 20, Vector3D(0,5,-5));
+	sim->allObj.addPlanes(1, 10, 10, 25, 0, 0, Vector3D(0,-6,-7));
+	sim->cameras->addPoint(Vector3D(20, 0, 0), Vector3D(0,-.5,2), Vector3D(0,0,1), 5.0f);
     sim->cameras->camview = CAMERAMODE;
     sim->allObj.makeTree();
     sim->allObj.tree->ID = "holder";
@@ -32,7 +32,7 @@ GLWidget::GLWidget(QWidget *parent)
 //    joystick = new joystick_s;
     bGravityOn = true;
     gravityON = true;
-    gravityVec = -Z;
+	gravityVec = Z*-2;
 }
 
 GLWidget::~GLWidget()

@@ -173,11 +173,11 @@ float Vector3D::angle(const Vector3D *v)								// length() returns the length o
 	return ang;
 }
 
-Vector3D Vector3D::proj(const Vector3D *v) const
+Vector3D Vector3D::proj(const Vector3D& v) const
 {
 	Vector3D projV, onto;
 	
-	onto = v->unit();
+	onto = v.unit();
 	projV = onto*(this->dot(onto));
 
 	return projV;
@@ -188,7 +188,7 @@ Vector3D Vector3D::proj(const Vector3D &v1, const Vector3D &v2) const
 	Vector3D normal, inPlane;
 
 	normal = Cross(v1, v2).unit();
-	return (*this - this->proj(&normal)); 
+	return (*this - this->proj(normal));
 }
 
 Vector3D Vector3D::rotate3D(const Vector3D &vin, float angle) const
@@ -252,9 +252,9 @@ Vector3D Vector3D::decompose(const Vector3D &v1, const Vector3D &v2, const Vecto
 	zBase = v3.unit();
 
 	coords.x = temp.dot(xBase);
-	temp -= temp.proj(&xBase);
+	temp -= temp.proj(xBase);
 	coords.y = temp.dot(yBase);
-	temp -= temp.proj(&yBase);
+	temp -= temp.proj(yBase);
 	coords.z = temp.dot(zBase);
 
 	return coords;

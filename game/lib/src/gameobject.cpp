@@ -175,7 +175,6 @@ void gameObj::render()
         default:
             break;
     }
-    currentLevel().draw();
 }
 	
 bool gameObj::addMenu(char* mTitle)

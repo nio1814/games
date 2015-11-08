@@ -42,6 +42,7 @@ bool Level::create(int index)
 {
     bool status = false;
     int numExtraSpheres = rand()%15;
+	numExtraSpheres = 0;
 
     GLfloat sqr3 = sqrtf(3.0f);
     switch(index)
@@ -61,11 +62,11 @@ bool Level::create(int index)
             //level1.player1 = ball;
             //ball->texture = balltxr;
 
-            allObj.addPlanes(1,1,8,8,0,  Vector3D(0,0,0));
+			allObj.addPlanes(1,8,8,0,0,  Vector3D(0,0,0));
             allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
 //			allObj.setTexture(PLANE, 0, tile1txr);
 
-            allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-4,1,0));
+			allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-4,1,0));
             allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
 
             allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
@@ -75,19 +76,19 @@ bool Level::create(int index)
             allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
             allObj.flipBase(PLANE, 3);
 
-            allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
+			allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
             allObj.setPos(PLANE, 4,  Vector3D(-3,1,-4));
             allObj.setNormal(PLANE, 4, Vector3D(0,0,1));
 
             allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
             allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
 
-            allObj.addPlanes(1,1,4,10,0,  Vector3D(0,-.98f,-8.9f));
+			allObj.addPlanes(1,4,10,0,0,  Vector3D(0,-.98f,-8.9f));
             allObj.setNormal(PLANE, 6, Vector3D(0,1,-.2));
             allObj.flipBase(PLANE, 6);
     //        allObj.setTexture(PLANE, 6, wall1txr);
 
-            allObj.addPlanes(1,1,4,4,0,  Vector3D(0,-1.96f,-15.8f));
+			allObj.addPlanes(1,4,4,0,0,  Vector3D(0,-1.96f,-15.8f));
     //        allObj.setTexture(PLANE, 7, wall1txr);
 
             allObj.addPlanes(2,1,4,2,0,0,  Vector3D(0,-.96f,-17.8f));
@@ -97,12 +98,12 @@ bool Level::create(int index)
             allObj.setPos(PLANE, 9,  Vector3D(2,-.96f,-15.8f));
             allObj.setNormal(PLANE, 9, Vector3D(-1,0,0));
 
-            allObj.addPlanes(1,1,4,20,0,  Vector3D(-11.8f,-3.92f,-15.8f));
+			allObj.addPlanes(1,4,20,0,0,  Vector3D(-11.8f,-3.92f,-15.8f));
             allObj.setNormal(PLANE, 10, Vector3D(-.2f,1.0f,0.0f));
             //level1.allObj.flipBase(PLANE, 10);
     //        allObj.setTexture(PLANE, 10, wall1txr);
 
-            allObj.addPlanes(1,1,4,4,0,  Vector3D(-23.6f,-5.88f,-15.8f));
+			allObj.addPlanes(1,4,4,0,0,  Vector3D(-23.6f,-5.88f,-15.8f));
             allObj.setNormal(PLANE, 11, Vector3D(0.0f, 1.0f, 0.0f));
     //        allObj.setTexture(PLANE, 11, wall1txr);
 
@@ -136,12 +137,12 @@ bool Level::create(int index)
             allObj.setNormal(PLANE, 21, Vector3D(0.0f, -sqr3, 1.0f));
             allObj.flipBase(PLANE, 21);
 
-            allObj.addPlanes(1,1,4,10,0,  Vector3D(-23.6f,-6.86f,-8.9f));
+			allObj.addPlanes(1,4,10,0,0,  Vector3D(-23.6f,-6.86f,-8.9f));
             allObj.setNormal(PLANE, 22, Vector3D(0,1,.2));
             allObj.flipBase(PLANE, 22);
     //        allObj.setTexture(PLANE, 22, wall1txr);
 
-            allObj.addPlanes(1,1,8,8,0,  Vector3D(-23.6f,-7.84f, 0.0f));
+			allObj.addPlanes(1,8,8,0,0,  Vector3D(-23.6f,-7.84f, 0.0f));
     //        allObj.setTexture(PLANE, 23, tile1txr);
 
             allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-27.6f,-6.84f,0.0f));
@@ -160,14 +161,14 @@ bool Level::create(int index)
 
             allObj.setPos(PLANE, 28,  Vector3D(-26.6f,-6.84f,-4));
             allObj.setNormal(PLANE, 28, Vector3D(0,0,1));
-            allObj.flipBase(PLANE, 28);
+			allObj.flipBase(PLANE, 28);
 
     //        floors = &allObj.planes->objs[0];
 
             cameras->addPoint(Vector3D(0, 4.6, 8), Vector3D(0, 0, 0), X, 10.0f);
             //level1.allObj.cameras->addPoint(Vector3D(xCam, 3.60f, -14.6f), Vector3D(-11.8f, -3.0f, -13.8f), 5.0f);
             cameras->addPoint(Vector3D(0, 3.60f, 0), Vector3D(0, 3.0f, -13.8f), Y, 10.0f);
-            majAxis = Z;
+			majAxis = Y;
 
             status = true;
             break;
@@ -297,7 +298,7 @@ Vector3D Level::setCam(Vector3D* pos)
     }
     else if(cameras->camview == FIRST)
     {
-        cam->look += (pos->proj(&majAxis) - cam->look.proj(&majAxis))*.95f*delta;
+		cam->look += (pos->proj(majAxis) - cam->look.proj(majAxis))*.95f*delta;
         cam2look = cam->look - cam->pos;
         cam->pos = *pos;
 
@@ -421,6 +422,7 @@ void Level::run(GLfloat dt)
         sprintf(timetext, "%.2f", timer);
     }
 
+//	gravityVec = majAxis*-1;
     updateCam();
     run3ds();
     allObj.run(dt);

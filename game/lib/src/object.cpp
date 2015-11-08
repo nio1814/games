@@ -172,7 +172,8 @@ void Object::init()								// this method will call the init() method of every m
 	mass->init();						// call init() method of the mass
 	if(bGravityOn)
 	{
-		gravityVec = mass->force = gravityVec*mass->m;
+//		gravityVec =
+		mass->force = gravityVec*mass->m;
 		mass->forcenew = mass->force;
 	}
 }
@@ -365,23 +366,10 @@ void object_spheres::solve()													//gravitational force will be applied t
 
 
 //SINGLE SPHERE----------------------------------------------
-object_sphere::object_sphere() : Object()
+object_sphere::object_sphere(float mass, float rad) : Object(mass),
+  radius(rad)
 {
 	objType = SPHERE;
-	radius = 1;
-    /*quad = gluNewQuadric();								// Create A New Quadratic
-	gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
-    gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
-	bMovable = true;
-}
-
-object_sphere::object_sphere(float mass, float rad) : Object(mass)
-{
-	objType = SPHERE;
-	radius = rad;
-    /*quad = gluNewQuadric();								// Create A New Quadratic
-	gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
-    gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
 	bMovable = true;
 }
 
@@ -580,10 +568,12 @@ void object_sphere::collide(const object_plane *plane)
 	v1 = mass1->vel;
 	v2 = mass2->vel;
 
-	if(plane->isAbove(&mass->pos))
+	/*if(plane->isAbove(&mass->pos))
 		planeNorm = plane->normal;
 	else
-		planeNorm = plane->normal*-1;
+		planeNorm = plane->normal*-1;*/
+	planeNorm = (mass1->pos - mass2->pos).proj(plane->normal);
+	planeNorm.unitize();
 	v1normMag = fabs(v1.dot(&planeNorm));
 
 	if(fabs(v1.length()) < MINBOUNCEVEL)
@@ -600,7 +590,7 @@ void object_sphere::collide(const object_plane *plane)
 
 	mass->pos += planeNorm*(radius - planeNorm.dot(mass1->pos-mass2->pos));
 
-	vpara = v1 - v1.proj(&Y);
+	vpara = v1 - v1.proj(Y);
 
 //	sphere->xrotspeed = vpara.dot(&Vector3D(0,0,1))/(sphere->radius*2*PI);
 	mass->avelnew = vpara.dot(&Vector3D(0,0,1))/(radius*2*PI);
@@ -835,21 +825,22 @@ void object_lines::addObjects(int numMass, float m, Vector3D v1, Vector3D v2, fl
 
 
 //SINGLE LINE----------------------------- 
-object_line::object_line() : Object()
-{
-	objType = LINE;
-	vertex[0] = Vector3D(0,0,0);
-	vertex[1] = Vector3D(1,0,0);
-	comf = .5f;
-	moveForce = Vector3D(0,0,0);
-	bMovable = true;
-	initGeo();
-}
+//object_line::object_line() : Object()
+//{
+//	objType = LINE;
+//	vertex[0] = Vector3D(0,0,0);
+//	vertex[1] = Vector3D(1,0,0);
+//	comf = .5f;
+//	moveForce = Vector3D(0,0,0);
+//	bMovable = true;
+//	initGeo();
+//}
 
-object_line::object_line(float mass, Vector3D v1, Vector3D v2) : Object(mass)
+object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) : Object(mass)
 {
-	Object();
-	object_line();
+//	Object();
+//	object_line();
+	objType = LINE;
 	vertex[0] = v1;
 	vertex[1] = v2;
 	width = 15;
@@ -857,21 +848,21 @@ object_line::object_line(float mass, Vector3D v1, Vector3D v2) : Object(mass)
     bMovable = true;
 }
 
-object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) : Object(mass)
-{
-	Object();
-	object_line();
-	vertex[0] = v1;
-	vertex[1] = v2;
-	initGeo();
-    bMovable = true;
-}
+//object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) : Object(mass)
+//{
+//	Object();
+//	object_line();
+//	vertex[0] = v1;
+//	vertex[1] = v2;
+//	initGeo();
+//    bMovable = true;
+//}
 
 void object_line::initGeo()
 {
 	lvec = (vertex[1] - vertex[0]).unit();
 	length = (vertex[1] - vertex[0]).length();
-	normal = Z - Z.proj(&lvec);							//make normal vector starting from Z
+	normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 	
 	mass->pos = vertex[0] + (vertex[1] - vertex[0]) * comf;
 	mass->I = mass->m*pow(length,2)/12.0f;
@@ -883,7 +874,7 @@ void object_line::calcGeo()
 	lvec = lvec.rotate3D(mass->axis, mass->dtheta);
 	vertex[0] = mass->pos - (lvec*length*comf);
 	vertex[1] = mass->pos + (lvec*length*(1-comf));
-	normal = Z - Z.proj(&lvec);							//make normal vector starting from Z
+	normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
 	return;
 }
@@ -936,6 +927,44 @@ void object_line::draw()
 
 	return detect;
 }*/
+
+void object_line::collide(const object_plane* plane, const Vector3D& contactPoint, const Vector3D& contactNormal)
+{
+	Vector3D t;						//lever arm and torque
+	Vector3D rComP, rpp;			//vector to contact point
+	Vector3D vLine1, vLine2; 			//linear and angular velocities
+	GLfloat wLine1, wLine2;
+	Vector3D vp1, vp2;			//linear and angular velocities
+	GLfloat wp1, wp2;
+	Vector3D vcp;
+	GLfloat rLine, rp;						//distance of com to cp
+	GLfloat mLine, mPlane, ILine, IPlane;
+	GLfloat j;
+	Vector3D rotateAxis;
+
+	mLine = mass->m;
+	ILine = mass->I;
+	vLine1 = mass->vel;
+	wLine1 = mass->avel;
+
+	rComP = contactPoint - mass->pos;
+	rLine = rComP.length();
+	rotateAxis = Cross(rComP, contactNormal);
+
+	vcp = vLine1 + Cross(rComP, mass->axis)*wLine1;
+
+	j = (-(1 + mass->elas)*(vLine1.dot(contactNormal))/(1/mLine + Cross(rComP,contactNormal).dot(Cross(rComP,contactNormal))/ILine));
+
+	vLine2 = vLine1 + contactNormal*j/mLine;
+	wLine2 = (mass->axis*wLine1 + rotateAxis*Cross(rComP,(contactNormal*j)).length()/ILine).length();
+
+	mass->velnew = vLine2;
+	mass->avelnew = wLine2;
+	//lobj->mass->torquenew += Cross(&rpLine, &cn);
+	mass->axis = (mass->axis*wLine1 + rotateAxis*wLine2).unit();
+
+	return;
+}
 
 void* object_line::getProperty(int idx, dataType &type)
 {

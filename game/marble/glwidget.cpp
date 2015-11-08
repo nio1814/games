@@ -183,7 +183,7 @@ void GLWidget::initializeObjects()
 	//level1.allObj.planes->objs[23].texture[0] = texture[0];
 
 	bGravityOn = true;
-	gravityDir = -Z;
+	gravityDir = -Y;
 
 //	ball = game->levels[game->currentLevel].ball;
     ball = game->currentLevel().ball;
