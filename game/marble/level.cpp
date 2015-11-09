@@ -45,6 +45,9 @@ bool Level::create(int index)
 	numExtraSpheres = 0;
 
     GLfloat sqr3 = sqrtf(3.0f);
+    object_plane plane;
+	matrix2D3 basis;
+
     switch(index)
     {
         case 0:
@@ -62,36 +65,59 @@ bool Level::create(int index)
             //level1.player1 = ball;
             //ball->texture = balltxr;
 
-			allObj.addPlanes(1,8,8,0,0,  Vector3D(0,0,0));
-            allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
+//          allObj.majorAxis = Y;
+
+		  basis.A[0] = X;
+		  basis.A[1] = Z;
+		  basis.A[2] = Y;
+		  allObj.m_basis = basis;
+
+            allObj.addPlanes(1,1,8,8,0,0,  Vector3D(0,0,0));
+//            allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
 //			allObj.setTexture(PLANE, 0, tile1txr);
+//            allObj.addPlanes(3,1,8,2,0,0, Vector3D(-4,1,0));
+//            allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
+			plane = object_plane(2,8,Vector3D(-4,1,0),X,basis);
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-4,1,0));
-            allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
+            plane.mass->pos = Vector3D(4,1,0);
+//            allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
+//            allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
-            allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
+//            allObj.setPos(PLANE, 3,  Vector3D(0,1,4));
+            plane.setPosition(Vector3D(0,1,4));
+//            allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
+            plane.rotate(Y,90);
+//            allObj.flipBase(PLANE, 3);
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 3,  Vector3D(0,1,4));
-            allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
-            allObj.flipBase(PLANE, 3);
+//			allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
+//            allObj.setPos(PLANE, 4,  Vector3D(-3,1,-4));
+//            allObj.setNormal(PLANE, 4, Vector3D(0,0,1));
+			plane = object_plane(2,2,Vector3D(-3,1,-4), Z, basis);
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
-            allObj.setPos(PLANE, 4,  Vector3D(-3,1,-4));
-            allObj.setNormal(PLANE, 4, Vector3D(0,0,1));
+//			allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
+//            allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
+			plane.setPosition(Vector3D(3,1,-4));
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
-            allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
-
-			allObj.addPlanes(1,4,10,0,0,  Vector3D(0,-.98f,-8.9f));
-            allObj.setNormal(PLANE, 6, Vector3D(0,1,-.2));
-            allObj.flipBase(PLANE, 6);
+//			allObj.addPlanes(1,4,10,0,0,  Vector3D(0,-.98f,-8.9f));
+//            allObj.setNormal(PLANE, 6, Vector3D(0,1,-.2));
+//            allObj.flipBase(PLANE, 6);
     //        allObj.setTexture(PLANE, 6, wall1txr);
+			plane = object_plane(1,4,10,0,0,Vector3D(0,1,-.2));
+			plane.setPosition(Vector3D(0,-.98f,-8.9f));
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(1,4,4,0,0,  Vector3D(0,-1.96f,-15.8f));
+//			allObj.addPlanes(1,4,4,0,0,  Vector3D(0,-1.96f,-15.8f));
     //        allObj.setTexture(PLANE, 7, wall1txr);
+			plane = object_plane(1,4,4,0,0,Y);
+			plane.setPosition(Vector3D(0,-1.96f,-15.8f));
+			allObj.addPlane(plane);
 
-            allObj.addPlanes(2,1,4,2,0,0,  Vector3D(0,-.96f,-17.8f));
+			/*allObj.addPlanes(2,1,4,2,0,0,  Vector3D(0,-.96f,-17.8f));
             allObj.setNormal(PLANE, 8, Vector3D(0,0,1));
             allObj.flipBase(PLANE, 8);
 
@@ -161,7 +187,7 @@ bool Level::create(int index)
 
             allObj.setPos(PLANE, 28,  Vector3D(-26.6f,-6.84f,-4));
             allObj.setNormal(PLANE, 28, Vector3D(0,0,1));
-			allObj.flipBase(PLANE, 28);
+            allObj.flipBase(PLANE, 28);*/
 
     //        floors = &allObj.planes->objs[0];
 
@@ -422,7 +448,8 @@ void Level::run(GLfloat dt)
         sprintf(timetext, "%.2f", timer);
     }
 
-//	gravityVec = majAxis*-1;
+    gravityVec = majAxis*-1;
+//    gravityVec = majAxis*0;
     updateCam();
     run3ds();
     allObj.run(dt);

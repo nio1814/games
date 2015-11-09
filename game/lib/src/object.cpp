@@ -18,6 +18,7 @@ bool bGravityOn = false;
 GLfloat gravityAcc = 9.8f;
 Vector3D gravityDir;
 
+
 //Object Container--------------------------------
 template <class T>
 Objects<T>::Objects()
@@ -60,6 +61,14 @@ void Objects<T>::init()								// this method will call the init() method of eve
 //	for (int a = 0; a < numOfMasses; ++a)		// We will init() every mass
 	for(int a=0; a<objs.size(); a++)
 		objs[a]->mass->init();						// call init() method of the mass
+}
+
+template <class T>
+T* Objects<T>::addObject(const T &obj)
+{
+    objs.append(new T(obj));
+
+    return objs.last();
 }
 
 template <class T>
@@ -130,26 +139,29 @@ int Objects<T>::size() const
 
 
 //SINGLE OBJECT----------------------------
-Object::Object(float m)
+Object::Object(float m) : mass(new Mass(1)), texture(NULL), isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
 {
 	bMovable = false;
-	mass = new Mass(1);				// Create a Mass as a pointer and put it in the array
-	touches = new objP[MAXTOUCHES];
-	touches2[PLANE] = new object_plane*[MAXTOUCHES];
-	touches2[SPHERE] = new object_sphere*[MAXTOUCHES];
-	touches2[LINE] = new object_line*[MAXTOUCHES];
-	touches2[BOX] = new object_box*[MAXTOUCHES];
-	totalTouches = 0;
-	for(int i=0;i<NUMSHAPES;i++)
-		numTouches[i] = 0;
+	m_basis.A[0] = X;
+	m_basis.A[1] = Y;
+	m_basis.A[2] = Z;
+                // Create a Mass as a pointer and put it in the array
+//    touches = new objP[MAXTOUCHES];
+//	touches2[PLANE] = new object_plane*[MAXTOUCHES];
+//	touches2[SPHERE] = new object_sphere*[MAXTOUCHES];
+//	touches2[LINE] = new object_line*[MAXTOUCHES];
+//	touches2[BOX] = new object_box*[MAXTOUCHES];
+//	totalTouches = 0;
+//	for(int i=0;i<NUMSHAPES;i++)
+//		numTouches[i] = 0;
 //	texture = &nullTexture;
-	texture = NULL;
-	bDraw = true;
-	bDetect = true;
+//	;
+//    ;
+//    ;
 	bCollide = true;
 	bVisible = true;
-	isTouching = false;
-	isTouching3ds = false;
+//    ;
+//	;
 }
 
 //Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
@@ -159,10 +171,43 @@ Object::Object(float m)
 //	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
 //}
 
+Object::Object(const Object &obj)
+{
+    *this = obj;
+}
+
+Object& Object::operator = (const Object& obj)
+{
+    mass = new Mass(*obj.mass);									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
+    objType = obj.objType;
+    texture = obj.texture;
+    moveForce = obj.moveForce;							//force acting on object
+    isTouching = obj.isTouching;							//object is touching something
+    touchObj = obj.touchObj;
+    isTouching3ds = obj.isTouching3ds;
+    touchObj3ds = obj.touchObj3ds;
+    self = obj.self;									//pointer to this object
+//    memcpy(touches, obj.touches, MAXTOUCHES*sizeof(objP));
+    //touches2[NUMSHAPES];
+//    memcpy(touches2, obj.touches2, MAXTOUCHES*sizeof(Shape));
+//    totalTouches = obj.totalTouches;
+    //numTouches[NUMSHAPES];
+    bDraw = obj.bDraw;
+    bDetect = obj.bDetect;
+    bCollide = obj.bCollide;
+    bVisible = obj.bVisible;
+    bMovable = obj.bMovable;
+
+    m_touchedObjects.clear();
+    m_touchedObjects << obj.m_touchedObjects;
+
+    return *this;
+}
+
 Object::~Object()
 {
 	delete mass;				// Create a Mass as a pointer and put it in the array
-	delete touches;
+//	delete touches;
 //	delete texture;
 }
 
@@ -259,7 +304,7 @@ void* Object::getProperty(int idx, dataType &type)
 		type = tpOBJP;
 		break;
 	case 10:
-		ptr = touches;
+//		ptr = touches;
 		type = tpOBJP;
 		break;
 	case 11:
@@ -279,6 +324,11 @@ void* Object::getProperty(int idx, dataType &type)
 	}
 
 	return ptr;
+}
+
+void Object::setPosition(Vector3D position)
+{
+    mass->pos = position;
 }
 
 bool Object::detectCollision(const object_holder* objs)
@@ -650,6 +700,27 @@ object_plane::object_plane(float mass, float wid, float len, float phi, float th
 	makeBase(&mAxis);
 }
 
+object_plane::object_plane(float width, float length, Vector3D position, Vector3D norm, matrix2D3 basis) : Object(1),
+	width(width), length(length), normal(norm)//, m_basis(basis)
+{
+	mass->pos = position;
+	m_basis = basis;
+}
+
+object_plane& object_plane::operator = (const object_plane& plane)
+{
+    Object::operator =(plane);
+
+    width = plane.width;
+    length = plane.length;
+    normal = plane.normal;
+    wvec = plane.wvec;
+    lvec = plane.lvec;
+    angles = plane.angles;
+
+    return *this;
+}
+
 void object_plane::draw()
 {
 	Vector3D v;							//keeps coords of vertex for drawing
@@ -711,7 +782,7 @@ void object_plane::makeBase(const Vector3D* mAxis)
 	}
 	else
 		//msgbox('incorrect major axis');
-		;
+		wvec =
 
 	normal = Cross(wvec, lvec);
 
@@ -743,6 +814,14 @@ void object_plane::flipBase()
 
 	return detect;
 }*/
+void object_plane::rotate(const Vector3D &axis, GLfloat degrees)
+{
+    normal.rotate3D(axis, degrees);
+    wvec.rotate3D(axis, degrees);
+    lvec.rotate3D(axis, degrees);
+
+    return;
+}
 
 bool object_plane::inPlane(const Vector3D *v)
 {
@@ -1118,6 +1197,11 @@ object_sphere* object_holder::addSpheres(float mass, float radius, Vector3D base
 	numObjects++;
 	
 	return sphereout;
+}
+
+object_plane* object_holder::addPlane(const object_plane &plane)
+{
+    planes.addObject(plane);
 }
 
 object_plane* object_holder::addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir, float distBetween)

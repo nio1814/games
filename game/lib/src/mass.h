@@ -19,6 +19,9 @@ extern Vector3D gravityVec;
 class Mass
 {
 public:
+    Mass(const Mass& mass);
+    Mass& operator = (const Mass& mass);
+
 	float m;									// The mass value
 	float elas;
 	Vector3D dir;								// direction of mass
@@ -30,6 +33,7 @@ public:
 	float avel, avelnew;						//angular velocity
 	float torque, torquenew;
 	Vector3D axis;								//axis of rotation
+
 	Mass(float m);								// Constructor
 
 	/*
@@ -51,8 +55,7 @@ public:
 	  simple. It is suitable for most of physical simulations that we know in common 
 	  computer and video games.
 	*/
-	void simulate(float dt);
-
+	void simulate(float dt);	
 };
 
 #endif

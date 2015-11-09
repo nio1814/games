@@ -74,6 +74,7 @@ public:
 	Objects(int numOfMasses, float m);			// Constructor creates some masses with mass values m
 	
 	//virtual void addObject(int numOfMasses, float m);
+    virtual T* addObject(const T& obj);
 	virtual void release();							// delete the masses created
 	virtual void init();							// this method will call the init() method of every mass
 	virtual void solve()							// no implementation because no forces are wanted in this basic container
@@ -91,6 +92,8 @@ public:
 class Object
 {
 public:
+    void setPosition(Vector3D position);
+
 	Mass* mass;									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
 	Shape objType; 
 	texture_s* texture;
@@ -100,10 +103,10 @@ public:
 	bool isTouching3ds;
 	objP3ds touchObj3ds;
 	objP self;									//pointer to this object
-	objP *touches;								//other objects this object is touching
-	void* touches2[NUMSHAPES];
-	int totalTouches;
-	int numTouches[NUMSHAPES];
+//	objP *touches;								//other objects this object is touching
+//	void* touches2[NUMSHAPES];
+//	int totalTouches;
+//	int numTouches[NUMSHAPES];
 	bool bDraw;
 	bool bDetect;
 	bool bCollide;
@@ -112,7 +115,11 @@ public:
 	
 //	Object();
     Object(float m=1);							// Constructor creates some masses with mass values m
+    Object(const Object& obj);
 	~Object();
+
+    Object& operator= (const Object& obj);
+
 	virtual void init();							// this method will call the init() method of every mass
 	virtual void solve()							// no implementation because no forces are wanted in this basic container
 	{
@@ -124,6 +131,8 @@ public:
 	}
 
 	virtual void simulate(float dt);				// Iterate the masses by the change in time
+
+    virtual void rotate(Vector3D axis, GLfloat degrees){};
 
 	virtual void operate(const object_holder *allObjs);
 	virtual void* getProperty(int idx, dataType &type);
@@ -138,6 +147,7 @@ public:
 	virtual void collide(const object_plane* plane){};
 	virtual void collide(const object_line* line){};
 
+	matrix2D3 m_basis;
 	QVector<const Object*> m_touchedObjects;
 };
 
@@ -196,15 +206,21 @@ public:
 	float width, length;
 	Vector3D normal, wvec, lvec;
 	Vector2D angles;									//(phi, theta)
-	bool touching;
+//	bool touching;
 	
 //	object_plane();
-	object_plane(float mass=1, float wid=1, float len=1, float phi=0, float theta=0, Vector3D mAxis=Z);
+    object_plane(float mass=1, float wid=1, float len=1, float phi=0, float theta=0, Vector3D mAxis=Z);
+	object_plane(float width, float length, Vector3D position, Vector3D normal=Z, Vector3D basisAxis=Z);
+	object_plane(float width, float length, Vector3D position, Vector3D normal, matrix2D3 basis);
+
+    object_plane& operator = (const object_plane& plane);
+
 	virtual void draw();
 	//virtual bool doCollisions(const object_holder *allObjs);
 	//make length and width vectors by rotating from major axis
 	void makeBase(const Vector3D* mAxis);
 	void flipBase();
+    void rotate(const Vector3D& axis, GLfloat degrees);
 	bool inPlane(const Vector3D *v);
 	bool atSurface(const Vector3D *v);
 	bool isAbove(const Vector3D *v) const;
@@ -287,6 +303,7 @@ class object_holder
 		~object_holder();
 		object_sphere* addSpheres(int numObjs, float mass, float radius, Vector3D basePos, Vector3D offsetDir);
 		object_sphere* addSpheres(float mass, float radius, Vector3D basePos);
+        object_plane* addPlane(const object_plane& plane);
         object_plane* addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir=Vector3D(0,0,1), float distBetween=0);
 		object_plane* addPlanes(float mass, float wid, float len, float ph, float th, Vector3D basePos);
         object_line* addLines(int numObjs, float mass, Vector3D v1, Vector3D v2, float cmf, Vector3D offsetDir=Z, float offsetDist=0.0f);
@@ -316,6 +333,8 @@ class object_holder
 		object_lines lines;
 		//object_boxes* boxes;
 		pointerTree* tree;
+
+		matrix2D3 m_basis;
 };
 
 bool detectCollision(Object *obj, const object_holder *allobj, objP &p);

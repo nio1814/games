@@ -31,6 +31,33 @@ Mass::Mass(float m)								// Constructor
 	torque = torquenew = 0.0f;
 }
 
+Mass::Mass(const Mass &mass)
+{
+    *this = mass;
+}
+
+Mass& Mass::operator= (const Mass& mass)
+{
+    m = mass.m;
+    elas = mass.elas;
+    dir = mass.dir;								// direction of mass
+    pos = mass.pos;
+    posnew = mass.posnew;
+    dpos = mass.dpos;
+    vel = mass.vel;
+    velnew = mass.velnew;						// Velocity
+    force = mass.force;
+    forcenew = mass.forcenew;					// Force applied on this mass at an instance
+    I = mass.I;									//momment of inertia
+    theta = mass.theta;
+    dtheta = mass.dtheta;						//angle of mass
+    avel = mass.avel;
+    avelnew = mass.avelnew;						//angular velocity
+    torque = mass.torque;
+    torquenew = mass.torquenew;
+
+    return *this;
+}
 
 void Mass::applyForce(Vector3D force)
 {
