@@ -18,7 +18,6 @@ bool bGravityOn = false;
 GLfloat gravityAcc = 9.8f;
 Vector3D gravityDir;
 
-
 //Object Container--------------------------------
 template <class T>
 Objects<T>::Objects()
@@ -107,30 +106,6 @@ void Objects<T>::operate(const object_holder *allObjs)					// The complete proce
 	return;
 }
 
-void Object::collisions()
-{
-	for(int n=0; n<m_touchedObjects.size(); n++)
-	{
-		const Object* touchedObj = m_touchedObjects[n];
-		switch(touchedObj->objType)
-		{
-			case SPHERE:
-				collide(static_cast<const object_sphere*>(m_touchedObjects[n]));
-				break;
-			case PLANE:
-				collide(static_cast<const object_plane*>(m_touchedObjects[n]));
-				break;
-		}
-	}
-/*        if(point.shape == SPHERE)
-			collide(this, &allObjs->spheres->objs[point.index]);
-		else if(point.shape == PLANE)
-			collide(this, &allObjs->planes->objs[point.index]);*/
-
-
-	return;
-}
-
 template <class T>
 int Objects<T>::size() const
 {
@@ -139,29 +114,12 @@ int Objects<T>::size() const
 
 
 //SINGLE OBJECT----------------------------
-Object::Object(float m) : mass(new Mass(1)), texture(NULL), isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
+Object::Object(float m)
 {
 	bMovable = false;
 	m_basis.A[0] = X;
 	m_basis.A[1] = Y;
 	m_basis.A[2] = Z;
-                // Create a Mass as a pointer and put it in the array
-//    touches = new objP[MAXTOUCHES];
-//	touches2[PLANE] = new object_plane*[MAXTOUCHES];
-//	touches2[SPHERE] = new object_sphere*[MAXTOUCHES];
-//	touches2[LINE] = new object_line*[MAXTOUCHES];
-//	touches2[BOX] = new object_box*[MAXTOUCHES];
-//	totalTouches = 0;
-//	for(int i=0;i<NUMSHAPES;i++)
-//		numTouches[i] = 0;
-//	texture = &nullTexture;
-//	;
-//    ;
-//    ;
-	bCollide = true;
-	bVisible = true;
-//    ;
-//	;
 }
 
 //Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
@@ -217,7 +175,7 @@ void Object::init()								// this method will call the init() method of every m
 	mass->init();						// call init() method of the mass
 	if(bGravityOn)
 	{
-//		gravityVec =
+//        gravityVec =
 		mass->force = gravityVec*mass->m;
 		mass->forcenew = mass->force;
 	}
@@ -235,7 +193,7 @@ void Object::operate(const object_holder *allObjs)					// The complete procedure
 		init();										// Step 1: reset forces to zero(and do gravity)
 		detectCollision(allObjs);
 		collisions();
-		solve();								// Step 2: apply forces
+		solve();									// Step 2: apply forces
 	}
 	
 }
@@ -417,9 +375,12 @@ void object_spheres::solve()													//gravitational force will be applied t
 
 //SINGLE SPHERE----------------------------------------------
 object_sphere::object_sphere(float mass, float rad) : Object(mass),
-  radius(rad)
+	radius(rad)
 {
 	objType = SPHERE;
+    /*quad = gluNewQuadric();								// Create A New Quadratic
+	gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
+    gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
 	bMovable = true;
 }
 
@@ -782,7 +743,7 @@ void object_plane::makeBase(const Vector3D* mAxis)
 	}
 	else
 		//msgbox('incorrect major axis');
-		wvec =
+		;
 
 	normal = Cross(wvec, lvec);
 
@@ -814,6 +775,7 @@ void object_plane::flipBase()
 
 	return detect;
 }*/
+
 void object_plane::rotate(const Vector3D &axis, GLfloat degrees)
 {
     normal.rotate3D(axis, degrees);
