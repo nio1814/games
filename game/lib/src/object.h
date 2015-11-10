@@ -220,6 +220,7 @@ public:
 	//make length and width vectors by rotating from major axis
 	void makeBase(const Vector3D* mAxis);
 	void flipBase();
+	void orient(const Vector3D& norm);
     void rotate(const Vector3D& axis, GLfloat degrees);
 	bool inPlane(const Vector3D *v);
 	bool atSurface(const Vector3D *v);

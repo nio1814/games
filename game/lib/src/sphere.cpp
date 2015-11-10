@@ -20,9 +20,9 @@ static GLint tindices[20][3] = {
 void drawtriangle(float *v1, float *v2, float *v3)
 {
    glBegin(GL_POLYGON);
-      glNormal3fv(v1); glVertex3fv(v1);
-      glNormal3fv(v2); glVertex3fv(v2);
-      glNormal3fv(v3); glVertex3fv(v3);
+	  glNormal3fv(v1); glVertex3fv(v1);
+	  glNormal3fv(v2); glVertex3fv(v2);
+	  glNormal3fv(v3); glVertex3fv(v3);
    glEnd();
 }
 
@@ -64,9 +64,9 @@ void drawSphere(int subDivisions)
 {
     for (int i = 0; i < 20; i++)
     {
-        subdivide(&vdata[tindices[i][0]][0],
-                  &vdata[tindices[i][1]][0],
-        &vdata[tindices[i][2]][0],
-              subDivisions);
+		subdivide(&vdata[tindices[i][0]][0],
+				  &vdata[tindices[i][1]][0],
+		&vdata[tindices[i][2]][0],
+			  subDivisions);
     }
 }

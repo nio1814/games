@@ -84,6 +84,8 @@ GLWidget::GLWidget(QWidget *parent)
 	game = new gameObj();
 	mos = new Mouse(WindowSize.x,WindowSize.y);
 	initializeObjects();
+
+	connect(this, SIGNAL(keyPressed()), this, SLOT(processKeyboard()));
 }
 
 GLWidget::~GLWidget()
@@ -318,10 +320,11 @@ game.levels[levelnum].allObj.draw();
     return;
 }
 
-void GLWidget::ProcessKeyboard()							// Process Keyboard Results
+void GLWidget::processKeyboard()							// Process Keyboard Results
 {
 	Vector3D forward, toleft;
-	forward = camToLook.unit();
+//	forward = camToLook.unit();
+	forward = (ball->mass->pos - game->currentLevel().cameras->current().pos).unit();
 	forward.y = 0;
 	toleft = forward.rotate3D(Y, 90);
 
@@ -364,10 +367,13 @@ void GLWidget::process()
     //commandFcn(game, mos);
     game->run(mos, commandFcn, delta);
 
+	processKeyboard();
+
 	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));
 	zCam += zc;
 	zLook += zc;
 	gravityV = Vector3D(0,1,0)*currentgravity;
+
 
     update();
 
@@ -378,6 +384,9 @@ void GLWidget::process()
 void GLWidget::keyPressEvent(QKeyEvent *event)
 {
 	return keyDown(event->key());
+//	emit keyPressed();
+
+	return;
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)

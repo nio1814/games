@@ -79,7 +79,7 @@ public:
 	float length() const;								// length() returns the length of this Vector3D		   		
 	float dot(const Vector3D *v) const;						//calculate dot product
 	float dot(Vector3D v) const;						//calculate dot product
-	float angle(const Vector3D *v);					//calculate the angle between another vector(degrees)
+	float angle(const Vector3D &v);					//calculate the angle between another vector(degrees)
 	Vector3D proj(const Vector3D &v) const;
 	Vector3D proj(const Vector3D &v1, const Vector3D &v2) const;
 	Vector3D rotate3D(const Vector3D &v, float angle) const;//rotate vector about v with given angle in degrees
@@ -128,6 +128,7 @@ public:
 	matrix2D3& operator= (matrix2D3 m);
 	
 	Vector3D transform(const Vector3D* vec);
+	Vector3D cartesianToSpherical(Vector3D cartesian);
 };
 
 

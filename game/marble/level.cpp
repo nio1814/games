@@ -42,7 +42,7 @@ bool Level::create(int index)
 {
     bool status = false;
     int numExtraSpheres = rand()%15;
-	numExtraSpheres = 0;
+//	numExtraSpheres = 0;
 
     GLfloat sqr3 = sqrtf(3.0f);
     object_plane plane;
@@ -65,10 +65,10 @@ bool Level::create(int index)
             //level1.player1 = ball;
             //ball->texture = balltxr;
 
-//          allObj.majorAxis = Y;
+		  allObj.majorAxis = Y;
 
-		  basis.A[0] = X;
-		  basis.A[1] = Z;
+		  basis.A[0] = Z;
+		  basis.A[1] = X;
 		  basis.A[2] = Y;
 		  allObj.m_basis = basis;
 
@@ -107,8 +107,9 @@ bool Level::create(int index)
 //            allObj.setNormal(PLANE, 6, Vector3D(0,1,-.2));
 //            allObj.flipBase(PLANE, 6);
     //        allObj.setTexture(PLANE, 6, wall1txr);
-			plane = object_plane(1,4,10,0,0,Vector3D(0,1,-.2));
-			plane.setPosition(Vector3D(0,-.98f,-8.9f));
+//			plane = object_plane(1,4,10,0,0,Vector3D(0,1,-.2));
+//			plane.setPosition(Vector3D(0,-.98f,-8.9f));
+			plane = object_plane(4,10,Vector3D(0,-.98f,-8.9f),Vector3D(0,1,-.2), basis);
 			allObj.addPlane(plane);
 
 //			allObj.addPlanes(1,4,4,0,0,  Vector3D(0,-1.96f,-15.8f));

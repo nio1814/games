@@ -154,14 +154,14 @@ float Vector3D::dot(Vector3D v)	const							// length() returns the length of th
 	return x*v.x + y*v.y + z*v.z;
 }			   		
 
-float Vector3D::angle(const Vector3D *v)								// length() returns the length of this Vector3D
+float Vector3D::angle(const Vector3D& v)								// length() returns the length of this Vector3D
 {
 	float magv1, magv2;
 	float dotp;
 	float ang = 0;
 
 	magv1 = this->length();
-	magv2 = v->length();
+	magv2 = v.length();
 	dotp = this->dot(v);
 
 	if(magv1*magv2 != 0)
@@ -272,11 +272,11 @@ Vector3D Vector3D::cart2sph(Vector3D *v)
 	r = v->length();
 	
 	if(y >= 0)
-		phi = v->angle(&X);		//quadrants I,II
+		phi = v->angle(X);		//quadrants I,II
 	else
-		phi = 360 - v->angle(&X);	//quadrants III, IV
+		phi = 360 - v->angle(X);	//quadrants III, IV
 
-	theta = v->angle(&Z);
+	theta = v->angle(Z);
 
 	return Vector3D(r, phi, theta);
 }
@@ -291,23 +291,23 @@ Vector3D Vector3D::cart2angxyz()
 	//z ang
 	vxy = proj(X,Y);
 	if(vxy.y >= 0)
-		angles.z = vxy.angle(&X);		//quadrants I,II
+		angles.z = vxy.angle(X);		//quadrants I,II
 	else
-		angles.z = 360 - angle(&X);	//quadrants III, IV
+		angles.z = 360 - angle(X);	//quadrants III, IV
 	vxz = rotate3D(Z, -angles.z);
 
 	//y ang
 	if(vxz.x >= 0)
-		angles.y = vxz.angle(&Z);		//quadrants I,II
+		angles.y = vxz.angle(Z);		//quadrants I,II
 	else
-		angles.y = 360 - vxz.angle(&Z);	//quadrants III, IV
+		angles.y = 360 - vxz.angle(Z);	//quadrants III, IV
 	vyz = vxz.rotate3D(Y, -angles.y);
 
 	//x ang
 	if(vyz.y <= 0)
-		angles.x = vyz.angle(&Z);		//quadrants I,II
+		angles.x = vyz.angle(Z);		//quadrants I,II
 	else
-		angles.x = 360 - vyz.angle(&Z);	//quadrants III, IV	
+		angles.x = 360 - vyz.angle(Z);	//quadrants III, IV
 
 	return angles;
 }
@@ -627,6 +627,17 @@ Vector3D matrix2D3::transform(const Vector3D* in)
 	out.z = A[2].dot(in);
 
 	return out;
+}
+
+Vector3D matrix2D3::cartesianToSpherical(Vector3D cartesian)
+{
+	float r = cartesian.length();
+	float theta = A[2].angle(cartesian);
+	Vector3D inPlane = cartesian - A[2].proj(cartesian);
+	float phi = A[0].angle(inPlane);
+
+	return Vector3D(r, phi, theta);
+
 }
 
 matrix2D3& matrix2D3::operator= (matrix2D3 m)

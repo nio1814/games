@@ -66,8 +66,12 @@ template <class T>
 T* Objects<T>::addObject(const T &obj)
 {
     objs.append(new T(obj));
+	T* newObj = objs.last();
+	newObj->self.index = objs.size();
+//	newObj->self.holder = holder;
+	newObj->self.shape = objType;
 
-    return objs.last();
+	return newObj;
 }
 
 template <class T>
@@ -457,8 +461,8 @@ void object_sphere::draw()
 
 //		gluSphere(quad, radius, 32, 16);					// Draw Another Sphere Using New Texture
 															// Textures Will Mix Creating A MultiTexture Effect (Reflection)
-
-        drawSphere(2);
+		glScalef(radius, radius, radius);
+		drawSphere(2);
 
 		glDisable(GL_TEXTURE_GEN_S);						// Disable Sphere Mapping
 		glDisable(GL_TEXTURE_GEN_T);						// Disable Sphere Mapping
@@ -690,6 +694,7 @@ object_plane::object_plane(float width, float length, Vector3D position, Vector3
 {
 	mass->pos = position;
 	m_basis = basis;
+	orient(norm);
 }
 
 object_plane& object_plane::operator = (const object_plane& plane)
@@ -784,6 +789,19 @@ void object_plane::flipBase()
 	return;
 }
 	
+void object_plane::orient(const Vector3D& norm)
+{
+	normal = norm;
+	Vector3D sphericalCoords = m_basis.cartesianToSpherical(norm);
+	wvec = m_basis.A[0].rotate3D(m_basis.A[1], sphericalCoords.z);
+	wvec = wvec.rotate3D(m_basis.A[2], sphericalCoords.y);
+
+//	lvec = m_basis.A[1].rotate3D(m_basis.A[1], sphericalCoords.z);
+	lvec = m_basis.A[1].rotate3D(m_basis.A[2], sphericalCoords.y);
+
+	return;
+}
+
 /*bool object_plane::doCollisions(const object_holder *allObjs)
 {
 	bool detect = false;
@@ -802,9 +820,9 @@ void object_plane::flipBase()
 
 void object_plane::rotate(const Vector3D &axis, GLfloat degrees)
 {
-    normal.rotate3D(axis, degrees);
-    wvec.rotate3D(axis, degrees);
-    lvec.rotate3D(axis, degrees);
+	normal = normal.rotate3D(axis, degrees);
+	wvec = wvec.rotate3D(axis, degrees);
+	lvec = lvec.rotate3D(axis, degrees);
 
     return;
 }

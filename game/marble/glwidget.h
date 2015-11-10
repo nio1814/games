@@ -30,7 +30,7 @@ signals:
     void keyPressed();
 public slots:
     void process();
-    void ProcessKeyboard();
+	void processKeyboard();
 
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
