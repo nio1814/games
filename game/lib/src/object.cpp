@@ -106,6 +106,30 @@ void Objects<T>::operate(const object_holder *allObjs)					// The complete proce
 	return;
 }
 
+void Object::collisions()
+{
+	for(int n=0; n<m_touchedObjects.size(); n++)
+	{
+		const Object* touchedObj = m_touchedObjects[n];
+		switch(touchedObj->objType)
+		{
+			case SPHERE:
+				collide(static_cast<const object_sphere*>(m_touchedObjects[n]));
+				break;
+			case PLANE:
+				collide(static_cast<const object_plane*>(m_touchedObjects[n]));
+				break;
+		}
+	}
+/*        if(point.shape == SPHERE)
+			collide(this, &allObjs->spheres->objs[point.index]);
+		else if(point.shape == PLANE)
+			collide(this, &allObjs->planes->objs[point.index]);*/
+
+
+	return;
+}
+
 template <class T>
 int Objects<T>::size() const
 {
@@ -114,7 +138,7 @@ int Objects<T>::size() const
 
 
 //SINGLE OBJECT----------------------------
-Object::Object(float m)
+Object::Object(float m) : mass(new Mass(1)), texture(NULL), isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
 {
 	bMovable = false;
 	m_basis.A[0] = X;
@@ -547,9 +571,9 @@ void object_sphere::collide(const object_sphere *sphere2)
 		v1 += sphereNorm*(mass1->elas)*v1normMag*2;
 
 //	s1->xrotspeed = v1.dot(&Vector3D(1,0,0));
-	mass1->avelnew = v1.dot(&Vector3D(1,0,0));
+	mass1->avelnew = v1.dot(Vector3D(1,0,0));
 //	s1->yrotspeed = v1.dot(&Vector3D(0,1,0));
-	mass1->avelnew += v1.dot(&Vector3D(0,1,0));
+	mass1->avelnew += v1.dot(Vector3D(0,1,0));
 	//s1->zrotspeed = v1.dot(&Vector3D(0,0,1));
 
 	mass1->velnew = v1;
@@ -604,9 +628,9 @@ void object_sphere::collide(const object_plane *plane)
 	vpara = v1 - v1.proj(Y);
 
 //	sphere->xrotspeed = vpara.dot(&Vector3D(0,0,1))/(sphere->radius*2*PI);
-	mass->avelnew = vpara.dot(&Vector3D(0,0,1))/(radius*2*PI);
+	mass->avelnew = vpara.dot(Vector3D(0,0,1))/(radius*2*PI);
 //	sphere->zrotspeed = vpara.dot(&Vector3D(-1,0,0))/(sphere->radius*2*PI);
-	mass->avelnew += vpara.dot(&Vector3D(-1,0,0))/(radius*2*PI);
+	mass->avelnew += vpara.dot(Vector3D(-1,0,0))/(radius*2*PI);
 
 	return;
 }
