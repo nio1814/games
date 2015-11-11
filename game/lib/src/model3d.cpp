@@ -102,7 +102,7 @@ bool MeshModel::loadFile(string filename)
 	}
 	else
 	{
-		MessageBox(NULL, (LPCWSTR)L"Error opening file", (LPCWSTR)L"Loading Mesh Model", MB_OK);
+		//MessageBox(NULL, (LPCWSTR)L"Error opening file", (LPCWSTR)L"Loading Mesh Model", MB_OK);
 	}
 
 	calcExtremes();
@@ -245,13 +245,14 @@ void MeshModel::calcExtremes()
 	return;
 }
 
-void MeshModel::translate(const Vector3D* shift)
+void MeshModel::translate(const Vector3D& shift)
 {
 	for(int i=0; i<numVerts; i++)
 	{
-		verts[i].coord.x += shift->x;
-		verts[i].coord.y += shift->y;
-		verts[i].coord.z += shift->z;
+		/*verts[i].coord.x += shift.x;
+		verts[i].coord.y += shift.y;
+		verts[i].coord.z += shift.z;*/
+		verts[i].coord += shift;
 	}
 
 	//calcCenter();
@@ -264,7 +265,7 @@ void MeshModel::translateTo(const Vector3D* pos)
 	Vector3D shift;
 
 	shift = *pos - center;
-	translate(&shift);
+	translate(shift);
 
 	return;
 }
@@ -299,7 +300,7 @@ Vector3D MeshModel::calcCenter()
 void MeshModel::centerMesh()
 {
 	calcCenter();
-	translate(&(-center));
+	translate(-center);
 	calcCenter();
 
 	return;

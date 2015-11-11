@@ -5,7 +5,7 @@
 #include "model3d.h"
 #include "mass.h"
 
-GLWidget::GLWidget(QWidget *parent)
+GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
 	level = new Level;
 //	level.addLight(GL_LIGHT0, Vector3D(4,2,-2), Vector3D(0.6,0.5,0.5), Vector3D(0.8,1,0.8), Vector3D(1,1,1));	
@@ -36,7 +36,7 @@ void GLWidget::resizeGL(int w, int h)
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f, (GLfloat)w/(GLfloat)h, 0.1f, 1200.0f);
+	glPerspective(45.0f, (GLfloat)w/(GLfloat)h, 0.1f, 1200.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix

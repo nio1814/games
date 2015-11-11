@@ -19,11 +19,13 @@ SOURCES += main.cpp\
     level.cpp \
     meshobject.cpp \
     ../lib/src/model3d.cpp \
-    ../lib/src/vector3d.cpp
+    ../lib/src/vector3d.cpp \
+    ../lib/src/qtgl.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
     level.h \
     meshobject.h \
     ../lib/src/model3d.h \
-    ../lib/src/vector3d.h
+    ../lib/src/vector3d.h \
+    ../lib/src/qtgl.h

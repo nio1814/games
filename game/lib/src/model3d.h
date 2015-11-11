@@ -1,10 +1,10 @@
 #ifndef MODEL3D
 #define MODEL3D
 
-#include <windows.h>
-#include <gl/gl.h>
+#include "vector3d.h"
+
+#include "qtgl.h"
 #include <string>
-#include "Vector3D.h"
 
 using namespace std;
 
@@ -57,7 +57,7 @@ public:
 	void calcNormals();
 	void draw();
 	void scale(GLfloat scaleFactor);
-	void translate(const Vector3D* shift);
+	void translate(const Vector3D& shift);
 	void translateTo(const Vector3D* pos);
 	void calcExtremes();
 	bool detectCollisionM(const MeshModel* mesh2, Vector3D* point, Vector3D* norm);
