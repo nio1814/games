@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include "glwidget.h"
+
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -8,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(gl);
     centralWidget()->setFocus();
 
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), gl, SLOT(process()));
-    timer->start(50);
+	gl->restartTimer();
+	while(1)
+	{
+		gl->process();
+	}
 }
 
 MainWindow::~MainWindow()

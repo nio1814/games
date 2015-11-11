@@ -7,12 +7,13 @@
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
-	level = new Level;
-//	level.addLight(GL_LIGHT0, Vector3D(4,2,-2), Vector3D(0.6,0.5,0.5), Vector3D(0.8,1,0.8), Vector3D(1,1,1));	
-	level->addPlayer(":data/mercedes3.ogl");
-	level->player->mass->dir = Y;
-	level->player->mesh->centerMesh();
-	level->player->mass->pos = level->player->mesh->center;
+	m_timer = new QElapsedTimer;
+	m_level = new Level;
+	m_level->addLight(GL_LIGHT0, Vector3D(4,2,-2), Vector3D(0.6,0.5,0.5), Vector3D(0.8,1,0.8), Vector3D(1,1,1));	
+	m_level->addPlayer(":data/mercedes3.ogl");
+	m_level->player->mass->dir = Y;
+	m_level->player->mesh->centerMesh();
+	m_level->player->mass->pos = m_level->player->mesh->center;
 
 }
 
@@ -24,6 +25,13 @@ QSize GLWidget::minimumSizeHint() const
 QSize GLWidget::sizeHint() const
 {
 	return QSize(500,300);
+}
+
+void GLWidget::restartTimer()
+{
+	m_timer->start();
+
+	return;
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -64,5 +72,13 @@ void GLWidget::paintGL()
 GLWidget::~GLWidget()
 {
 
+}
+
+void GLWidget::process()
+{
+	m_level.run(m_timer->elapsed());
+	m_timer.start();
+
+	return;
 }
 

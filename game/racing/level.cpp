@@ -3,6 +3,7 @@
 #include "meshobject.h"
 #include "model3d.h"
 #include "mass.h"
+#include "light.h"
 
 Level::Level()
 {
@@ -25,6 +26,7 @@ void Level::initObject(MeshObject *obj)
 
 	return;
 }
+
 void Level::addPlayer(const char* modelfile)
 {
 	player->mesh = new MeshModel;
@@ -32,5 +34,10 @@ void Level::addPlayer(const char* modelfile)
 	player->mesh->loadFile(modelfile);
 	initObject(player);
 
+	return;
+}
+
+void Level::addLight(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec)
+{
 	return;
 }

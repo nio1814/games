@@ -15,12 +15,15 @@ public:
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+    void restartTimer();
+    void process();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
 private:
-	Level* level;
+	Level* m_level;
+	QElapsedTimer* m_timer;
 };
 
 #endif // GLWIDGET_H
