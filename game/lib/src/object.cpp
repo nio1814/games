@@ -690,8 +690,11 @@ object_plane::object_plane(float mass, float wid, float len, float phi, float th
 }
 
 object_plane::object_plane(float width, float length, Vector3D position, Vector3D norm, matrix2D3 basis) : Object(1),
-	width(width), length(length), normal(norm)//, m_basis(basis)
+	width(width), length(length)//, m_basis(basis)
 {
+	norm.unitize();
+	normal = norm;
+	objType = PLANE;
 	mass->pos = position;
 	m_basis = basis;
 	orient(norm);
@@ -825,6 +828,11 @@ void object_plane::rotate(const Vector3D &axis, GLfloat degrees)
 	lvec = lvec.rotate3D(axis, degrees);
 
     return;
+}
+
+void object_plane::rotateAroundNormal(GLfloat degrees)
+{
+	return rotate(normal, degrees);
 }
 
 bool object_plane::inPlane(const Vector3D *v)

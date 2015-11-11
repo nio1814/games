@@ -222,6 +222,7 @@ public:
 	void flipBase();
 	void orient(const Vector3D& norm);
     void rotate(const Vector3D& axis, GLfloat degrees);
+	void rotateAroundNormal(GLfloat degrees);
 	bool inPlane(const Vector3D *v);
 	bool atSurface(const Vector3D *v);
 	bool isAbove(const Vector3D *v) const;

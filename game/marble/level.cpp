@@ -41,6 +41,7 @@ void Level::setMajAxis(Vector3D axis)
 bool Level::create(int index)
 {
     bool status = false;
+	srand(QDateTime::currentDateTime().time().msec());
     int numExtraSpheres = rand()%15;
 //	numExtraSpheres = 0;
 
@@ -61,11 +62,13 @@ bool Level::create(int index)
             }
 
 		  ball = allObj.spheres.objs[1];
+		  ball->mass->elas = .5;
 //            ball = &allObj.spheres[1];
             //level1.player1 = ball;
             //ball->texture = balltxr;
 
-		  allObj.majorAxis = Y;
+		  majAxis = Y;
+		  allObj.majorAxis = majAxis;
 
 		  basis.A[0] = Z;
 		  basis.A[1] = X;
@@ -88,7 +91,7 @@ bool Level::create(int index)
 //            allObj.setPos(PLANE, 3,  Vector3D(0,1,4));
             plane.setPosition(Vector3D(0,1,4));
 //            allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
-            plane.rotate(Y,90);
+			plane.rotate(Y,90);
 //            allObj.flipBase(PLANE, 3);
 			allObj.addPlane(plane);
 
@@ -101,6 +104,7 @@ bool Level::create(int index)
 //			allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
 //            allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
 			plane.setPosition(Vector3D(3,1,-4));
+			plane.orient(Z);
 			allObj.addPlane(plane);
 
 //			allObj.addPlanes(1,4,10,0,0,  Vector3D(0,-.98f,-8.9f));
@@ -109,92 +113,154 @@ bool Level::create(int index)
     //        allObj.setTexture(PLANE, 6, wall1txr);
 //			plane = object_plane(1,4,10,0,0,Vector3D(0,1,-.2));
 //			plane.setPosition(Vector3D(0,-.98f,-8.9f));
-			plane = object_plane(4,10,Vector3D(0,-.98f,-8.9f),Vector3D(0,1,-.2), basis);
+			plane = object_plane(10,4,Vector3D(0,-.98f,-8.9f),Vector3D(0,1,-.2), basis);
 			allObj.addPlane(plane);
 
 //			allObj.addPlanes(1,4,4,0,0,  Vector3D(0,-1.96f,-15.8f));
     //        allObj.setTexture(PLANE, 7, wall1txr);
-			plane = object_plane(1,4,4,0,0,Y);
-			plane.setPosition(Vector3D(0,-1.96f,-15.8f));
+			plane = object_plane(4,4,Vector3D(0,-1.96f,-15.8f),majAxis,basis);
+//			plane.setPosition(Vector3D(0,-1.96f,-15.8f));
 			allObj.addPlane(plane);
 
 			/*allObj.addPlanes(2,1,4,2,0,0,  Vector3D(0,-.96f,-17.8f));
             allObj.setNormal(PLANE, 8, Vector3D(0,0,1));
-            allObj.flipBase(PLANE, 8);
+			allObj.flipBase(PLANE, 8);*/
+			plane = object_plane(2,4,Vector3D(0,-.96f,-17.8f),Z,basis);
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 9,  Vector3D(2,-.96f,-15.8f));
-            allObj.setNormal(PLANE, 9, Vector3D(-1,0,0));
+			/*allObj.setPos(PLANE, 9,  Vector3D(2,-.96f,-15.8f));
+			allObj.setNormal(PLANE, 9, Vector3D(-1,0,0));*/
+			plane.setPosition(Vector3D(2,-.96f,-15.8f));
+			plane.orient(-X);
+			plane.rotateAroundNormal(90);
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(1,4,20,0,0,  Vector3D(-11.8f,-3.92f,-15.8f));
-            allObj.setNormal(PLANE, 10, Vector3D(-.2f,1.0f,0.0f));
+			/*allObj.addPlanes(1,4,20,0,0,  Vector3D(-11.8f,-3.92f,-15.8f));
+			allObj.setNormal(PLANE, 10, Vector3D(-.2f,1.0f,0.0f));*/
             //level1.allObj.flipBase(PLANE, 10);
     //        allObj.setTexture(PLANE, 10, wall1txr);
+			plane = object_plane(20,4, Vector3D(-11.8f,-3.92f,-15.8f), Vector3D(-.2f,1.0f,0.0f), basis);
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(1,4,4,0,0,  Vector3D(-23.6f,-5.88f,-15.8f));
-            allObj.setNormal(PLANE, 11, Vector3D(0.0f, 1.0f, 0.0f));
-    //        allObj.setTexture(PLANE, 11, wall1txr);
+			/*allObj.addPlanes(1,4,4,0,0,  Vector3D(-23.6f,-5.88f,-15.8f));
+			allObj.setNormal(PLANE, 11, Vector3D(0.0f, 1.0f, 0.0f));*/
+	//        allObj.setTexture(PLANE, 11, wall1txr);*/
+			plane = object_plane(4,4, Vector3D(-23.6f,-5.88f,-15.8f), Y, basis);
+			allObj.addPlane(plane);
 
-            allObj.addPlanes(10,1,4,1,0,0, Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f));
-            allObj.setNormal(PLANE, 12, Vector3D(1.0f, sqrt(3), 0.0f));
-            allObj.setPos(PLANE,13,  Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
+			/*allObj.addPlanes(10,1,4,1,0,0, Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f));
+			allObj.setNormal(PLANE, 12, Vector3D(1.0f, sqrt(3), 0.0f));*/
+			plane = object_plane(4,1,Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f), Vector3D(1.0f, sqrt(3), 0.0f), basis);
+			allObj.addPlane(plane);
+
+			/*allObj.setPos(PLANE,13,  Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
             allObj.setNormal(PLANE, 13, Vector3D(0.0f, sqr3, 1.0f));
-            allObj.flipBase(PLANE, 13);
+			allObj.flipBase(PLANE, 13);*/
+			plane.setPosition(Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
+			plane.orient(Vector3D(0.0f, sqr3, 1.0f));
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE,14,  Vector3D(-25.6f-sqr3/2-.25f, -5.38f+sqr3/4, -15.8f));
-            allObj.setNormal(PLANE, 14, Vector3D(sqrt(3), 1.0f, 0.0f));
-            allObj.setPos(PLANE,15,  Vector3D(-23.6f, -5.38f+sqr3/4, -17.8f-sqr3/2-.25f));
+			/*allObj.setPos(PLANE,14,  Vector3D(-25.6f-sqr3/2-.25f, -5.38f+sqr3/4, -15.8f));
+			allObj.setNormal(PLANE, 14, Vector3D(sqrt(3), 1.0f, 0.0f));*/
+			plane.setPosition(Vector3D(-25.6f-sqr3/2-.25f, -5.38f+sqr3/4, -15.8f));
+			plane.orient(Vector3D(sqrt(3), 1.0f, 0.0f));
+			allObj.addPlane(plane);
+
+			/*allObj.setPos(PLANE,15,  Vector3D(-23.6f, -5.38f+sqr3/4, -17.8f-sqr3/2-.25f));
             allObj.setNormal(PLANE, 15, Vector3D(0.0f, 1.0f, sqr3));
-            allObj.flipBase(PLANE, 15);
+			allObj.flipBase(PLANE, 15);*/
+			plane.setPosition(Vector3D(-23.6f, -5.38f+sqr3/4, -17.8f-sqr3/2-.25f));
+			plane.orient(Vector3D(0.0f, 1.0f, sqr3));
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE,16,  Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));
-            allObj.setNormal(PLANE, 16, Vector3D(1.0f, 0.0f, 0.0f));
-            allObj.setPos(PLANE,17,  Vector3D(-23.6f,-5.38f+sqr3/2+.5f,-17.8f-sqr3/2-.5f));
+			/*allObj.setPos(PLANE,16,  Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));
+			allObj.setNormal(PLANE, 16, Vector3D(1.0f, 0.0f, 0.0f));*/
+			plane.setPosition(Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));
+			plane.orient(X);
+			allObj.addPlane(plane);
+
+			/*allObj.setPos(PLANE,17,  Vector3D(-23.6f,-5.38f+sqr3/2+.5f,-17.8f-sqr3/2-.5f));
             allObj.setNormal(PLANE, 17, Vector3D(0.0f, 0.0f, 1.0f));
-            allObj.flipBase(PLANE, 17);
+			allObj.flipBase(PLANE, 17);*/
+			plane.setPosition(Vector3D(-23.6f,-5.38f+sqr3/2+.5f,-17.8f-sqr3/2-.5f));
+			plane.orient(Z);
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE,18,  Vector3D(-25.6f-sqr3/2-.25f, -4.38f+3*sqr3/4, -15.8f));
-            allObj.setNormal(PLANE, 18, Vector3D(-sqr3, 1.0f, 0.0f));
-            allObj.setPos(PLANE,19,  Vector3D(-23.6f, -4.38f+3*sqr3/4, -17.8f-sqr3/2-.25f));
+			/*allObj.setPos(PLANE,18,  Vector3D(-25.6f-sqr3/2-.25f, -4.38f+3*sqr3/4, -15.8f));
+			allObj.setNormal(PLANE, 18, Vector3D(-sqr3, 1.0f, 0.0f));*/
+			plane.setPosition(Vector3D(-25.6f-sqr3/2-.25f, -4.38f+3*sqr3/4, -15.8f));
+			plane.orient(Vector3D(-sqr3, 1.0f, 0.0f));
+			allObj.addPlane(plane);
+
+			/*allObj.setPos(PLANE,19,  Vector3D(-23.6f, -4.38f+3*sqr3/4, -17.8f-sqr3/2-.25f));
             allObj.setNormal(PLANE, 19, Vector3D(0.0f, -1.0f, sqr3));
-            allObj.flipBase(PLANE, 19);
+			allObj.flipBase(PLANE, 19);*/
+			plane.setPosition(Vector3D(-23.6f, -4.38f+3*sqr3/4, -17.8f-sqr3/2-.25f));
+			plane.orient(Vector3D(0.0f, -1.0f, sqr3));
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE,20,  Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
-            allObj.setNormal(PLANE, 20, Vector3D(1.0f, -sqr3, 0.0f));
-            allObj.setPos(PLANE,21,  Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
+			/*allObj.setPos(PLANE,20,  Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
+			allObj.setNormal(PLANE, 20, Vector3D(1.0f, -sqr3, 0.0f));*/
+			plane.setPosition(Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
+			plane.orient(Vector3D(1.0f, -sqr3, 0.0f));
+			allObj.addPlane(plane);
+
+			/*allObj.setPos(PLANE,21,  Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
             allObj.setNormal(PLANE, 21, Vector3D(0.0f, -sqr3, 1.0f));
-            allObj.flipBase(PLANE, 21);
+			allObj.flipBase(PLANE, 21);*/
+			plane.setPosition(Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
+			plane.orient(Vector3D(0.0f, -sqr3, 1.0f));
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(1,4,10,0,0,  Vector3D(-23.6f,-6.86f,-8.9f));
+			/*allObj.addPlanes(1,4,10,0,0,  Vector3D(-23.6f,-6.86f,-8.9f));
             allObj.setNormal(PLANE, 22, Vector3D(0,1,.2));
-            allObj.flipBase(PLANE, 22);
+			allObj.flipBase(PLANE, 22);*/
     //        allObj.setTexture(PLANE, 22, wall1txr);
+			plane = object_plane(4,10, Vector3D(-23.6f,-6.86f,-8.9f), Vector3D(0,1,.2), basis);
+			allObj.addPlane(plane);
 
-			allObj.addPlanes(1,8,8,0,0,  Vector3D(-23.6f,-7.84f, 0.0f));
+//			allObj.addPlanes(1,8,8,0,0,  Vector3D(-23.6f,-7.84f, 0.0f));
     //        allObj.setTexture(PLANE, 23, tile1txr);
+			plane = object_plane(8,8,Vector3D(-23.6f,-7.84f, 0.0f), majAxis, basis);
+			allObj.addPlane(plane);
 
-            allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-27.6f,-6.84f,0.0f));
-            allObj.setNormal(PLANE, 24, Vector3D(1,0,0));
+			/*allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-27.6f,-6.84f,0.0f));
+			allObj.setNormal(PLANE, 24, Vector3D(1,0,0));*/
+			plane = object_plane(8,2,Vector3D(-27.6f,-6.84f,0.0f), X, basis);
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 25,  Vector3D(-19.6f,-6.84f,0.0f));
-            allObj.setNormal(PLANE, 25, Vector3D(-1,0,0));
+			/*allObj.setPos(PLANE, 25,  Vector3D(-19.6f,-6.84f,0.0f));
+			allObj.setNormal(PLANE, 25, Vector3D(-1,0,0));*/
+			plane.setPosition(Vector3D(-19.6f,-6.84f,0.0f));
+			plane.orient(-X);
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 26,  Vector3D(-23.6f,-6.84f,4.0f));
+			/*allObj.setPos(PLANE, 26,  Vector3D(-23.6f,-6.84f,4.0f));
             allObj.setNormal(PLANE, 26, Vector3D(0,0,-1));
-            allObj.flipBase(PLANE, 26);
+			allObj.flipBase(PLANE, 26);*/
+			plane.setPosition(Vector3D(-23.6f,-6.84f,4.0f));
+			plane.orient(-Z);
+			allObj.addPlane(plane);
 
-            allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
+			/*allObj.addPlanes(2,1,2,2,0,0,  Vector3D(0,0,0));
             allObj.setPos(PLANE, 27,  Vector3D(-20.6f,-6.84f,-4));
-            allObj.setNormal(PLANE, 27, Vector3D(0,0,1));
+			allObj.setNormal(PLANE, 27, Vector3D(0,0,1));*/
+			plane = object_plane(2,2,Vector3D(-20.6f,-6.84f,-4), Z, basis);
+			allObj.addPlane(plane);
 
-            allObj.setPos(PLANE, 28,  Vector3D(-26.6f,-6.84f,-4));
+			/*allObj.setPos(PLANE, 28,  Vector3D(-26.6f,-6.84f,-4));
             allObj.setNormal(PLANE, 28, Vector3D(0,0,1));
-            allObj.flipBase(PLANE, 28);*/
+			allObj.flipBase(PLANE, 28);*/
+			plane.setPosition(Vector3D(-26.6f,-6.84f,-4));
+			plane.orient(Z);
+			allObj.addPlane(plane);
 
     //        floors = &allObj.planes->objs[0];
 
-            cameras->addPoint(Vector3D(0, 4.6, 8), Vector3D(0, 0, 0), X, 10.0f);
+			cameras->addPoint(Vector3D(0, 8.6, 8), Vector3D(0, 0, 0), majAxis, 5.0f);
             //level1.allObj.cameras->addPoint(Vector3D(xCam, 3.60f, -14.6f), Vector3D(-11.8f, -3.0f, -13.8f), 5.0f);
-            cameras->addPoint(Vector3D(0, 3.60f, 0), Vector3D(0, 3.0f, -13.8f), Y, 10.0f);
+			cameras->addPoint(Vector3D(0, 3.60f, 0), Vector3D(0, 3.0f, -13.8f), majAxis, 10.0f);
+			cameras->camview = FOLLOW;
 			majAxis = Y;
 
             status = true;
@@ -294,13 +360,14 @@ void Level::addCamera(Vector3D campos, Vector3D lookpos, const Vector3D upin, GL
 }
 
 
-Vector3D Level::setCam(Vector3D* pos)
+Vector3D Level::setCam(const Vector3D& pos, GLfloat delta, GLfloat objvel)
 {
+//	delta *= 1000;
     CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
     CameraPoint* nextcam;
     Vector3D cam2cam, cam2obj, cam2look;
     Vector3D look, alongv, movepos;
-    GLfloat camdist, objvel, camRotate;
+	GLfloat camdist, camRotate;
 
     camRotate = 0;
 
@@ -311,23 +378,23 @@ Vector3D Level::setCam(Vector3D* pos)
     else
         nextcam = &cameras->cpoints[cameras->currentPoint+1];
 
-    cam2obj = *pos - cam->pos;
+	cam2obj = pos - cam->pos;
 
     if(cameras->camview == FOLLOW)
     {
-        movepos = *pos - cam2obj.unit()*cam->followDist;
-        cam->pos += (*pos - cam->pos)*.2f*delta*objvel;
-        cam->look += (*pos - cam->look)*.7f*delta*objvel;
+		movepos = pos - cam2obj.unit()*cam->followDist;
+		cam->pos += (movepos - cam->pos)*.2f*delta*objvel;
+		cam->look += (pos - cam->look)*.7f*delta*objvel;
     }
     else if(cameras->camview == LOCKED)
     {
-        cam->look += (*pos - cam->look)*.7f*delta*objvel;
+		cam->look += (pos - cam->look)*.7f*delta*objvel;
     }
     else if(cameras->camview == FIRST)
     {
-		cam->look += (pos->proj(majAxis) - cam->look.proj(majAxis))*.95f*delta;
+		cam->look += (pos.proj(majAxis) - cam->look.proj(majAxis))*.95f*delta;
         cam2look = cam->look - cam->pos;
-        cam->pos = *pos;
+		cam->pos = pos;
 
         if(isKeys(Qt::Key_Left))
             camRotate = 100*delta;
@@ -352,12 +419,15 @@ void Level::updateCam()
         cam->pos += X;
     }
 
+	Vector3D camToLook = cam->look - cam->pos;
+
     switch(cameras->camview)
     {
         case FIRST:
             //cam->look += (cam->pos.proj(&majAxis) - cam->look.proj(&majAxis))*.95f*delta;
             break;
         case FOLLOW:
+			cam->pos += camToLook*(camToLook.length()-cam->followDist)*.01;
             break;
         default:
 //			MessageBox(NULL,"Invalid Camera View.","ERROR",MB_OK | MB_ICONINFORMATION);
@@ -451,7 +521,8 @@ void Level::run(GLfloat dt)
 
     gravityVec = majAxis*-1;
 //    gravityVec = majAxis*0;
-    updateCam();
+//    updateCam();
+	setCam(ball->mass->pos, dt, ball->mass->vel.length());
     run3ds();
     allObj.run(dt);
 
@@ -480,7 +551,7 @@ void Level::run3ds()
 
 void Level::draw()
 {
-    glLookAt(cameras->current().pos.toQVector3D(), ball->mass->pos.toQVector3D(), majAxis.toQVector3D());
+	glLookAt(cameras->current().pos.toQVector3D(), ball->mass->pos.toQVector3D(), majAxis.toQVector3D());
 //    world3ds.Render_3ds();
     allObj.draw();
 

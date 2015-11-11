@@ -27,7 +27,7 @@ public:
     void setMajAxis(Vector3D axis);
     //Vector3D setCam(Object* obj, CameraView view);
     void addCamera(Vector3D campos, Vector3D lookpos, const Vector3D upin, GLfloat dist);
-    Vector3D setCam(Vector3D* pos);
+	Vector3D setCam(const Vector3D &pos, GLfloat delta, GLfloat objvel=1);
     void updateCam();
     void setView(CameraView view);
     //texture_s* addTexture(char *filename, char *ID);
@@ -39,7 +39,7 @@ public:
 private:
     int levelNum;
     bool started;
-    GLfloat startTime, currentTime, timer, delta;
+	GLfloat startTime, currentTime, timer;
     int numPlayers;
     Vector3D playerStart;		//player starting positions
 

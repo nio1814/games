@@ -633,8 +633,10 @@ Vector3D matrix2D3::cartesianToSpherical(Vector3D cartesian)
 {
 	float r = cartesian.length();
 	float theta = A[2].angle(cartesian);
-	Vector3D inPlane = cartesian - A[2].proj(cartesian);
+	Vector3D inPlane = cartesian - cartesian.proj(A[2]);
 	float phi = A[0].angle(inPlane);
+	if(inPlane.dot(A[1])<0)
+		phi = -phi;
 
 	return Vector3D(r, phi, theta);
 
