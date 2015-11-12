@@ -11,6 +11,7 @@ public:
 	MeshObject();
 	~MeshObject();
 		virtual void init();							// this method will call the init() method of every mass
+		void draw();
 		virtual void simulate(float dt);				// Iterate the masses by the change in time
 		void updateBoundingBox();
 

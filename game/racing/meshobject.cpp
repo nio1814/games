@@ -6,12 +6,18 @@
 MeshObject::MeshObject()
 {
 	mass = new Mass;
+	mesh = NULL;
+	hasBBox = false;
+	isDynamicMesh = false;
+	isMoveable = false;
 	bbox = new MeshModel;
 }
 
 MeshObject::~MeshObject()
 {
 	delete mass;
+	if(isDynamicMesh)
+		delete mesh;
 	delete bbox;
 }
 
@@ -26,6 +32,24 @@ void MeshObject::simulate(float dt)					// Iterate the masses by the change in t
 {
 	mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
 
+	return;
+}
+
+void MeshObject::draw()
+{
+	//Draw object
+	glPushMatrix();
+	glTranslatef(mass->pos.x, mass->pos.y, mass->pos.z);
+	glRotatef(mass->theta, mass->axis.x, mass->axis.y, mass->axis.z);
+	mesh->draw();
+	glPopMatrix();
+
+	//Draw bounding box
+	glPushMatrix();
+	//glTranslatef(bbox.center.x, bbox.center.y, bbox.center.z);
+	//glColor4f(1,1,1,0.2f);
+	bbox->draw();
+	glPopMatrix();
 	return;
 }
 

@@ -67,6 +67,7 @@ void GLWidget::initializeGL()
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
 	return;
 }
 
@@ -74,6 +75,8 @@ void GLWidget::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+	m_level->draw();
 
 	return;
 }
@@ -89,6 +92,8 @@ void GLWidget::process()
 //	qErrnoWarning("%f\n", dt);
 	m_level->run(dt);
 	m_timer->start();
+
+	update();
 
 	return;
 }

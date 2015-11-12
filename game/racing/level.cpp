@@ -74,6 +74,32 @@ MeshObject* Level::addObject(const char* modelfile)
 	return objs.last();
 }
 
+void Level::draw()
+{
+	int numLines = 200;
+	GLfloat linewidth = 5;
+	glLookAt(cam.pos.toQVector3D(), cam.look.toQVector3D(), cam.up.toQVector3D());
+
+	for(int y=-numLines/2; y<numLines/2; y++)
+	{
+		glBegin(GL_LINES);
+		glNormal3f( 0.0f, 0.0f, 1.0f);
+		glVertex3f(-0.5*linewidth*numLines, y*linewidth, 0.0f);
+		glVertex3f(0.5*linewidth*numLines, y*linewidth, 0.0f);
+		glEnd();
+		glBegin(GL_LINES);
+		glNormal3f( 0.0f, 0.0f, 1.0f);
+		glVertex3f(y*linewidth, -0.5*linewidth*numLines, 0.0f);
+		glVertex3f(y*linewidth, 0.5*linewidth*numLines, 0.0f);
+		glEnd();
+	}
+
+	for(int i=0; i<objs.size(); i++)
+		objs[i]->draw();
+	player->draw();
+
+	return objs.last();
+}
 
 void Level::run(GLfloat dt)
 {
