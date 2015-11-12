@@ -76,8 +76,8 @@ GLWidget::~GLWidget()
 
 void GLWidget::process()
 {
-	m_level.run(m_timer->elapsed());
-	m_timer.start();
+	m_level->run(m_timer->elapsed());
+	m_timer->start();
 
 	return;
 }

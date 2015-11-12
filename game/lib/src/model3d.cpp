@@ -305,3 +305,74 @@ void MeshModel::centerMesh()
 
 	return;
 }
+
+bool detectCollision(const Vector3D& point, const Vector3D* triVerts, const Vector3D& norm)
+{
+	bool detect = false;
+	Vector3D alongNorm;
+	float height;
+	Vector3D planeNormIn;
+	Vector3D vec;
+	Vector3D pointInPlane;
+	Vector3D vec1, vec2;
+	int v;
+
+	alongNorm = point - triVerts[0];
+	alongNorm = alongNorm.proj(norm);
+	height = alongNorm.length();
+
+	if(height<1)
+	{
+		pointInPlane = point - norm*height;
+		v = 0;
+		do
+		{
+			vec = triVerts[(v+1)%3] - triVerts[v];
+			vec.unitize();
+			planeNormIn = triVerts[(v+2)%3] - triVerts[v];
+			planeNormIn = planeNormIn - planeNormIn.proj(vec);
+			vec1 = triVerts[(v+2)%3] - triVerts[v];
+			vec2 = pointInPlane - triVerts[v];
+			float temp = (vec1.dot(planeNormIn)*vec2.dot(planeNormIn));
+			if(temp>0)
+				detect = true;
+			else
+				detect = false;
+		}while(detect && (v++)<2);
+	}
+
+	return detect;
+}
+
+bool MeshModel::detectCollisionM(const MeshModel* mesh2, Vector3D* point, Vector3D* norm)
+{
+	bool detect = false;
+	MeshVert* triVerts[3];
+	//MeshVert** triVerts;
+	Vector3D triVertsCoords[3];
+
+	//triVerts = new MeshVert*[3];
+	for(int v=0; v<numVerts; v++)
+	{
+		for(int t=0; t<mesh2->numTris; t++)
+		{
+			//triVerts = mesh2->getVerts(t);
+			mesh2->getVerts(triVerts,t);
+			for(int v2=0; v2<3; v2++)
+				triVertsCoords[v2] = (triVerts[v2]->coord);
+			if(mesh2->tris[t].norm.length()>0.5)
+			{
+				if(detectCollision(verts[v].coord, triVertsCoords, mesh2->tris[t].norm))
+				{
+					detect = true;
+					*point = verts[v].coord;
+					*norm = mesh2->tris[t].norm;
+				}
+			}
+		}
+	}
+
+	//delete triVerts;
+
+	return detect;
+}
