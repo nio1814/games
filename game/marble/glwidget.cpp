@@ -327,14 +327,16 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
 	forward = (ball->mass->pos - game->currentLevel().cameras->current().pos).unit();
 	forward.y = 0;
 	toleft = forward.rotate3D(Y, 90);
+	Level* level = &game->currentLevel();
+	CameraPoint* cam = &level->cameras->current();
 
     if (isKeys(Qt::Key_H))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
     if (isKeys(Qt::Key_K))		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
     if (isKeys(Qt::Key_U))		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
     if (isKeys(Qt::Key_J))		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
 
-    if (isKeys(Qt::Key_A))			zCam +=0.05f;				// 'A' Key Pressed ... Zoom In
-    if (isKeys(Qt::Key_Z))			zCam -=0.05f;				// 'Z' Key Pressed ... Zoom Out
+	if (isKeys(Qt::Key_A))			cam->pos += level->majAxis*0.05f;				// 'A' Key Pressed ... Zoom In
+	if (isKeys(Qt::Key_Z))			cam->pos -= level->majAxis*0.05f;				// 'Z' Key Pressed ... Zoom Out
 
     if (isKeys(Qt::Key_PageUp))		ballHeight +=0.03f;				// Page Up Key Pressed Move Ball Up
     if (isKeys(Qt::Key_PageDown))		ballHeight -=0.03f;				// Page Down Key Pressed Move Ball Down
@@ -349,6 +351,24 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
     if (isKeys(Qt::Key_Left))		ball->moveForce += toleft;				// Page Down Key Pressed Move Ball Down
     if (isKeys(Qt::Key_Right))		ball->moveForce -= toleft;				// Page Down Key Pressed Move Ball Down
     if (isKeys(Qt::Key_G))			ball->moveForce += Vector3D(0.0, 20.0, 0.0);			// Page Down Key Pressed Move Ball Down
+
+	CameraView newView;
+	if(isKeys(Qt::Key_C))
+	{
+		switch(game->currentLevel().cameras->camview)
+		{
+			case FOLLOW:
+				newView = LOCKED;
+				break;
+			case FIRST:
+				newView = FOLLOW;
+				break;
+			case LOCKED:
+				newView = FIRST;
+				break;
+		}
+		game->currentLevel().cameras->camview = newView;
+	}
 }
 
 void GLWidget::process()

@@ -151,6 +151,7 @@ bool Level::create(int index)
 			/*allObj.addPlanes(10,1,4,1,0,0, Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f));
 			allObj.setNormal(PLANE, 12, Vector3D(1.0f, sqrt(3), 0.0f));*/
 			plane = object_plane(4,1,Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f), Vector3D(1.0f, sqrt(3), 0.0f), basis);
+			plane.flipBase();
 			allObj.addPlane(plane);
 
 			/*allObj.setPos(PLANE,13,  Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
@@ -197,12 +198,14 @@ bool Level::create(int index)
 			allObj.flipBase(PLANE, 19);*/
 			plane.setPosition(Vector3D(-23.6f, -4.38f+3*sqr3/4, -17.8f-sqr3/2-.25f));
 			plane.orient(Vector3D(0.0f, -1.0f, sqr3));
+			plane.flipBase();
 			allObj.addPlane(plane);
 
 			/*allObj.setPos(PLANE,20,  Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
 			allObj.setNormal(PLANE, 20, Vector3D(1.0f, -sqr3, 0.0f));*/
 			plane.setPosition(Vector3D(-25.6f-sqr3/4, -4.38f+sqr3+.25f, -15.8f));
 			plane.orient(Vector3D(1.0f, -sqr3, 0.0f));
+			plane.flipBase();
 			allObj.addPlane(plane);
 
 			/*allObj.setPos(PLANE,21,  Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
@@ -210,13 +213,14 @@ bool Level::create(int index)
 			allObj.flipBase(PLANE, 21);*/
 			plane.setPosition(Vector3D(-23.6f, -4.38f+sqr3+.25f, -17.8f-sqr3/4));
 			plane.orient(Vector3D(0.0f, -sqr3, 1.0f));
+			plane.flipBase();
 			allObj.addPlane(plane);
 
 			/*allObj.addPlanes(1,4,10,0,0,  Vector3D(-23.6f,-6.86f,-8.9f));
             allObj.setNormal(PLANE, 22, Vector3D(0,1,.2));
 			allObj.flipBase(PLANE, 22);*/
     //        allObj.setTexture(PLANE, 22, wall1txr);
-			plane = object_plane(4,10, Vector3D(-23.6f,-6.86f,-8.9f), Vector3D(0,1,.2), basis);
+			plane = object_plane(10,4, Vector3D(-23.6f,-6.86f,-8.9f), Vector3D(0,1,.2), basis);
 			allObj.addPlane(plane);
 
 //			allObj.addPlanes(1,8,8,0,0,  Vector3D(-23.6f,-7.84f, 0.0f));
@@ -227,12 +231,13 @@ bool Level::create(int index)
 			/*allObj.addPlanes(3,1,8,2,0,0,  Vector3D(-27.6f,-6.84f,0.0f));
 			allObj.setNormal(PLANE, 24, Vector3D(1,0,0));*/
 			plane = object_plane(8,2,Vector3D(-27.6f,-6.84f,0.0f), X, basis);
+			plane.flipBase();
 			allObj.addPlane(plane);
 
 			/*allObj.setPos(PLANE, 25,  Vector3D(-19.6f,-6.84f,0.0f));
 			allObj.setNormal(PLANE, 25, Vector3D(-1,0,0));*/
 			plane.setPosition(Vector3D(-19.6f,-6.84f,0.0f));
-			plane.orient(-X);
+			plane.orient(-X);			
 			allObj.addPlane(plane);
 
 			/*allObj.setPos(PLANE, 26,  Vector3D(-23.6f,-6.84f,4.0f));

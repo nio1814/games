@@ -9,11 +9,14 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(gl);
     centralWidget()->setFocus();
 
-	gl->restartTimer();
-	while(1)
-	{
-		gl->process();
-	}
+//	gl->restartTimer();
+//	while(1)
+//	{
+//		gl->process();
+//	}
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), gl, SLOT(process()));
+	timer->start(5);
 }
 
 MainWindow::~MainWindow()

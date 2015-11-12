@@ -1,5 +1,14 @@
-#include <fstream>
+//#include <fstream>
 #include "model3d.h"
+
+QChar peek(QTextStream& textStream)
+{
+	int initialPosition = textStream.pos();
+	QChar nextChar = *textStream.read(1).data();
+	textStream.seek(initialPosition);
+
+	return nextChar;
+}
 
 MeshModel::MeshModel()
 {
@@ -16,12 +25,12 @@ MeshModel::~MeshModel()
 	delete tris;
 }
 
-bool MeshModel::loadFile(string filename)
+bool MeshModel::loadFile(QString filename)
 {
 	bool status=false;
-	ifstream fileIn(filename.c_str());
+
 	const int maxLength = 256;
-	char tempString[maxLength];
+//	char tempString[maxLength];
 	GLfloat vert[3];
 	GLfloat norm[3];
 	GLint vertIdx[3];
@@ -29,80 +38,110 @@ bool MeshModel::loadFile(string filename)
 	GLint textureID = -1;
 	GLfloat texCoord[3][2];
 
-	if(fileIn.is_open())
+	QFile file(filename);
+	if(file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
+		QTextStream fileIn(&file);
+		QString tempString;
+
 		status = true;
-		fileIn.getline(tempString, maxLength);
-		fileIn.getline(tempString, maxLength);
+//		fileIn.getline(tempString, maxLength);
+		tempString = fileIn.readLine();
+//		fileIn.getline(tempString, maxLength);
+		tempString = fileIn.readLine();
 		//Get vertices
 		do
 		{
 			//Get vertex coordinates
-			fileIn.getline(tempString, maxLength, '[');
+//			fileIn.getline(tempString, maxLength, '[');
+			tempString = fileIn.readLine().split('[').last();
 			fileIn >> vert[0];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> vert[1];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> vert[2];
 			//Get vertex normal
-			fileIn.getline(tempString, maxLength, '[');
+//			fileIn.getline(tempString, maxLength, '[');
+			tempString = fileIn.readLine().split(']').last();
 			fileIn >> norm[0];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> norm[1];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> norm[2];
-			fileIn.getline(tempString, maxLength);
+//			fileIn.getline(tempString, maxLength);
+			tempString = fileIn.readLine();
 			addVertex(vert[0], vert[1], vert[2], norm[0], norm[1], norm[2]);
-		}while(fileIn.peek()=='\t');
-		fileIn.getline(tempString, maxLength);
+//		}while(fileIn.peek()=='\t');
+		}while(peek(fileIn)=='\t');
+//		fileIn.getline(tempString, maxLength);
+		tempString = fileIn.readLine();
 		//Get vertex indicies of faces
 		do
 		{
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> vertIdx[0];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> vertIdx[1];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> vertIdx[2];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			//Get face normal
-			fileIn.getline(tempString, maxLength, '[');
+//			fileIn.getline(tempString, maxLength, '[');
+			tempString = fileIn.readLine().split('[').last();
 			fileIn >> norm[0];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> norm[1];
-			fileIn.get();
+//			fileIn.get();
+			fileIn.read(1);
 			fileIn >> norm[2];
 			//Get texture
-			fileIn.getline(tempString, maxLength, ']');
+//			fileIn.getline(tempString, maxLength, ']');
+			tempString = fileIn.readLine().split(']').last();
 			fileIn >> textureID;
 			if(textureID)
 			{
-				fileIn.getline(tempString, maxLength, '[');
+//				fileIn.getline(tempString, maxLength, '[');
+				tempString = fileIn.readLine().split('[').last();
 				fileIn >> texCoord[0][0];
-				fileIn.get();
+//				fileIn.get();
+				fileIn.read(1);
 				fileIn >> texCoord[0][1];
-				fileIn.get(tempString,4);
+//				fileIn.get(tempString,4);
+				tempString = fileIn.read(4);
 				fileIn >> texCoord[1][0];
-				fileIn.get();
+//				fileIn.get();
+				fileIn.read(1);
 				fileIn >> texCoord[1][1];
-				fileIn.get(tempString,4);
+//				fileIn.get(tempString,4);
+				tempString = fileIn.read(4);
 				fileIn >> texCoord[2][0];
-				fileIn.get();
+//				fileIn.get();
+				fileIn.read(1);
 				fileIn >> texCoord[2][1];
 				addTriangle(vertIdx[0], vertIdx[1], vertIdx[2], norm[0], norm[1], norm[2], textureID, texCoord[0][0], texCoord[0][1], texCoord[1][0], texCoord[1][1], texCoord[2][0], texCoord[2][1]);
 			}
 			else
 				addTriangle(vertIdx[0], vertIdx[1], vertIdx[2], norm[0], norm[1], norm[2]);
-			fileIn.getline(tempString, maxLength);
-			
-		}
-		while(fileIn.peek()=='\t');
-		fileIn.close();
+//			fileIn.getline(tempString, maxLength);
+			tempString = fileIn.readLine();
+//		}while(fileIn.peek()=='\t');
+		}while(peek(fileIn)=='\t');
+		file.close();
 		//calcNormals();
 	}
 	else
 	{
 		//MessageBox(NULL, (LPCWSTR)L"Error opening file", (LPCWSTR)L"Loading Mesh Model", MB_OK);
+		qErrnoWarning("Error opening mesh model file %s\n", filename);
 	}
 
 	calcExtremes();

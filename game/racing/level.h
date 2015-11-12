@@ -24,9 +24,9 @@ public:
 	Level();
 	~Level();
 		void addPlayer(MeshObject* obj);
-		void addPlayer(const char* modelfile);
+		void addPlayer(QString modelfile);
 		void initObject(MeshObject* obj);
-		void addObject(const char* modelfile);
+		MeshObject* addObject(const char* modelfile);
 	void addLight(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec);
 		void run(GLfloat dt);
 		void updateObjects(GLfloat dt);

@@ -4,9 +4,9 @@
 #include "vector3d.h"
 
 #include "qtgl.h"
-#include <string>
+//#include <string>
 
-using namespace std;
+//using namespace std;
 
 #define MAX_VERTS 2000
 
@@ -45,7 +45,7 @@ class MeshModel
 public:
 	MeshModel();
 	~MeshModel();
-	bool loadFile(string filename);
+	bool loadFile(QString filename);
 	void addVertex(GLfloat x, GLfloat y, GLfloat z);
 	void addVertex(GLfloat x, GLfloat y, GLfloat z, GLfloat nx, GLfloat ny, GLfloat nz);
 	void addTriangle(GLint v1, GLint v2, GLint v3);

@@ -5,12 +5,14 @@
 
 MeshObject::MeshObject()
 {
-
+	mass = new Mass;
+	bbox = new MeshModel;
 }
 
 MeshObject::~MeshObject()
 {
-
+	delete mass;
+	delete bbox;
 }
 
 void MeshObject::init()								// this method will call the init() method of every mass

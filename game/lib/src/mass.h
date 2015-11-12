@@ -34,7 +34,7 @@ public:
 	float torque, torquenew;
 	Vector3D axis;								//axis of rotation
 
-	Mass(float m);								// Constructor
+	Mass(float m=1);								// Constructor
 
 	/*
 	  void applyForce(Vector3D force) method is used to add external force to the mass. 

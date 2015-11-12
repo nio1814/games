@@ -16,6 +16,7 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void restartTimer();
+public slots:
     void process();
 protected:
     void initializeGL();

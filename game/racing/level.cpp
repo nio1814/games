@@ -46,7 +46,7 @@ void Level::initObject(MeshObject *obj)
 	return;
 }
 
-void Level::addPlayer(const char* modelfile)
+void Level::addPlayer(QString modelfile)
 {
 	player->mesh = new MeshModel;
 	player->isDynamicMesh = true;
@@ -61,28 +61,31 @@ void Level::addLight(GLenum lnum, const Vector3D ptn, const Vector3D amb, const 
 	return;
 }
 
-void Level::addObject(const char* modelfile)
-{
-	objs[numObjs].mesh = new MeshModel;
-	objs[numObjs].isDynamicMesh = true;
-	objs[numObjs].mesh->loadFile(modelfile);
-	initObject(&objs[numObjs++]);
+MeshObject* Level::addObject(const char* modelfile)
+{	
+	objs.append(new MeshObject);
+	MeshObject* newObject = objs.last();
+	newObject->mesh = new MeshModel;
+	newObject->isDynamicMesh = true;
+	newObject->mesh->loadFile(modelfile);
 
-	return;
+	initObject(newObject);
+
+	return objs.last();
 }
 
 
 void Level::run(GLfloat dt)
 {
-	int o;
-
-	for(o=0; o<objs.size(); o++)
+	for(int o=0; o<objs.size(); o++)
 	{
-		contactPoints[o].touch = player->bbox->detectCollisionM(objs[o]->bbox, &contactPoints[o].point, &contactPoints[o].norm);
-		if(contactPoints[o].touch)
+//		contactPoints[o].touch = player->bbox->detectCollisionM(objs[o]->bbox, &contactPoints[o].point, &contactPoints[o].norm);
+		Contact contactPoint;
+		contactPoint.touch = player->bbox->detectCollisionM(objs[o]->bbox, &contactPoint.point, &contactPoint.norm);
+		if(contactPoint.touch)
 		{
-			doCollision(player, objs[o], contactPoints[o].point, contactPoints[o].norm);
-			doCollision(objs[o], player, contactPoints[o].point, -contactPoints[o].norm);
+			doCollision(player, objs[o], contactPoints[o].point, contactPoint.norm);
+			doCollision(objs[o], player, contactPoints[o].point, -contactPoint.norm);
 		}
 	}
 	updateObjects(dt);

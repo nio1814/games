@@ -14,11 +14,11 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 	m_level->player->mass->dir = Y;
 	m_level->player->mesh->centerMesh();
 	m_level->player->mass->pos = m_level->player->mesh->center;
-	m_level.addObject("data/track1_4.ogl");
+	MeshObject *object = m_level->addObject(":data/track1_4.ogl");
 //	m_level->addTexture("data/visa09.tga");
-	m_level->objs[0].mesh->scale(1500);
-	m_level->objs[0].mesh->centerMesh();
-	m_level->objs[0].mesh->translate(&Vector3D(0,0,game.objs[0].mesh->maxs.z));
+	object->mesh->scale(1500);
+	object->mesh->centerMesh();
+	object->mesh->translate(Vector3D(0,0,object->mesh->maxs.z));
 	m_level->player->mass->pos = Vector3D(250,0,22);
 
 }
@@ -72,6 +72,9 @@ void GLWidget::initializeGL()
 
 void GLWidget::paintGL()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
 	return;
 }
 
@@ -82,7 +85,9 @@ GLWidget::~GLWidget()
 
 void GLWidget::process()
 {
-	m_level->run(m_timer->elapsed());
+	GLfloat dt = m_timer->elapsed()*1e-3;
+//	qErrnoWarning("%f\n", dt);
+	m_level->run(dt);
 	m_timer->start();
 
 	return;
