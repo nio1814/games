@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>data/mercedes3.ogl</file>
+        <file>data/track1_4.ogl</file>
+    </qresource>
+</RCC>

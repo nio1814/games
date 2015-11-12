@@ -14,6 +14,12 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 	m_level->player->mass->dir = Y;
 	m_level->player->mesh->centerMesh();
 	m_level->player->mass->pos = m_level->player->mesh->center;
+	m_level.addObject("data/track1_4.ogl");
+//	m_level->addTexture("data/visa09.tga");
+	m_level->objs[0].mesh->scale(1500);
+	m_level->objs[0].mesh->centerMesh();
+	m_level->objs[0].mesh->translate(&Vector3D(0,0,game.objs[0].mesh->maxs.z));
+	m_level->player->mass->pos = Vector3D(250,0,22);
 
 }
 

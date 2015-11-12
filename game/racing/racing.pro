@@ -35,3 +35,6 @@ HEADERS  += mainwindow.h \
     ../lib/src/keys.h \
     ../lib/src/camera.h \
     ../lib/src/mass.h
+
+RESOURCES += \
+    racing.qrc

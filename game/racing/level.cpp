@@ -21,6 +21,15 @@ Level::Level()
 {
 	player = new MeshObject;
 
+	up = Z;
+	
+	cam.pos = Vector3D(0.01f,-5.1f,3.3f);
+	cam.look = Vector3D(0,0,0);
+	cam.up = Z;
+	cam.up.x = 0;
+	cam.up.y = 0;
+	cam.up.z = 1;
+	camview = FOLLOW;
 }
 
 Level::~Level()
@@ -51,6 +60,17 @@ void Level::addLight(GLenum lnum, const Vector3D ptn, const Vector3D amb, const 
 {
 	return;
 }
+
+void Level::addObject(const char* modelfile)
+{
+	objs[numObjs].mesh = new MeshModel;
+	objs[numObjs].isDynamicMesh = true;
+	objs[numObjs].mesh->loadFile(modelfile);
+	initObject(&objs[numObjs++]);
+
+	return;
+}
+
 
 void Level::run(GLfloat dt)
 {
