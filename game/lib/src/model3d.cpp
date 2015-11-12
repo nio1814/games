@@ -54,7 +54,8 @@ bool MeshModel::loadFile(QString filename)
 		{
 			//Get vertex coordinates
 //			fileIn.getline(tempString, maxLength, '[');
-			tempString = fileIn.readLine().split('[').last();
+//			tempString = fileIn.readLine().split('[').last();
+			fileIn.read(2);
 			fileIn >> vert[0];
 //			fileIn.get();
 			fileIn.read(1);
@@ -62,9 +63,11 @@ bool MeshModel::loadFile(QString filename)
 //			fileIn.get();
 			fileIn.read(1);
 			fileIn >> vert[2];
+
 			//Get vertex normal
 //			fileIn.getline(tempString, maxLength, '[');
-			tempString = fileIn.readLine().split(']').last();
+//			tempString = fileIn.readLine().split(']').last();
+			fileIn.read(3);
 			fileIn >> norm[0];
 //			fileIn.get();
 			fileIn.read(1);
@@ -77,6 +80,7 @@ bool MeshModel::loadFile(QString filename)
 			addVertex(vert[0], vert[1], vert[2], norm[0], norm[1], norm[2]);
 //		}while(fileIn.peek()=='\t');
 		}while(peek(fileIn)=='\t');
+
 //		fileIn.getline(tempString, maxLength);
 		tempString = fileIn.readLine();
 		//Get vertex indicies of faces
@@ -93,9 +97,11 @@ bool MeshModel::loadFile(QString filename)
 			fileIn >> vertIdx[2];
 //			fileIn.get();
 			fileIn.read(1);
+
 			//Get face normal
 //			fileIn.getline(tempString, maxLength, '[');
-			tempString = fileIn.readLine().split('[').last();
+//			tempString = fileIn.readLine().split('[').last();
+			fileIn.read(3);
 			fileIn >> norm[0];
 //			fileIn.get();
 			fileIn.read(1);
@@ -103,9 +109,11 @@ bool MeshModel::loadFile(QString filename)
 //			fileIn.get();
 			fileIn.read(1);
 			fileIn >> norm[2];
+
 			//Get texture
 //			fileIn.getline(tempString, maxLength, ']');
-			tempString = fileIn.readLine().split(']').last();
+//			tempString = fileIn.readLine().split(']').last();
+			fileIn.read(2);
 			fileIn >> textureID;
 			if(textureID)
 			{

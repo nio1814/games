@@ -87,6 +87,7 @@ void Level::draw()
 		glVertex3f(-0.5*linewidth*numLines, y*linewidth, 0.0f);
 		glVertex3f(0.5*linewidth*numLines, y*linewidth, 0.0f);
 		glEnd();
+
 		glBegin(GL_LINES);
 		glNormal3f( 0.0f, 0.0f, 1.0f);
 		glVertex3f(y*linewidth, -0.5*linewidth*numLines, 0.0f);
@@ -98,7 +99,7 @@ void Level::draw()
 		objs[i]->draw();
 	player->draw();
 
-	return objs.last();
+	return;
 }
 
 void Level::run(GLfloat dt)
@@ -196,7 +197,7 @@ void Level::updateObjects(GLfloat dt)
 
 void Level::updateCamera(GLfloat dt)
 {
-	GLfloat followDist = 20.0f;
+	GLfloat followDist = 30.0f;
 	GLfloat followHeight = 10.0f;
 	Vector3D targetPos;
 	Vector3D moveDir;
