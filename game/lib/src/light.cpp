@@ -8,14 +8,14 @@ Light::Light()
 
 Light::Light(GLenum lnum)
 {
-        Light();
+	Light();
 	
 	lightNum = lnum;
 }
 
 Light::Light(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec)
 {
-        Light();
+	Light();
 	
 	pos = ptn;
 	ambient = amb;

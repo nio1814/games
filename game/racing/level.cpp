@@ -77,7 +77,7 @@ MeshObject* Level::addObject(const char* modelfile)
 void Level::draw()
 {
 	for (int l=0; l<m_lights.size(); l++)
-		glEnable(m_lights[l]->lightNum);
+		m_lights[l]->enable();
 
 	int numLines = 200;
 	GLfloat linewidth = 5;
