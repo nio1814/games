@@ -1,21 +1,21 @@
 #include "light.h"
 
-light_c::light_c()
+Light::Light()
 {
 	enabled = false;
 	lightNum = (GLenum)0;
 }
 
-light_c::light_c(GLenum lnum)
+Light::Light(GLenum lnum)
 {
-	light_c();
+        Light();
 	
 	lightNum = lnum;
 }
 
-light_c::light_c(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec)
+Light::Light(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec)
 {
-	light_c();
+        Light();
 	
 	pos = ptn;
 	ambient = amb;
@@ -24,7 +24,7 @@ light_c::light_c(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vect
 	lightNum = lnum;
 }
 
-bool light_c::enable()
+bool Light::enable()
 {
 	bool success = false;	//need to figure out a way to see if success
 	GLfloat posA[] = {pos.x,pos.y,pos.z,1.0f};

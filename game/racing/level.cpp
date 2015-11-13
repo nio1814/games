@@ -25,10 +25,8 @@ Level::Level()
 	
 	cam.pos = Vector3D(0.01f,-5.1f,3.3f);
 	cam.look = Vector3D(0,0,0);
-	cam.up = Z;
-	cam.up.x = 0;
-	cam.up.y = 0;
-	cam.up.z = 1;
+	cam.up = up;
+
 	camview = FOLLOW;
 }
 
@@ -58,6 +56,8 @@ void Level::addPlayer(QString modelfile)
 
 void Level::addLight(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec)
 {
+	m_lights.append(new Light(lnum, ptn, amb, dif, spec));
+
 	return;
 }
 
@@ -76,6 +76,9 @@ MeshObject* Level::addObject(const char* modelfile)
 
 void Level::draw()
 {
+	for (int l=0; l<m_lights.size(); l++)
+		glEnable(m_lights[l]->lightNum);
+
 	int numLines = 200;
 	GLfloat linewidth = 5;
 	glLookAt(cam.pos.toQVector3D(), cam.look.toQVector3D(), cam.up.toQVector3D());

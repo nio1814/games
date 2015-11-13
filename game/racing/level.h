@@ -39,6 +39,7 @@ public:
 		QList<Contact> contactPoints;
 		CameraPoint cam;
 		CameraView camview;
+		QVector<Light*> m_lights;
 };
 
 #endif // LEVEL_H

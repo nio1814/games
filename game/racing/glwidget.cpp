@@ -9,7 +9,7 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
 	m_timer = new QElapsedTimer;
 	m_level = new Level;
-	m_level->addLight(GL_LIGHT0, Vector3D(4,2,-2), Vector3D(0.6,0.5,0.5), Vector3D(0.8,1,0.8), Vector3D(1,1,1));	
+	m_level->addLight(GL_LIGHT0, Vector3D(-40,2,20), Vector3D(0.1,0.5,0.5), Vector3D(0.1,1,0.8), Vector3D(1,1,1));
 	m_level->addPlayer(":data/mercedes3.ogl");
 	m_level->player->mass->dir = Y;
 	m_level->player->mesh->centerMesh();
