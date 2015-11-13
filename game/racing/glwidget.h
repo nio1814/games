@@ -22,6 +22,8 @@ protected:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
+    void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
 private:
 	Level* m_level;
 	QElapsedTimer* m_timer;

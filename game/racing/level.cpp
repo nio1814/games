@@ -79,7 +79,8 @@ void Level::draw()
 	for (int l=0; l<m_lights.size(); l++)
 		m_lights[l]->enable();
 
-	int numLines = 200;
+//	int numLines = 200;
+	int numLines = 2;
 	GLfloat linewidth = 5;
 	glLookAt(cam.pos.toQVector3D(), cam.look.toQVector3D(), cam.up.toQVector3D());
 

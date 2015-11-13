@@ -32,6 +32,7 @@ public:
 		void run(GLfloat dt);
 		void updateObjects(GLfloat dt);
 		void updateCamera(GLfloat dt);
+		bool checkKeys();
 
 		Vector3D up;
 		MeshObject* player;
