@@ -12,10 +12,11 @@
 
 #include "mass.h"
 #include <texture.h>
-#include "camera.h"
-#include "datastructs.h"
+//#include "camera.h"
+//#include "datastructs.h"
 
 #include <qvector.h>
+#include "qtgl.h"
 
 extern GLfloat dt;
 extern bool bGravityOn;

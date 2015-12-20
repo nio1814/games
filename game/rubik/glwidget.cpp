@@ -6,6 +6,7 @@
 #include "keys.h"
 #include "constants.h"
 #include "mouse.h"
+#include "qtgl.h"
 
 #define CAMOVESPEED 2.0f
 
@@ -209,8 +210,8 @@ void GLWidget::runMouse()
     {
         if(mos->y != mos->yOld)
 		{
-            look2cam = look2cam.rotate3D(&toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
-            cam->up = cam->up.rotate3D(&toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+			look2cam = look2cam.rotate3D(toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+			cam->up = cam->up.rotate3D(toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
 			camposOld = cam->pos;
 			cam->pos = cam->look + look2cam;
 		}
@@ -219,7 +220,7 @@ void GLWidget::runMouse()
 		toSideDir = cam->dir2RSide();
         if(mos->x != mos->xOld)
 		{
-            look2cam = look2cam.rotate3D(&cam->up,-(mos->x-mos->xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
+			look2cam = look2cam.rotate3D(cam->up,-(mos->x-mos->xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
 			camposOld = cam->pos;
 			cam->pos = cam->look + look2cam;
 		}
@@ -251,7 +252,7 @@ void GLWidget::rotateLR(GLfloat angle)
 {
 	Vector3D look2cam = -cam->cam2look();
 
-	look2cam = look2cam.rotate3D(&cam->up,-angle);
+	look2cam = look2cam.rotate3D(cam->up,-angle);
 //	camposOld = cam->pos;
 	cam->pos = cam->look + look2cam;
 
@@ -263,8 +264,8 @@ void GLWidget::rotateUD(GLfloat angle)
 	Vector3D look2cam = -cam->cam2look();
 	Vector3D toSideDir = cam->dir2RSide();
 
-	look2cam = look2cam.rotate3D(&toSideDir, angle);
-	cam->up = cam->up.rotate3D(&toSideDir, angle);
+	look2cam = look2cam.rotate3D(toSideDir, angle);
+	cam->up = cam->up.rotate3D(toSideDir, angle);
 //	camposOld = cam->pos;
 	cam->pos = cam->look + look2cam;
 

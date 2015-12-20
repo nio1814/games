@@ -26,6 +26,8 @@
 #include <texture.h>
 
 #include "commands.h"
+#include "qtgl.h"
+#include <QKeyEvent>
 
 //bool		keys[256];									// Array Used For The Keyboard Routine
 bool		active=true;								// Window Active Flag Set To TRUE By Default

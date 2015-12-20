@@ -499,6 +499,8 @@ int Level::objectIndex(type objType, int index)
         default:
             qWarning() << "Invalid object type: " << objType;
     }
+
+	return objectIdx;
 }
 
 void Level::setMass(type objType, int index, float mass)

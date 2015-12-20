@@ -50,7 +50,7 @@ private:
 	void rotateUD(GLfloat angle);
 
     bool lightActive;
-    light_c light;
+	Light light;
     CameraPoint* cam;
     Vector2D fovAngle;
     rcube_c rcube;

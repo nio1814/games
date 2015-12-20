@@ -7,5 +7,5 @@ int             F_API FSOUND_PlaySound(int channel, FSOUND_SAMPLE *sptr)
 
 signed char     F_API FSOUND_StopSound(int channel)
 {
-
+	return '\0';
 }

@@ -1,6 +1,8 @@
 #ifndef GLWIDGET
 #define GLWIDGET
 
+#include <QtGlobal>
+
 class gameObj;
 class Mouse;
 class object_sphere;
