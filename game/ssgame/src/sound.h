@@ -41,7 +41,7 @@ extern soundData_s sonicSounds;
 extern soundData_s tailsSounds;
 
 void doSounds();
-void playActionSound(const Object &obj, actions act);
+void playActionSound(const Object &obj, Action act);
 void setMusic(FSOUND_SAMPLE *song);
 bool toggleMusic();
 

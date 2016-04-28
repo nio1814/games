@@ -50,7 +50,7 @@ void clearStates(Object &obj);
 void updatePlayerMove(Object &moveObj, GLfloat dt);
 void updateObjectMove(Object &moveObj, GLfloat dt);
 void updateEnemyMove(Object &moveObj, const Object &target, GLfloat dt);
-actions runEnemyAI(Object &thisEnemy, const Object &target);
+Action runEnemyAI(Object &thisEnemy, const Object &target);
 void updateMoves(int mobjects[], int numObjects);
 void updateMoves(objectHolder_c mobjects);
 

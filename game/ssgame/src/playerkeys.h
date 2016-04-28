@@ -22,7 +22,7 @@ enum buttons{btnLEFT, btnRIGHT, btnUP, btnDOWN, btnJUMP, btnATTACK, btnSHOOT, bt
 void assignControls();
 
 //void runKeys(Level* lvl, joystick_s *joy, pointerTree* tP);
-int getKey(playerNum numPlayer, actions act);
+int getKey(playerNum numPlayer, Action act);
 void getKeys(playerNum numPlayer, int pKeys[]);
 void getBtns(playerNum numPlayer, int pBtns[]);
 bool playerPress(playerNum pnum, const int In);

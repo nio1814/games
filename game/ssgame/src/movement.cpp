@@ -323,7 +323,7 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 {
     QTime clock;
 	GLfloat currentTime;
-	actions thisAct;
+	Action thisAct;
 	bool doneAction[20];		//used for loop of actions
 	int playerKeys[8];
 	int playerBtns[8];
@@ -470,7 +470,7 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 	do
 	{
 		if(!moveObj.animationDone[moveObj.currentAct] && !doneAction[moveObj.currentAct])
-			thisAct = static_cast<actions>(moveObj.currentAct);
+			thisAct = static_cast<Action>(moveObj.currentAct);
 		else if( playerPress(numPlayer, btnSHOOT) && (moveObj.objshots != NULL) && !doneAction[actSHOOT] && moveObj.canShoot)
 		{
 			if(canPlayerToggle(numPlayer, btnSHOOT))
@@ -567,7 +567,7 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 
 void updateEnemyMove(Object &moveObj, const Object &target, GLfloat dt)
 {
-	actions thisAct = actNONE;
+	Action thisAct = actNONE;
 	bool couldAnimate = true;
 	bool hurt = false;
 	bool doneAction[20];
@@ -752,10 +752,10 @@ void updateEnemyMove(Object &moveObj, const Object &target, GLfloat dt)
 }
 
 
-actions runEnemyAI(Object &thisEnemy, const Object &target)
+Action runEnemyAI(Object &thisEnemy, const Object &target)
 {
 	GLfloat floorLeft, floorRight;
-	actions thisAct = actNONE;
+	Action thisAct = actNONE;
 	thisEnemy.mov = Vector2D(0,0);
 	
 	switch(thisEnemy.person)

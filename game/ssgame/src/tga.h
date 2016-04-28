@@ -27,9 +27,9 @@ struct tImageTGA
 tImageTGA *Load_TGA(const char *filename);
 tImageTGA* loadTGA(QString filename);
 void TGA_Texture(unsigned int textureArray[], const char* strFileName, int textureID);
-void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center=.05f);
-void TGA_Texture(Animation *aData, const char* strFileName, int ID, GLfloat center);
-void tgaTextures(Animation *aData, QStringList filenames);
+void TGA_Texture(Animations *aData, const char* strFileName, GLfloat center=.5f);
+void TGA_Texture(Animations *aData, const char* strFileName, int ID, GLfloat center);
+void tgaTextures(Animations *aData, QStringList filenames);
 
 
 #endif

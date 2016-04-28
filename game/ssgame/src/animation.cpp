@@ -1,8 +1,6 @@
 #include <stdio.h>						// Header File For Standard Input/Output
 #include <stdarg.h>						// Header File For Variable Argument Routines	( ADD )
 #include <math.h>						// Header File For Windows Math Library
-//#include <gl\gl.h>						// Header File For The OpenGL32 Library
-//#include <gl\glu.h>
 #include <string>
 
 #include "vector3d.h"
@@ -14,19 +12,125 @@
 #include "masking.h"
 #include "movement.h"
 
-#include "QTime"
+#include <QTime>
 
 extern int DEFRUNFRAMESPD = 17;
 
-Animation tailsT;
+Animations tailsT;
 
-Animation playerTextures[NUMCHARACTERS];
-Animation objectTextures[NUMBLOCKTYPES];
-Animation shotTextures[NUMSHOTTYPES];
+Animations playerTextures[NUMCHARACTERS];
+Animations objectTextures[NUMBLOCKTYPES];
+Animations shotTextures[NUMSHOTTYPES];
 
-int Animation::numTextures()
+Animation::Animation() : m_repeatFrame(0), m_mustPassFrame(0), m_speed(DEFFRAMESPEED), m_canHold(false)
+{}
+
+Animation::Animation(QStringList textureFiles, int mustPassFrame, int repeatFrame, bool canHold, GLfloat speed):
+	m_repeatFrame(repeatFrame), m_mustPassFrame(mustPassFrame), m_speed(speed), m_canHold(canHold)
+{
+	foreach(QString textureFile, textureFiles)
+	{
+		tImageTGA* pBitMap = loadTGA(textureFile);
+
+		if(pBitMap->data == NULL)
+		{
+			qErrnoWarning("Failed to load TGA data from %s\n", textureFile.constData());
+			exit(0);
+		}
+
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		int textureType = GL_RGB;
+		if(pBitMap->channels == 4)
+		   textureType = GL_RGBA;
+		glTexImage2D(GL_TEXTURE_2D, 0, textureType, pBitMap->size_x, pBitMap->size_y, 0, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		Texture newTexture;
+		newTexture.ID == texture;
+		newTexture.center = 0.5f;
+		newTexture.size[0] = pBitMap->size_x;
+		newTexture.size[1] = pBitMap->size_y;
+
+		m_textures.append(newTexture);
+	}
+}
+
+void Animation::setSpeed(GLfloat speed)
+{
+	m_speed = speed;
+}
+
+void Animation::canHold(bool holdable)
+{
+	m_canHold = holdable;
+}
+
+void Animation::setCenters(QVector<GLfloat> centers)
+{
+	if(m_textures.size()==centers.size())
+		for(int n=0; n<m_textures.size(); n++)
+		{
+			m_textures[n].center = centers[n];
+		}
+	else
+		qErrnoWarning("Number of textures %d does not match number of centers %d", m_textures.size(), centers.size());
+
+	return;
+}
+
+int Animations::numTextures()
 {
     return textures.size();
+}
+
+Animations::Animations()
+{
+	for(int i=0; i<NUMACTIONS; i++)
+	{
+		frameData[i][animSTART] =  -1;
+		frameData[i][animSPEED] = 10*DEFFRAMESPEED;
+		frameData[i][minstopFRAME] = -1;
+		frameData[i][canHOLD] = 0;
+	}
+
+	frameData[actRUN][animSPEED] = DEFRUNFRAMESPD;
+	frameData[actATTACK1][animSPEED] = DEFATK1FRAMESPD;
+	frameData[actJUMP][animSPEED] = DEFJUMPFRAMESPD;
+	m_animations[actRUN].setSpeed(DEFRUNFRAMESPD);
+	m_animations[actATTACK1].setSpeed(DEFATK1FRAMESPD);
+	m_animations[actJUMP].setSpeed(DEFJUMPFRAMESPD);
+
+	frameData[actDUCK][canHOLD] = 1;
+	frameData[actWALL][canHOLD] = 1;
+	frameData[actSHOOT][canHOLD] = 1;
+	m_animations[actDUCK].canHold(true);
+	m_animations[actWALL].canHold(true);
+	m_animations[actSHOOT].canHold(true);
+
+//		for(int i=0; i<MAXTEXTURES; i++)
+//			centers[i] = .5f;
+
+	canWallClimb = false;
+	canGrabWall = false;
+	canShoot = false;
+	canRoll = false;
+	animates = false;
+	isSolid = true;
+
+	jumpStrength = DEFJUMPSTRENGTH;	//make into defaults
+	maxSpeed = DEFMAXSPEED;
+}
+
+void Animations::setAnimation(Action action, Animation animation)
+{
+	m_animations[action] = animation;
+
+	return;
 }
 
 QStringList filenameList(QString baseDir, QString baseName, int length, QString extension)
@@ -41,7 +145,7 @@ QStringList filenameList(QString baseDir, QString baseName, int length, QString 
     return filenames;
 }
 
-int LoadGLTextures(Animation *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
+int LoadGLTextures(Animations *aData, char filePath[], int ID)								// Load Bitmaps And Convert To Textures
 {
     int Status = false;
 //	GLuint *tpointer;
@@ -78,17 +182,29 @@ void doTextures()
 	for(int i=0; i<NUMBLOCKTYPES; i++)
 //        objectTextures[i] = new Animation;
         objectTextures.append(Animation());*/
+	QString characterImgDir = ":img/characters/";
+	QStringList filenames;
 
 	//load pics for each animdata
 	//ZERO
+	QString currentDir = characterImgDir+"zero/";
+
     playerTextures[ZERO].person = ZERO;
-//    TGA_Texture(playerTextures[ZERO], "Data/img/characters/zero/zero.tga", 0);
+	TGA_Texture(&playerTextures[ZERO], ":img/characters/zero/zero.tga");
+
+//	Animation animationInfo;
+//	animationInfo.numFrames = 11;
+//	animationInfo.repeatFrame = 2;
+//	animationInfo.stopFrame = 0;
 
     playerTextures[ZERO].frameData[actRUN][animSTART] = 1;
     playerTextures[ZERO].frameData[actRUN][numFRAMES] = 11;
     playerTextures[ZERO].frameData[actRUN][repeatFRAME] = 2;
     playerTextures[ZERO].frameData[actRUN][lastFRAME] = 11;
     playerTextures[ZERO].maxSpeed = 5.0f;
+	filenames = filenameList(currentDir, "zeroRun", 11, "tga");
+	tgaTextures(&playerTextures[ZERO], filenames);
+	Animation newAnimation(filenames, 0, 1);
     /*TGA_Texture(playerTextures[ZERO], "Data/img/characters/zero/zeroRun1.tga", 1);		// First Mask
     TGA_Texture(playerTextures[ZERO], "Data/img/characters/zero/zeroRun2.tga", 2);
     TGA_Texture(playerTextures[ZERO], "Data/img/characters/zero/zeroRun3.tga", 3);
@@ -105,6 +221,12 @@ void doTextures()
     playerTextures[ZERO].frameData[actATTACK1][numFRAMES] = 11;
     playerTextures[ZERO].frameData[actATTACK1][lastFRAME] = 22;
     playerTextures[ZERO].frameData[actATTACK1][minstopFRAME] = 22;
+	filenames = filenameList(currentDir, "zeroAtk", 11, "tga");
+	newAnimation = Animation(filenames, 10,  -1);
+	QVector<GLfloat> centers;
+	centers << 0 << 0.63461f << 0.63461f <<  0.6458333f << 0.296875f << 0.225f << 0.225f << 0.225f << 0.23684210f << 0.25714285f << 0.4f;
+	newAnimation.setCenters(centers);
+	playerTextures[ZERO].setAnimation(actATTACK1, newAnimation);
     /*TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroAtk1.tga", 12);			// First Mask
 	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroAtk2.tga", 13, 0.63461f);
 	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroAtk3.tga", 14, 0.63461f);
@@ -121,6 +243,8 @@ void doTextures()
     playerTextures[ZERO].frameData[actJUMP][numFRAMES] = 7;
     playerTextures[ZERO].frameData[actJUMP][repeatFRAME] = 27;
     playerTextures[ZERO].frameData[actJUMP][lastFRAME] = 29;
+	filenames = filenameList(currentDir, "zeroJump", 7, "tga");
+	playerTextures[ZERO].setAnimation(actJUMP, Animation(filenames, 0,  4));
     /*TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroJump1.tga", 23);			// First Mask
 	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroJump2.tga", 24);	
 	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroJump3.tga", 25);	
@@ -133,23 +257,32 @@ void doTextures()
     playerTextures[ZERO].frameData[actWALL][numFRAMES] = 1;
     playerTextures[ZERO].frameData[actWALL][lastFRAME] = 30;
     playerTextures[ZERO].canWallClimb = true;
+	playerTextures[ZERO].setAnimation(actWALL, Animation(QStringList(":img/characters/zero/zeroWall2.tga")));
     /*TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroWall2.tga", 30);
     TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroWall1.tga", 31);*/
 
     playerTextures[ZERO].frameData[actDUCK][animSTART] = 32;
     playerTextures[ZERO].frameData[actDUCK][numFRAMES] = 1;
     playerTextures[ZERO].frameData[actDUCK][lastFRAME] = 32;
+	playerTextures[ZERO].setAnimation(actWALL, Animation(QStringList(":img/characters/zero/zeroDuck.tga")));
 //	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroDuck.tga", 32);
 
     playerTextures[ZERO].frameData[actHURT][animSTART] = 33;
     playerTextures[ZERO].frameData[actHURT][numFRAMES] = 1;
     playerTextures[ZERO].frameData[actHURT][lastFRAME] = 33;
+	playerTextures[ZERO].setAnimation(actWALL, Animation(QStringList(":img/characters/zero/zeroHurt1.tga")));
 //	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroHurt1.tga", 33);
 
     playerTextures[ZERO].frameData[actJUMPATK][animSTART] = 34;
     playerTextures[ZERO].frameData[actJUMPATK][numFRAMES] = 12;
     playerTextures[ZERO].frameData[actJUMPATK][lastFRAME] = 45;
     playerTextures[ZERO].frameData[actJUMPATK][minstopFRAME] = 45;
+	filenames = filenameList(currentDir, "zeroJumpAtk", 12, "tga");
+	newAnimation = Animation(filenames, 11);
+	centers.clear();
+	centers << 0 << 0.4375f <<  0.5588235f << 0.622222f << 0.7045f << 0.333333f << 0.236111111f << 0.222222222f << 0.208333333f << 0.2205882352f << 0.241935483f << 0.43243243243f;
+	newAnimation.setCenters(centers);
+	playerTextures[ZERO].setAnimation(actJUMP, Animation(filenames, 0,  4));
     /*TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroJumpAtk1.tga", 34);			// First Mask
 	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroJumpAtk2.tga", 35, 0.4375f);
 	TGA_Texture(playerTextures[ZERO],  "Data/img/characters/zero/zeroJumpAtk3.tga", 36, 0.5588235f);
@@ -231,10 +364,8 @@ void doTextures()
 
     shotTextures[GOKUSHOT].lastFrame = 1;
 
-    QString characterImgDir = ":img/characters/";
-
 	//MMX
-    QString currentDir = characterImgDir+"mmx/";
+	currentDir = characterImgDir+"mmx/";
     playerTextures[MMX].person = MMX;
     TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga");
 	
@@ -247,7 +378,7 @@ void doTextures()
     playerTextures[MMX].frameData[actRUN][numFRAMES] = 11;
     playerTextures[MMX].frameData[actRUN][repeatFRAME] = 3;
     playerTextures[MMX].frameData[actRUN][lastFRAME] = 12;
-    QStringList filenames;
+
     filenames = filenameList(currentDir, "mmxRun", 11, "tga");
     tgaTextures(&playerTextures[MMX], filenames);
     /*TGA_Texture(playerTextures[MMX], "Data/img/characters/mmx/mmxRun1.tga", 2);
@@ -915,7 +1046,7 @@ void doTextures()
 	return;
 }
 
-void assignTextures(Object &obj, Animation *animData)
+void assignTextures(Object &obj, Animations *animData)
 {
 	for(int i=0; i<NUMACTIONS; i++)
 	{
@@ -941,7 +1072,7 @@ void assignTextures(Object &obj, Animation *animData)
 	return;
 }
 
-bool sendAnimation(Object &obj, actions act, GLfloat dt)
+bool sendAnimation(Object &obj, Action act, GLfloat dt)
 {
 	bool didAnimation;
 
@@ -979,7 +1110,7 @@ bool sendAnimation(Object &obj, actions act, GLfloat dt)
 	return didAnimation;
 }
 
-bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt)
+bool animate(Object &obj, Action act, const Animations *animData, GLfloat dt)
 {
 	int frame;
 	GLfloat rx, ry;
@@ -1138,7 +1269,7 @@ bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt)
 	return didAnimation;
 }
 
-void setDefaults(Animation animData[], int numobjs)
+void setDefaults(Animations animData[], int numobjs)
 {
 	for(int i=0; i<numobjs; i++)
 	{

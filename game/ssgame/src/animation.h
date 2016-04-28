@@ -9,14 +9,45 @@
 
 #include "objects.h"
 
-enum actions{actNONE, actRUN, actATTACK1, actJUMP, actWALL, actFLY, actDUCK, actSHOOT, actBLOCK, actJUMPATK, actJUMPSHOOT, actPUSH, actHURT, actRUNATK};
+enum Action{actNONE, actRUN, actATTACK1, actJUMP, actWALL, actFLY, actDUCK, actSHOOT, actBLOCK, actJUMPATK, actJUMPSHOOT, actPUSH, actHURT, actRUNATK};
 enum frame{animSTART, numFRAMES, repeatFRAME, animSPEED, lastFRAME, minstopFRAME, canHOLD};
 
+#define DEFFRAMESPEED 10
+
+struct Texture
+{
+	GLuint ID;
+	Vector2D scale;
+	GLfloat center;
+	GLint size[2];
+};
+
+class Animation
+{
+public:
+	Animation();
+	Animation(QStringList textureFiles, int mustPassFrame=0, int repeatFrame=0, bool canHold=false, GLfloat speed=DEFFRAMESPEED);
+
+	void setCenters(QVector<GLfloat> centers);
+
+	int numFrames();
+	void setSpeed(GLfloat speed);
+	void canHold(bool holdable);
+
+private:
+	int m_repeatFrame;
+	int m_mustPassFrame;
+	float m_speed;
+	bool m_canHold;
+
+	QVector<Texture> m_textures;
+};
+
 #define NUMACTIONS 13
-#define MAXTEXTURES 100
+//#define MAXTEXTURES 100
 //#define MAXFRAMES
 
-#define DEFFRAMESPEED 10
+
 //#define DEFRUNFRAMESPD 17
 extern int DEFRUNFRAMESPD;
 #define DEFATK1FRAMESPD 120
@@ -25,8 +56,14 @@ extern int DEFRUNFRAMESPD;
 #define DEFJUMPSTRENGTH 1.0f
 #define DEFMAXSPEED 5.0f
 
-struct Animation
+class Animations
 {
+public:
+	Animations();
+	int numTextures();
+	void setSpeed(Action action, GLfloat speed);
+	void setAnimation(Action action, Animation animation);
+
     QVector<Vector2D> scale;			//scaling factors for texture
 	Vector2D pixels;
 		//GLfloat hScale[100];
@@ -38,6 +75,7 @@ struct Animation
     QVector<GLfloat> centers;			//center coords for texture
 	
 	int frameData[20][7];			//make sure NUMACTIONS=20
+	Animation m_animations[NUMACTIONS];
 
 	int lastFrame;
 	
@@ -55,51 +93,17 @@ struct Animation
 
 	GLfloat jumpStrength;
 	GLfloat maxSpeed;
-
-    Animation()
-	{
-		for(int i=0; i<NUMACTIONS; i++)
-		{
-			frameData[i][animSTART] =  -1;
-			frameData[i][animSPEED] = 10*DEFFRAMESPEED;
-			frameData[i][minstopFRAME] = -1;
-			frameData[i][canHOLD] = 0;
-		}
-
-		frameData[actRUN][animSPEED] = DEFRUNFRAMESPD;
-		frameData[actATTACK1][animSPEED] = DEFATK1FRAMESPD;
-		frameData[actJUMP][animSPEED] = DEFJUMPFRAMESPD;
-
-		frameData[actDUCK][canHOLD] = 1;
-		frameData[actWALL][canHOLD] = 1;
-		frameData[actSHOOT][canHOLD] = 1;
-		
-//		for(int i=0; i<MAXTEXTURES; i++)
-//			centers[i] = .5f;
-
-		canWallClimb = false;
-		canGrabWall = false;
-		canShoot = false;
-		canRoll = false;
-		animates = false;
-		isSolid = true;
-		
-		jumpStrength = DEFJUMPSTRENGTH;	//make into defaults
-		maxSpeed = DEFMAXSPEED;
-	}
-
-    int numTextures();
 };
 
-extern Animation playerTextures[NUMCHARACTERS];
-extern Animation objectTextures[NUMBLOCKTYPES];
-extern Animation shotTextures[NUMSHOTTYPES];
+extern Animations playerTextures[NUMCHARACTERS];
+extern Animations objectTextures[NUMBLOCKTYPES];
+extern Animations shotTextures[NUMSHOTTYPES];
 
 void doTextures();
-void assignTextures(Object &obj, Animation *animData);
-void setDefaults(Animation animData[], int numobjs);	//last frame and minstop frame
-bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt);
-bool sendAnimation(Object &obj, actions act, GLfloat dt);
+void assignTextures(Object &obj, Animations *animData);
+void setDefaults(Animations animData[], int numobjs);	//last frame and minstop frame
+bool animate(Object &obj, Action act, const Animations *animData, GLfloat dt);
+bool sendAnimation(Object &obj, Action act, GLfloat dt);
 void fixSize(Object &animObj);
 
 

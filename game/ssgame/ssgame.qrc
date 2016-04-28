@@ -39,5 +39,18 @@
         <file>img/characters/mmx/mmxHurt1.tga</file>
         <file>img/characters/mmx/mmxHurt2.tga</file>
         <file>img/characters/mmx/mmxHurt3.tga</file>
+        <file>img/characters/zero/zero.tga</file>
+        <file>img/characters/zero/zeroRun1.tga</file>
+        <file>img/characters/zero/zeroRun2.tga</file>
+        <file>img/characters/zero/zeroRun3.tga</file>
+        <file>img/characters/zero/zeroRun4.tga</file>
+        <file>img/characters/zero/zeroRun5.tga</file>
+        <file>img/characters/zero/zeroRun6.tga</file>
+        <file>img/characters/zero/zeroRun7.tga</file>
+        <file>img/characters/zero/zeroRun8.tga</file>
+        <file>img/characters/zero/zeroRun9.tga</file>
+        <file>img/characters/zero/zeroRun10.tga</file>
+        <file>img/characters/zero/zeroRun11.tga</file>
+        <file>img/characters/goomba/goomba1.tga</file>
     </qresource>
 </RCC>

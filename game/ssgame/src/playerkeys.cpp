@@ -327,7 +327,7 @@ void runKeys(Level* lvl, pointerTree* treeIn)
 }
 
 
-int getKey(playerNum numPlayer, actions act)
+int getKey(playerNum numPlayer, Action act)
 {
 	int key = controlsK[numPlayer][act];
 	

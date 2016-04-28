@@ -38,7 +38,7 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 }
 
 
-void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
+void TGA_Texture(Animations *aData, const char* strFileName, GLfloat center)
 {
     if(!strFileName)
     {
@@ -108,7 +108,7 @@ void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
 		aData->animates = true;					//need more than one frame to animate
 }
 
-void TGA_Texture(Animation *aData, const char* strFileName, int ID, GLfloat center)
+void TGA_Texture(Animations *aData, const char* strFileName, int ID, GLfloat center)
 {
     TGA_Texture(aData, strFileName);
     aData->centers[19] = center;
@@ -116,7 +116,7 @@ void TGA_Texture(Animation *aData, const char* strFileName, int ID, GLfloat cent
 	return;
 }
 
-void tgaTextures(Animation *aData, QStringList filenames)
+void tgaTextures(Animations *aData, QStringList filenames)
 {
 //    QStringListIterator filename;
     foreach (QString filename, filenames)

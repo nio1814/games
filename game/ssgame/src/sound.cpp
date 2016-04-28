@@ -53,7 +53,7 @@ void doSounds()
 }
 
 
-void playActionSound(const Object &obj, actions act)
+void playActionSound(const Object &obj, Action act)
 {
 	soundData_s soundData;
 	
