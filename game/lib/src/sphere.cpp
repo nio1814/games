@@ -2,6 +2,8 @@
 
 #include "qtgl.h"
 
+#include <math.h>
+
 #define SPHERE_X .525731112119133606
 #define SPHERE_Z .850650808352039932
 

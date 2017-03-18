@@ -4,8 +4,8 @@
 #include <string.h>
 
 #include <keys.h>
-#include <3dsGT/3ds.h>
-#include <3dsGT/3dsLoader.h>
+#include <3ds.h>
+#include <3dsLoader.h>
 #include <mouse.h>
 #include <constants.h>
 #include "texture.h"

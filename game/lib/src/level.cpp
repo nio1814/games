@@ -2,6 +2,8 @@
 #include "camera.h"
 #include "keys.h"
 
+#include <qdatetime.h>
+
 Level::Level()
 {
     started = false;

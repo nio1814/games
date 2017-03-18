@@ -4,7 +4,8 @@
 #include "qtgl.h"
 
 #include "object.h"
-#include "3dsGT/3dsLoader.h"
+#include "3dsLoader.h"
+#include "camera.h"
 
 #include <qstring.h>
 
