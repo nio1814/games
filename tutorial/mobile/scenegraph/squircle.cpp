@@ -1,49 +1,61 @@
-#include "scene.h"
+#include "squircle.h"
 
-#include "ellipse.h"
-#include "scenerenderer.h"
 #include <qquickwindow.h>
+#include "squirclerenderer.h"
 
-Scene::Scene() : m_renderer(NULL)
+Squircle::Squircle() : m_t(0), m_renderer(NULL)
 {
 	connect(this, SIGNAL(windowChanged(QQuickWindow*)), this, SLOT(handleWindowChanged(QQuickWindow*)));
 }
 
-void Scene::handleWindowChanged(QQuickWindow *win)
+qreal Squircle::t() const
 {
-	if(win)
+	return m_t;
+}
+
+void Squircle::setT(qreal t)
+{
+	if(t!=m_t)
 	{
-		connect(win, SIGNAL(beforeSynchronizing()), this, SLOT(sync()));
-		connect(win, SIGNAL(sceneGraphInvalidated()), this, SLOT(cleanup()));
-		win->setClearBeforeRendering(false);
+		m_t = t;
+		emit tChanged();
+		if(window())
+			window()->update();
 	}
+
 	return;
 }
 
-void Scene::sync()
+void Squircle::handleWindowChanged(QQuickWindow *win)
+{
+	if(win)
+	{
+		connect(win, SIGNAL(beforeRendering()), this, SLOT(sync()));
+		connect(win, SIGNAL(sceneGraphInvalidated()), this, SLOT(cleanup()));
+		win->setClearBeforeRendering(false);
+	}
+}
+
+void Squircle::sync()
 {
 	if(!m_renderer)
 	{
-		m_renderer = new SceneRenderer;
+		m_renderer = new SquircleRenderer;
 		connect(window(), SIGNAL(beforeRendering()), m_renderer, SLOT(paint()));
 	}
 	m_renderer->setViewportSize(window()->size()*window()->devicePixelRatio());
+	m_renderer->setT(m_t);
+
+	return;
 }
 
-void Scene::cleanup()
+void Squircle::cleanup()
 {
 	if(m_renderer)
 	{
 		delete m_renderer;
 		m_renderer = NULL;
 	}
-
-	return;
-}
-
-void Scene::render(QOpenGLShaderProgram *program)
-{
-	m_ellipses.draw(program);
 
 	return;
 }

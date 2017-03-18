@@ -17,8 +17,9 @@ public:
 	void render(QOpenGLShaderProgram* program);
 
 signals:
-
 public slots:
+	void sync();
+	void cleanup();
 private slots:
 	void handleWindowChanged(QQuickWindow* win);
 private:

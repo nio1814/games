@@ -6,6 +6,8 @@
 SceneRenderer::SceneRenderer(QObject *parent) : QObject(parent)
 {
 	m_lastTime = -1;
+	m_backgroundColor = QColor(qrand()/255, qrand()/255, qrand()/255);
+
 
 	QString vertexShaderCode = "uniform mat4 uMVPMatrix;	\n";
 	vertexShaderCode += "attribute vec4 vPosition;	\n";
@@ -24,6 +26,18 @@ SceneRenderer::SceneRenderer(QObject *parent) : QObject(parent)
 	m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderCode);
 	m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderCode);
 	m_program->link();
+}
+
+SceneRenderer::~SceneRenderer()
+{
+	delete m_program;
+}
+
+void SceneRenderer::setViewportSize(const QSize &size)
+{
+	m_viewportSize = size;
+
+	return;
 }
 
 void SceneRenderer::paint()

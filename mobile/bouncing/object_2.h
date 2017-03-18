@@ -1,5 +1,5 @@
-#ifndef OBJECT
-#define OBJECT
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <qvector.h>
 
@@ -11,6 +11,7 @@ enum Shape{PLANE, SPHERE, LINE, BOX, TRI, ELLIPSE};
 class Object
 {
 public:
+	Object();
 	virtual void draw(QOpenGLShaderProgram* program) {}
 	bool doDraw();
 protected:

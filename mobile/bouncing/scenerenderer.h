@@ -14,7 +14,9 @@ class SceneRenderer : public QObject, protected QOpenGLFunctions
     Q_OBJECT
 public:
     SceneRenderer(QObject *parent = 0);
+	~SceneRenderer();
 
+	void setViewportSize(const QSize &size);
 signals:
 
 public slots:

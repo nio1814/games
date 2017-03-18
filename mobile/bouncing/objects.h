@@ -9,6 +9,13 @@ template <class T>
 class Objects
 {
 public:
+	T* addObject(T* object)
+	{
+		m_objs.append(object);
+
+		return object;
+	}
+
 	void draw(QOpenGLShaderProgram* program)
 	{
 		for(int a=0; a<m_objs.size(); a++)
