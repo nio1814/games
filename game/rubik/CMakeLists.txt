@@ -10,7 +10,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../lib/src)
 set(SRC
 	main.cpp
 	mainwindow.cpp
-	glwidget.cpp
+	cubewindow.cpp
 	shape.cpp
 )
 

@@ -20,7 +20,10 @@ set(SRC
 	3dsLoader.cpp
 	sphere.cpp
 	light.cpp
+	glwidget.cpp
 )
+
+set(CMAKE_AUTOMOC ON)
 
 add_library(gamelib ${SRC})
 

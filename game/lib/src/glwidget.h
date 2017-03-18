@@ -5,10 +5,9 @@
 #include <qpointer.h>
 #include <qtimer.h>
 
-#include "shape.h"
 #include "light.h"
 
-class CameraPoint;
+QT_FORWARD_DECLARE_CLASS(CameraPoint)
 class QTimer;
 class Mouse;
 
@@ -37,29 +36,28 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent* );
+	void runUpdate();
 
+	bool lightActive;
+	CameraPoint* cam;
+	Mouse* mos;
+	Vector3D moslook;
+	QPointer<QTimer> m_timer;
+	Vector2D fovAngle;
+	int m_windowSizeX;
+	int m_windowSizeY;
 signals:
 
 public slots:
-    void animate();
-    void runKeys();
-    void runMouse();
+	virtual void animate() {}
+
+	virtual void runKeys() {}
+
+	virtual void runMouse() {}
 
 private:
-	void rotateLR(GLfloat angle);
-	void rotateUD(GLfloat angle);
-
-    bool lightActive;
 	Light light;
-    CameraPoint* cam;
-    Vector2D fovAngle;
-    rcube_c rcube;
     bool m_twisting;
-    int m_windowSizeX;
-    int m_windowSizeY;
-    Mouse* mos;
-    Vector3D moslook;
-    QPointer<QTimer> m_timer;
 };
 
 #endif // GLWIDGET_H

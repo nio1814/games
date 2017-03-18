@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-class GLWidget;
+QT_FORWARD_DECLARE_CLASS(CubeWindow)
 
 namespace Ui {
 class MainWindow;
@@ -18,7 +18,7 @@ public:
 	~MainWindow();
 
 private:
-	GLWidget *gl;
+	CubeWindow *m_cubeWindow;
 	Ui::MainWindow *ui;
 };
 
