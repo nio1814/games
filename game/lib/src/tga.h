@@ -1,7 +1,7 @@
 #ifndef _TGA_H
 #define _TGA_H
 
-#include <qopengl.h>
+#include "qtgl.h"
 
 #define TGA_RGB	2
 #define TGA_A		3

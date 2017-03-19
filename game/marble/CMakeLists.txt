@@ -1,7 +1,14 @@
 set(PROJECT marble)
 
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL REQUIRED)
+if(${QT_VERSION}==5)
+	find_package(Qt5Widgets)
+	find_package(Qt5OpenGL REQUIRED)
+else()
+	find_package(Qt4 COMPONENTS REQUIRED QtOpenGL)
+	include(${QT_USE_FILE})
+	add_definitions(${QT_DEFINITIONS})
+
+endif()
 find_package(OpenGL REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -17,6 +24,8 @@ set(CMAKE_AUTOMOC ON)
 
 add_executable(${PROJECT} ${SRC})
 
-qt5_use_modules(${PROJECT} Widgets OpenGL)
+if(${QT_VERSION}==5)
+	qt5_use_modules(${PROJECT} Widgets OpenGL)
+endif()
 
-target_link_libraries(${PROJECT} gamelib ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT} gamelib ${OPENGL_LIBRARIES} ${QT_LIBRARIES})
