@@ -2,7 +2,7 @@ set(PROJECT rubik)
 
 find_qt()
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	find_package(Qt5Widgets)
 	find_package(Qt5OpenGL REQUIRED)
 else()
@@ -27,7 +27,7 @@ set(CMAKE_AUTOUIC ON)
 
 add_executable(${PROJECT} ${SRC})
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	qt5_use_modules(${PROJECT} Widgets OpenGL)
 endif()
 

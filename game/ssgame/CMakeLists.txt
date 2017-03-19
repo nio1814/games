@@ -1,7 +1,8 @@
 set(PROJECT sidescroller)
 
-if(${QT_VERSION}==5)
-	find_package(Qt5OpenGL REQUIRED)
+find_qt()
+
+if(${QT_VERSION} EQUAL 5)
 else()
 	find_package(Qt4 COMPONENTS REQUIRED QtOpenGL)
 	include(${QT_USE_FILE})
@@ -35,7 +36,7 @@ set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT} ${SRC} ssgame.qrc)
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	qt5_use_modules(${PROJECT} OpenGL)
 else()
 endif()
