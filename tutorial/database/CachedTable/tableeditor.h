@@ -8,7 +8,7 @@ class TableEditor : public QWidget
 	Q_OBJECT
 
 public:
-	TableEditor(QWidget *parent = 0);
+	TableEditor(const QString &tableName, QWidget *parent = 0);
 	~TableEditor();
 };
 

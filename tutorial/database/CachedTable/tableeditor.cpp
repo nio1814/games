@@ -1,6 +1,6 @@
 #include "tableeditor.h"
 
-TableEditor::TableEditor(QWidget *parent)
+TableEditor::TableEditor(const QString &tableName, QWidget *parent)
 	: QWidget(parent)
 {
 }
