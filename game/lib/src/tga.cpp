@@ -6,6 +6,7 @@
 
 #include "qimage.h"
 #include "qerrormessage.h"
+#include <qfile.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //										TGA TEXTURE LOADER
@@ -15,7 +16,7 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 	if(!strFileName)
 		return;
 
-	ImageTGA *pBitMap = load_TGA(strFileName);
+	ImageTGA *pBitMap = loadTGA(strFileName);
 
 	if(pBitMap == NULL)
 		exit(0);
@@ -40,10 +41,9 @@ void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID)
 	return;
 }
 
-ImageTGA* load_TGA(const char* strfilename)
+ImageTGA *loadTGA(QString filename)
 {
-	ImageTGA *pImgData	= NULL;
-	FILE *pFile			= NULL;
+	ImageTGA* pImgData = NULL;
 	short width			= 0;
 	short height			= 0;
 	quint8 length			= 0;
@@ -52,136 +52,159 @@ ImageTGA* load_TGA(const char* strfilename)
 	int channels		= 0;
 	int stride			= 0;
 	int i				= 0;
-	static int timecalled=0;
-	char angletext[100];
-	char tempString[128];
-	
-	sprintf(angletext, "%i", timecalled++);
-	
-	if((pFile = fopen(strfilename, "rb")) == NULL)
+
+	QFile file(filename);
+	if (!file.open(QIODevice::ReadOnly))
 	{
-		sprintf(tempString, "Error loading tga file: %s", strfilename);
-		//MessageBox(NULL, tempString, "Error", MB_OK);
-		//MessageBox(NULL, angletext, "ERROR", MB_OK);
-		return NULL;
-	}
-	
-	pImgData = (ImageTGA*)malloc(sizeof(ImageTGA));
-	fread(&length, sizeof(quint8), 1, pFile);
-	fseek(pFile, 1, SEEK_CUR);
-	fread(&imgType, sizeof(quint8), 1, pFile);
-	fseek(pFile, 9, SEEK_CUR);
-	fread(&width, sizeof(short), 1, pFile);
-	fread(&height, sizeof(short), 1, pFile);
-	fread(&bits, sizeof(quint8), 1, pFile);	
-	fseek(pFile, length+1, SEEK_CUR);	
-	
-	if(imgType != TGA_RLE)
-	{
-		//Check for 24 or 32 bits
-		if(bits == 24 || bits == 32)
-		{
-			channels = bits/8;
-			stride = channels*width;
-			pImgData->data = new unsigned char[stride*height];
-			
-			for(int y=0; y<height; y++)
-			{
-				unsigned char *pLine = &(pImgData->data[stride*y]);
-				fread(pLine, stride, 1, pFile);
-				
-				for(i=0; i<stride; i++)
-				{
-					int temp	= pLine[i];
-					pLine[i]	= pLine[i+2];
-					pLine[i+2]	= temp;
-				}
-			}
-		}
-		
-		//Check for 16 bits
-		else if(bits == 16)
-		{
-			unsigned short pixels = 0;
-			int r=0, g=0, b=0;
-			
-			channels = 3;
-			stride = channels*width;
-			pImgData->data = new unsigned char[stride*height];
-			
-			for(int i=0; i<width*height; i++)
-			{
-				fread(&pixels, sizeof(unsigned short), 1, pFile);
-				b = (pixels & 0x1f) << 3;
-				g = ((pixels >> 5) & 0x1f) << 3;
-				r = ((pixels >> 10) & 0x1f) <<3;
-				
-				pImgData->data[i*3+0] = r;
-				pImgData->data[i*3+1] = g;
-				pImgData->data[i*3+2] = b;
-			}
-		}
-		else
-			return NULL;
+		qErrnoWarning("Error opening tga file %s\n", filename.toLatin1().data());
+//		MessageBox(NULL, angletext, "ERROR", MB_OK);
 	}
 	else
 	{
-		quint8 rleID = 0;
-		int colorsRead = 0;
-		channels = bits/8;
-		stride = channels*width;
-		
-		pImgData->data = new unsigned char[stride*height];
-		quint8 *pColors = new quint8[channels];
-		
-		while(i<width*height)
+		pImgData = new ImageTGA;
+		QDataStream fileData(&file);
+		fileData.setByteOrder(QDataStream::LittleEndian);
+
+//		fread(&length, sizeof(quint8), 1, pFile);
+		fileData >> length;
+
+//		fseek(pFile,1,SEEK_CUR);
+		fileData.skipRawData(1);
+
+//		fread(&imgType, sizeof(quint8), 1, pFile);
+		fileData >> imgType;
+
+//		fseek(pFile, 9, SEEK_CUR);
+		fileData.skipRawData(9);
+
+		/*fread(&width,  sizeof(short), 1, pFile);
+		fread(&height, sizeof(short), 1, pFile);
+		fread(&bits,   sizeof(quint8), 1, pFile);*/
+		fileData >> width >> height >> bits;
+
+//		fseek(pFile, length + 1, SEEK_CUR);
+		fileData.skipRawData(length+1);
+
+		if(imgType != TGA_RLE)
 		{
-			fread(&rleID, sizeof(quint8), 1, pFile);
-			
-			if(rleID < 128)
+			// Check for 24 or 32 Bit
+			if(bits == 24 || bits == 32)
 			{
-				rleID++;
-				while(rleID)
+
+				channels = bits / 8;
+				stride = channels * width;
+				pImgData->data = new unsigned char[stride * height];
+
+				for(int y = 0; y < height; y++)
 				{
-					fread(pColors, sizeof(quint8)*channels, 1, pFile);
-					
-					pImgData->data[colorsRead+0] = pColors[2];
-					pImgData->data[colorsRead+1] = pColors[1];
-					pImgData->data[colorsRead+2] = pColors[0];
-					
-					if(bits==32)
-						pImgData->data[colorsRead+3] = pColors[3];
-					i++;
-					rleID--;
-					colorsRead += channels;
+					unsigned char *pLine = &(pImgData->data[stride * y]);
+
+//					fread(pLine, stride, 1, pFile);
+					fileData.readRawData((char*)pLine, stride);
+
+					for(i = 0; i < stride; i += channels)
+					{
+						int temp     = pLine[i];
+						pLine[i]     = pLine[i + 2];
+						pLine[i + 2] = temp;
+					}
 				}
 			}
-			else
+
+			// Check for 16 Bit
+			else if(bits == 16)
 			{
-				rleID -= 127;
-				fread(pColors, sizeof(quint8)*channels, 1, pFile);
-				
-				while(rleID)
+				unsigned short pixels = 0;
+				int r=0, g=0, b=0;
+
+				channels = 3;
+				stride = channels * width;
+				pImgData->data = new unsigned char[stride * height];
+
+				for(int i = 0; i < width*height; i++)
 				{
-					pImgData->data[colorsRead+0] = pColors[2];
-					pImgData->data[colorsRead+1] = pColors[1];
-					pImgData->data[colorsRead+2] = pColors[0];
-					
-					if(bits==32)
-						pImgData->data[colorsRead+3] = pColors[3];
-					i++;
-					rleID--;
-					colorsRead += channels;
+//					fread(&pixels, sizeof(unsigned short), 1, pFile);
+					fileData >> pixels;
+
+					b = (pixels & 0x1f) << 3;
+					g = ((pixels >> 5) & 0x1f) << 3;
+					r = ((pixels >> 10) & 0x1f) << 3;
+
+					pImgData->data[i * 3 + 0] = r;
+					pImgData->data[i * 3 + 1] = g;
+					pImgData->data[i * 3 + 2] = b;
 				}
 			}
+//			else
+//				return NULL;
 		}
+		else
+		{
+			quint8 rleID = 0;
+			int colorsRead = 0;
+			channels = bits / 8;
+			stride = channels * width;
+
+			pImgData->data = new unsigned char[stride * height];
+			quint8 *pColors = new quint8 [channels];
+
+			while(i < width*height)
+			{
+
+//				fread(&rleID, sizeof(quint8), 1, pFile);
+				fileData >> rleID;
+
+				if(rleID < 128)
+				{
+					rleID++;
+
+					while(rleID)
+					{
+//						fread(pColors, sizeof(quint8) * channels, 1, pFile);
+						fileData.readRawData((char*)pColors, sizeof(quint8)*channels);
+
+						pImgData->data[colorsRead + 0] = pColors[2];
+						pImgData->data[colorsRead + 1] = pColors[1];
+						pImgData->data[colorsRead + 2] = pColors[0];
+
+						if(bits == 32)
+							pImgData->data[colorsRead + 3] = pColors[3];
+
+						i++;
+						rleID--;
+						colorsRead += channels;
+					}
+				}
+				else
+				{
+					rleID -= 127;
+
+//					fread(pColors, sizeof(quint8) * channels, 1, pFile);
+					fileData.readRawData((char*)pColors, sizeof(quint8)*channels);
+
+					while(rleID)
+					{
+						pImgData->data[colorsRead + 0] = pColors[2];
+						pImgData->data[colorsRead + 1] = pColors[1];
+						pImgData->data[colorsRead + 2] = pColors[0];
+
+						if(bits == 32)
+							pImgData->data[colorsRead + 3] = pColors[3];
+
+						i++;
+						rleID--;
+						colorsRead += channels;
+					}
+				}
+			}
+			delete[] pColors;
+		}
+
+		pImgData->channels  = channels;
+		pImgData->size_x    = width;
+		pImgData->size_y    = height;
 	}
-	
-	fclose(pFile);
-	pImgData->channels	= channels;
-	pImgData->size_x	= width;
-	pImgData->size_y	= height;
-	
+
 	return pImgData;
 }
 

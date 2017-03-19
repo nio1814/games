@@ -1,22 +1,17 @@
-#ifndef GLWIDGET_H
-#define GLWIDGET_H
+#ifndef LevelWindow_H
+#define LevelWindow_H
 
-#include <QtGlobal>
 #include <qmatrix4x4.h>
+
+#include "glwidget.h"
 
 class Game;
 
-#if (QT_VERSION >= 0x050500)
-#include "qopenglwidget.h"
-class GLWidget : public QOpenGLWidget
-#else
-#include "QtOpenGL/QGLWidget"
-class GLWidget : public QGLWidget
-#endif
+class LevelWindow : public GLWidget
 {
     Q_OBJECT
 public:
-    GLWidget(QWidget *parent);
+	LevelWindow(QWidget *parent);
 
 protected:
     void initializeGL();
@@ -38,5 +33,5 @@ public slots:
     void animate();
 };
 
-#endif // GLWIDGET_H
+#endif // LevelWindow_H
 

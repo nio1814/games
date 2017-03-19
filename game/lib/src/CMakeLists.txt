@@ -21,6 +21,7 @@ set(SRC
 	sphere.cpp
 	light.cpp
 	glwidget.cpp
+	tga.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

@@ -1,4 +1,4 @@
-#include "glwidget.h"
+#include "levelwindow.h"
 
 #include <qtimer.h>
 
@@ -7,22 +7,15 @@
 #include "keys.h"
 #include "playerkeys.h"
 
-GLWidget::GLWidget(QWidget *parent)
-#if (QT_VERSION >= 0x050500)
-    : QOpenGLWidget(parent)
-#else
-    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
-//    : QGLWidget(parent)
-#endif
+LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent), m_elapsed(0)
 {
-    m_elapsed = 0;
     m_game = new Game();
     m_game->addLevel(1);
 
     assignControls();
 }
 
-void GLWidget::initializeGL()
+void LevelWindow::initializeGL()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(1.0f);
@@ -47,7 +40,7 @@ void GLWidget::initializeGL()
     return;
 }
 
-void GLWidget::resizeGL(int w, int h)
+void LevelWindow::resizeGL(int w, int h)
 {
     if (h==0)								// Prevent A Divide By Zero By
         h=1;							// Making Height Equal One
@@ -74,7 +67,7 @@ void GLWidget::resizeGL(int w, int h)
     return;
 }
 
-void GLWidget::paintGL()
+void LevelWindow::paintGL()
 {
      GLfloat T = 10000;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -157,22 +150,22 @@ void GLWidget::paintGL()
     return;
 }
 
-void GLWidget::keyPressEvent(QKeyEvent *event)
+void LevelWindow::keyPressEvent(QKeyEvent *event)
 {
 	return keyDown(event->key());
 }
 
-void GLWidget::keyReleaseEvent(QKeyEvent *event)
+void LevelWindow::keyReleaseEvent(QKeyEvent *event)
 {
 	return keyUp(event->key());
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event)
+void LevelWindow::mousePressEvent(QMouseEvent *event)
 {
 //	return keyDown(event->button()+255);
 }
 
-void GLWidget::animate()
+void LevelWindow::animate()
 {
     int dt = qobject_cast<QTimer*>(sender())->interval();
 

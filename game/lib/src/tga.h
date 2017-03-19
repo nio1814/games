@@ -15,7 +15,7 @@ struct ImageTGA
 	unsigned char *data;
 };
 
-ImageTGA *load_TGA(const char *filename);
+ImageTGA *loadTGA(QString filename);
 void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID);
 
 #endif
