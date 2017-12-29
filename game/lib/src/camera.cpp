@@ -119,7 +119,7 @@ void setCam(CameraPoints* cameras, Vector3D* objpos, CameraView view)
 	CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
 	CameraPoint* nextcam;
 	Vector3D pos, look, cam2cam, cam2obj, alongv;
-	GLfloat camdist;
+//	GLfloat camdist;
 
 	cameras->camview = view;
 	

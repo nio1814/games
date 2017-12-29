@@ -46,7 +46,6 @@ public:
 	//Vector2D rotate3D(Vector2D *v, float angle);
 	void unitize();								// unitize() normalizes this Vector2D that its direction remains the same but its length is 1.
 	Vector2D unit();								// unit() returns a new Vector2D. The returned value is a unitized version of this Vector2D.
-
 };
 
 		
@@ -91,7 +90,7 @@ public:
 	Vector3D angxyz2cart();						//convert vector of x,y,z anglesin to cartesian  
 	void unitize();								// unitize() normalizes this Vector3D that its direction remains the same but its length is 1.
 	Vector3D unit() const;								// unit() returns a new Vector3D. The returned value is a unitized version of this Vector3D.
-	float* toArray() const;						//converts vector to a array of floats
+//	float* toArray() const;						//converts vector to a array of floats
 	QVector3D toQVector3D() const;
 };	
 

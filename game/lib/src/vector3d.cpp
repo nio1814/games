@@ -16,7 +16,7 @@
 
 #include "qtgl.h"
 
-#define EPS 1e-1
+//#define EPS 1e-1
 
 //Define global axes
 extern const Vector3D X = Vector3D(1.0f,0.0f,0.0f);
@@ -346,7 +346,7 @@ Vector3D Vector3D::unit() const							// unit() returns a new Vector3D. The retu
 	return Vector3D(x / length, y / length, z / length);
 }
 
-float* Vector3D::toArray() const
+/*float[] Vector3D::toArray() const
 {
 	float out[3];
 
@@ -355,7 +355,7 @@ float* Vector3D::toArray() const
 	out[2] = z;
 
 	return out;
-}
+}*/
 
 QVector3D Vector3D::toQVector3D() const
 {

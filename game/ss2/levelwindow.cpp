@@ -1,10 +1,15 @@
 #include "levelwindow.h"
 
-#include <chrono>
+#include "level.h"
+
+//#include <chrono>
 
 LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 {
+	m_level = std::make_shared<Level>();
 
+	m_keys = std::make_shared<std::map<int,bool> >();
+	m_level->setKeys(m_keys);
 }
 
 LevelWindow::~LevelWindow()
@@ -12,7 +17,7 @@ LevelWindow::~LevelWindow()
 
 }
 
-void LevelWindow::initializeGL()
+/*void LevelWindow::initializeGL()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
@@ -59,15 +64,15 @@ void LevelWindow::resizeGL(int w, int h)
 	glLoadIdentity();							// Reset The Modelview Matrix
 
 	return;
-}
+}*/
 
 void LevelWindow::paintGL()
 {
-	GLfloat T = 10000;
+//	GLfloat T = 10000;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+/*	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	GLfloat x = 0.1*elapsed/10000.0f;
 	GLfloat y = 0.03*elapsed/10000.0f;
 	GLfloat z = 1*elapsed/10000.0f;
@@ -134,7 +139,16 @@ void LevelWindow::paintGL()
 	glEnd();
 
 //	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0f,1.0f,1.0f);
+	glColor3f(1.0f,1.0f,1.0f);*/
+
+	m_level->draw();
 
 	return;
+}
+
+void LevelWindow::keyPressEvent(QKeyEvent *event)
+{
+	(*m_keys)[event->key()] = true;
+
+	m_level->updateKeys();
 }
