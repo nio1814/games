@@ -2,7 +2,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_qt()
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	find_package(Qt5OpenGL)
 else()
 	find_package(Qt4 COMPONENTS REQUIRED QtOpenGL)
@@ -36,6 +36,6 @@ set(CMAKE_AUTOMOC ON)
 
 add_library(gamelib ${SRC})
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	qt5_use_modules(gamelib OpenGL)
 endif()

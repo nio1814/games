@@ -18,11 +18,8 @@ protected:
 	void paintGL();
 
 	void keyPressEvent(QKeyEvent *key);
-private:
-	QMatrix4x4 m_projection;
-	GLfloat m_aspectRatio;
+private:	
 	std::shared_ptr<Level> m_level;
-
 	std::shared_ptr<std::map<int,bool> > m_keys;
 
 };

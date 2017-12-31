@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include "mass.h"
+#include "vector2d.h"
 
 #include <memory>
 

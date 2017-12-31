@@ -1,6 +1,6 @@
 set(PROJECT sidescroller)
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	find_package(Qt5OpenGL REQUIRED)
 else()
 	find_package(Qt4 COMPONENTS REQUIRED QtOpenGL)

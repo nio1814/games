@@ -2,10 +2,10 @@
 
 #include <QKeyEvent>
 
-#include "camera.h"
-#include "keys.h"
-#include "constants.h"
-#include "mouse.h"
+//#include "camera.h"
+//#include "keys.h"
+//#include "constants.h"
+//#include "mouse.h"
 #include "qtgl.h"
 
 #define CAMOVESPEED 2.0f
@@ -20,15 +20,15 @@ GLWidget::GLWidget(QWidget *parent)
 {
     setMouseTracking(true);
 
-	fovAngle = Vector2D(0.0f,45.0f);
-	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
-    mos = new Mouse(m_windowSizeX,m_windowSizeY);
+//	fovAngle = Vector2D(0.0f,45.0f);
+//	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
+//    mos = new Mouse(m_windowSizeX,m_windowSizeY);
 	m_timer = new QTimer;
 
-    light.pos = Vector3D(rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2);
-	light.ambient = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
-	light.diffuse = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
-    light.specular = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
+//    light.pos = Vector3D(rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2);
+//	light.ambient = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
+//	light.diffuse = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
+//    light.specular = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
 	/*light.ambient = Vector3D(.10f,.10f,.10f);
 	light.diffuse = Vector3D(1,1,1);
 	light.specular = Vector3D(1,1,1);*/
@@ -47,7 +47,7 @@ GLWidget::GLWidget(QWidget *parent)
 
 GLWidget::~GLWidget()
 {
-	delete cam;
+//	delete cam;
 }
 
 void GLWidget::initializeGL()
@@ -62,8 +62,8 @@ void GLWidget::initializeGL()
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_LIGHTING);
 
-    light.enable();
-    lightActive = false;
+//    light.enable();
+//    lightActive = false;
 
 	return;
 }
@@ -75,8 +75,8 @@ void GLWidget::resizeGL(int w, int h)
 
 	m_windowSizeX = w;
     m_windowSizeY = h;
-    mos->screenWidth = w;
-    mos->screenHeight = h;
+//    mos->screenWidth = w;
+//    mos->screenHeight = h;
 
 	glViewport(0,0,w,h);						// Reset The Current Viewport
 
@@ -85,8 +85,8 @@ void GLWidget::resizeGL(int w, int h)
 
 	// Calculate The Aspect Ratio Of The Window
 //	gluPerspective(fovAngle.y,(GLfloat)w/(GLfloat)h,clipClose,clipFar);
-	fovAngle.x = (GLfloat)w/(GLfloat)h*fovAngle.y;
-    glPerspective(fovAngle.y, (GLfloat)w/(GLfloat)h, 0.01f, 100.0f);
+//	fovAngle.x = (GLfloat)w/(GLfloat)h*fovAngle.y;
+	glPerspective(45.0f, (GLfloat)w/(GLfloat)h, 0.01f, 100.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();
@@ -106,6 +106,7 @@ void GLWidget::runUpdate()
 #endif
 }
 
+/*
 void GLWidget::keyPressEvent(QKeyEvent *event)
 {
 	keyDown(event->key());
@@ -164,3 +165,4 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 
     return;
 }
+*/

@@ -1,6 +1,6 @@
 set(PROJECT marble)
 
-if(${QT_VERSION}==5)
+if(${QT_VERSION} EQUAL 5)
 	find_package(Qt5Widgets)
 	find_package(Qt5OpenGL REQUIRED)
 else()

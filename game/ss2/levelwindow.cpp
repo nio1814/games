@@ -2,7 +2,7 @@
 
 #include "level.h"
 
-//#include <chrono>
+#include <QKeyEvent>
 
 LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 {
@@ -17,7 +17,7 @@ LevelWindow::~LevelWindow()
 
 }
 
-/*void LevelWindow::initializeGL()
+void LevelWindow::initializeGL()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
@@ -64,7 +64,7 @@ void LevelWindow::resizeGL(int w, int h)
 	glLoadIdentity();							// Reset The Modelview Matrix
 
 	return;
-}*/
+}
 
 void LevelWindow::paintGL()
 {
@@ -150,5 +150,6 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 {
 	(*m_keys)[event->key()] = true;
 
-	m_level->updateKeys();
+//	m_level->updateKeys();
 }
+

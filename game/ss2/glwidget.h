@@ -1,11 +1,12 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
+#include "light.h"
+
 #include <QtGlobal>
 #include <qpointer.h>
 #include <qtimer.h>
-
-#include "light.h"
+#include <QMatrix4x4>
 
 QT_FORWARD_DECLARE_CLASS(CameraPoint)
 class QTimer;
@@ -34,6 +35,8 @@ protected:
 	QPointer<QTimer> m_timer;
 	int m_windowSizeX;
 	int m_windowSizeY;
+	GLfloat m_aspectRatio;
+	QMatrix4x4 m_projection;
 signals:
 
 public slots:
