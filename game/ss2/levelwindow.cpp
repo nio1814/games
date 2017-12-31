@@ -1,6 +1,7 @@
 #include "levelwindow.h"
 
 #include "level.h"
+#include "camera.h"
 
 #include <QKeyEvent>
 
@@ -10,6 +11,8 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 
 	m_keys = std::make_shared<std::map<int,bool> >();
 	m_level->setKeys(m_keys);
+
+	m_camera = std::make_unique<Camera>(Vector3D(0,0,15));
 }
 
 LevelWindow::~LevelWindow()
@@ -93,8 +96,7 @@ void LevelWindow::paintGL()
 //	GLfloat y = 0.03*elapsed/10000.0f;
 //	GLfloat z = 1*elapsed/10000.0f;
 
-	glTranslatef(0,0,-15);
-
+	glLookAt(m_camera->position().vector(), m_camera->look().vector(), m_camera->up().vector());
 
 	/*glBegin(GL_TRIANGLES);
 	glColor3f(.3, .1, .7);
@@ -166,6 +168,36 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 {
 	(*m_keys)[event->key()] = true;
 
-//	m_level->updateKeys();
+	qWarning() << event->key();
+
+	switch (event->key())
+	{
+		case Qt::Key_C:
+			if (m_mode==GameMode)
+				m_mode = CameraMode;
+			else if (m_mode==CameraMode)
+				m_mode = GameMode;
+			break;
+			qWarning() << m_mode;
+	}
+
+	switch (m_mode)
+	{
+		case GameMode:
+			m_level->updateKeys();
+			break;
+		case CameraMode:
+			switch (event->key()) {
+				case Qt::Key_Up:
+					m_camera->position() += Vector3D(0,0,.1);
+					break;
+				case Qt::Key_Down:
+					m_camera->position() -= Vector3D(0,0,.1);
+					break;
+				default:
+					break;
+		}
+			break;
+	}
 }
 

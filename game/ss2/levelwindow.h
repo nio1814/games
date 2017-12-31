@@ -7,10 +7,13 @@
 #include <memory>
 
 QT_FORWARD_DECLARE_CLASS(Level)
+QT_FORWARD_DECLARE_CLASS(Camera)
 
 class LevelWindow : public GLWidget
 {
 public:
+	enum Mode {GameMode, CameraMode};
+
 	LevelWindow(QWidget* parent);
 	~LevelWindow();
 
@@ -27,6 +30,8 @@ private:
 	std::shared_ptr<Level> m_level;
 	std::shared_ptr<std::map<int,bool> > m_keys;
 	QDateTime m_lastTime;
+	Mode m_mode = GameMode;
+	std::unique_ptr<Camera> m_camera;
 };
 
 #endif // LEVELWINDOW_H

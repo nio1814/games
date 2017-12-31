@@ -49,10 +49,21 @@ std::valarray<float> VectorND::array() const
 	return m_array;
 }
 
+std::vector<float> VectorND::vector()
+{
+	return std::vector<float>(std::begin(m_array), std::end(m_array));
+}
+
 VectorND& VectorND::operator+= (VectorND v)			// operator+= is used to add another Vector3D to this Vector3D.
 {
-
 	m_array += v.array();
+
+	return *this;
+}
+
+VectorND &VectorND::operator-=(VectorND v)
+{
+	m_array -= v.array();
 
 	return *this;
 }

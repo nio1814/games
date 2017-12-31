@@ -25,7 +25,7 @@ set(SS2_SOURCE
 	vector2d.cpp
 	mass.cpp
 #	${CMAKE_CURRENT_SOURCE_DIR}/../lib/src/light.cpp
-#	${CMAKE_CURRENT_SOURCE_DIR}/../lib/src/camera.cpp
+	camera.cpp
 #	${CMAKE_CURRENT_SOURCE_DIR}/../lib/src/mouse.cpp
 #	${CMAKE_CURRENT_SOURCE_DIR}/../lib/src/keys.cpp
 	qtgl.cpp

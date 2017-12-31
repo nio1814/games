@@ -24,9 +24,17 @@ void Level::setKeys(std::shared_ptr<std::map<int,bool> > keys)
 
 void Level::updateKeys()
 {
-	if (Qt::Key_Left) {
-		m_player->setVelocity(1.0f, 0.0f);
+	if (Qt::Key_Left)
+	{
+		m_player->setVelocity(-1.0f, 0.0f);
+//		m_player->setDirection(DirectionLeft);
 	}
+	else if (Qt::Key_Right)
+	{
+		m_player->setVelocity(1.0f, 0.0f);
+//		m_player->setDirection(DirectionRight);
+	}
+
 }
 
 void Level::draw()

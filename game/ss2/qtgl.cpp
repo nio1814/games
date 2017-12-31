@@ -35,6 +35,15 @@ void glLookAt(QVector3D cameraPosition, QVector3D lookPosition, QVector3D upDire
     return;
 }
 
+void glLookAt(const std::vector<float>& cameraPosition, const std::vector<float>& lookPosition, const std::vector<float>& up)
+{
+	QVector3D camPosition = QVector3D(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+	QVector3D camLook = QVector3D(lookPosition[0], lookPosition[1], lookPosition[2]);
+	QVector3D camUp = QVector3D(up[0], up[1], up[2]);
+
+	glLookAt(camPosition, camLook, camUp);
+}
+
 void glPerspective(GLfloat viewAngle, GLfloat aspectRatio, GLfloat clipClose, GLfloat clipFar)
 {
 	QMatrix4x4 matrix;

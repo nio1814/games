@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 	QPointer<LevelWindow> levelWindow(new LevelWindow(&w));
 	w.setCentralWidget(levelWindow.data());
 	w.show();
+	w.centralWidget()->setFocus();
 
 	QPointer<QTimer> timer(new QTimer(&w));
 	QObject::connect(timer, SIGNAL(timeout()), levelWindow, SLOT(update()));

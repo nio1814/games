@@ -12,7 +12,7 @@ Mass::~Mass()
 
 void Mass::setVelocity(float velocityX, float velocityY)
 {
-	m_velocity = Vector3D({velocityX, velocityY, 0});
+	m_velocity = {velocityX, velocityY, 0};
 }
 
 void Mass::update(float timeElapsed)
