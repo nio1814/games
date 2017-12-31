@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
 	w.setCentralWidget(levelWindow.data());
 	w.show();
 
+	QPointer<QTimer> timer(new QTimer(&w));
+	QObject::connect(timer, SIGNAL(timeout()), levelWindow, SLOT(update()));
+	timer->start(10);
 
 	return a.exec();
 }

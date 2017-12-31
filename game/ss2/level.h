@@ -17,6 +17,7 @@ public:
 
 	void updateKeys();
 	void draw();
+	void update(float timeElapsed);
 private:
 	std::vector<std::shared_ptr<Object> > m_objects;
 	std::shared_ptr<Object> m_player;

@@ -36,3 +36,11 @@ void Level::draw()
 		(*i)->draw();
 	}
 }
+
+void Level::update(float timeElapsed)
+{
+	for (auto i=m_objects.begin(); i!=m_objects.end(); i++)
+	{
+		(*i)->update(timeElapsed);
+	}
+}

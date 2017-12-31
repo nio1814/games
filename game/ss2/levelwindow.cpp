@@ -14,7 +14,22 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 
 LevelWindow::~LevelWindow()
 {
+}
 
+void LevelWindow::run()
+{
+	while(true)
+		update();
+}
+
+void LevelWindow::update()
+{
+	qint64 interval = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_lastTime.toMSecsSinceEpoch();
+
+	m_level->update(interval*1e-3);
+	m_level->draw();
+
+	m_lastTime = QDateTime::currentDateTime();
 }
 
 void LevelWindow::initializeGL()
@@ -72,15 +87,16 @@ void LevelWindow::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-/*	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	GLfloat x = 0.1*elapsed/10000.0f;
-	GLfloat y = 0.03*elapsed/10000.0f;
-	GLfloat z = 1*elapsed/10000.0f;
+//	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+//	int elapsed = QDateTime::currentDateTime().toMSecsSinceEpoch();
+//	GLfloat x = 0.1*elapsed/10000.0f;
+//	GLfloat y = 0.03*elapsed/10000.0f;
+//	GLfloat z = 1*elapsed/10000.0f;
 
 	glTranslatef(0,0,-15);
 
 
-	glBegin(GL_TRIANGLES);
+	/*glBegin(GL_TRIANGLES);
 	glColor3f(.3, .1, .7);
 	glColor3f(cos(elapsed/T), sin(elapsed/T*1.53), sin(elapsed/T*.42));
 	glVertex3f(0,0,-1);
@@ -139,8 +155,8 @@ void LevelWindow::paintGL()
 	glEnd();
 
 //	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0f,1.0f,1.0f);*/
-
+	glColor3f(1.0f,1.0f,1.0f);
+*/
 	m_level->draw();
 
 	return;
