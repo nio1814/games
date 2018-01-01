@@ -5,6 +5,7 @@
 #include <vector>
 
 Object::Object(float width, float height, float positionX, float positionY) :
+	Mass(Vector3D(positionX, positionY, 0)),
 	m_size(Vector2D({width, height})),
 	m_speed(1.0f)
 {

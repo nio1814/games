@@ -16,7 +16,7 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 
 	m_timer = new QTimer(this);
 	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(run()));
-	m_timer->start(80);
+	m_timer->start(50);
 }
 
 LevelWindow::~LevelWindow()
@@ -29,7 +29,7 @@ void LevelWindow::run()
 	interval = std::min(interval, (qint64)100);
 	qWarning() << "update " << interval;
 
-	m_level->update(interval*1e-3);
+	m_level->update(interval*1e-3*m_throttle);
 
 	m_lastTime = QDateTime::currentDateTime();
 
