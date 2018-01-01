@@ -25,7 +25,8 @@ protected:
 	void resizeGL(int w, int h);
 	void paintGL();
 
-	void keyPressEvent(QKeyEvent *key);
+	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 private:	
 	std::shared_ptr<Level> m_level;
 	std::shared_ptr<std::map<int,bool> > m_keys;

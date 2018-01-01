@@ -16,7 +16,7 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 
 	m_timer = new QTimer(this);
 	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(run()));
-	m_timer->start(100);
+	m_timer->start(80);
 }
 
 LevelWindow::~LevelWindow()
@@ -39,10 +39,11 @@ void LevelWindow::run()
 void LevelWindow::initializeGL()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClearDepth(1.0f);
+	glClearDepth(10.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -67,7 +68,7 @@ void LevelWindow::resizeGL(int w, int h)
 
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();							// Reset The Projection Matrix
-
+	glEnable(GL_NORMALIZE);
 	// Calculate The Aspect Ratio Of The Window
 //    glPerspective(45.0f,(GLfloat)w/(GLfloat)h,0.1f,100.0f);
 	m_projection.setToIdentity();
@@ -200,5 +201,12 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 			}
 			break;
 	}
+}
+
+void LevelWindow::keyReleaseEvent(QKeyEvent *event)
+{
+	(*m_keys)[event->key()] = false;
+
+	m_level->updateKeys();
 }
 

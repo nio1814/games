@@ -25,17 +25,19 @@ void Level::setKeys(std::shared_ptr<std::map<int,bool> > keys)
 
 void Level::updateKeys()
 {
-	if (m_keys->count(Qt::Key_Left) && m_keys->at(Qt::Key_Left))
+//	if (m_keys->count(Qt::Key_Left) && m_keys->at(Qt::Key_Left))
+	if ((*m_keys)[Qt::Key_Left])
 	{
 		m_player->setVelocity(-1.0f, 0.0f);
 //		m_player->setDirection(DirectionLeft);
 	}
-	if (m_keys->count(Qt::Key_Right) && m_keys->at(Qt::Key_Right))
+	else  if ((*m_keys)[Qt::Key_Right])
 	{
 		m_player->setVelocity(1.0f, 0.0f);
 //		m_player->setDirection(DirectionRight);
 	}
-
+	else
+		m_player->setVelocity(0.0f, 0.0f);
 }
 
 void Level::draw()
@@ -52,5 +54,5 @@ void Level::update(float timeElapsed)
 	{
 		(*i)->update(timeElapsed);
 	}
-	fprintf(stderr, "%f %f %f", m_player->position()[0], m_player->position()[1], m_player->position()[2]);
+//	fprintf(stderr, "%f %f %f", m_player->position()[0], m_player->position()[1], m_player->position()[2]);
 }
