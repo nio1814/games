@@ -9,6 +9,7 @@ Object::Object(float width, float height, float positionX, float positionY) :
 	m_size(Vector2D({width, height})),
 	m_speed(1.0f)
 {
+	resetTouches();
 }
 
 Object::~Object()
@@ -34,9 +35,62 @@ Vector2D Object::maxPosition()
 	return minPos;
 }
 
+Vector2D Object::size()
+{
+	return m_size;
+}
+
 float Object::directionFloat()
 {
 	return m_facingRight ? 1.0f : -1.0f;
+}
+
+void Object::checkTouch(std::shared_ptr<Object> otherObject)
+{
+	Vector3D otherPosition = otherObject->position();
+	float distance = m_position.distance(otherPosition);
+
+	if(distance < diagonalLength() + otherObject->diagonalLength())
+	{
+		VectorND vectorBetween = otherPosition - m_position;
+		float otherWidth = otherObject->size().x();
+		bool withinWidth = std::abs(vectorBetween.x()) < .5f*(otherWidth+m_size.x());
+		float otherHeight = otherObject->size().y();
+		float combinedHeight = otherHeight + m_size.y();
+		bool above = m_position.y() > otherPosition.y();
+		if(withinWidth && std::abs(vectorBetween.y())< .5*combinedHeight)
+		{
+			if(above)
+				m_touching[BottomSide] = true;
+			else
+				m_touching[TopSide] = true;
+		}
+	}
+	else
+		resetTouches();
+}
+
+void Object::update(float timeElapsed)
+{
+	if(m_touching[BottomSide])
+	{
+		m_velocity.setY(0);
+	} else if(m_hasGravity)
+		m_velocity += Vector3D(0,m_gravity,0);
+
+	m_position += Vector3D(m_velocity*timeElapsed);
+
+}
+
+float Object::diagonalLength() const
+{
+	return m_size.length();
+}
+
+void Object::resetTouches()
+{
+	for (Side side : {LeftSide,RightSide,BottomSide,TopSide})
+		m_touching[side] = false;
 }
 
 void Object::draw()

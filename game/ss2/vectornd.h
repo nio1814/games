@@ -22,21 +22,25 @@ public:
 
 	float x();
 	float y();
+	void setY(float newY);
 
 	int size() const;
+	int minSize(const VectorND &other) const;
 
 	VectorND unit() const;								// unit() returns a new Vector3D. The returned value is a unitized version of this Vector3D.
 	float dot(const VectorND &v) const;						//calculate dot product
 	VectorND project(const VectorND &v) const;
+	float distance(const VectorND& otherVector);
+	float length() const;
 
 	VectorND& operator= (VectorND v);			// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
-//	VectorND& operator+ (VectorND v) const;				// operator+ is used to add two Vector3D's. operator+ returns a new Vector3D
-//	VectorND& operator- (const VectorND v) const;				// operator- is used to take difference of two Vector3D's. operator- returns a new Vector3D
+	VectorND operator+ (const VectorND& v) const;				// operator+ is used to add two Vector3D's. operator+ returns a new Vector3D
+	VectorND operator- (const VectorND& v) const;				// operator- is used to take difference of two Vector3D's. operator- returns a new Vector3D
 	VectorND operator* (float value);			// operator* is used to scale a Vector2D by a value. This value multiplies the Vector2D's x, y and z.
 //	VectorND& operator/ (float value);			// operator/ is used to scale a Vector2D by a value. This value divides the Vector2D's x, y and z.
 	VectorND& operator+= (VectorND v);			// operator+= is used to add another Vector3D to this Vector3D.
 	VectorND& operator-= (VectorND v);			// operator-= is used to subtract another Vector3D from this Vector3D.
-	float operator[] (int index);
+	float operator[] (int index) const;
 
 //	std::valarray<float> array() const;
 	std::vector<float> vector() const;

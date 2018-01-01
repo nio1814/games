@@ -31,9 +31,40 @@ float VectorND::y()
 	return m_array[1];
 }
 
+void VectorND::setY(float newY)
+{
+	m_array[1] = newY;
+}
+
 int VectorND::size() const
 {
 	return m_array.size();
+}
+
+int VectorND::minSize(const VectorND& other) const
+{
+	return std::min(size(), other.size());
+}
+
+float VectorND::distance(const VectorND &otherVector)
+{
+	float d = 0;
+	for (int n=0; n<minSize(otherVector); n++)
+	{
+		float difference = otherVector[n]-m_array[n];
+		d += difference*difference;
+	}
+
+	return std::sqrt(d);
+}
+
+float VectorND::length() const
+{
+	float d = 0;
+	for(float r : m_array)
+		d += r*r;
+
+	return std::sqrt(d);
 }
 
 VectorND &VectorND::operator=(VectorND v)
@@ -65,6 +96,26 @@ std::vector<float> VectorND::vector() const
 	return m_array;
 }
 
+VectorND VectorND::operator+ (const VectorND& v) const			// operator+= is used to add another Vector3D to this Vector3D.
+{
+	std::vector<float> newVector;
+
+	for (int n=0; n<minSize(v); n++)
+		newVector.push_back(m_array[n]+v[n]);
+
+	return VectorND(newVector);
+}
+
+VectorND VectorND::operator- (const VectorND& v) const			// operator+= is used to add another Vector3D to this Vector3D.
+{
+	std::vector<float> newVector;
+
+	for (int n=0; n<minSize(v); n++)
+		newVector.push_back(m_array[n]-v[n]);
+
+	return VectorND(newVector);
+}
+
 VectorND& VectorND::operator+= (VectorND v)			// operator+= is used to add another Vector3D to this Vector3D.
 {
 //	m_array += v.array();
@@ -85,7 +136,7 @@ VectorND &VectorND::operator-=(VectorND v)
 	return *this;
 }
 
-float VectorND::operator[](int index)
+float VectorND::operator[](int index) const
 {
 	return m_array[index];
 }

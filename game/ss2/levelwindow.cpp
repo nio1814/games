@@ -16,7 +16,7 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 
 	m_timer = new QTimer(this);
 	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(run()));
-	m_timer->start(50);
+	m_timer->start(40);
 }
 
 LevelWindow::~LevelWindow()

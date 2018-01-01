@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-const static float Gravity = -9.8;
-
 Mass::Mass(Vector3D position) :
 	m_position(position),
 	m_mass(1.0f)
@@ -24,11 +22,11 @@ void Mass::setVelocity(float velocityX, float velocityY)
 void Mass::update(float timeElapsed)
 {
 	if(m_hasGravity)
-		m_velocity += Vector3D(0,Gravity,0);
+		m_velocity += Vector3D(0,m_gravity,0);
 	m_position += Vector3D(m_velocity*timeElapsed);
 }
 
-Vector3D Mass::position()
+Vector3D Mass::position() const
 {
 	return m_position;
 }

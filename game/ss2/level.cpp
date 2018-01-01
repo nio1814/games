@@ -52,6 +52,13 @@ void Level::draw()
 
 void Level::update(float timeElapsed)
 {
+	for(size_t m=0; m<m_objects.size(); m++)
+	{
+		for(size_t n=m+1; n<m_objects.size(); n++)
+		{
+			m_objects[m]->checkTouch(m_objects[n]);
+		}
+	}
 	for (auto i=m_objects.begin(); i!=m_objects.end(); i++)
 	{
 		(*i)->update(timeElapsed);
