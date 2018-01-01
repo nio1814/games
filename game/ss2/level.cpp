@@ -5,11 +5,12 @@
 #include <map>
 #include <qnamespace.h>
 
+#include <stdio.h>
+
 Level::Level()
 {
-	m_objects.push_back(std::make_shared<Object>(30,70,0,0));
-
-	m_player = m_objects[0];
+	m_player = std::make_shared<Object>(30,70,0,0);
+	m_objects.push_back(m_player);
 }
 
 Level::~Level()
@@ -19,17 +20,17 @@ Level::~Level()
 
 void Level::setKeys(std::shared_ptr<std::map<int,bool> > keys)
 {
-
+	m_keys = keys;
 }
 
 void Level::updateKeys()
 {
-	if (Qt::Key_Left)
+	if (m_keys->count(Qt::Key_Left) && m_keys->at(Qt::Key_Left))
 	{
 		m_player->setVelocity(-1.0f, 0.0f);
 //		m_player->setDirection(DirectionLeft);
 	}
-	else if (Qt::Key_Right)
+	if (m_keys->count(Qt::Key_Right) && m_keys->at(Qt::Key_Right))
 	{
 		m_player->setVelocity(1.0f, 0.0f);
 //		m_player->setDirection(DirectionRight);
@@ -51,4 +52,5 @@ void Level::update(float timeElapsed)
 	{
 		(*i)->update(timeElapsed);
 	}
+	fprintf(stderr, "%f %f %f", m_player->position()[0], m_player->position()[1], m_player->position()[2]);
 }

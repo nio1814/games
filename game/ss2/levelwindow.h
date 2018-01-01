@@ -11,15 +11,15 @@ QT_FORWARD_DECLARE_CLASS(Camera)
 
 class LevelWindow : public GLWidget
 {
+	Q_OBJECT
 public:
 	enum Mode {GameMode, CameraMode};
 
 	LevelWindow(QWidget* parent);
 	~LevelWindow();
 
-	void run();
 public slots:
-	void update();
+	void run();
 protected:
 	void initializeGL();
 	void resizeGL(int w, int h);
@@ -32,6 +32,7 @@ private:
 	QDateTime m_lastTime;
 	Mode m_mode = GameMode;
 	std::unique_ptr<Camera> m_camera;
+	QPointer<QTimer> m_timer;
 };
 
 #endif // LEVELWINDOW_H

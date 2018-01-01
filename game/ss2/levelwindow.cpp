@@ -13,6 +13,10 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 	m_level->setKeys(m_keys);
 
 	m_camera = std::make_unique<Camera>(Vector3D(0,0,15));
+
+	m_timer = new QTimer(this);
+	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(run()));
+	m_timer->start(100);
 }
 
 LevelWindow::~LevelWindow()
@@ -21,18 +25,15 @@ LevelWindow::~LevelWindow()
 
 void LevelWindow::run()
 {
-	while(true)
-		update();
-}
-
-void LevelWindow::update()
-{
 	qint64 interval = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_lastTime.toMSecsSinceEpoch();
+	interval = std::min(interval, (qint64)100);
+	qWarning() << "update " << interval;
 
 	m_level->update(interval*1e-3);
-	m_level->draw();
 
 	m_lastTime = QDateTime::currentDateTime();
+
+	update();
 }
 
 void LevelWindow::initializeGL()
@@ -196,7 +197,7 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 					break;
 				default:
 					break;
-		}
+			}
 			break;
 	}
 }

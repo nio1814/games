@@ -18,6 +18,7 @@ public:
 	VectorND();
 //	VectorND(int N);
 	VectorND(std::vector<float> vector);
+	VectorND(const VectorND& vector);
 
 	float x();
 	float y();
@@ -37,11 +38,12 @@ public:
 	VectorND& operator-= (VectorND v);			// operator-= is used to subtract another Vector3D from this Vector3D.
 	float operator[] (int index);
 
-	std::valarray<float> array() const;
-	std::vector<float> vector();
+//	std::valarray<float> array() const;
+	std::vector<float> vector() const;
 
 protected:
-	std::valarray<float> m_array;
+//	std::valarray<float> m_array;
+	std::vector<float> m_array;
 };
 
 

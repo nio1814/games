@@ -11,6 +11,7 @@ public:
 
 	void setVelocity(float velocityX, float velocityY);
 	void update(float timeElapsed);
+	Vector3D position();
 protected:
 	Vector3D m_position;
 private:
