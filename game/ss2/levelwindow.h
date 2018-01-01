@@ -34,7 +34,7 @@ private:
 	Mode m_mode = GameMode;
 	std::unique_ptr<Camera> m_camera;
 	QPointer<QTimer> m_timer;
-	float m_throttle = .1;
+	float m_throttle = 1.0f;
 };
 
 #endif // LEVELWINDOW_H

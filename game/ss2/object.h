@@ -20,7 +20,9 @@ public:
 	Vector2D size();
 	float directionFloat();
 	void checkTouch(std::shared_ptr<Object> otherObject);
+	bool touching(Side side);
 	void update(float timeElapsed);
+	void reset();
 private:
 	float diagonalLength() const;
 	void resetTouches();

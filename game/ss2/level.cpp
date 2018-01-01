@@ -40,6 +40,10 @@ void Level::updateKeys()
 	}
 	else
 		m_player->setVelocity(0.0f, 0.0f);
+
+	if ((*m_keys)[Qt::Key_Control] && m_player->touching(Object::BottomSide))
+		m_player->setVelocity(0.0f, 10.0f);
+
 }
 
 void Level::draw()
@@ -52,6 +56,10 @@ void Level::draw()
 
 void Level::update(float timeElapsed)
 {
+	for (auto i=m_objects.begin(); i!=m_objects.end(); i++)
+	{
+		(*i)->reset();
+	}
 	for(size_t m=0; m<m_objects.size(); m++)
 	{
 		for(size_t n=m+1; n<m_objects.size(); n++)

@@ -61,7 +61,10 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 		if(withinWidth && std::abs(vectorBetween.y())< .5*combinedHeight)
 		{
 			if(above)
+			{
 				m_touching[BottomSide] = true;
+				m_position.setY(otherPosition.y() + .5*combinedHeight);
+			}
 			else
 				m_touching[TopSide] = true;
 		}
@@ -70,16 +73,27 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 		resetTouches();
 }
 
+bool Object::touching(Object::Side side)
+{
+	return m_touching[side];
+}
+
 void Object::update(float timeElapsed)
 {
 	if(m_touching[BottomSide])
 	{
-		m_velocity.setY(0);
+		float velocityY = std::max(m_velocity.y(), 0.0f);
+		m_velocity.setY(velocityY);
 	} else if(m_hasGravity)
-		m_velocity += Vector3D(0,m_gravity,0);
+		m_velocity += Vector3D(0,m_gravity,0)*timeElapsed;
 
 	m_position += Vector3D(m_velocity*timeElapsed);
 
+}
+
+void Object::reset()
+{
+	resetTouches();
 }
 
 float Object::diagonalLength() const
