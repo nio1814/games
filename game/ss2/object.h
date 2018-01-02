@@ -3,9 +3,12 @@
 
 #include "mass.h"
 #include "vector2d.h"
+#include "characters.h"
 
 #include <memory>
 #include <map>
+
+class Sprite;
 
 class Object : public Mass
 {
@@ -23,6 +26,7 @@ public:
 	bool touching(Side side);
 	void update(float timeElapsed);
 	void reset();
+	void loadSprite(Character character);
 private:
 	float diagonalLength() const;
 	void resetTouches();
@@ -32,6 +36,7 @@ private:
 	bool m_facingRight;
 	float m_speed;
 	std::map<Side,bool> m_touching;
+	std::unique_ptr<Sprite> m_sprite;
 };
 
 #endif // OBJECT_H

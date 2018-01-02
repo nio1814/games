@@ -1,6 +1,7 @@
 #include "object.h"
 
 #include "qtgl.h"
+#include "sprite.h"
 
 #include <vector>
 
@@ -94,6 +95,11 @@ void Object::update(float timeElapsed)
 void Object::reset()
 {
 	resetTouches();
+}
+
+void Object::loadSprite(Character character)
+{
+	m_sprite = std::make_unique<Sprite>(character);
 }
 
 float Object::diagonalLength() const

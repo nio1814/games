@@ -27,7 +27,7 @@ void LevelWindow::run()
 {
 	qint64 interval = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_lastTime.toMSecsSinceEpoch();
 	interval = std::min(interval, (qint64)100);
-	qWarning() << "update " << interval;
+//	qWarning() << "update " << interval;
 
 	m_level->update(interval*1e-3*m_throttle);
 

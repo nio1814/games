@@ -11,6 +11,8 @@ Level::Level()
 {
 	m_player = std::make_shared<Object>(1,1.5,0,0);
 	m_player->setHasGravity(true);
+	m_player->loadSprite(Goomba);
+
 	m_objects.push_back(m_player);
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));
 }

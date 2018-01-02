@@ -29,6 +29,8 @@ set(SS2_SOURCE
 #	${CMAKE_CURRENT_SOURCE_DIR}/../lib/src/mouse.cpp
 #	${CMAKE_CURRENT_SOURCE_DIR}/../lib/src/keys.cpp
 	qtgl.cpp
+	sprite.cpp
+	tga.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

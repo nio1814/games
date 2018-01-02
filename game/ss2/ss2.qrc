@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/characters/goomba/goomba1.tga</file>
+        <file>img/characters/goomba/goomba2.tga</file>
+    </qresource>
+</RCC>
