@@ -31,6 +31,7 @@ set(SS2_SOURCE
 	qtgl.cpp
 	sprite.cpp
 	tga.cpp
+	textureloader.cpp
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -40,8 +41,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall")
 
-add_executable(${PROJECT_NAME} ${SS2_SOURCE})
+add_executable(${PROJECT_NAME} ${SS2_SOURCE} ss2.qrc)
 if(${QT_VERSION} EQUAL 5)
 	qt5_use_modules(${PROJECT_NAME} OpenGL)
 endif()
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${QT_LIBRARIES})
+
+#file(GLOB_RECURSE IMAGES "img/*.*")
+#message(STATUS "${IMAGES}")
+
+add_subdirectory(img/characters/goomba)

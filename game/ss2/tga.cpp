@@ -19,17 +19,16 @@ TGA::TGA(std::string filename)
 		file >> m_width >> m_height >> bits;
 		file.ignore(length+1);
 
-		int channels;
 		int stride;
 		if(type == RLE)
 		{
 			uint8_t rleID = 0;
 //			int colorsRead = 0;
-			channels = bits/8;
-			stride = channels*m_width;
+			m_channels = bits/8;
+			stride = m_channels*m_width;
 //			m_data.resize(stride*m_height);
 			m_data.clear();
-			std::vector<uint8_t> pixelColors(channels);
+			std::vector<uint8_t> pixelColors(m_channels);
 //			uint8_t* pixelColorsData = pixelColors.data();
 
 			int i=0;
@@ -83,8 +82,8 @@ TGA::TGA(std::string filename)
 				case 24:
 				case 32:
 					{
-						channels = bits/8;
-						stride = channels*m_width;
+						m_channels = bits/8;
+						stride = m_channels*m_width;
 						m_data.resize(stride*m_height);
 						unsigned char* data = m_data.data();
 						for(int y=0; y<m_height; y++)
@@ -93,7 +92,7 @@ TGA::TGA(std::string filename)
 //							file.read(pixelLine, stride);
 							for (int n=0; n<stride; n++)
 								file >> pixelLine[n];
-							for (int i=0; i<stride; i+=channels)
+							for (int i=0; i<stride; i+=m_channels)
 							{
 								std::swap(pixelLine[i], pixelLine[i+2]);
 							}
@@ -103,8 +102,8 @@ TGA::TGA(std::string filename)
 				case 16:
 					{
 						unsigned short pixels = 0;
-						channels = 3;
-						stride = channels*m_width;
+						m_channels = 3;
+						stride = m_channels*m_width;
 						m_data.resize(stride*m_height);
 						for(int i=0; i<m_width*m_height; i++)
 						{
@@ -127,6 +126,26 @@ TGA::TGA(std::string filename)
 		file.close();
 	}
 	else
-		std::cerr << "Failed to open " << filename;
+		std::cerr << "Failed to open " << filename << std::endl;
+}
+
+int TGA::channels()
+{
+	return m_channels;
+}
+
+short TGA::width()
+{
+	return m_width;
+}
+
+short TGA::height()
+{
+	return m_height;
+}
+
+unsigned char *TGA::data()
+{
+	return m_data.data();
 }
 

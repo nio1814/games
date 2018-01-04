@@ -21,6 +21,7 @@ public:
 	Sprite(Character character);
 
 	void load(Character character);
+	unsigned int textureIndex();
 private:
 	std::map<Action, Animation> m_actions;
 };

@@ -18,14 +18,18 @@ void Sprite::load(Character character)
 				m_actions.insert(std::pair<Action,Animation>(Stand, Animation(filenames)));
 
 				filenames = {
-					"img/characters/goomba/gommba1.tga",
-					"img/characters/goomba/gommba2.tga"
+
 				};
 				m_actions.insert(std::pair<Action,Animation>(Run, Animation(filenames)));
 
 			}
 			break;
 	}
+}
+
+unsigned int Sprite::textureIndex()
+{
+	return 0;
 }
 
 

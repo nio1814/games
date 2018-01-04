@@ -1,6 +1,7 @@
 #include "level.h"
 
 #include "object.h"
+#include "textureloader.h"
 
 #include <map>
 #include <qnamespace.h>
@@ -15,6 +16,12 @@ Level::Level()
 
 	m_objects.push_back(m_player);
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));
+
+	m_textureLoader = std::make_shared<TextureLoader>();
+	m_textureLoader->load({
+							  "img/characters/goomba/goomba1.tga",
+							  "img/characters/goomba/goomba2.tga"
+						  });
 }
 
 Level::~Level()

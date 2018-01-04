@@ -115,6 +115,8 @@ void Object::resetTouches()
 
 void Object::draw()
 {
+	if (m_sprite->textureIndex()>=0)
+		glBindTexture(GL_TEXTURE_2D, m_sprite->textureIndex());
 	glEnable(GL_TEXTURE_2D);
 
 	float positionX = m_position.x();

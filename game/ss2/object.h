@@ -14,6 +14,7 @@ class Object : public Mass
 {
 public:
 	enum Side{LeftSide, BottomSide, RightSide, TopSide};
+
 	Object(float width, float height, float positionX, float positionY);
 	~Object();
 
