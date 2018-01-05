@@ -4,11 +4,13 @@
 #include "sprite.h"
 
 #include <vector>
+#include <iostream>
 
 Object::Object(float width, float height, float positionX, float positionY) :
 	Mass(Vector3D(positionX, positionY, 0)),
 	m_size(Vector2D({width, height})),
-	m_speed(1.0f)
+	m_speed(1.0f),
+	m_action(std::make_shared<Action>(Stand))
 {
 	resetTouches();
 }
@@ -39,6 +41,15 @@ Vector2D Object::maxPosition()
 Vector2D Object::size()
 {
 	return m_size;
+}
+
+void Object::scaleToSpriteSize()
+{
+	if(m_sprite)
+	{
+		float height = m_sprite->heightWidthScale()*m_size.x();
+		m_size.setY(height);
+	}
 }
 
 float Object::directionFloat()
@@ -81,6 +92,7 @@ bool Object::touching(Object::Side side)
 
 void Object::update(float timeElapsed)
 {
+	scaleToSpriteSize();
 	if(m_touching[BottomSide])
 	{
 		float velocityY = std::max(m_velocity.y(), 0.0f);
@@ -97,9 +109,10 @@ void Object::reset()
 	resetTouches();
 }
 
-void Object::loadSprite(Character character)
+void Object::setSprite(const Sprite& sprite)
 {
-	m_sprite = std::make_unique<Sprite>(character);
+	m_sprite = std::make_unique<Sprite>(sprite);
+	m_sprite->setActionPointer(m_action);
 }
 
 float Object::diagonalLength() const
@@ -115,9 +128,12 @@ void Object::resetTouches()
 
 void Object::draw()
 {
-	if (m_sprite->textureIndex()>=0)
+	if (m_sprite && m_sprite->textureIndex()>=0)
+	{
 		glBindTexture(GL_TEXTURE_2D, m_sprite->textureIndex());
-	glEnable(GL_TEXTURE_2D);
+//		std::cerr << glGetError() << std::endl;
+		glEnable(GL_TEXTURE_2D);
+	}
 
 	float positionX = m_position.x();
 	float positionY = m_position.y();
@@ -134,8 +150,10 @@ void Object::draw()
 	Vector2D maxPos = maxPosition();
 	float isRightOne = m_facingRight ? 1.0f : 0.0f;
 	glTexCoord2f(1.0f-isRightOne, 1.0f);
+//	glColor3f(1,0,0);
 	glVertex3f(minPos.x(), maxPos.y(), 0.0f);
 	glTexCoord2f(isRightOne, 1.0f);
+//	glColor3f(0,1,0);
 	glVertex3f(maxPos.x(), maxPos.y(), 0.0f);
 	glTexCoord2f(isRightOne, 0.0f);
 	glVertex3f(maxPos.x(), minPos.y(), 0.0f);

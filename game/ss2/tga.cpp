@@ -2,21 +2,42 @@
 
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 
 TGA::TGA(std::string filename)
 {
+	FILE* f = fopen(filename.c_str(), "rb");
+	if(f)
+	{
+		int8_t length;
+		fread(&length, 1, sizeof(int8_t), f);
+		fseek(f, 1, SEEK_CUR);
+		int8_t type;
+		fread(&type, 1, sizeof(int8_t), f);
+		fclose(f);
+	}
+	else
+	{
+		std::cerr << "error";
+	}
+
 	std::ifstream file;
-	file.open(filename);
+	file.open(filename, std::ios_base::in | std::ios_base::binary);
 	if(file.is_open())
 	{
 		int8_t length;
-		file >> length;
+//		file >> length;
+		file.read(reinterpret_cast<char*>(&length), sizeof(int8_t));
 		file.ignore(1);
 		int8_t type;
-		file >> type;
+//		file >> type;
+		file.read(reinterpret_cast<char*>(&type), sizeof(int8_t));
 		file.ignore(9);
 		uint8_t bits;
-		file >> m_width >> m_height >> bits;
+//		file >> m_width >> m_height >> bits;
+		file.read(reinterpret_cast<char*>(&m_width), sizeof(short));
+		file.read(reinterpret_cast<char*>(&m_height), sizeof(short));
+		file.read(reinterpret_cast<char*>(&bits), sizeof(uint8_t));
 		file.ignore(length+1);
 
 		int stride;
@@ -29,20 +50,21 @@ TGA::TGA(std::string filename)
 //			m_data.resize(stride*m_height);
 			m_data.clear();
 			std::vector<uint8_t> pixelColors(m_channels);
-//			uint8_t* pixelColorsData = pixelColors.data();
+			uint8_t* pixelColorsData = pixelColors.data();
 
 			int i=0;
 			while(i<m_width*m_height)
 			{
-				file >> rleID;
+//				file >> rleID;
+				file.read(reinterpret_cast<char*>(&rleID), sizeof(uint8_t));
 				if(rleID<128)
 				{
 					rleID++;
 					while(rleID)
 					{
-//						file.read(pixelColorsData, channels*sizeof(uint8_t));
-						for (uint8_t& color : pixelColors)
-							file >> color;
+						file.read(reinterpret_cast<char*>(pixelColorsData), m_channels*sizeof(uint8_t));
+//						for (uint8_t& color : pixelColors)
+//							file >> color;
 
 						m_data.push_back(pixelColors[2]);
 						m_data.push_back(pixelColors[1]);
@@ -58,9 +80,9 @@ TGA::TGA(std::string filename)
 				else
 				{
 					rleID -= 127;
-//					file.read(pixelColorsData, channels*sizeof(uint8_t));
-					for (uint8_t& color : pixelColors)
-						file >> color;
+					file.read(reinterpret_cast<char*>(pixelColorsData), m_channels*sizeof(uint8_t));
+//					for (uint8_t& color : pixelColors)
+//						file >> color;
 					while(rleID)
 					{
 						m_data.push_back(pixelColors[2]);
@@ -78,7 +100,8 @@ TGA::TGA(std::string filename)
 		}
 		else
 		{
-			switch (bits) {
+			switch (bits)
+			{
 				case 24:
 				case 32:
 					{
@@ -89,9 +112,9 @@ TGA::TGA(std::string filename)
 						for(int y=0; y<m_height; y++)
 						{
 							unsigned char* pixelLine = &data[stride*y];
-//							file.read(pixelLine, stride);
-							for (int n=0; n<stride; n++)
-								file >> pixelLine[n];
+							file.read(reinterpret_cast<char*>(pixelLine), stride);
+//							for (int n=0; n<stride; n++)
+//								file >> pixelLine[n];
 							for (int i=0; i<stride; i+=m_channels)
 							{
 								std::swap(pixelLine[i], pixelLine[i+2]);
@@ -118,7 +141,8 @@ TGA::TGA(std::string filename)
 						}
 					}
 					break;
-//				default:
+				default:
+					std::cerr << "Read invalid number of bits " << bits << std::endl;
 //					break;
 			}
 		}

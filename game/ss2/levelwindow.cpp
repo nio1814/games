@@ -12,7 +12,7 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 	m_keys = std::make_shared<std::map<int,bool> >();
 	m_level->setKeys(m_keys);
 
-	m_camera = std::make_unique<Camera>(Vector3D(0,0,15));
+	m_camera = std::make_unique<Camera>(Vector3D(0,0,5));
 
 	m_timer = new QTimer(this);
 	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(run()));
@@ -39,22 +39,28 @@ void LevelWindow::run()
 void LevelWindow::initializeGL()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClearDepth(10.0f);
+	glClearDepth(20.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+//	glEnable(GL_LIGHTING);
+//	glEnable(GL_LIGHT0);
 
-	static GLfloat lightPosition[4] = {.5, 5, 7, 1};
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+//	static GLfloat lightPosition[4] = {.5, 5, 7, 1};
+//	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
-	glEnable(GL_TEXTURE);
+	glEnable(GL_TEXTURE_2D);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+
+	GLenum error = glGetError();
+	if(error!=GL_NO_ERROR)
+		qWarning() << "Error " << error << " initializing GL";
+
+	m_level->load();
 
 	return;
 }

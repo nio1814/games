@@ -22,12 +22,13 @@ public:
 	Vector2D minPosition();
 	Vector2D maxPosition();
 	Vector2D size();
+	void scaleToSpriteSize();
 	float directionFloat();
 	void checkTouch(std::shared_ptr<Object> otherObject);
 	bool touching(Side side);
 	void update(float timeElapsed);
 	void reset();
-	void loadSprite(Character character);
+	void setSprite(const Sprite &sprite);
 private:
 	float diagonalLength() const;
 	void resetTouches();
@@ -38,6 +39,8 @@ private:
 	float m_speed;
 	std::map<Side,bool> m_touching;
 	std::unique_ptr<Sprite> m_sprite;
+	std::shared_ptr<Action> m_action;
+	bool m_mobile = false;
 };
 
 #endif // OBJECT_H

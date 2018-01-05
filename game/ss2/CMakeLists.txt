@@ -50,4 +50,4 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${QT_LIBRARIES})
 #file(GLOB_RECURSE IMAGES "img/*.*")
 #message(STATUS "${IMAGES}")
 
-add_subdirectory(img/characters/goomba)
+add_subdirectory(img/characters)
