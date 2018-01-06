@@ -2,6 +2,7 @@
 
 #include "level.h"
 #include "camera.h"
+#include "keys.h"
 
 #include <QKeyEvent>
 
@@ -9,7 +10,7 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 {
 	m_level = std::make_shared<Level>();
 
-	m_keys = std::make_shared<std::map<int,bool> >();
+	m_keys = std::make_shared<Keys>();
 	m_level->setKeys(m_keys);
 
 	m_camera = std::make_unique<Camera>(Vector3D(0,0,5));
@@ -174,7 +175,8 @@ void LevelWindow::paintGL()
 
 void LevelWindow::keyPressEvent(QKeyEvent *event)
 {
-	(*m_keys)[event->key()] = true;
+//	(*m_keys)[event->key()] = true;
+	m_keys->setKeyPressed(event->key(), true);
 
 	qWarning() << event->key();
 
@@ -211,7 +213,8 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 
 void LevelWindow::keyReleaseEvent(QKeyEvent *event)
 {
-	(*m_keys)[event->key()] = false;
+//	(*m_keys)[event->key()] = false;
+	m_keys->setKeyPressed(event->key(), false);
 
 	m_level->updateKeys();
 }

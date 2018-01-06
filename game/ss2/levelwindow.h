@@ -8,6 +8,7 @@
 
 QT_FORWARD_DECLARE_CLASS(Level)
 QT_FORWARD_DECLARE_CLASS(Camera)
+QT_FORWARD_DECLARE_CLASS(Keys)
 
 class LevelWindow : public GLWidget
 {
@@ -29,7 +30,7 @@ protected:
 	void keyReleaseEvent(QKeyEvent *event);
 private:	
 	std::shared_ptr<Level> m_level;
-	std::shared_ptr<std::map<int,bool> > m_keys;
+	std::shared_ptr<Keys> m_keys;
 	QDateTime m_lastTime;
 	Mode m_mode = GameMode;
 	std::unique_ptr<Camera> m_camera;

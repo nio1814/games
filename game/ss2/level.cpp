@@ -3,6 +3,7 @@
 #include "object.h"
 #include "textureloader.h"
 #include "sprite.h"
+#include "keys.h"
 
 #include <map>
 #include <qnamespace.h>
@@ -12,6 +13,8 @@
 Level::Level()
 {
 	m_textureLoader = std::make_shared<TextureLoader>();
+
+	m_keys = std::make_shared<Keys>();
 }
 
 Level::~Level()
@@ -19,20 +22,23 @@ Level::~Level()
 
 }
 
-void Level::setKeys(std::shared_ptr<std::map<int,bool> > keys)
+void Level::setKeys(std::shared_ptr<Keys> keys)
 {
 	m_keys = keys;
+	m_keys->setKeyIndex(Keys::Left, Qt::Key_Left);
+	m_keys->setKeyIndex(Keys::Right, Qt::Key_Right);
+	m_keys->setKeyIndex(Keys::Jump, Qt::Key_Control);
 }
 
 void Level::updateKeys()
 {
 //	if (m_keys->count(Qt::Key_Left) && m_keys->at(Qt::Key_Left))
-	if ((*m_keys)[Qt::Key_Left])
+	if (m_keys->keyPressed(Keys::Left))
 	{
 		m_player->setVelocity(-1.0f, 0.0f);
 //		m_player->setDirection(DirectionLeft);
 	}
-	else  if ((*m_keys)[Qt::Key_Right])
+	else  if (m_keys->keyPressed(Keys::Right))
 	{
 		m_player->setVelocity(1.0f, 0.0f);
 //		m_player->setDirection(DirectionRight);
@@ -40,7 +46,7 @@ void Level::updateKeys()
 	else
 		m_player->setVelocity(0.0f, 0.0f);
 
-	if ((*m_keys)[Qt::Key_Control] && m_player->touching(Object::BottomSide))
+	if (m_keys->keyPressed(Keys::Jump) && m_player->touching(Object::BottomSide))
 		m_player->setVelocity(0.0f, 10.0f);
 
 }
@@ -80,7 +86,7 @@ void Level::load()
 
 	m_player = std::make_shared<Object>(1,1.5,0,0);
 	m_player->setHasGravity(true);
-	m_player->setSprite(*m_sprites[MMX]);
+	m_player->setSprite(*m_sprites[Goomba]);
 
 	m_objects.push_back(m_player);
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));

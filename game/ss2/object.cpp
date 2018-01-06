@@ -66,11 +66,11 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 	{
 		VectorND vectorBetween = otherPosition - m_position;
 		float otherWidth = otherObject->size().x();
-		bool withinWidth = std::abs(vectorBetween.x()) < .5f*(otherWidth+m_size.x());
+		bool withinWidth = std::abs(vectorBetween.x()) <= .5f*(otherWidth+m_size.x());
 		float otherHeight = otherObject->size().y();
 		float combinedHeight = otherHeight + m_size.y();
 		bool above = m_position.y() > otherPosition.y();
-		if(withinWidth && std::abs(vectorBetween.y())< .5*combinedHeight)
+		if(withinWidth && std::abs(vectorBetween.y()) <= .5*combinedHeight)
 		{
 			if(above)
 			{
