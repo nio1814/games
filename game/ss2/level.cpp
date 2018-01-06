@@ -38,11 +38,10 @@ void Level::updateKeys()
 	else  if (m_keys->keyPressed(Keys::Right))
 		m_player->moveRight();
 	else
-		m_player->setVelocity(0.0f, 0.0f);
+		m_player->noLeftRightMove();
 
-	if (m_keys->keyPressed(Keys::Jump) && m_player->touching(Object::BottomSide))
-		m_player->setVelocity(0.0f, 10.0f);
-
+	if(m_keys->keyPressed(Keys::Jump))
+		m_player->jump();
 }
 
 void Level::draw()
@@ -55,6 +54,7 @@ void Level::draw()
 
 void Level::update(float timeElapsed)
 {
+	updateKeys();
 	for (auto i=m_objects.begin(); i!=m_objects.end(); i++)
 	{
 		(*i)->reset();
@@ -80,7 +80,7 @@ void Level::load()
 
 	m_player = std::make_shared<Object>(1,1.5,0,0);
 	m_player->setHasGravity(true);
-	m_player->setSprite(*m_sprites[Goomba]);
+	m_player->setSprite(*m_sprites[MMX]);
 
 	m_objects.push_back(m_player);
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));

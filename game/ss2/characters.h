@@ -3,7 +3,7 @@
 
 enum Character{Goomba, MMX};
 
-enum Action{Stand, Run};
+enum Action{Stand, Run, Jump};
 
 #endif // CHARACTERS_H
 

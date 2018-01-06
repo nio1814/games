@@ -17,7 +17,8 @@ LevelWindow::LevelWindow(QWidget *parent) : GLWidget(parent)
 
 	m_timer = new QTimer(this);
 	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(run()));
-	m_timer->start(40);
+//	connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(update()));
+	m_timer->start(50);
 }
 
 LevelWindow::~LevelWindow()
@@ -95,6 +96,7 @@ void LevelWindow::resizeGL(int w, int h)
 
 void LevelWindow::paintGL()
 {
+//	qWarning() << "paint";
 //	GLfloat T = 10000;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -178,7 +180,7 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 //	(*m_keys)[event->key()] = true;
 	m_keys->setKeyPressed(event->key(), true);
 
-	qWarning() << event->key();
+//	qWarning() << event->key();
 
 	switch (event->key())
 	{
@@ -194,7 +196,7 @@ void LevelWindow::keyPressEvent(QKeyEvent *event)
 	switch (m_mode)
 	{
 		case GameMode:
-			m_level->updateKeys();
+//			m_level->updateKeys();
 			break;
 		case CameraMode:
 			switch (event->key()) {
@@ -216,6 +218,6 @@ void LevelWindow::keyReleaseEvent(QKeyEvent *event)
 //	(*m_keys)[event->key()] = false;
 	m_keys->setKeyPressed(event->key(), false);
 
-	m_level->updateKeys();
+//	m_level->updateKeys();
 }
 

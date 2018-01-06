@@ -14,7 +14,7 @@ class Animation
 {
 public:
 	Animation(){};
-	Animation(std::vector<std::shared_ptr<Frame> > frames);
+	Animation(std::vector<std::shared_ptr<Frame> > frames, float duration);
 
 	unsigned int textureIndex();
 	std::shared_ptr<Frame> frame();
@@ -33,12 +33,13 @@ public:
 	void load(Character character);
 	unsigned int textureIndex();
 //	std::shared_ptr<Action> action();
+	bool hasAction(Action action);
 	void setActionPointer(std::shared_ptr<Action> action);
 	float heightWidthScale();
 
 	Sprite& operator =(const Sprite& other);
 private:
-	void addAction(Action action, std::vector<std::string> filenames);
+	void addAction(Action action, std::vector<std::string> filenames, float duration);
 	std::shared_ptr<const Frame> frame();
 
 	std::map<Action, Animation> m_actions;

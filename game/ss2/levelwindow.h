@@ -21,6 +21,7 @@ public:
 
 public slots:
 	void run();
+//	void update();
 protected:
 	void initializeGL();
 	void resizeGL(int w, int h);

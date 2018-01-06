@@ -71,6 +71,17 @@ void Object::moveRight()
 	m_facingRight = true;
 }
 
+void Object::noLeftRightMove()
+{
+	m_velocity.setX(0);
+}
+
+void Object::jump()
+{
+	if(m_sprite->hasAction(Jump) && *m_action==Stand && m_touching[BottomSide])
+		m_velocity.setY(m_jumpStrength);
+}
+
 void Object::checkTouch(std::shared_ptr<Object> otherObject)
 {
 	Vector3D otherPosition = otherObject->position();

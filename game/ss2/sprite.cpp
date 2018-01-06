@@ -25,18 +25,25 @@ void Sprite::load(Character character)
 //				filenames = {"img/characters/goomba/gommba1.tga"};
 //				std::vector<unsigned int> textureIndices = m_textureLoader->load(filenames);
 //				m_actions.insert(std::pair<Action,Animation>(Stand, Animation(textureIndices)));
-				addAction(Stand, {"img/characters/goomba/goomba1.tga"});
+				addAction(Stand, {"img/characters/goomba/goomba1.tga"}, 0);
 
 				addAction(Run, {
 							  "img/characters/goomba/goomba1.tga",
 							  "img/characters/goomba/goomba2.tga"
-						  });
+						  }, .3);
 //				textureIndices = m_textureLoader->load(filenames);
 //				m_actions.insert(std::pair<Action,Animation>(Run, Animation(filenames)));
 			}
 			break;
 		case MMX:
-			addAction(Stand, {"img/characters/mmx/mmx.tga"});
+			addAction(Stand, {"img/characters/mmx/mmx.tga"}, 0);
+			addAction(Jump, {
+						  "img/characters/mmx/mmxJump1.tga",
+						  "img/characters/mmx/mmxJump2.tga",
+						  "img/characters/mmx/mmxJump3.tga",
+						  "img/characters/mmx/mmxJump4.tga",
+						  "img/characters/mmx/mmxJump5.tga"
+					  }, .8);
 			break;
 	}
 }
@@ -48,6 +55,11 @@ unsigned int Sprite::textureIndex()
 		return m_actions.at(*m_action).textureIndex();
 	else
 		return -1;
+}
+
+bool Sprite::hasAction(Action action)
+{
+	return m_actions.count(action);
 }
 
 void Sprite::setActionPointer(std::shared_ptr<Action> action)
@@ -76,11 +88,11 @@ Sprite &Sprite::operator =(const Sprite &other)
 //	return m_action;
 //}
 
-void Sprite::addAction(Action action, std::vector<std::string> filenames)
+void Sprite::addAction(Action action, std::vector<std::string> filenames, float duration)
 {
 	std::vector<std::shared_ptr<Frame> > textures = m_textureLoader->load(filenames);
 
-	m_actions.insert(std::pair<Action,Animation>(action, Animation(textures)));
+	m_actions.insert(std::pair<Action,Animation>(action, Animation(textures, duration)));
 }
 
 std::shared_ptr<const Frame> Sprite::frame()
@@ -94,9 +106,13 @@ std::shared_ptr<const Frame> Sprite::frame()
 }
 
 
-Animation::Animation(std::vector<std::shared_ptr<Frame> > frames) :
+Animation::Animation(std::vector<std::shared_ptr<Frame> > frames, float duration) :
 	m_frames(frames)
 {
+	float frameDuration = duration/frames.size();
+	for(std::shared_ptr<Frame> frame : m_frames)
+		frame->duration = frameDuration;
+
 	if(m_index<0)
 		m_index = 0;
 }
