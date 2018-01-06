@@ -21,6 +21,7 @@ public:
 	VectorND(const VectorND& vector);
 
 	float x();
+	void setX(float newX);
 	float y();
 	void setY(float newY);
 

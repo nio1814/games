@@ -57,6 +57,20 @@ float Object::directionFloat()
 	return m_facingRight ? 1.0f : -1.0f;
 }
 
+void Object::moveLeft()
+{
+	float velocityX = std::min(m_velocity.x(), -m_speed);
+	m_velocity.setX(velocityX);
+	m_facingRight = false;
+}
+
+void Object::moveRight()
+{
+	float velocityX = std::max(m_velocity.x(), m_speed);
+	m_velocity.setX(velocityX);
+	m_facingRight = true;
+}
+
 void Object::checkTouch(std::shared_ptr<Object> otherObject)
 {
 	Vector3D otherPosition = otherObject->position();

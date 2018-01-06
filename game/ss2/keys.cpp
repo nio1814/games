@@ -35,4 +35,3 @@ int Keys::keyIndex(Keys::KeyAction action)
 {
 	return m_keyActionIndex[action];
 }
-

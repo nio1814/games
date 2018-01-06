@@ -26,6 +26,11 @@ float VectorND::x()
 	return m_array[0];
 }
 
+void VectorND::setX(float newX)
+{
+	m_array[0] = newX;
+}
+
 float VectorND::y()
 {
 	return m_array[1];

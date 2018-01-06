@@ -24,6 +24,9 @@ public:
 	Vector2D size();
 	void scaleToSpriteSize();
 	float directionFloat();
+	void moveLeft();
+	void moveRight();
+
 	void checkTouch(std::shared_ptr<Object> otherObject);
 	bool touching(Side side);
 	void update(float timeElapsed);
@@ -36,7 +39,7 @@ private:
 	Vector2D m_size;
 	float m_rotation;
 	bool m_facingRight;
-	float m_speed;
+	float m_speed = 1;
 	std::map<Side,bool> m_touching;
 	std::unique_ptr<Sprite> m_sprite;
 	std::shared_ptr<Action> m_action;

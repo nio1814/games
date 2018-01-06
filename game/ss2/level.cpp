@@ -34,15 +34,9 @@ void Level::updateKeys()
 {
 //	if (m_keys->count(Qt::Key_Left) && m_keys->at(Qt::Key_Left))
 	if (m_keys->keyPressed(Keys::Left))
-	{
-		m_player->setVelocity(-1.0f, 0.0f);
-//		m_player->setDirection(DirectionLeft);
-	}
+		m_player->moveLeft();
 	else  if (m_keys->keyPressed(Keys::Right))
-	{
-		m_player->setVelocity(1.0f, 0.0f);
-//		m_player->setDirection(DirectionRight);
-	}
+		m_player->moveRight();
 	else
 		m_player->setVelocity(0.0f, 0.0f);
 
