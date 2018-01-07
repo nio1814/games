@@ -14,14 +14,22 @@ class Animation
 {
 public:
 	Animation(){};
-	Animation(std::vector<std::shared_ptr<Frame> > frames, float duration);
+	Animation(std::vector<std::shared_ptr<Frame> > frames, float duration, int loopEnd=-1, int loopStart=-1);
 
+	int index();
 	unsigned int textureIndex();
 	std::shared_ptr<Frame> frame();
+	void update(float timeElapsed);
+	void start();
 
 private:
+	float duration();
+
 	std::vector<std::shared_ptr<Frame> > m_frames;
-	int m_index=-1;
+//	int m_index = -1;
+	float m_time = -1;
+	int m_loopIndexStart = -1;
+	int m_loopIndexEnd = -1;
 };
 
 class Sprite
@@ -32,19 +40,21 @@ public:
 
 	void load(Character character);
 	unsigned int textureIndex();
+	void update(float timeElapsed);
 //	std::shared_ptr<Action> action();
 	bool hasAction(Action action);
-	void setActionPointer(std::shared_ptr<Action> action);
+	void setAction(Action action);
 	float heightWidthScale();
 
 	Sprite& operator =(const Sprite& other);
 private:
-	void addAction(Action action, std::vector<std::string> filenames, float duration);
+	void addAction(Action action, std::vector<std::string> filenames, float duration=0);
 	std::shared_ptr<const Frame> frame();
+	std::shared_ptr<Animation> currentAnimation();
 
-	std::map<Action, Animation> m_actions;
+	std::map<Action, std::shared_ptr<Animation> > m_actions;
 	std::shared_ptr<TextureLoader> m_textureLoader;
-	std::shared_ptr<Action> m_action;
+	Action m_action;
 };
 
 #endif // SPRITE_H

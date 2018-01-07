@@ -6,20 +6,20 @@
 
 TGA::TGA(std::string filename)
 {
-	FILE* f = fopen(filename.c_str(), "rb");
-	if(f)
-	{
-		int8_t length;
-		fread(&length, 1, sizeof(int8_t), f);
-		fseek(f, 1, SEEK_CUR);
-		int8_t type;
-		fread(&type, 1, sizeof(int8_t), f);
-		fclose(f);
-	}
-	else
-	{
-		std::cerr << "error";
-	}
+//	FILE* f = fopen(filename.c_str(), "rb");
+//	if(f)
+//	{
+//		int8_t length;
+//		fread(&length, 1, sizeof(int8_t), f);
+//		fseek(f, 1, SEEK_CUR);
+//		int8_t type;
+//		fread(&type, 1, sizeof(int8_t), f);
+//		fclose(f);
+//	}
+//	else
+//	{
+//		std::cerr << "error";
+//	}
 
 	std::ifstream file;
 	file.open(filename, std::ios_base::in | std::ios_base::binary);

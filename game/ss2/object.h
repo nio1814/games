@@ -46,7 +46,7 @@ private:
 	float m_jumpStrength = 5;
 	std::map<Side,bool> m_touching;
 	std::unique_ptr<Sprite> m_sprite;
-	std::shared_ptr<Action> m_action;
+	Action m_action;
 	bool m_mobile = false;
 };
 

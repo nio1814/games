@@ -10,7 +10,7 @@ Object::Object(float width, float height, float positionX, float positionY) :
 	Mass(Vector3D(positionX, positionY, 0)),
 	m_size(Vector2D({width, height})),
 	m_speed(1.0f),
-	m_action(std::make_shared<Action>(Stand))
+	m_action(Stand)
 {
 	resetTouches();
 }
@@ -78,8 +78,12 @@ void Object::noLeftRightMove()
 
 void Object::jump()
 {
-	if(m_sprite->hasAction(Jump) && *m_action==Stand && m_touching[BottomSide])
+	if(m_sprite->hasAction(Jump) && m_action==Stand && m_touching[BottomSide])
+	{
 		m_velocity.setY(m_jumpStrength);
+		m_sprite->setAction(Jump);
+		m_action = Jump;
+	}
 }
 
 void Object::checkTouch(std::shared_ptr<Object> otherObject)
@@ -101,6 +105,8 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 			{
 				m_touching[BottomSide] = true;
 				m_position.setY(otherPosition.y() + .5*combinedHeight);
+				m_action = Stand;
+				m_sprite->setAction(Stand);
 			}
 			else
 				m_touching[TopSide] = true;
@@ -117,12 +123,15 @@ bool Object::touching(Object::Side side)
 
 void Object::update(float timeElapsed)
 {
+	if(m_sprite)
+		m_sprite->update(timeElapsed);
 	scaleToSpriteSize();
 	if(m_touching[BottomSide])
 	{
 		float velocityY = std::max(m_velocity.y(), 0.0f);
 		m_velocity.setY(velocityY);
-	} else if(m_hasGravity)
+	}
+	else if(m_hasGravity)
 		m_velocity += Vector3D(0,m_gravity,0)*timeElapsed;
 
 	m_position += Vector3D(m_velocity*timeElapsed);
@@ -137,7 +146,7 @@ void Object::reset()
 void Object::setSprite(const Sprite& sprite)
 {
 	m_sprite = std::make_unique<Sprite>(sprite);
-	m_sprite->setActionPointer(m_action);
+//	m_sprite->setActionPointer(m_action);
 }
 
 float Object::diagonalLength() const
