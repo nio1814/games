@@ -38,6 +38,7 @@ public:
 private:
 	float diagonalLength() const;
 	void resetTouches();
+	void setAction(Action action);
 
 	Vector2D m_size;
 	float m_rotation;

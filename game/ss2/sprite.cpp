@@ -2,6 +2,9 @@
 
 #include "textureloader.h"
 
+//#include <limits>
+#include <iostream>
+
 Sprite::Sprite(std::shared_ptr<TextureLoader> textureLoader, Character character) :
 	m_textureLoader(textureLoader)
 {
@@ -30,7 +33,7 @@ void Sprite::load(Character character)
 				addAction(Run, {
 							  "img/characters/goomba/goomba1.tga",
 							  "img/characters/goomba/goomba2.tga"
-						  }, .3);
+						  }, .3, 1, 0);
 //				textureIndices = m_textureLoader->load(filenames);
 //				m_actions.insert(std::pair<Action,Animation>(Run, Animation(filenames)));
 			}
@@ -100,13 +103,13 @@ Sprite &Sprite::operator =(const Sprite &other)
 //	return m_action;
 //}
 
-void Sprite::addAction(Action action, std::vector<std::string> filenames, float duration)
+void Sprite::addAction(Action action, std::vector<std::string> filenames, float duration, int loopEnd, int loopStart)
 {
 	std::vector<std::shared_ptr<Frame> > textures = m_textureLoader->load(filenames);
 
 	if(m_actions.empty())
 		m_action = action;
-	std::shared_ptr<Animation> animation = std::make_shared<Animation>(textures, duration);
+	std::shared_ptr<Animation> animation = std::make_shared<Animation>(textures, duration, loopEnd, loopStart);
 	m_actions.insert(std::pair<Action,std::shared_ptr<Animation>>(action, animation));
 }
 
@@ -151,19 +154,31 @@ int Animation::index()
 	float loopTimeStart = 0;
 	float loopTimeEnd = 0;
 
+	float t=0;
+	for(size_t n=0; n<m_frames.size(); n++)
+	{
+		if(n==(size_t)m_loopIndexStart)
+			loopTimeStart = t;
+		t += m_frames[n]->duration;
+		if(n==(size_t)m_loopIndexEnd)
+			loopTimeEnd = t;
+	}
+	if(m_time>loopTimeEnd)
+		m_time = loopTimeStart + m_time-loopTimeEnd;
+//	std::cout << m_time << std::endl;
+
 	for(size_t n=0; n<m_frames.size(); n++)
 	{
 		std::shared_ptr<Frame> frame = m_frames[n];
 		float frameEndTimeNext = frameEndTimePrevious + frame->duration;
-		if(n==(size_t)m_loopIndexStart)
-			loopTimeStart = frameEndTimePrevious;
-		else if(n==(size_t)m_loopIndexEnd)
-			loopTimeEnd = frameEndTimeNext;
 
-		if(m_time>loopTimeEnd)
-			m_time -= loopTimeStart;
 		if(m_time<frameEndTimeNext)
+		{
+//			std::cout << n << std::endl;
 			return n;
+		}
+
+		frameEndTimePrevious = frameEndTimeNext;
 	}
 
 	return m_frames.size()-1;

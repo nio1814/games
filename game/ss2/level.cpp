@@ -80,6 +80,7 @@ void Level::load()
 
 	m_player = std::make_shared<Object>(1,1.5,0,0);
 	m_player->setHasGravity(true);
+//	m_player->setSprite(*m_sprites[Goomba]);
 	m_player->setSprite(*m_sprites[MMX]);
 
 	m_objects.push_back(m_player);

@@ -48,7 +48,7 @@ public:
 
 	Sprite& operator =(const Sprite& other);
 private:
-	void addAction(Action action, std::vector<std::string> filenames, float duration=0);
+	void addAction(Action action, std::vector<std::string> filenames, float duration=0, int loopEnd=-1, int loopStart=-1);
 	std::shared_ptr<const Frame> frame();
 	std::shared_ptr<Animation> currentAnimation();
 

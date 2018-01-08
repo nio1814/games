@@ -62,6 +62,8 @@ void Object::moveLeft()
 	float velocityX = std::min(m_velocity.x(), -m_speed);
 	m_velocity.setX(velocityX);
 	m_facingRight = false;
+	if(m_touching[BottomSide])
+		setAction(Run);
 }
 
 void Object::moveRight()
@@ -69,11 +71,16 @@ void Object::moveRight()
 	float velocityX = std::max(m_velocity.x(), m_speed);
 	m_velocity.setX(velocityX);
 	m_facingRight = true;
+	if(m_touching[BottomSide])
+		setAction(Run);
+
 }
 
 void Object::noLeftRightMove()
 {
 	m_velocity.setX(0);
+	if(m_touching[BottomSide])
+		setAction(Stand);
 }
 
 void Object::jump()
@@ -105,8 +112,11 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 			{
 				m_touching[BottomSide] = true;
 				m_position.setY(otherPosition.y() + .5*combinedHeight);
-				m_action = Stand;
-				m_sprite->setAction(Stand);
+				if(m_action!=Run)
+				{
+					m_action = Stand;
+					m_sprite->setAction(Stand);
+				}
 			}
 			else
 				m_touching[TopSide] = true;
@@ -158,6 +168,12 @@ void Object::resetTouches()
 {
 	for (Side side : {LeftSide,RightSide,BottomSide,TopSide})
 		m_touching[side] = false;
+}
+
+void Object::setAction(Action action)
+{
+	m_action = action;
+	m_sprite->setAction(action);
 }
 
 void Object::draw()
