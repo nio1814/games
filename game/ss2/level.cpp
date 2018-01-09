@@ -66,6 +66,9 @@ void Level::update(float timeElapsed)
 			m_objects[m]->checkTouch(m_objects[n]);
 		}
 	}
+	for(std::shared_ptr<Object> enemy : m_enemies)
+		updateEnemy(enemy);
+
 	for (auto i=m_objects.begin(); i!=m_objects.end(); i++)
 	{
 		(*i)->update(timeElapsed);
@@ -73,16 +76,42 @@ void Level::update(float timeElapsed)
 	//	fprintf(stderr, "%f %f %f", m_player->position()[0], m_player->position()[1], m_player->position()[2]);
 }
 
+void Level::updateEnemy(std::shared_ptr<Object> enemy)
+{
+	if(enemy->position().x()<m_player->position().x())
+		enemy->moveRight();
+	else
+		enemy->moveLeft();
+}
+
 void Level::load()
 {
 	for(Character character : {Goomba, MMX, Mario1Little})
 		m_sprites[character] = std::make_unique<Sprite>(m_textureLoader, character);
 
-	m_player = std::make_shared<Object>(1,1.5,0,0);
+	setPlayer(std::make_shared<Object>(1,1.5,0,0));
 	m_player->setHasGravity(true);
 //	m_player->setSprite(*m_sprites[Goomba]);
 	m_player->setSprite(*m_sprites[Mario1Little]);
 
-	m_objects.push_back(m_player);
+	std::shared_ptr<Object> object;
+	object = std::make_shared<Object>(1,1, 3, 1);
+	object->setHasGravity(true);
+	object->setSprite(*m_sprites[Goomba]);
+	addEnemy(object);
+
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));
+}
+
+void Level::setPlayer(std::shared_ptr<Object> player)
+{
+	m_player = player;
+	if(std::find(m_objects.begin(), m_objects.end(), m_player) == m_objects.end())
+		m_objects.push_back(m_player);
+}
+
+void Level::addEnemy(std::shared_ptr<Object> enemy)
+{
+	m_enemies.push_back(enemy);
+	m_objects.push_back(enemy);
 }

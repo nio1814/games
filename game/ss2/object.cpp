@@ -74,7 +74,7 @@ void Object::moveRight()
 	float velocityX = std::max(m_velocity.x(), m_speed);
 	m_velocity.setX(velocityX);
 	m_facingRight = true;
-	if(m_touching[BottomSide])
+	if(m_touching[BottomSide] && velocityX)
 		setAction(Run);
 
 }
@@ -168,6 +168,7 @@ void Object::setSprite(const Sprite& sprite)
 	{
 		case Mario1Little:
 			m_speed = 3;
+			m_jumpStrength = 6;
 			break;
 		default:
 			break;
