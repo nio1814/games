@@ -40,6 +40,7 @@ private:
 	void resetTouches();
 	void setAction(Action action);
 
+	Vector2D m_sizeOriginal;
 	Vector2D m_size;
 	float m_rotation;
 	bool m_facingRight;

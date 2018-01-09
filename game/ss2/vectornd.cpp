@@ -90,6 +90,16 @@ VectorND VectorND::operator* (float value)			// operator* is used to scale a Vec
 	return VectorND(newVector);
 }
 
+VectorND VectorND::operator*(const VectorND &v)
+{
+	std::vector<float> newVector;
+
+	for (int n=0; n<minSize(v); n++)
+		newVector.push_back(m_array[n]*v[n]);
+
+	return VectorND(newVector);
+}
+
 /*std::valarray<float> VectorND::array() const
 {
 	return m_array;
@@ -137,6 +147,15 @@ VectorND &VectorND::operator-=(VectorND v)
 	int minSize = std::min(size(), v.size());
 	for (int n=0; n<minSize; n++)
 		m_array[n] -= v[n];
+
+	return *this;
+}
+
+VectorND &VectorND::operator*=(VectorND v)
+{
+	int minSize = std::min(size(), v.size());
+	for (int n=0; n<minSize; n++)
+		m_array[n] *= v[n];
 
 	return *this;
 }

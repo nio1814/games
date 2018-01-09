@@ -18,7 +18,8 @@ public:
 
 	int index();
 	unsigned int textureIndex();
-	std::shared_ptr<Frame> frame();
+	std::shared_ptr<Frame> currentFrame();
+	std::shared_ptr<Frame> frame(int n);
 	void update(float timeElapsed);
 	void start();
 
@@ -45,8 +46,9 @@ public:
 	bool hasAction(Action action);
 	void setAction(Action action);
 	float heightWidthScale();
+	std::vector<float> sizeScale();
 
-	Sprite& operator =(const Sprite& other);
+//	Sprite& operator =(const Sprite& other);
 private:
 	void addAction(Action action, std::vector<std::string> filenames, float duration=0, int loopEnd=-1, int loopStart=-1);
 	std::shared_ptr<const Frame> frame();
@@ -55,6 +57,7 @@ private:
 	std::map<Action, std::shared_ptr<Animation> > m_actions;
 	std::shared_ptr<TextureLoader> m_textureLoader;
 	Action m_action;
+	std::shared_ptr<const Frame> m_referenceFrame;
 };
 
 #endif // SPRITE_H

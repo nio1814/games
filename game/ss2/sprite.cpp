@@ -89,14 +89,25 @@ float Sprite::heightWidthScale()
 	return currentFrame->height*1.0/currentFrame->width;
 }
 
-Sprite &Sprite::operator =(const Sprite &other)
+std::vector<float> Sprite::sizeScale()
 {
-	m_actions = other.m_actions;
-	m_textureLoader = other.m_textureLoader;
-	m_action = other.m_action;
+	std::shared_ptr<const Frame> currentFrame = frame();
 
-	return *this;
+	std::vector<float> scale(2);
+	scale[0] = currentFrame->width*1.0f/m_referenceFrame->width;
+	scale[1] = currentFrame->height*1.0f/m_referenceFrame->height;
+
+	return scale;
 }
+
+//Sprite &Sprite::operator =(const Sprite &other)
+//{
+//	m_actions = other.m_actions;
+//	m_textureLoader = other.m_textureLoader;
+//	m_action = other.m_action;
+
+//	return *this;
+//}
 
 //std::shared_ptr<Sprite::Action> Sprite::action()
 //{
@@ -107,9 +118,12 @@ void Sprite::addAction(Action action, std::vector<std::string> filenames, float 
 {
 	std::vector<std::shared_ptr<Frame> > textures = m_textureLoader->load(filenames);
 
-	if(m_actions.empty())
-		m_action = action;
 	std::shared_ptr<Animation> animation = std::make_shared<Animation>(textures, duration, loopEnd, loopStart);
+	if(m_actions.empty())
+	{
+		m_action = action;
+		m_referenceFrame = animation->frame(0);
+	}
 	m_actions.insert(std::pair<Action,std::shared_ptr<Animation>>(action, animation));
 }
 
@@ -119,7 +133,7 @@ std::shared_ptr<const Frame> Sprite::frame()
 	std::shared_ptr<Animation> animation = currentAnimation();
 
 	if(animation)
-		frame = animation->frame();
+		frame = animation->currentFrame();
 
 	return frame;
 }
@@ -194,7 +208,7 @@ unsigned int Animation::textureIndex()
 	return i;
 }
 
-std::shared_ptr<Frame> Animation::frame()
+std::shared_ptr<Frame> Animation::currentFrame()
 {
 	std::shared_ptr<Frame> currentFrame;
 
@@ -203,6 +217,11 @@ std::shared_ptr<Frame> Animation::frame()
 		currentFrame = m_frames[i];
 
 	return currentFrame;
+}
+
+std::shared_ptr<Frame> Animation::frame(int n)
+{
+	return m_frames[n];
 }
 
 void Animation::update(float timeElapsed)

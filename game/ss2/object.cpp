@@ -8,6 +8,7 @@
 
 Object::Object(float width, float height, float positionX, float positionY) :
 	Mass(Vector3D(positionX, positionY, 0)),
+	m_sizeOriginal({width,height}),
 	m_size(Vector2D({width, height})),
 	m_speed(1.0f),
 	m_action(Stand)
@@ -47,8 +48,10 @@ void Object::scaleToSpriteSize()
 {
 	if(m_sprite)
 	{
-		float height = m_sprite->heightWidthScale()*m_size.x();
-		m_size.setY(height);
+		Vector2D scale = Vector2D(m_sprite->sizeScale());
+//		float height = m_sprite->heightWidthScale()*m_size.x();
+//		m_size.setY(height);
+		m_size = m_sizeOriginal*scale;
 	}
 }
 
@@ -85,7 +88,9 @@ void Object::noLeftRightMove()
 
 void Object::jump()
 {
-	if(m_sprite->hasAction(Jump) && m_action==Stand && m_touching[BottomSide])
+	if(m_sprite->hasAction(Jump) &&
+			(m_action==Stand || m_action==Run) &&
+			m_touching[BottomSide])
 	{
 		m_velocity.setY(m_jumpStrength);
 		m_sprite->setAction(Jump);
@@ -157,6 +162,7 @@ void Object::setSprite(const Sprite& sprite)
 {
 	m_sprite = std::make_unique<Sprite>(sprite);
 //	m_sprite->setActionPointer(m_action);
+	m_sizeOriginal.setY(m_sprite->heightWidthScale()*m_sizeOriginal.x());
 }
 
 float Object::diagonalLength() const
