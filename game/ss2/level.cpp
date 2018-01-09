@@ -4,6 +4,7 @@
 #include "textureloader.h"
 #include "sprite.h"
 #include "keys.h"
+#include "motion.h"
 
 #include <map>
 #include <qnamespace.h>
@@ -101,6 +102,11 @@ void Level::load()
 	addEnemy(object);
 
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));
+	object = std::make_shared<Object>(5,1,10,-5);
+	Motion motion;
+	motion.addCycle(3, 2.5, Vector2D(1,0));
+	object->setMotion(motion);
+	m_objects.push_back(object);
 }
 
 void Level::setPlayer(std::shared_ptr<Object> player)

@@ -2,14 +2,15 @@
 
 #include "qtgl.h"
 #include "sprite.h"
+#include "motion.h"
 
 #include <vector>
 #include <iostream>
 
 Object::Object(float width, float height, float positionX, float positionY) :
 	Mass(Vector3D(positionX, positionY, 0)),
-	m_sizeOriginal({width,height}),
-	m_size(Vector2D({width, height})),
+	m_sizeOriginal(Vector2D(width, height)),
+	m_size(Vector2D(width, height)),
 	m_speed(1.0f),
 	m_action(Stand)
 {
@@ -127,8 +128,8 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 				m_touching[TopSide] = true;
 		}
 	}
-	else
-		resetTouches();
+//	else
+//		resetTouches();
 }
 
 bool Object::touching(Object::Side side)
@@ -140,6 +141,8 @@ void Object::update(float timeElapsed)
 {
 	if(m_sprite)
 		m_sprite->update(timeElapsed);
+	if(m_motion)
+		m_position = m_motion->position();
 	scaleToSpriteSize();
 	if(m_touching[BottomSide])
 	{
@@ -147,7 +150,11 @@ void Object::update(float timeElapsed)
 		m_velocity.setY(velocityY);
 	}
 	else if(m_hasGravity)
+	{
 		m_velocity += Vector3D(0,m_gravity,0)*timeElapsed;
+		if(m_sprite && m_sprite->hasAction(Jump))
+			m_sprite->setAction(Jump);
+	}
 
 	m_position += Vector3D(m_velocity*timeElapsed);
 
@@ -173,6 +180,13 @@ void Object::setSprite(const Sprite& sprite)
 		default:
 			break;
 	}
+}
+
+void Object::setMotion(const Motion &motion)
+{
+	m_motion = std::make_unique<Motion>(motion);
+	m_motion->setInitialPosition(m_position);
+
 }
 
 float Object::diagonalLength() const

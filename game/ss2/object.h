@@ -9,6 +9,7 @@
 #include <map>
 
 class Sprite;
+class Motion;
 
 class Object : public Mass
 {
@@ -35,11 +36,13 @@ public:
 	void update(float timeElapsed);
 	void reset();
 	void setSprite(const Sprite &sprite);
+	void setMotion(const Motion& motion);
 private:
 	float diagonalLength() const;
 	void resetTouches();
 	void setAction(Action action);
 
+	Vector2D m_positionOriginal;
 	Vector2D m_sizeOriginal;
 	Vector2D m_size;
 	float m_rotation;
@@ -50,6 +53,7 @@ private:
 	std::unique_ptr<Sprite> m_sprite;
 	Action m_action;
 	bool m_mobile = false;
+	std::unique_ptr<Motion> m_motion;
 };
 
 #endif // OBJECT_H

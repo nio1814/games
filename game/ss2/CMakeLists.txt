@@ -32,6 +32,7 @@ set(SS2_SOURCE
 	sprite.cpp
 	tga.cpp
 	textureloader.cpp
+	motion.cpp
 )
 
 set(CMAKE_AUTOMOC ON)
