@@ -167,7 +167,8 @@ void LevelWindow::mousePressEvent(QMouseEvent *event)
 
 void LevelWindow::animate()
 {
-    int dt = qobject_cast<QTimer*>(sender())->interval();
+	QObject* sendingObject = sender();
+	int dt = qobject_cast<QTimer*>(sendingObject)->interval();
 
     m_game->update(dt*1e-3);
 

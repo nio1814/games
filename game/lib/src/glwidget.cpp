@@ -24,6 +24,8 @@ GLWidget::GLWidget(QWidget *parent)
 	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
     mos = new Mouse(m_windowSizeX,m_windowSizeY);
 	m_timer = new QTimer;
+	connect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
+	m_timer->start(50);
 
     light.pos = Vector3D(rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2);
 	light.ambient = Vector3D(rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX,rand()*1.0f/RAND_MAX);
@@ -110,12 +112,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
 {
 	keyDown(event->key());
 
-//	if(m_timer.isNull())
-//	{
-//		m_timer = new QTimer;
-//		connect(m_timer, SIGNAL(timeout()), this, SLOT(runKeys()));
-//		m_timer->start(50);
-//	}
 	emit runKeys();
 
 	return;
@@ -142,7 +138,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     mos->updatePos(event->pos());
 
     emit runMouse();
-    emit animate();
+//	emit animate();
 
     return;
 }
@@ -160,7 +156,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
     mos->wheel += event->delta();
 
     emit runMouse();
-    emit animate();
+//    emit animate();
 
     return;
 }

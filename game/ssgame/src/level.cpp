@@ -695,7 +695,7 @@ void Level::runMoveWorld(GLfloat dt)
 	}
     for(int e=0; e<numEnemies(); e++)
 	{
-        ObjectPointer enemy;
+		ObjectPointer enemy = getEnemy(e);
         if(enemy->active)
 		{
             updateEnemyMove(*enemy,*getPlayer(0), dt);
