@@ -6,7 +6,8 @@
 #include <iostream>
 
 Sprite::Sprite(std::shared_ptr<TextureLoader> textureLoader, Character character) :
-	m_textureLoader(textureLoader)
+	m_textureLoader(textureLoader),
+	m_character(character)
 {
 	load(character);
 }
@@ -48,6 +49,14 @@ void Sprite::load(Character character)
 						  "img/characters/mmx/mmxJump5.tga"
 					  }, .8);
 			break;
+	case Mario1Little:
+		addAction(Stand, {"img/characters/mario1little/mario.tga"});
+		addAction(Run, {
+					  "img/characters/mario1little/marioRun1.tga",
+					  "img/characters/mario1little/marioRun2.tga"
+				  }, .2, 1);
+		addAction(Jump, {"img/characters/mario1little/marioJump.tga"});
+		break;
 	}
 }
 
@@ -98,6 +107,11 @@ std::vector<float> Sprite::sizeScale()
 	scale[1] = currentFrame->height*1.0f/m_referenceFrame->height;
 
 	return scale;
+}
+
+Character Sprite::character()
+{
+	return m_character;
 }
 
 //Sprite &Sprite::operator =(const Sprite &other)

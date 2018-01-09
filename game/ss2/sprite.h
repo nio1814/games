@@ -47,6 +47,7 @@ public:
 	void setAction(Action action);
 	float heightWidthScale();
 	std::vector<float> sizeScale();
+	Character character();
 
 //	Sprite& operator =(const Sprite& other);
 private:
@@ -58,6 +59,7 @@ private:
 	std::shared_ptr<TextureLoader> m_textureLoader;
 	Action m_action;
 	std::shared_ptr<const Frame> m_referenceFrame;
+	Character m_character;
 };
 
 #endif // SPRITE_H

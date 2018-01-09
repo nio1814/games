@@ -75,13 +75,13 @@ void Level::update(float timeElapsed)
 
 void Level::load()
 {
-	for(Character character : {Goomba, MMX})
+	for(Character character : {Goomba, MMX, Mario1Little})
 		m_sprites[character] = std::make_unique<Sprite>(m_textureLoader, character);
 
 	m_player = std::make_shared<Object>(1,1.5,0,0);
 	m_player->setHasGravity(true);
 //	m_player->setSprite(*m_sprites[Goomba]);
-	m_player->setSprite(*m_sprites[MMX]);
+	m_player->setSprite(*m_sprites[Mario1Little]);
 
 	m_objects.push_back(m_player);
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));

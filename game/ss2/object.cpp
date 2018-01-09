@@ -163,6 +163,15 @@ void Object::setSprite(const Sprite& sprite)
 	m_sprite = std::make_unique<Sprite>(sprite);
 //	m_sprite->setActionPointer(m_action);
 	m_sizeOriginal.setY(m_sprite->heightWidthScale()*m_sizeOriginal.x());
+
+	switch(m_sprite->character())
+	{
+		case Mario1Little:
+			m_speed = 3;
+			break;
+		default:
+			break;
+	}
 }
 
 float Object::diagonalLength() const
