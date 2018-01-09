@@ -15,7 +15,7 @@ public:
 
 	std::vector<std::shared_ptr<Frame> > load(std::vector<std::string> filenames);
 private:
-	std::map<std::string, uint> m_IDs;
+	std::map<std::string, unsigned int> m_IDs;
 };
 
 #endif // TextureLoader_H
