@@ -35,3 +35,8 @@ void Mass::setHasGravity(bool status)
 {
 	m_hasGravity = status;
 }
+
+Vector3D Mass::velocity()
+{
+	return m_velocity;
+}

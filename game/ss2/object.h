@@ -37,6 +37,7 @@ public:
 	void reset();
 	void setSprite(const Sprite &sprite);
 	void setMotion(const Motion& motion);
+	bool hasMotion();
 private:
 	float diagonalLength() const;
 	void resetTouches();

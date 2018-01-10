@@ -118,6 +118,8 @@ void Object::checkTouch(std::shared_ptr<Object> otherObject)
 			{
 				m_touching[BottomSide] = true;
 				m_position.setY(otherPosition.y() + .5*combinedHeight);
+				if(otherObject->hasMotion())
+					m_velocity += otherObject->velocity();
 				if(m_action!=Run)
 				{
 					m_action = Stand;
@@ -142,7 +144,8 @@ void Object::update(float timeElapsed)
 	if(m_sprite)
 		m_sprite->update(timeElapsed);
 	if(m_motion)
-		m_position = m_motion->position();
+//		m_position = m_motion->position();
+		m_velocity = m_motion->velocity();
 	scaleToSpriteSize();
 	if(m_touching[BottomSide])
 	{
@@ -187,6 +190,11 @@ void Object::setMotion(const Motion &motion)
 	m_motion = std::make_unique<Motion>(motion);
 	m_motion->setInitialPosition(m_position);
 
+}
+
+bool Object::hasMotion()
+{
+	return m_motion!=nullptr;
 }
 
 float Object::diagonalLength() const

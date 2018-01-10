@@ -38,3 +38,14 @@ Vector2D Motion::position()
 	return p;
 }
 
+Vector2D Motion::velocity()
+{
+	double time = QDateTime::currentMSecsSinceEpoch()*1e-3;
+
+	Vector2D v = Vector2D(0,0);
+	for(Cycle cycle : m_cycles)
+		v += cycle.direction*(cycle.range*M_PI/cycle.period)*std::cos(2*M_PI*time/cycle.period + cycle.offset);
+
+	return v;
+}
+

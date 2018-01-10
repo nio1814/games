@@ -22,6 +22,7 @@ public:
 	void addCycle(float period, float range, Vector2D direction, float offset=0);
 
 	Vector2D position();
+	Vector2D velocity();
 private:
 	Vector2D m_positionInitial;
 	std::vector<Cycle> m_cycles;

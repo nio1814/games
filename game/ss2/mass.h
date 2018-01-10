@@ -13,6 +13,7 @@ public:
 	virtual void update(float timeElapsed);
 	Vector3D position() const;
 	void setHasGravity(bool status);
+	Vector3D velocity();
 protected:
 	Vector3D m_position;
 	Vector3D m_velocity;

@@ -39,7 +39,7 @@ public:
 	VectorND operator- (const VectorND& v) const;				// operator- is used to take difference of two Vector3D's. operator- returns a new Vector3D
 	VectorND operator* (float value);			// operator* is used to scale a Vector2D by a value. This value multiplies the Vector2D's x, y and z.
 	VectorND operator* (const VectorND& v);			// operator* is used to scale a Vector2D by a value. This value multiplies the Vector2D's x, y and z.
-//	VectorND& operator/ (float value);			// operator/ is used to scale a Vector2D by a value. This value divides the Vector2D's x, y and z.
+	VectorND operator/ (float value);			// operator/ is used to scale a Vector2D by a value. This value divides the Vector2D's x, y and z.
 	VectorND& operator+= (VectorND v);			// operator+= is used to add another Vector3D to this Vector3D.
 	VectorND& operator-= (VectorND v);			// operator-= is used to subtract another Vector3D from this Vector3D.
 	VectorND& operator*= (VectorND v);

@@ -100,6 +100,16 @@ VectorND VectorND::operator*(const VectorND &v)
 	return VectorND(newVector);
 }
 
+VectorND VectorND::operator/(float value)
+{
+	std::vector<float> newVector = m_array;
+
+	for (float& r : newVector)
+		r /= value;
+
+	return VectorND(newVector);
+}
+
 /*std::valarray<float> VectorND::array() const
 {
 	return m_array;
