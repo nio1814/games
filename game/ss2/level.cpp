@@ -5,13 +5,16 @@
 #include "sprite.h"
 #include "keys.h"
 #include "motion.h"
+#include "camera.h"
+#include "vector3d.h"
 
 #include <map>
-#include <qnamespace.h>
+#include "qtgl.h"
 
 #include <stdio.h>
 
-Level::Level()
+Level::Level() :
+	m_camera(std::make_unique<Camera>(Vector3D(0,0,5)))
 {
 	m_textureLoader = std::make_shared<TextureLoader>();
 
@@ -47,6 +50,8 @@ void Level::updateKeys()
 
 void Level::draw()
 {
+	glLookAt(m_camera->position().vector(), m_camera->look().vector(), m_camera->up().vector());
+
 	for (auto i=m_objects.begin(); i!=m_objects.end(); i++)
 	{
 		(*i)->draw();
@@ -75,6 +80,9 @@ void Level::update(float timeElapsed)
 		(*i)->update(timeElapsed);
 	}
 	//	fprintf(stderr, "%f %f %f", m_player->position()[0], m_player->position()[1], m_player->position()[2]);
+	*m_lookPosition = m_player->position();
+	m_lookPosition->setZ(5);
+	m_camera->update(timeElapsed);
 }
 
 void Level::updateEnemy(std::shared_ptr<Object> enemy)
@@ -100,13 +108,17 @@ void Level::load()
 	object->setHasGravity(true);
 	object->setSprite(*m_sprites[Goomba]);
 	addEnemy(object);
-
 	m_objects.push_back(std::make_shared<Object>(10,1,0,-5));
 	object = std::make_shared<Object>(5,1,10,-5);
 	Motion motion;
 	motion.addCycle(3, 2.5, Vector2D(1,0));
 	object->setMotion(motion);
 	m_objects.push_back(object);
+
+	m_camera->setMode(Camera::Follow);
+	m_lookPosition = std::make_shared<Vector3D>(m_player->position());
+	m_camera->setFollowPosition(m_lookPosition);
+	m_camera->setLookToPosition(Vector3D(0,0,5));
 }
 
 void Level::setPlayer(std::shared_ptr<Object> player)

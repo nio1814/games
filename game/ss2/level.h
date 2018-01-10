@@ -11,6 +11,9 @@ class Object;
 class TextureLoader;
 class Sprite;
 class Keys;
+class Camera;
+class Vector2D;
+class Vector3D;
 
 class Level
 {
@@ -35,6 +38,8 @@ private:
 	std::shared_ptr<Keys> m_keys;
 	std::shared_ptr<TextureLoader> m_textureLoader;
 	std::map<Character,std::unique_ptr<Sprite> > m_sprites;
+	std::unique_ptr<Camera> m_camera;
+	std::shared_ptr<Vector3D> m_lookPosition;
 };
 
 #endif // LEVEL_H

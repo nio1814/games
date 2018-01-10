@@ -25,3 +25,8 @@ Vector3D::Vector3D(float x, float y, float z)
 {
 	m_array = {x,y,z};
 }
+
+void Vector3D::setZ(float z)
+{
+	m_array[2] = z;
+}

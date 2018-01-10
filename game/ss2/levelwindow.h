@@ -7,7 +7,6 @@
 #include <memory>
 
 QT_FORWARD_DECLARE_CLASS(Level)
-QT_FORWARD_DECLARE_CLASS(Camera)
 QT_FORWARD_DECLARE_CLASS(Keys)
 
 class LevelWindow : public GLWidget
@@ -34,7 +33,6 @@ private:
 	std::shared_ptr<Keys> m_keys;
 	QDateTime m_lastTime;
 	Mode m_mode = GameMode;
-	std::unique_ptr<Camera> m_camera;
 	QPointer<QTimer> m_timer;
 	float m_throttle = 1.0f;
 };

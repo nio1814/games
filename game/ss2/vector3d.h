@@ -10,6 +10,8 @@ public:
 	Vector3D(std::vector<float> vector);
 	Vector3D(const VectorND& vector);
 	Vector3D(float x, float y, float z);
+
+	void setZ(float z);
 };
 
 #endif // VECTOR3D_H
