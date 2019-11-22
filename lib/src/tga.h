@@ -9,10 +9,10 @@
 
 struct ImageTGA
 {
-	int channels;
-	int size_x;	
-	int size_y;				
-	unsigned char *data;
+	int channels = 0;
+	int size_x = 0;	
+	int size_y = 0;				
+	unsigned char *data = nullptr;
 };
 
 ImageTGA *loadTGA(QString filename);
