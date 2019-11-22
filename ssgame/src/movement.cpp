@@ -767,11 +767,12 @@ actions runEnemyAI(Object &thisEnemy, const Object &target)
 				floorLeft = thisEnemy.touchObj[BSIDE]->posMin.x;
 				//floorRight = getObject(thisEnemy.isTouchIndex[BSIDE])->posMax.x;
 				floorRight = thisEnemy.touchObj[BSIDE]->posMax.x;
+
+        if((floorLeft > thisEnemy.posMin.x) || thisEnemy.isTouching[LSIDE])
+          thisEnemy.vel.x = .07f*thisEnemy.xSpeed;
+        else if((floorRight < thisEnemy.posMax.x) || thisEnemy.isTouching[RSIDE])
+          thisEnemy.vel.x = -.07f*thisEnemy.xSpeed;
 			}
-			if((floorLeft > thisEnemy.posMin.x) || thisEnemy.isTouching[LSIDE])
-				thisEnemy.vel.x = .07f*thisEnemy.xSpeed;
-			else if((floorRight < thisEnemy.posMax.x) || thisEnemy.isTouching[RSIDE])
-				thisEnemy.vel.x = -.07f*thisEnemy.xSpeed;
 			else
 				thisEnemy.vel.x += .015*thisEnemy.xSpeed*thisEnemy.dirSign;
 			break;

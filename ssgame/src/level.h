@@ -92,7 +92,7 @@ public:
 	int movingObjIdx[10];
 	int numMovingObj;
 	int numtgas;
-    int playerFocus;
+    int playerFocusIndex = 0;
 	
 	bool is3D;
 	bool cameraLock;
@@ -125,7 +125,7 @@ public:
 	
     QVector<int> m_structureIdx;
     QVector<int> m_playerIdx;
-    QVector<int> m_enemyIdx;
+    QVector<int> m_enemyIndices;
     ObjectList m_objects;
     CameraPoints cameras;
 };

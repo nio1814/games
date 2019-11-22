@@ -26,6 +26,7 @@ protected:
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
     void mousePressEvent(QMouseEvent *);
+    qint64 m_previousRenderTime = -1;
 private:
     Game *m_game;
     int m_elapsed;

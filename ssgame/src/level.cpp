@@ -379,7 +379,6 @@ Level::Level()
     m_index = -1;
 	is3D = false;
 	cameraLock = false;
-	playerFocus = 0;
 	levelStarted = false;
 
 //    cameras = new CameraPoints[MAXCAMERAS];
@@ -403,7 +402,7 @@ void Level::addPlayer(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, 
     m_objects[index]->numPlayer = static_cast<playerNum>(numPlayers());
 
     if(m_playerIdx.size()==0)
-        playerFocus = 0;
+        this->playerFocusIndex = 0;
     m_playerIdx.append(index);
 	
 	return;
@@ -416,7 +415,7 @@ ObjectPointer Level::getPlayer(int index)
 
 ObjectPointer Level::getEnemy(int index)
 {
-    return m_objects[m_enemyIdx[index]];
+    return m_objects[m_enemyIndices[index]];
 }
 
 ObjectPointer Level::getStructure(int index)
@@ -456,7 +455,7 @@ ObjectList Level::enemies()
 
     for(int n=0; n<numEnemies(); n++)
     {
-        ObjectPointer obj = m_objects[m_enemyIdx[n]];
+        ObjectPointer obj = m_objects[m_enemyIndices[n]];
         if (obj->objType==tpENEMY)
             objs.append(obj);
     }
@@ -468,7 +467,7 @@ void Level::addEnemy(GLfloat wid, GLfloat hei, GLfloat xStart, GLfloat yStart, c
     int index = m_objects.size();
 
     m_objects.append(new Object(wid, hei, xStart, yStart, tpENEMY, cter));
-    m_enemyIdx.append(index);
+    m_enemyIndices.append(index);
 
 	return;
 }
@@ -494,7 +493,7 @@ int Level::objectIndex(type objType, int index)
             objectIdx = m_playerIdx[index];
             break;
         case tpENEMY:
-            objectIdx = m_enemyIdx[index];
+            objectIdx = m_enemyIndices[index];
             break;
         default:
             qWarning() << "Invalid object type: " << objType;
@@ -577,7 +576,7 @@ int Level::numPlayers()
 
 int Level::numEnemies()
 {
-    return m_enemyIdx.size();
+    return m_enemyIndices.size();
 }
 
 void Level::draw()
@@ -585,7 +584,7 @@ void Level::draw()
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Clear The Screen And The Depth Buffer
 	//glLoadIdentity();							// Reset The Current Modelview Matrix
 	//gluLookAt(-x, -y, -20, -x, -y, 0.0, 0.0, 1.0, 0.0);
-    setCam(getPlayer(playerFocus), 0);
+    setCam(getPlayer(this->playerFocusIndex), 0);
 
     for(int s=0; s<numStructures(); s++)
     {
@@ -693,9 +692,9 @@ void Level::runMoveWorld(GLfloat dt)
 			}
 		}			
 	}
-    for(int e=0; e<numEnemies(); e++)
+  for(int enemyIndex : m_enemyIndices)
 	{
-        ObjectPointer enemy;
+        ObjectPointer enemy = m_objects[enemyIndex];
         if(enemy->active)
 		{
             updateEnemyMove(*enemy,*getPlayer(0), dt);
@@ -813,7 +812,7 @@ void Level::run(GLfloat dt, int numRuns)
 	
 	if(!levelStarted)
 	{
-		levelStarted = true;
+    levelStarted = true;
         startTime = clock.msec();
 		currentTime = startTime;
 	}
@@ -824,7 +823,7 @@ void Level::run(GLfloat dt, int numRuns)
 		sprintf(timetext, "%.2f", timer);
 	}
 	fixSizes();
-    setCam(getPlayer(playerFocus), dt);
+    setCam(getPlayer(this->playerFocusIndex), dt);
 
 	for(int i=0; i<numRuns; i++)
 	{
@@ -833,7 +832,7 @@ void Level::run(GLfloat dt, int numRuns)
 			runCheckTouch();
 //			if(i == (numRuns -1))
 //                draw();
-			runMoveWorld(dt);
+      runMoveWorld(dt);
 		}
 //		else
 //            draw();

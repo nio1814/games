@@ -81,70 +81,6 @@ void LevelWindow::paintGL()
 //     glTranslatef(x,y,-z);
     glTranslatef(0,0,-15);
 
-//    glRotatef(10*m_elapsed/T,0,1,0);
-//    glRotatef(100*m_elapsed/T,1,1,0);
-
-
-    glBegin(GL_TRIANGLES);
-//    glColor3f(.3, .1, .7);
-    glColor3f(cos(m_elapsed/T), sin(m_elapsed/T*1.53), sin(m_elapsed/T*.42));
-    glVertex3f(0,0,-1);
-    glVertex3f(1,m_elapsed/10000.0,0);
-    glVertex3f(0,1,0);
-    glEnd();
-
-    // draw a cube (6 quadrilaterals)
-    glBegin(GL_QUADS);				// start drawing the cube.
-
-    // top of cube
-    glColor3f(0.0f,1.0f,0.0f);			// Set The Color To Blue
-    glNormal3f(0,1,0);
-    glVertex3f( 1.0f, 1.0f,-1.0f);		// Top Right Of The Quad (Top)
-    glVertex3f(-1.0f, 1.0f,-1.0f);		// Top Left Of The Quad (Top)
-    glVertex3f(-1.0f, 1.0f, 1.0f);		// Bottom Left Of The Quad (Top)
-    glVertex3f( 1.0f, 1.0f, 1.0f);		// Bottom Right Of The Quad (Top)
-
-    // bottom of cube
-    glColor3f(1.0f,0.5f,0.0f);			// Set The Color To Orange
-    glNormal3f(0,-1,0);
-    glVertex3f( 1.0f,-1.0f, 1.0f);		// Top Right Of The Quad (Bottom)
-    glVertex3f(-1.0f,-1.0f, 1.0f);		// Top Left Of The Quad (Bottom)
-    glVertex3f(-1.0f,-1.0f,-1.0f);		// Bottom Left Of The Quad (Bottom)
-    glVertex3f( 1.0f,-1.0f,-1.0f);		// Bottom Right Of The Quad (Bottom)
-
-    // front of cube
-    glColor3f(1.0f,0.0f,0.0f);
-    glNormal3f(0,0,1);// Set The Color To Red
-    glVertex3f( 1.0f, 1.0f, 1.0f);		// Top Right Of The Quad (Front)
-    glVertex3f(-1.0f, 1.0f, 1.0f);		// Top Left Of The Quad (Front)
-    glVertex3f(-1.0f,-1.0f, 1.0f);		// Bottom Left Of The Quad (Front)
-    glVertex3f( 1.0f,-1.0f, 1.0f);		// Bottom Right Of The Quad (Front)
-
-    // back of cube.
-    glColor3f(1.0f,1.0f,0.0f);			// Set The Color To Yellow
-    glNormal3f(0,0,-1);
-    glVertex3f( 1.0f,-1.0f,-1.0f);		// Top Right Of The Quad (Back)
-    glVertex3f(-1.0f,-1.0f,-1.0f);		// Top Left Of The Quad (Back)
-    glVertex3f(-1.0f, 1.0f,-1.0f);		// Bottom Left Of The Quad (Back)
-    glVertex3f( 1.0f, 1.0f,-1.0f);		// Bottom Right Of The Quad (Back)
-
-    // left of cube
-    glColor3f(0.0f,0.0f,1.0f);			// Blue
-    glVertex3f(-1.0f, 1.0f, 1.0f);		// Top Right Of The Quad (Left)
-    glVertex3f(-1.0f, 1.0f,-1.0f);		// Top Left Of The Quad (Left)
-    glVertex3f(-1.0f,-1.0f,-1.0f);		// Bottom Left Of The Quad (Left)
-    glVertex3f(-1.0f,-1.0f, 1.0f);		// Bottom Right Of The Quad (Left)
-
-    // Right of cube
-    glColor3f(1.0f,0.0f,1.0f);			// Set The Color To Violet
-    glVertex3f( 1.0f, 1.0f,-1.0f);	        // Top Right Of The Quad (Right)
-    glVertex3f( 1.0f, 1.0f, 1.0f);		// Top Left Of The Quad (Right)
-    glVertex3f( 1.0f,-1.0f, 1.0f);		// Bottom Left Of The Quad (Right)
-    glVertex3f( 1.0f,-1.0f,-1.0f);		// Bottom Right Of The Quad (Right)
-    glEnd();
-
-//    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0f,1.0f,1.0f);
     m_game->draw();
 
     return;
@@ -167,11 +103,12 @@ void LevelWindow::mousePressEvent(QMouseEvent *event)
 
 void LevelWindow::animate()
 {
-    int dt = qobject_cast<QTimer*>(sender())->interval();
-
-    m_game->update(dt*1e-3);
-
-    m_elapsed += dt;
+//    const int timeDelta = qobject_cast<QTimer*>(sender())->interval();
+    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    const qint64 timeDelta = m_previousRenderTime > 0 ? currentTime - m_previousRenderTime : 0;
+      m_game->update(timeDelta * 1e-3);
+    m_previousRenderTime = currentTime;
+      m_elapsed += timeDelta;
     update();
 
     return;

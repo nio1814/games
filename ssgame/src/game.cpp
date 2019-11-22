@@ -338,7 +338,6 @@ void Game::draw()
 
 void Game::update(float dt)
 {
-    QTime clock;
     /*static GLfloat lastTime = 0.0f;
 //	GLfloat thisTime = GetTickCount();
     GLfloat thisTime = clock.elapsed();
@@ -509,28 +508,26 @@ void Game::update(float dt)
 		glPrint(3,20,"Debug Mode",1);
     }*/
 		
-	printScreen(player->health);
+//	printScreen(player->health);
 
-	xrot+=xspeed;								// Add xspeed To xrot
-	yrot+=yspeed;								// Add yspeed To yrot
+//	xrot+=xspeed;								// Add xspeed To xrot
+//	yrot+=yspeed;								// Add yspeed To yrot
 
-    Level currentLevel = level();
-    if(!currentLevel.cameraLock)
-	{
-		xrot += (player->pos.x -player->posOld.x)/2.4;
-		yrot += (player->pos.y-player->posOld.y)/2.4;
-		if(yrot < -35.0f)
-			yrot += .1f;
-		else if(yrot > 35.0f)
-			yrot -= .1f;
+//    Level currentLevel = level();
+//    if(!currentLevel.cameraLock)
+//	{
+//		xrot += (player->pos.x -player->posOld.x)/2.4;
+//		yrot += (player->pos.y-player->posOld.y)/2.4;
+//		if(yrot < -35.0f)
+//			yrot += .1f;
+//		else if(yrot > 35.0f)
+//			yrot -= .1f;
 
-		if(xrot < -15.0f)
-			xrot += .1f;
-		else if(xrot > 15.0f)
-			xrot -= .1f;
-	}
-
-    return;								// Everything Went OK
+//		if(xrot < -15.0f)
+//			xrot += .1f;
+//		else if(xrot > 15.0f)
+//			xrot -= .1f;
+//	}
 }
 
 /*GLvoid KillGLWindow()							// Properly Kill The Window
