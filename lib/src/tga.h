@@ -1,7 +1,7 @@
 #ifndef _TGA_H
 #define _TGA_H
 
-#include <qopengl.h>
+#include "qtgl.h"
 
 #define TGA_RGB	2
 #define TGA_A		3
@@ -15,7 +15,7 @@ struct ImageTGA
 	unsigned char *data;
 };
 
-ImageTGA *load_TGA(const char *filename);
+ImageTGA *loadTGA(QString filename);
 void TGA_Texture(GLuint textureArray[], const char* strFileName, int ID);
 
 #endif

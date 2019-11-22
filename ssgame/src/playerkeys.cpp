@@ -7,7 +7,7 @@
 
 #include "masking.h"
 #include "movement.h"
-#include "sound.h"
+//#include "sound.h"
 #include "objects.h"
 #include "functions.h"
 #include "keys.h"
@@ -101,7 +101,8 @@ void runKeys(Level* lvl, pointerTree* treeIn)
 	//toggles music
 	if (canToggle('M'))				// Is M Key Being Pressed?
 	{
-		toggleMusic();
+//		TODO implement sound
+//		toggleMusic();
 	}
 	//debug mode	
 //	if (canToggle('G') || canToggleBtn(xbBACK))				// Is J Key Being Pressed?

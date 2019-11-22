@@ -36,11 +36,11 @@ public:
 
 		Vector3D up;
 		MeshObject* player;
-	QVector<MeshObject*> objs;
+  std::vector<MeshObject*> objs;
 		QList<Contact> contactPoints;
 		CameraPoint cam;
 		CameraView camview;
-		QVector<Light*> m_lights;
+    std::vector<Light*> m_lights;
 };
 
 #endif // LEVEL_H

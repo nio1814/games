@@ -15,7 +15,7 @@
   </property>
   <widget class="QMenuBar" name="menuBar" />
   <widget class="QToolBar" name="mainToolBar" />
-  <widget class="GLWidget" name="centralWidget" />
+  <widget class="LevelWindow" name="centralWidget" />
   <widget class="QStatusBar" name="statusBar" />
  </widget>
  <layoutDefault spacing="6" margin="11" />

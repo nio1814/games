@@ -1211,7 +1211,7 @@ object_sphere* object_holder::addSpheres(float mass, float radius, Vector3D base
 	return sphereout;
 }
 
-object_plane* object_holder::addPlane(const object_plane &plane)
+void object_holder::addPlane(const object_plane &plane)
 {
     planes.addObject(plane);
 }

@@ -21,4 +21,4 @@ add_executable(${PROJECT} ${SRC})
 
 qt5_use_modules(${PROJECT} Widgets OpenGL)
 
-target_link_libraries(${PROJECT} gamelib ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT} gamelib ${OPENGL_LIBRARIES} ${QT_LIBRARIES})

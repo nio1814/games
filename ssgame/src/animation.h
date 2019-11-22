@@ -102,6 +102,8 @@ bool animate(Object &obj, actions act, const Animation *animData, GLfloat dt);
 bool sendAnimation(Object &obj, actions act, GLfloat dt);
 void fixSize(Object &animObj);
 
+void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center=.05f);
+void tgaTextures(Animation *aData, QStringList filenames);
 
 #endif
 

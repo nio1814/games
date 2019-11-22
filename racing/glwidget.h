@@ -4,6 +4,7 @@
 #include "light.h"
 
 class Level;
+class QElapsedTimer;
 
 #include "QtOpenGL/QGLWidget"
 class GLWidget : public QGLWidget

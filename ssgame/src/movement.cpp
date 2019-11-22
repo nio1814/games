@@ -373,7 +373,7 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 		{
 			//thisAct = actJUMP;
 			moveObj.projectile = false;
-			playActionSound(moveObj, thisAct);
+//			playActionSound(moveObj, thisAct);
 			
 			if(moveObj.state[actDUCK]) 
 				moveObj.velOld.y += STRONGJUMPFACTOR*JUMPVEL*moveObj.jumpStrength;
@@ -534,8 +534,8 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 	}
 
 	//play action sound
-	if((moveObj.actionTime[thisAct].startTime == currentTime) && moveObj.state[thisAct])
-		playActionSound(moveObj, thisAct);
+//	if((moveObj.actionTime[thisAct].startTime == currentTime) && moveObj.state[thisAct])
+//		playActionSound(moveObj, thisAct);
 
 	//cycle character
 	static int playerNum = moveObj.person;
@@ -732,8 +732,8 @@ void updateEnemyMove(Object &moveObj, const Object &target, GLfloat dt)
 	if(thisAct != actHURT)
 		moveObj.state[thisAct] = true;
 
-	if(moveObj.actionTime[thisAct].timeHeld == 0.0f)
-		playActionSound(moveObj, thisAct);	
+//	if(moveObj.actionTime[thisAct].timeHeld == 0.0f)
+//		playActionSound(moveObj, thisAct);
 
 	if(moveObj.health == 0.0f)
 		moveObj.active = false;
@@ -1129,7 +1129,7 @@ void collide(Object &obj1, const Object &obj2, touch side)
 	if(obj1.health < initHealth)
 	{
 		obj1.state[actHURT] = true;
-		playActionSound(obj1, actHURT);
+//		playActionSound(obj1, actHURT);
 	}
 	if(obj1.health <= 0.0f)
 	{
@@ -1165,7 +1165,7 @@ void collide(Object &obj1, const Object &obj2)
 
 	if(obj1.health < initHealth)
 		obj1.state[actHURT] = true;
-		playActionSound(obj1, actHURT);
+//		playActionSound(obj1, actHURT);
 	if(obj1.health <= 0.0f)
 	{
 		obj1.health =0.0f;

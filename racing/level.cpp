@@ -56,22 +56,22 @@ void Level::addPlayer(QString modelfile)
 
 void Level::addLight(GLenum lnum, const Vector3D ptn, const Vector3D amb, const Vector3D dif, const Vector3D spec)
 {
-	m_lights.append(new Light(lnum, ptn, amb, dif, spec));
+  m_lights.push_back(new Light(lnum, ptn, amb, dif, spec));
 
 	return;
 }
 
 MeshObject* Level::addObject(const char* modelfile)
 {	
-	objs.append(new MeshObject);
-	MeshObject* newObject = objs.last();
+  objs.push_back(new MeshObject);
+  MeshObject* newObject = objs.back();
 	newObject->mesh = new MeshModel;
 	newObject->isDynamicMesh = true;
 	newObject->mesh->loadFile(modelfile);
 
 	initObject(newObject);
 
-	return objs.last();
+  return objs.back();
 }
 
 void Level::draw()

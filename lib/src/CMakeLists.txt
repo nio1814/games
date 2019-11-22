@@ -1,7 +1,5 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5OpenGL)
-
 set(SRC
 	object.cpp
 	gameobject.cpp
@@ -21,6 +19,8 @@ set(SRC
 	sphere.cpp
 	light.cpp
 	glwidget.cpp
+	tga.cpp
+  model3d.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

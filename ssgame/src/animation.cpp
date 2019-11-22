@@ -13,6 +13,7 @@
 #include "tga.h"
 #include "masking.h"
 #include "movement.h"
+#include "tga.h"
 
 #include "QTime"
 
@@ -231,12 +232,12 @@ void doTextures()
 
     shotTextures[GOKUSHOT].lastFrame = 1;
 
-    QString characterImgDir = ":img/characters/";
+	QString characterImgDir = ":img/characters/";
 
 	//MMX
     QString currentDir = characterImgDir+"mmx/";
     playerTextures[MMX].person = MMX;
-    TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga");
+	TGA_Texture(&playerTextures[MMX], ":img/characters/mmx/mmx.tga");
 	
     playerTextures[MMX].frameData[actDUCK][animSTART] = 1;
     playerTextures[MMX].frameData[actDUCK][numFRAMES] = 1;
@@ -1178,6 +1179,89 @@ void fixSize(Object &animObj)
 	}
 
 	animObj.calcBoundaries();
+
+	return;
+}
+
+void TGA_Texture(Animation *aData, const char* strFileName, GLfloat center)
+{
+	if(!strFileName)
+	{
+		qErrnoWarning("Invaid tga filename");
+		return;
+	}
+
+	ImageTGA *pBitMap = loadTGA(strFileName);
+//	tImageTGA* pBitMap = loadTGA(strFileName);
+
+	if(!pBitMap || pBitMap->data == NULL)
+	{
+		qErrnoWarning("Failed to load TGA data from %s\n", strFileName);
+		exit(0);
+	}
+
+//	glGenTextures(1, &aData->textures[ID]);
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	int textureType = GL_RGB;
+	if(pBitMap->channels == 4)
+	   textureType = GL_RGBA;
+//	gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+	glTexImage2D(GL_TEXTURE_2D, 0, textureType, pBitMap->size_x, pBitMap->size_y, 0, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+//    QImage image(strFileName);
+//    QGLWidget qgl;
+//    texture = qgl.bindTexture(image, GL_TEXTURE_2D);
+
+	if(aData->numTextures()==0)
+	{
+		aData->scale.append(Vector2D(1.0f,1.0f));
+			//aData->hScale[ID] = 1.0f;
+			//aData->wScale[ID] = 1.0f;
+		aData->pixels = Vector2D(pBitMap->size_x, pBitMap->size_y);
+			//aData->pixelsW = pBitMap->size_x;
+			//aData->pixelsH = pBitMap->size_y;
+	}
+	else
+	{
+		aData->scale.append(Vector2D(pBitMap->size_x / static_cast<GLfloat>(aData->pixels.x), pBitMap->size_y / static_cast<GLfloat>(aData->pixels.y)));
+			//aData->hScale[ID] = pBitMap->size_y / static_cast<GLfloat>(aData->pixelsH);
+			//aData->wScale[ID] = pBitMap->size_x / static_cast<GLfloat>(aData->pixelsW);
+	}
+
+	aData->centers.append(center);
+
+	/*if (pBitMap)
+	{
+		if (pBitMap.data)
+		{
+			free(pBitMap->data);
+		}
+		free(pBitMap);
+	}*/
+
+//	aData->numTextures++;
+	aData->textures.append(texture);
+
+	if(aData->numTextures()>1)
+		aData->animates = true;					//need more than one frame to animate
+}
+
+
+void tgaTextures(Animation *aData, QStringList filenames)
+{
+//    QStringListIterator filename;
+	foreach (QString filename, filenames)
+	{
+		TGA_Texture(aData, filename.toLatin1().constData());
+	}
 
 	return;
 }
