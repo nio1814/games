@@ -8,6 +8,10 @@
 
 //#include <GL/glu.h>
 
+#include <QVector3D>
+#include <QVector>
+#include <QList>
+
 #include <3ds.h>
 
 #include "mass.h"
@@ -15,13 +19,13 @@
 //#include "camera.h"
 #include "datastructs.h"
 
-#include <qvector.h>
 #include "qtgl.h"
 
 extern GLfloat dt;
 extern bool bGravityOn;
 extern Vector3D gravityDir;
 extern GLfloat gravityAcc;
+
 
 #define MAXTEXTURE 100
 enum Shape{PLANE, SPHERE, LINE, BOX, TRI};
@@ -305,8 +309,8 @@ class object_holder
 		object_holder();
 		~object_holder();
 		object_sphere* addSpheres(int numObjs, float mass, float radius, Vector3D basePos, Vector3D offsetDir);
-		object_sphere* addSpheres(float mass, float radius, Vector3D basePos);
-        object_plane* addPlane(const object_plane& plane);
+    object_sphere* addSpheres(float mass, float radius, Vector3D basePos);
+    void addPlane(const object_plane& plane);
         object_plane* addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir=Vector3D(0,0,1), float distBetween=0);
 		object_plane* addPlanes(float mass, float wid, float len, float ph, float th, Vector3D basePos);
         object_line* addLines(int numObjs, float mass, Vector3D v1, Vector3D v2, float cmf, Vector3D offsetDir=Z, float offsetDist=0.0f);

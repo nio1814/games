@@ -1,15 +1,5 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_qt()
-
-if(${QT_VERSION}==5)
-	find_package(Qt5OpenGL)
-else()
-	find_package(Qt4 COMPONENTS REQUIRED QtOpenGL)
-	include(${QT_USE_FILE})
-	add_definitions(${QT_DEFINITIONS})
-endif()
-
 set(SRC
 	object.cpp
 	gameobject.cpp
@@ -36,6 +26,4 @@ set(CMAKE_AUTOMOC ON)
 
 add_library(gamelib ${SRC})
 
-if(${QT_VERSION}==5)
-	qt5_use_modules(gamelib OpenGL)
-endif()
+qt5_use_modules(gamelib OpenGL)
