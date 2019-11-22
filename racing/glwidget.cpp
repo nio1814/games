@@ -6,6 +6,9 @@
 #include "mass.h"
 #include "keys.h"
 
+#include <QElapsedTimer>
+#include <QKeyEvent>
+
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent)
 {
 	m_timer = new QElapsedTimer;

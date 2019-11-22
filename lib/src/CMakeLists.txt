@@ -20,6 +20,7 @@ set(SRC
 	light.cpp
 	glwidget.cpp
 	tga.cpp
+  model3d.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

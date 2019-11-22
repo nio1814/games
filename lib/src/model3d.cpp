@@ -1,6 +1,9 @@
 //#include <fstream>
 #include "model3d.h"
 
+#include <QTextStream>
+#include <QFile>
+
 QChar peek(QTextStream& textStream)
 {
 	int initialPosition = textStream.pos();
@@ -149,7 +152,7 @@ bool MeshModel::loadFile(QString filename)
 	else
 	{
 		//MessageBox(NULL, (LPCWSTR)L"Error opening file", (LPCWSTR)L"Loading Mesh Model", MB_OK);
-		qErrnoWarning("Error opening mesh model file %s\n", filename);
+    qErrnoWarning("Error opening mesh model file %s\n", filename.toStdString().c_str());
 	}
 
 	calcExtremes();

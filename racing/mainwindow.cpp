@@ -2,6 +2,8 @@
 
 #include "glwidget.h"
 
+#include <QTimer>
+
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
