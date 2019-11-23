@@ -8,15 +8,12 @@
 #include "vector3d.h"
 
 #include <math.h>
-//#include <windows.h>									// Header File For Windows
-//#include <gl\gl.h>										// Header File For The OpenGL32 Library
-//#include <gl\glu.h>										// Header File For The GLu32 Library
 
 #include "constants.h"
 
 #include "qtgl.h"
 
-#define EPS 1e-1
+const float EPSILON = 1e-1;
 
 //Define global axes
 extern const Vector3D X = Vector3D(1.0f,0.0f,0.0f);
@@ -196,7 +193,7 @@ Vector3D Vector3D::rotate3D(const Vector3D &vin, float angle) const
 	Vector3D v, vout;
 	matrix2D3 T;
 	GLfloat angrad, cosang, sinang, t;
-	bool arbitrary = false;
+	//bool arbitrary = false;
 
 	angrad = angle*DEG2RAD;
 	cosang = cos(angrad);
@@ -212,7 +209,7 @@ Vector3D Vector3D::rotate3D(const Vector3D &vin, float angle) const
 		T = matrix2D3(Vector3D(cosang,-sinang,0), Vector3D(sinang,cosang,0), Z);
 	else
 	{
-		arbitrary = true;
+	//	arbitrary = true;
 		t = 1 - cosang;
 		T = matrix2D3(Vector3D(t*v.x*v.x+cosang, t*v.x*v.y-sinang*v.z, t*v.x*v.z+sinang*v.y),
 			Vector3D(t*v.x*v.y+sinang*v.z, t*v.y*v.y+cosang, t*v.y*v.z-sinang*v.x),
@@ -346,16 +343,16 @@ Vector3D Vector3D::unit() const							// unit() returns a new Vector3D. The retu
 	return Vector3D(x / length, y / length, z / length);
 }
 
-float* Vector3D::toArray() const
-{
-	float out[3];
+//float* Vector3D::toArray() const
+//{
+//	float out[3];
 
-	out[0] = x;
-	out[1] = y;
-	out[2] = z;
+//	out[0] = x;
+//	out[1] = y;
+//	out[2] = z;
 
-	return out;
-}
+//	return out;
+//}
 
 QVector3D Vector3D::toQVector3D() const
 {
@@ -369,11 +366,11 @@ Vector2D::Vector2D()									// Constructor to set x = y = z = 0
 	y = 0;
 }
 
-Vector2D::Vector2D(int angx, int angy, int angz, float length)
-{
-	x = length*cos(angx*DEG2RAD);
-	y = length*cos(angy*DEG2RAD);
-}
+//Vector2D::Vector2D(int angx, int angy, int angz, float length)
+//{
+//	x = length*cos(angx*DEG2RAD);
+//	y = length*cos(angy*DEG2RAD);
+//}
 
 Vector2D::Vector2D(float x, float y)			// Constructor that initializes this Vector2D to the intended values of x, y and z
 {
@@ -505,10 +502,8 @@ Vector2D Vector2D::proj(Vector2D *v)
 Vector2D Vector2D::proj(Vector2D *v1, Vector2D *v2)
 {
 	Vector2D line, toObj, alongv, point;
-	float dist;
 
 	line = *v2 - *v1;
-	dist = line.length();
 	toObj = *this - *v1;
 	alongv = toObj.proj(&line)*.2f;
 	point = *v1 + alongv;

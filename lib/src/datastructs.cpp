@@ -4,7 +4,7 @@
 #include "datastructs.h"
 #include "vector3d.h"
 #include "mass.h"
-#include "object.h"
+#include "object/object.h"
 
 using namespace std;
 

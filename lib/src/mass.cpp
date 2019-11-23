@@ -15,10 +15,10 @@ Prepared by Erkin Tunca for nehe.gamedev.net
 const float DEFAULTELASTICITY = .95f;
 const float DEFAULTINERTIA = 1;
 
-extern bool gravityON = false;
-extern float gravityMag = 9.81;
+bool gravityON = false;
+float gravityMag = 9.81;
 //extern float gravityMag = 0;
-extern Vector3D gravityVec = Y*-9.81;
+Vector3D gravityVec = Y*-9.81;
 
 Mass::Mass(float m)								// Constructor
 {

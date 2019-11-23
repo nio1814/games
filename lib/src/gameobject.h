@@ -52,7 +52,7 @@ public:
 //    bool addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
 	bool loadLevel();
 	bool unloadLevel();
-	texture_s* addTexture(char *filename, char *ID);
+  texture_s* addTexture(char *filename);
 	void setPlayerShape(Shape pShape);
 	void addPlayer(object_plane *plane);
     void run(Mouse* ms, void (*commandFcn)(gameObj* gm, Mouse* ms), GLfloat delta);

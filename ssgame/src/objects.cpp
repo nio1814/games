@@ -177,10 +177,9 @@ Object& Object::operator= (Object obj)				// operator= sets values of v to this 
 	
 	this->inFront = obj.inFront;
 
-
 	this->index		= obj.index;
 	this->parent	= obj.parent;
-	this->objshots == NULL;
+
 	if(obj.objshots != NULL)
 	{
 		this->objshots = new shotList_c;
@@ -193,6 +192,8 @@ Object& Object::operator= (Object obj)				// operator= sets values of v to this 
 			this->objshots->slist[i] = obj.objshots->slist[i];
 		}
 	}
+  else
+    this->objshots = nullptr;
 	this->animFrame = obj.animFrame;
 	this->animated	= obj.animated;
 	

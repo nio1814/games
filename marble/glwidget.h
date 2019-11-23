@@ -39,7 +39,7 @@ public slots:
     void mousePressEvent(QMouseEvent *);
 private:
     gameObj* game;
-    Mouse* mos;
+    Mouse* mouse;
     object_sphere* ball;
 };
 

@@ -1,8 +1,5 @@
 set(PROJECT sidescroller)
 
-find_package(Qt5OpenGL REQUIRED)
-find_package(OpenGL REQUIRED)
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)

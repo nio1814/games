@@ -1,6 +1,8 @@
 #include "level.h"
 #include "camera.h"
 #include "keys.h"
+#include "object/plane.h"
+#include "object/sphere.h"
 
 #include <qdatetime.h>
 

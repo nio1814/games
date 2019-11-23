@@ -11,6 +11,8 @@
 #include "texture.h"
 #include "masking.h"
 #include "level.h"
+#include "object/sphere.h"
+#include "object/plane.h"
 
 #include <QTime>
 
@@ -75,7 +77,7 @@ bool gameObj::addLevel(int index)
 	return success;
 }*/
 
-texture_s* gameObj::addTexture(char *filename, char *ID)
+texture_s* gameObj::addTexture(char *filename)
 {
 	bool success = false;
 	texture_s* ptr = NULL;

@@ -1,7 +1,16 @@
 find_package(Qt5Widgets)
+find_package(Qt5OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
+
 set(CMAKE_AUTOMOC TRUE)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
+
+if(MSVC)
+  add_compile_options(/W1 /WX)
+else()
+  add_compile_options(-Wall -Wextra -Werror)
+endif()
 
 add_subdirectory(lib/src)
 add_subdirectory(marble)

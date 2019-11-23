@@ -4,7 +4,7 @@
 #include "datastructs.h"
 //#include "text.h"
 #include "vector3d.h"
-#include "object.h"
+#include "object/object.h"
 
 #include "menu.h"
 using namespace std;

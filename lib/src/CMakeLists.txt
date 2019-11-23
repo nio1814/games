@@ -1,7 +1,14 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRC
-	object.cpp
+  object/object.cpp
+  object/collection.cpp
+  object/spheres.cpp
+  object/plane.cpp
+  object/planes.cpp
+  object/lines.cpp
+  object/line.cpp
+  object/sphere.cpp
 	gameobject.cpp
 	mouse.cpp
 	vector3d.cpp

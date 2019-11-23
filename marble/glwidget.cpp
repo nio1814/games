@@ -16,7 +16,7 @@
 
 #include <qtimer.h>
 
-#include <object.h>
+#include "object/sphere.h"
 #include <gameobject.h>
 //#include <mass.h>
 //#include "motion.h"
@@ -84,7 +84,7 @@ GLWidget::GLWidget(QWidget *parent)
 #endif
 {
 	game = new gameObj();
-	mos = new Mouse(WindowSize.x,WindowSize.y);
+  mouse = new Mouse(WindowSize.x,WindowSize.y);
 	initializeObjects();
 
 	connect(this, SIGNAL(keyPressed()), this, SLOT(processKeyboard()));
@@ -93,7 +93,7 @@ GLWidget::GLWidget(QWidget *parent)
 GLWidget::~GLWidget()
 {
 	delete game;
-	delete mos;
+  delete mouse;
 }
 
 QSize GLWidget::minimumSizeHint() const
@@ -166,9 +166,9 @@ void GLWidget::initializeObjects()
 	//MAKE LEVEL1
 	//level1.levelNum = 1;
 	//level1.allObj = allObjects;
-    texture_s* tile1txr = game->addTexture(":Data/Envwall.bmp", "tile1");
+    texture_s* tile1txr = game->addTexture(":Data/Envwall.bmp");//, "tile1");
 	//texture_s* balltxr = level1.addTexture("Data/Ball.bmp", "Data/EnvRoll.bmp", "ball");
-    texture_s* wall1txr = game->addTexture(":Data/wall.bmp", "wall");
+    texture_s* wall1txr = game->addTexture(":Data/wall.bmp");//, "wall");
 
 	//numExtraSpheres = 0;
 	//gravityON = false;
@@ -385,9 +385,9 @@ void GLWidget::process()
 		delta = MAXDELTA;
 	//game.levels[0].allObj.run(delta);
 //	game->levels[0].allObj.run(.03);
-    void (*commandFcn)(gameObj *, Mouse *);
+    void (*commandFcn)(gameObj *, Mouse *) = nullptr;
     //commandFcn(game, mos);
-    game->run(mos, commandFcn, delta);
+    game->run(mouse, commandFcn, delta);
 
 	processKeyboard();
 
@@ -419,7 +419,7 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    mos->btnDown(event->button());
+    mouse->btnDown(event->button());
 
     return;
 }

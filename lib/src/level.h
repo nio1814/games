@@ -3,7 +3,8 @@
 
 #include "qtgl.h"
 
-#include "object.h"
+#include "object/object.h"
+#include "object/collection.h"
 #include "3dsLoader.h"
 #include "camera.h"
 
