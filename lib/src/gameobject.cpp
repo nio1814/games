@@ -34,26 +34,27 @@ int gameObj::numLevels()
     return levels.size();
 }
 
-Level &gameObj::currentLevel()
+std::shared_ptr<Level> gameObj::currentLevel()
 {
-    return levels[m_currentLevelIndex];
+    return this->levels[m_currentLevelIndex];
 }
 
-bool gameObj::addLevel(int index)
+void gameObj::addLevel(std::shared_ptr<Level> level)
 {
-	bool success = false;
+//	bool success = false;
 
-    if(numLevels() == 0)
-        m_currentLevelIndex = 0;
+//    if(numLevels() == 0)
+//        m_currentLevelIndex = 0;
 
-    Level level;
-    if(level.create(index))
+//    Level level;
+//    if(level.create(index))
 //	levels[currentLevel].create(index);
-        levels.append(level);
+//        levels.append(level);
+    levels.push_back(level);
 
-    success = true;
+//    success = true;
 	
-	return success;
+//	return success;
 }
 
 /*bool gameObj::addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view)
@@ -153,10 +154,10 @@ void gameObj::run(Mouse *ms, void (*commandFcn)(gameObj *, Mouse *), GLfloat del
 				gMode = gmPLAY;
 			break;
         case gmPLAY:
-//            if(commandFcn!=NULL)
-//                commandFcn(this, ms);
+            if(commandFcn!=NULL)
+                commandFcn(this, ms);
 //            levels[currentLevel].run(delta);
-            currentLevel().run(delta);
+            currentLevel()->run(delta);
             break;
         default:
             break;
@@ -172,7 +173,7 @@ void gameObj::render()
             menus[currentMenu].display();
             break;
         case gmPLAY:
-            currentLevel().draw();
+            this->currentLevel()->draw();
             break;
         default:
             break;

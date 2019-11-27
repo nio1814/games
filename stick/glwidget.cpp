@@ -2,6 +2,12 @@
 
 #include "qtgl.h"
 #include "simulation.h"
+#include "object/sphere.h"
+#include "object/line.h"
+#include "object/plane.h"
+
+#include <QTimer>
+#include <QDateTime>
 
 GLWidget::GLWidget(QWidget *parent)
 #if (QT_VERSION >= 0x050500)
@@ -12,16 +18,28 @@ GLWidget::GLWidget(QWidget *parent)
 {
     sim = new Simulation;
 
-    sim->allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
-    sim->allObj.addSpheres(1,1,Vector3D(0,0,5));
-    sim->allObj.spheres.objs[0]->mass->elas = .5f;
-	sim->allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1,-3,2));
-	sim->allObj.addPlanes(1, 10, 10, 5, 0, 20, Vector3D(0,5,-5));
-	sim->allObj.addPlanes(1, 10, 10, 25, 0, 0, Vector3D(0,-6,-7));
+    const Vector3D gravity = Z * -2;
+
+    Object::Pointer object = sim->allObj.addObject(std::make_shared<object_line>(1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f));
+    object->setGravity(gravity);
+    object->mass->pos = Vector3D();
+//    sim->allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
+//    sim->allObj.addSpheres(1,1,Vector3D(0,0,5));
+    object = sim->allObj.addObject(std::make_shared<object_sphere>(1, 1, Vector3D(0,0,5)));
+    object->mass->elas = .5;
+    object->setGravity(gravity);
+//    sim->cameraFollowObject = object;
+//    sim->allObj.spheres.objs[0]->mass->elas = .5f;
+//	sim->allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1,-3,2));
+  sim->cameraFollowObject = sim->allObj.addObject(std::make_shared<object_plane>(10, 11, 11, 0, 159, Vector3D(1,-3,2)));
+//	sim->allObj.addPlanes(1, 10, 10, 5, 0, 20, Vector3D(0,5,-5));
+  sim->allObj.addObject(std::make_shared<object_plane>(10, 10, 5, 0, 20, Vector3D(0,5,-5)));
+//	sim->allObj.addPlanes(1, 10, 10, 25, 0, 0, Vector3D(0,-6,-7));
+  sim->allObj.addObject(std::make_shared<object_plane>(10, 10, 25, 0, 0, Vector3D(0,-6,-7)));
 	sim->cameras->addPoint(Vector3D(20, 0, 0), Vector3D(0,-.5,2), Vector3D(0,0,1), 5.0f);
     sim->cameras->camview = CAMERAMODE;
-    sim->allObj.makeTree();
-    sim->allObj.tree->ID = "holder";
+//    sim->allObj.makeTree();
+//    sim->allObj.tree->ID = "holder";
 
 //    Vector3D test = Vector3D(1,1,1);
 //    Vector3D testang = test.cart2angxyz();
@@ -32,7 +50,6 @@ GLWidget::GLWidget(QWidget *parent)
 //    joystick = new joystick_s;
     bGravityOn = true;
     gravityON = true;
-	gravityVec = Z*-2;
 }
 
 GLWidget::~GLWidget()
@@ -47,7 +64,7 @@ QSize GLWidget::minimumSizeHint() const
 
 QSize GLWidget::sizeHint() const
 {
-    return QSize(600, 400);
+    return QSize(1000, 800);
 }
 
 void GLWidget::initializeGL()
@@ -108,9 +125,12 @@ void GLWidget::paintGL()
 
 void GLWidget::animate()
 {
-    int dt = qobject_cast<QTimer*>(sender())->interval();
+//    int dt = qobject_cast<QTimer*>(sender())->interval();
+    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    const qint64 timeDelta = this->previousRunTime > 0 ? std::min((int)(currentTime - this->previousRunTime), 100) : 0;
 
-    sim->run(dt*1e-3);
+    sim->run(timeDelta * 1e-3);
+    this->previousRunTime = currentTime;
 
     update();
 

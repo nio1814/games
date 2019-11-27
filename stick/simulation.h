@@ -1,7 +1,8 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include "object.h"
+#include "object/objects.h"
+#include "camera.h"
 
 class Simulation
 {
@@ -12,15 +13,18 @@ public:
 	
     void run(GLfloat dt);
     void draw();
-	Vector3D setCam(Object* obj);
+  Vector3D setCam();
 	void setView(CameraView view);
 	
-	object_holder allObj;
+  Objects allObj;
     CameraPoints* cameras;
 
 	int simNum;
 	bool started, paused;
 	GLfloat startTime, currentTime, timer;
+  Object::Pointer cameraFollowObject;
+private:
+
 };
 
 #endif // SIMULATION_H

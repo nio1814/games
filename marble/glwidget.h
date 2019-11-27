@@ -1,9 +1,10 @@
 #ifndef GLWIDGET
 #define GLWIDGET
 
+#include "gameobject.h"
+
 #include <QtGlobal>
 
-class gameObj;
 class Mouse;
 class object_sphere;
 
@@ -24,6 +25,8 @@ public:
     QSize sizeHint() const;
 
     void initializeObjects();
+
+    gameObj game;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -38,9 +41,8 @@ public slots:
     void keyReleaseEvent(QKeyEvent *);
     void mousePressEvent(QMouseEvent *);
 private:
-    gameObj* game;
     Mouse* mouse;
-    object_sphere* ball;
+    std::shared_ptr<object_sphere> ball;
 };
 
 #endif // GLWIDGET

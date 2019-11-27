@@ -2,6 +2,8 @@
 
 #include "keys.h"
 
+#include <QTime>
+
 Simulation::Simulation()
 {
     cameras = new CameraPoints;
@@ -24,12 +26,15 @@ void Simulation::run(GLfloat dt)
 
 void Simulation::draw()
 {
-    setCam(allObj.planes.objs[0]);
+    setCam();
     allObj.draw();
 }
 
-Vector3D Simulation::setCam(Object* obj)
+Vector3D Simulation::setCam()
 {
+  if(!this->cameraFollowObject)
+    return Vector3D();
+
     CameraPoint* cam = &cameras->current();
     CameraPoint* nextcam;
 	Vector3D cam2cam, cam2obj, cam2look;
@@ -43,16 +48,16 @@ Vector3D Simulation::setCam(Object* obj)
 
 	camRotate = 0;
 
-    if(cameras->currentPoint == cameras->numPoints()-1)
+    if(cameras->currentIndex == cameras->numPoints()-1)
 	{
 		nextcam = cam;
 	}
 	else
-		nextcam = &cameras->cpoints[cameras->currentPoint+1];
+		nextcam = &cameras->points[cameras->currentIndex+1];
 
-	objpos = obj->mass->pos;
-	objvel = obj->mass->vel.length();
-	cam2obj = obj->mass->pos - cam->pos;
+  objpos = this->cameraFollowObject->mass->pos;
+  objvel = this->cameraFollowObject->mass->vel.length();
+  cam2obj = this->cameraFollowObject->mass->pos - cam->pos;
 
 	/*cam2cam = nextcam->pos - cam->pos;
 	camdist = cam2cam.length();
@@ -67,13 +72,13 @@ Vector3D Simulation::setCam(Object* obj)
 	{
 		case FOLLOW:
 //			glPrintHead(3,3,"Follow Cam",15);
-			if(obj->moveForce == Vector3D(0,0,0))
+      if(this->cameraFollowObject->moveForce == Vector3D(0,0,0))
 			{
 				movepos = objpos - cam2obj.unit()*cam->followDist;
 			}
 			else
 			{
-				movepos = objpos - (obj->moveForce.unit()*cam->followDist + cam2obj.unit()*cam->followDist)/2;
+        movepos = objpos - (this->cameraFollowObject->moveForce.unit()*cam->followDist + cam2obj.unit()*cam->followDist)/2;
 			}
 			cam->pos += (movepos - cam->pos)*.2f*delta*objvel;
 			cam->look += (objpos - cam->look)*.7f*delta*objvel;

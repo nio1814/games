@@ -741,7 +741,7 @@ Vector3D Level::setCam(Object* obj, GLfloat dt)
 	Vector3D cam2look;
 	if(cameras.numPoints())
 	{
-	    CameraPoint* cam = &cameras.cpoints[cameras.currentPoint];
+	    CameraPoint* cam = &cameras.points[cameras.currentIndex];
 	    CameraPoint* nextcam;
 		Vector3D cam2cam, cam2obj;
 		Vector3D pos, look, alongv, movepos;
@@ -749,12 +749,12 @@ Vector3D Level::setCam(Object* obj, GLfloat dt)
 		GLfloat camdist, objvel, camRotate;
 		CameraView view = cameras.camview;
 
-		if(cameras.currentPoint == cameras.numPoints()-1)
+		if(cameras.currentIndex == cameras.numPoints()-1)
 		{
 			nextcam = cam;
 		}
 		else
-			nextcam = &cameras.cpoints[cameras.currentPoint+1];
+			nextcam = &cameras.points[cameras.currentIndex+1];
 
 		objpos = obj->pos;
 		objvel = obj->vel.length();

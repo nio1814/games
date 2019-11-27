@@ -16,7 +16,7 @@ class object_holder
     ~object_holder();
     object_sphere* addSpheres(int numObjs, float mass, float radius, Vector3D basePos, Vector3D offsetDir);
     object_sphere* addSpheres(float mass, float radius, Vector3D basePos);
-    void addPlane(const object_plane& plane);
+    void addPlane(const object_plane& plne);
         object_plane* addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir=Vector3D(0,0,1), float distBetween=0);
     object_plane* addPlanes(float mass, float wid, float len, float ph, float th, Vector3D basePos);
         object_line* addLines(int numObjs, float mass, Vector3D v1, Vector3D v2, float cmf, Vector3D offsetDir=Z, float offsetDist=0.0f);
@@ -50,5 +50,13 @@ class object_holder
     matrix2D3 m_basis;
 };
 
+struct objP							//pointer to an object
+{
+  int index;
+  Shape shape;
+  const object_holder* holder;
+};
+
+bool isSame(objP p1, objP p2);
 
 #endif // COLLECTION_H

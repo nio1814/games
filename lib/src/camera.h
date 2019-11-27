@@ -42,10 +42,10 @@ public:
 	void addPoint(Vector3D campos, Vector3D lookpos, const Vector3D upin, GLfloat dist);
 	void cycleView();
 	void setLook(Vector3D newLook);
-    CameraPoint& current();
+  std::shared_ptr<CameraPoint> current();
 
-    QList<CameraPoint> cpoints;
-    int currentPoint;
+  std::vector<std::shared_ptr<CameraPoint>> points;
+  int currentIndex;
     CameraView camview;
 };
 

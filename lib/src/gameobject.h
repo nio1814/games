@@ -13,16 +13,15 @@
 #define MAXLIGHTS 10
 #define MAXPLAYERS 4
 
+#include "object/plane.h"
+
 #include <QString>
 
 enum gameMode{gmMENU, gmPLAY};
 
 class gameObj
 {
-public:
     int numLevels();
-    Level& currentLevel();
-    void render();
 
 	int numPlayers;
 	void* players;
@@ -30,7 +29,7 @@ public:
 	Shape playerShape;
 	
     int m_currentLevelIndex;
-    QList<Level> levels;
+  std::vector<std::shared_ptr<Level>> levels;
 	
 	bool paused;
 	gameMode gMode;
@@ -45,18 +44,21 @@ public:
 	texture_s alltexture[MAXTEXTURE];
 	int numTextures;
 	
+public:
 	gameObj();
 	~gameObj();
 	
-    bool addLevel(int index);
+  bool addMenu(char* mTitle);
+    void addLevel(std::shared_ptr<Level> level);
 //    bool addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
 	bool loadLevel();
+  std::shared_ptr<Level> currentLevel();
 	bool unloadLevel();
   texture_s* addTexture(char *filename);
 	void setPlayerShape(Shape pShape);
 	void addPlayer(object_plane *plane);
     void run(Mouse* ms, void (*commandFcn)(gameObj* gm, Mouse* ms), GLfloat delta);
-	bool addMenu(char* mTitle);
+  void render();
 };
 
 #endif

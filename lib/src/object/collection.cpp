@@ -240,3 +240,17 @@ object_line* object_holder::getLine(int index) const
 {
   return lines.objs[index];
 }
+
+bool isSame(objP p1, objP p2)
+{
+  bool same = true;
+
+  if(p1.index != p2.index)
+    same = false;
+  else if(p1.shape != p2.shape)
+    same = false;
+  else if(p1.holder != p2.holder)
+    same = false;
+
+  return same;
+}

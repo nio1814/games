@@ -70,7 +70,7 @@ void drawSphere(int subDivisions)
 }
 
 
-object_sphere::object_sphere(float mass, float rad) : Object(mass),
+object_sphere::object_sphere(float mass, float rad, const Vector3D position) : Object(mass),
   radius(rad)
 {
   objType = SPHERE;
@@ -78,6 +78,7 @@ object_sphere::object_sphere(float mass, float rad) : Object(mass),
   gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
     gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
   bMovable = true;
+  this->mass->pos = position;
 }
 
 object_sphere::~object_sphere()
@@ -146,27 +147,27 @@ void object_sphere::draw()
   glDisable(GL_TEXTURE_2D);							// Disable 2D Texture Mapping
 }
 
-bool object_sphere::detectCollision(const object_sphere* obj2)
+bool object_sphere::detectCollision(const std::shared_ptr<object_sphere> obj2)
 {
   bool detect = false;
 
   Vector3D vecToSphere;
   GLfloat dist;
 
-  if(!isSame(self, obj2->self))
-  {
+//  if(!isSame(self, obj2->self))
+//  {
     vecToSphere = mass->pos - obj2->mass->pos;
     dist = vecToSphere.length();
 
     if(dist < (radius + obj2->radius))
     {
       detect = true;
-      m_touchedObjects.append(obj2);
+      m_touchedObjects.push_back(obj2);
       //p.index = sidx;
       //p.shape = SPHERE;
       //p.holder = allobj;
     }
-  }
+//  }
 
   return detect;
 }

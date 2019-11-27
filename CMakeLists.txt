@@ -1,3 +1,5 @@
+project(games)
+
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -17,4 +19,4 @@ add_subdirectory(marble)
 add_subdirectory(rubik)
 add_subdirectory(ssgame)
 add_subdirectory(racing)
-
+add_subdirectory(stick)

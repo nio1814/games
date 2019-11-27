@@ -67,7 +67,7 @@ CameraPoints::CameraPoints()
 {
 //	cpoints = new CameraPoint[DEFNUMCAMS];
 //	numPoints = 0;
-	currentPoint = 0;
+  currentIndex = 0;
 	camview = FOLLOW;
 }
 
@@ -79,12 +79,12 @@ CameraPoints::CameraPoints(Vector3D campos, Vector3D lookpos, Vector3D upin, GLf
 
 int CameraPoints::numPoints()
 {
-	return cpoints.size();
+	return points.size();
 }
 
 void CameraPoints::addPoint(Vector3D campos, Vector3D lookpos, Vector3D up, GLfloat dist)
 {	
-	return cpoints.append(CameraPoint(campos, lookpos, up, dist));
+  return points.push_back(std::make_shared<CameraPoint>(campos, lookpos, up, dist));
 }
 
 void CameraPoints::cycleView()
@@ -104,38 +104,36 @@ void CameraPoints::cycleView()
 
 void CameraPoints::setLook(Vector3D newLook)
 {
-	cpoints[currentPoint].look = newLook;
+  this->current()->look = newLook;
 
 	return;
 }
 
-CameraPoint& CameraPoints::current()
+std::shared_ptr<CameraPoint> CameraPoints::current()
 {
-    return cpoints[currentPoint];
+    return this->points[this->currentIndex];
 }
 
 void setCam(CameraPoints* cameras, Vector3D* objpos, CameraView view)
 {
-	CameraPoint* cam = &cameras->cpoints[cameras->currentPoint];
-	CameraPoint* nextcam;
 	Vector3D pos, look, cam2cam, cam2obj, alongv;
-	GLfloat camdist;
 
 	cameras->camview = view;
 	
-	int nextCamIdx = qMin(cameras->cpoints.size()-1, cameras->currentPoint+1);
+  int nextCamIdx = qMin(cameras->points.size()-1, (size_t)cameras->currentIndex+1);
 
-	nextcam = &cameras->cpoints[nextCamIdx];
+  std::shared_ptr<CameraPoint> nextCamera = cameras->points[nextCamIdx];
 
 	if(view == FOLLOW)
 	{
-		look = objpos->proj(nextcam->oldLook, cam->oldLook);
+    std::shared_ptr<const CameraPoint> currentCamera = cameras->current();
+    look = objpos->proj(nextCamera->oldLook, currentCamera->oldLook);
 //		gluLookAt(cam->pos.x, cam->pos.y,cam->pos.z, objpos->x, objpos->y, 0, cam->up.x, cam->up.y, cam->up.z);
 //        QMatrix4x4 camMatrix;
 //        camMatrix.
 //		camMatrix.lookAt(cam->pos.toQVector3D(), objpos->toQVector3D(), cam->up.toQVector3D());
 //		glMultMatrixf(camMatrix.constData());
-        glLookAt(cam->pos.toQVector3D(), objpos->toQVector3D(), cam->up.toQVector3D());
+        glLookAt(currentCamera->pos.toQVector3D(), objpos->toQVector3D(), currentCamera->up.toQVector3D());
 	}
 
 	return;

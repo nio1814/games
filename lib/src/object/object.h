@@ -21,6 +21,8 @@
 
 #include "qtgl.h"
 
+#include <memory>
+
 extern GLfloat dt;
 extern bool bGravityOn;
 extern Vector3D gravityDir;
@@ -38,31 +40,15 @@ enum triPoint{triMID, triEND1, triEND2};
 #define MAXOBJECTS 50
 #define MAXTOUCHES 5
 
-class Object;
-
-class object_plane;
-class object_planes;
-class object_box;
-class object_sphere;
-class object_spheres;
-class object_line;
 class object_triangle;
-class object_holder;
 
-struct objP							//pointer to an object
-{
-	int index;
-	Shape shape;
-	const object_holder* holder;
-};
+
 
 struct objP3ds						//pointer to a 3ds object
 {
 	int faceidx;
 	t3DObject* obj3ds;
 };
-
-bool isSame(objP p1, objP p2);
 
 
 // class Objects		---> A container object for simulating masses
@@ -72,17 +58,18 @@ bool isSame(objP p1, objP p2);
 class Object
 {
 public:
-    void setPosition(Vector3D position);
+  using Pointer = std::shared_ptr<Object>;
+
+  void setPosition(Vector3D position);
+  void setGravity(const Vector3D gravity);
 
 	Mass* mass;									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
 	Shape objType; 
 	texture_s* texture;
 	Vector3D moveForce;							//force acting on object
 	bool isTouching;							//object is touching something
-	objP touchObj;
 	bool isTouching3ds;
 	objP3ds touchObj3ds;
-	objP self;									//pointer to this object
 //	objP *touches;								//other objects this object is touching
 //	void* touches2[NUMSHAPES];
 //	int totalTouches;
@@ -118,7 +105,7 @@ public:
       Q_UNUSED(degrees);
     }
 
-	virtual void operate(const object_holder *allObjs);
+//	virtual void operate(const object_holder *allObjs);
 	virtual void* getProperty(int idx, dataType &type);
 //	virtual bool detectCollision(const object_holder* objs);
 //  virtual bool detectCollision(const object_sphere* obj2)
@@ -146,12 +133,8 @@ public:
 //	virtual void collide(const object_line* line){};
 
 	matrix2D3 m_basis;
-	QVector<const Object*> m_touchedObjects;
+  std::vector<Pointer> m_touchedObjects;
 };
-
-
-//Sphere Container
-
 
 //Single Triangle
 class object_triangle : Object

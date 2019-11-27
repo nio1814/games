@@ -1,6 +1,8 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
+#include <QtGlobal>
+
 class Simulation;
 
 #if (QT_VERSION >= 0x050500)
@@ -25,6 +27,7 @@ public slots:
     void animate();
 private:
     Simulation* sim;
+    qint64 previousRunTime;
 };
 
 #endif // GLWIDGET_H

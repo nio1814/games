@@ -4,7 +4,8 @@
 #include "qtgl.h"
 
 #include "object/object.h"
-#include "object/collection.h"
+#include "object/objects.h"
+#include "object/sphere.h"
 #include "3dsLoader.h"
 #include "camera.h"
 
@@ -19,6 +20,8 @@ public:
 	Level(int players);
 //    Level(QString filename);
     ~Level();
+
+  void addObject(std::shared_ptr<Object> object);
 
     bool create(int index);
     void loadmap(QString filename, GLfloat scale);
@@ -35,10 +38,13 @@ public:
     //texture_s* addTexture(char *filename, char *ID);
     //texture_s* addTexture(char *filename1, char *filename2, char *ID);
 
-    object_sphere* ball;
-    CameraPoints* cameras;
+    std::shared_ptr<Object> player;
+    CameraPoints cameras;
     Vector3D majAxis;
+    Objects objects;
 private:
+    std::shared_ptr<CameraPoint> camera();
+
     int levelNum;
     bool started;
 	GLfloat startTime, currentTime, timer;
@@ -51,7 +57,6 @@ private:
     //int numTextures;
     //messageList msgList;
 
-    object_holder allObj;
     //Object *player1, *player2;
     //texture_s *alltexture;
 

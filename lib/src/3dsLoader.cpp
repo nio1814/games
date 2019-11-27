@@ -111,7 +111,6 @@ void C3dsLoader::Texture_3ds(unsigned int textureArray[], const char* strFileNam
 //	AUX_RGBImageRec *pBitMap = NULL;
 	FILE *pFile = NULL;									
 	unsigned char *pJpeg = NULL;
-	unsigned long width, height; 
 	int type;
 	//CJPEGFile jpeg;
 	char tempstring[5] = {0};

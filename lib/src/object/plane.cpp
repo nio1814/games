@@ -96,7 +96,7 @@ void object_plane::makeBase(const Vector3D* mAxis)
   }
   else
     //msgbox('incorrect major axis');
-    ;
+    return;
 
   normal = Cross(wvec, lvec);
 
@@ -183,4 +183,9 @@ bool object_plane::isAbove(const Vector3D *v) const
   above = (planeBasisv.z > 0.0f);
 
   return above;
+}
+
+std::shared_ptr<object_plane> copyPlane(std::shared_ptr<const object_plane> plane)
+{
+  return std::make_shared<object_plane>(*plane);
 }

@@ -32,5 +32,6 @@ public:
   bool isAbove(const Vector3D *v) const;
 };
 
+std::shared_ptr<object_plane> copyPlane(std::shared_ptr<const object_plane> plane);
 
 #endif // PLANE_H

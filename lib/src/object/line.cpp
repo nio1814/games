@@ -1,6 +1,8 @@
 #include "line.h"
 
-object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) : Object(mass)
+object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) :
+  Object(mass),
+  centerOfMassFraction(cmf)
 {
 //	Object();
 //	object_line();
@@ -18,7 +20,7 @@ void object_line::initGeo()
   length = (vertex[1] - vertex[0]).length();
   normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
-  mass->pos = vertex[0] + (vertex[1] - vertex[0]) * comf;
+  mass->pos = vertex[0] + (vertex[1] - vertex[0]) * centerOfMassFraction;
   mass->I = mass->m*pow(length,2)/12.0f;
   return;
 }
@@ -26,8 +28,8 @@ void object_line::initGeo()
 void object_line::calcGeo()
 {
   lvec = lvec.rotate3D(mass->axis, mass->dtheta);
-  vertex[0] = mass->pos - (lvec*length*comf);
-  vertex[1] = mass->pos + (lvec*length*(1-comf));
+  vertex[0] = mass->pos - (lvec*length*centerOfMassFraction);
+  vertex[1] = mass->pos + (lvec*length*(1-centerOfMassFraction));
   normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
   return;
@@ -138,13 +140,13 @@ Vector3D object_line::calcVertexVel(int vnum)
   switch(vnum)
   {
     case 0:
-      armLength = comf*length;
+      armLength = centerOfMassFraction*length;
       velDir = Cross(mass->axis,vertex[0]-vertex[1]);
       velDir.unitize();
       rotVel = velDir*armLength*mass->avel;
       break;
     case 1:
-      armLength = (1.0f-comf)*length;
+      armLength = (1.0f-centerOfMassFraction)*length;
       velDir = Cross(mass->axis, vertex[1]-vertex[0]);
       velDir.unitize();
       rotVel = velDir*armLength*mass->avel;

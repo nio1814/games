@@ -27,6 +27,8 @@
 
 #include "commands.h"
 #include "qtgl.h"
+#include "levels.h"
+
 #include <QKeyEvent>
 
 //bool		keys[256];									// Array Used For The Keyboard Routine
@@ -34,7 +36,7 @@ bool		active=true;								// Window Active Flag Set To TRUE By Default
 bool		fullscreen=true;							// Fullscreen Flag Set To Fullscreen Mode By Default
 
 //object_holder allObjects;
-object_holder menu;
+//object_holder menu;
 
 object_plane* floors;
 //object_sphere* ball = new object_sphere(1.0f, .35f);
@@ -83,7 +85,7 @@ GLWidget::GLWidget(QWidget *parent)
        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 #endif
 {
-	game = new gameObj();
+	//game = new gameObj();
   mouse = new Mouse(WindowSize.x,WindowSize.y);
 	initializeObjects();
 
@@ -92,7 +94,7 @@ GLWidget::GLWidget(QWidget *parent)
 
 GLWidget::~GLWidget()
 {
-	delete game;
+	//delete game;
   delete mouse;
 }
 
@@ -166,19 +168,19 @@ void GLWidget::initializeObjects()
 	//MAKE LEVEL1
 	//level1.levelNum = 1;
 	//level1.allObj = allObjects;
-    texture_s* tile1txr = game->addTexture(":Data/Envwall.bmp");//, "tile1");
+    texture_s* tile1txr = game.addTexture(":Data/Envwall.bmp");//, "tile1");
 	//texture_s* balltxr = level1.addTexture("Data/Ball.bmp", "Data/EnvRoll.bmp", "ball");
-    texture_s* wall1txr = game->addTexture(":Data/wall.bmp");//, "wall");
+    texture_s* wall1txr = game.addTexture(":Data/wall.bmp");//, "wall");
 
 	//numExtraSpheres = 0;
 	//gravityON = false;
 	//currentgravity = 0;
 
-	game->addMenu("Marble Game");
-    game->addLevel(0);
+	game.addMenu("Marble Game");
+    //game->addLevel(0);
 //    game->addLevel(1);
 //    game->addLevel(2);
-
+	game.addLevel(createLevel1());
 
 	//level1.allObj.spheres->objs[1].texture[1] = texture[1];
 	//level1.allObj.spheres->objs[1].texture[2] = texture[2];
@@ -190,7 +192,7 @@ void GLWidget::initializeObjects()
 	gravityDir = -Y;
 
 //	ball = game->levels[game->currentLevel].ball;
-    ball = game->currentLevel().ball;
+  this->ball = std::dynamic_pointer_cast<object_sphere>(this->game.currentLevel()->player);
 	
 	return;
 }
@@ -317,7 +319,7 @@ game.levels[levelnum].allObj.draw();
 	yrot += yrotspeed;									// Update Y Rotation Angle By yrotspeed
 	glFlush();											// Flush The GL Pipeline
 */
-    game->render();
+    this->game.render();
 
     return;
 }
@@ -326,19 +328,21 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
 {
 	Vector3D forward, toleft;
 //	forward = camToLook.unit();
-	forward = (ball->mass->pos - game->currentLevel().cameras->current().pos).unit();
+  forward = (ball->mass->pos - this->game.currentLevel()->cameras.current()->pos).unit();
 	forward.y = 0;
 	toleft = forward.rotate3D(Y, 90);
-	Level* level = &game->currentLevel();
-	CameraPoint* cam = &level->cameras->current();
+  std::shared_ptr<Level> level = game.currentLevel();
+  std::shared_ptr<CameraPoint> camera = level->cameras.current();
 
     if (isKeys(Qt::Key_H))	yrotspeed += 0.08f;			// Right Arrow Pressed (Increase yrotspeed)
     if (isKeys(Qt::Key_K))		yrotspeed -= 0.08f;			// Left Arrow Pressed (Decrease yrotspeed)
     if (isKeys(Qt::Key_U))		xrotspeed += 0.08f;			// Down Arrow Pressed (Increase xrotspeed)
     if (isKeys(Qt::Key_J))		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
 
-	if (isKeys(Qt::Key_A))			cam->pos += level->majAxis*0.05f;				// 'A' Key Pressed ... Zoom In
-	if (isKeys(Qt::Key_Z))			cam->pos -= level->majAxis*0.05f;				// 'Z' Key Pressed ... Zoom Out
+  if (isKeys(Qt::Key_A))
+    camera->pos += level->majAxis*0.05f;				// 'A' Key Pressed ... Zoom In
+  if (isKeys(Qt::Key_Z))
+    camera->pos -= level->majAxis*0.05f;				// 'Z' Key Pressed ... Zoom Out
 
     if (isKeys(Qt::Key_PageUp))		ballHeight +=0.03f;				// Page Up Key Pressed Move Ball Up
     if (isKeys(Qt::Key_PageDown))		ballHeight -=0.03f;				// Page Down Key Pressed Move Ball Down
@@ -357,7 +361,7 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
 	CameraView newView;
 	if(isKeys(Qt::Key_C))
 	{
-		switch(game->currentLevel().cameras->camview)
+    switch(this->game.currentLevel()->cameras.camview)
 		{
 			case FOLLOW:
 				newView = LOCKED;
@@ -369,7 +373,7 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
 				newView = FIRST;
 				break;
 		}
-		game->currentLevel().cameras->camview = newView;
+    this->game.currentLevel()->cameras.camview = newView;
 	}
 }
 
@@ -387,7 +391,7 @@ void GLWidget::process()
 //	game->levels[0].allObj.run(.03);
     void (*commandFcn)(gameObj *, Mouse *) = nullptr;
     //commandFcn(game, mos);
-    game->run(mouse, commandFcn, delta);
+    game.run(mouse, commandFcn, delta);
 
 	processKeyboard();
 

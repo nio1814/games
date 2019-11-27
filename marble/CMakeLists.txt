@@ -11,6 +11,7 @@ set(SRC
 	main.cpp
 	mainwindow.cpp
 	glwidget.cpp
+  levels.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

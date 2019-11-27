@@ -37,7 +37,6 @@ bool MeshModel::loadFile(QString filename)
 	GLfloat vert[3];
 	GLfloat norm[3];
 	GLint vertIdx[3];
-	int i;
 	GLint textureID = -1;
 	GLfloat texCoord[3][2];
 
@@ -209,7 +208,6 @@ void MeshModel::addTriangle(GLint v1, GLint v2, GLint v3, GLfloat nx, GLfloat ny
 void MeshModel::draw()
 {
 	int t,v;
-	float length;
 
 	for(t=0; t<numTris; t++)
 	{

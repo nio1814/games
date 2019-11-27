@@ -9,7 +9,7 @@ class object_line : public Object
 public:
   Vector3D vertex[2];										//vertices
   float length, width;
-  float comf;												//com location(as fraction from v1 to v2)
+  float centerOfMassFraction;												//com location(as fraction from v1 to v2)
   Vector3D normal, lvec;
   Vector2D anglesSph;										//spherical angles(phi, theta)
 

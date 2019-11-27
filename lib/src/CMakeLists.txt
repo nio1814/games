@@ -1,12 +1,15 @@
+project(gamelib)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRC
   object/object.cpp
-  object/collection.cpp
-  object/spheres.cpp
+  object/objects.cpp
+#  object/collection.cpp
+#  object/spheres.cpp
   object/plane.cpp
-  object/planes.cpp
-  object/lines.cpp
+#  object/planes.cpp
+#  object/lines.cpp
   object/line.cpp
   object/sphere.cpp
 	gameobject.cpp
@@ -17,13 +20,12 @@ set(SRC
 	mass.cpp
 	datastructs.cpp
 	menu.cpp
-	level.cpp
+  level.cpp
 	masking.cpp
 	texturecode.cpp
 	qtgl.cpp
 	3ds.cpp
 	3dsLoader.cpp
-	sphere.cpp
 	light.cpp
 	glwidget.cpp
 	tga.cpp
@@ -32,6 +34,6 @@ set(SRC
 
 set(CMAKE_AUTOMOC ON)
 
-add_library(gamelib ${SRC})
+add_library(${PROJECT_NAME} ${SRC})
 
-qt5_use_modules(gamelib OpenGL)
+qt5_use_modules(${PROJECT_NAME} OpenGL)

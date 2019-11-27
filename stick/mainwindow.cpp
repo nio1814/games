@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 	
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), centralWidget(), SLOT(animate()));
-    timer->start(50);
+    timer->start(30);
 }
 
 MainWindow::~MainWindow()

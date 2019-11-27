@@ -50,10 +50,8 @@ Object& Object::operator = (const Object& obj)
     texture = obj.texture;
     moveForce = obj.moveForce;							//force acting on object
     isTouching = obj.isTouching;							//object is touching something
-    touchObj = obj.touchObj;
     isTouching3ds = obj.isTouching3ds;
     touchObj3ds = obj.touchObj3ds;
-    self = obj.self;									//pointer to this object
 //    memcpy(touches, obj.touches, MAXTOUCHES*sizeof(objP));
     //touches2[NUMSHAPES];
 //    memcpy(touches2, obj.touches2, MAXTOUCHES*sizeof(Shape));
@@ -65,8 +63,7 @@ Object& Object::operator = (const Object& obj)
     bVisible = obj.bVisible;
     bMovable = obj.bMovable;
 
-    m_touchedObjects.clear();
-    m_touchedObjects << obj.m_touchedObjects;
+    m_touchedObjects = obj.m_touchedObjects;
 
     return *this;
 }
@@ -85,8 +82,7 @@ void Object::init()								// this method will call the init() method of every m
 	if(bGravityOn)
 	{
 //        gravityVec =
-		mass->force = gravityVec*mass->m;
-		mass->forcenew = mass->force;
+
 	}
 }
 
@@ -95,17 +91,17 @@ void Object::simulate(float dt)					// Iterate the masses by the change in time
 	mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
 }
 
-void Object::operate(const object_holder *allObjs)					// The complete procedure of Objects
-{
-	if(bMovable)
-	{
-		init();										// Step 1: reset forces to zero(and do gravity)
-//		detectCollision(allObjs);
-//		collisions();
-		solve();									// Step 2: apply forces
-	}
+//void Object::operate(const object_holder *allObjs)					// The complete procedure of Objects
+//{
+//	if(bMovable)
+//	{
+//		init();										// Step 1: reset forces to zero(and do gravity)
+////		detectCollision(allObjs);
+////		collisions();
+//		solve();									// Step 2: apply forces
+//	}
 	
-}
+//}
 
 
 /*bool Object::doCollisions(const object_holder *allObjs)
@@ -154,10 +150,10 @@ void* Object::getProperty(int idx, dataType &type)
 		ptr = &isTouching;
 		type = tpBOOL;
 		break;
-	case 6:
-		ptr = &touchObj;
-		type = tpOBJP;
-		break;
+//	case 6:
+//		ptr = &touchObj;
+//		type = tpOBJP;
+//		break;
 	case 7:
 		ptr = &isTouching3ds;
 		type = tpBOOL;
@@ -166,10 +162,10 @@ void* Object::getProperty(int idx, dataType &type)
 		//ptr = touchObj3ds;
 		//type = tpMASS;
 		break;
-	case 9:
-		ptr = &self;
-		type = tpOBJP;
-		break;
+//	case 9:
+//		ptr = &self;
+//		type = tpOBJP;
+//		break;
 	case 10:
 //		ptr = touches;
 		type = tpOBJP;
@@ -195,7 +191,13 @@ void* Object::getProperty(int idx, dataType &type)
 
 void Object::setPosition(Vector3D position)
 {
-    mass->pos = position;
+  mass->pos = position;
+}
+
+void Object::setGravity(const Vector3D gravity)
+{
+//  mass->force ;
+  mass->forcenew = mass->force = gravity * mass->m;
 }
 
 //bool Object::detectCollision(const object_holder* objs)
@@ -342,16 +344,4 @@ void Object::setPosition(Vector3D position)
 
 
 //FUNCTION DEFINITIONS
-bool isSame(objP p1, objP p2)
-{
-	bool same = true;
 
-	if(p1.index != p2.index)
-		same = false;
-	else if(p1.shape != p2.shape)
-		same = false;
-	else if(p1.holder != p2.holder)
-		same = false;
-
-	return same;
-}

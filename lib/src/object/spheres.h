@@ -2,6 +2,7 @@
 #define SPHERES_H
 
 #include "objects.h"
+#include "sphere.h"
 
 
 class object_spheres : public Objects<object_sphere>
