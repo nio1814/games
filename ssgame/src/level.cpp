@@ -430,7 +430,7 @@ ObjectList Level::structures()
     ObjectList::iterator o;
     for(o=m_objects.begin(); o!=m_objects.end(); o++)
     {
-        if ((*o)->objType!=tpENEMY && (*o)->objType!=tpPLAYER)
+        if ((*o)->type!=tpENEMY && (*o)->type!=tpPLAYER)
             objs.append(*o);
     }
     return objs;
@@ -443,7 +443,7 @@ ObjectList Level::players()
     for(int n=0; n<numPlayers(); n++)
     {
         ObjectPointer obj = m_objects[m_playerIdx[n]];
-        if (obj->objType==tpPLAYER)
+        if (obj->type==tpPLAYER)
             objs.append(obj);
     }
     return objs;
@@ -456,7 +456,7 @@ ObjectList Level::enemies()
     for(int n=0; n<numEnemies(); n++)
     {
         ObjectPointer obj = m_objects[m_enemyIndices[n]];
-        if (obj->objType==tpENEMY)
+        if (obj->type==tpENEMY)
             objs.append(obj);
     }
     return objs;
@@ -545,7 +545,7 @@ void Level::initTextures()
 	for(int n=0; n<numObjects(); n++)
 	{
 		ObjectPointer obj = m_objects[n];
-		switch (m_objects[n]->objType)
+		switch (m_objects[n]->type)
 		{
 			case tpPLAYER:
 			case tpENEMY:
@@ -630,7 +630,7 @@ void Level::runCheckTouch()
 	{
         Object* obj = m_objects[n];
         clearTouches(*obj);
-        if(obj->objType==tpPLAYER && (obj->objshots != NULL))
+        if(obj->type==tpPLAYER && (obj->objshots != NULL))
         {
             for(int s=0; s<obj->objshots->numShots; s++)
                 clearTouches(obj->objshots->slist[s]);
@@ -716,7 +716,7 @@ void Level::fixSizes()
     ObjectList::iterator o;
     for (o=m_objects.begin(); o!=m_objects.end(); o++)
     {
-        if (((*o)->objType==tpPLAYER || (*o)->objType==tpPLAYER) && (*o)->active)
+        if (((*o)->type==tpPLAYER || (*o)->type==tpPLAYER) && (*o)->active)
         {
             fixSize(**o);
         }

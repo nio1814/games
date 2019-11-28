@@ -10,17 +10,17 @@
 
 #include "vector3d.h"
 
-struct texture_s
+struct Texture
 {
-	GLuint layer[3];
-	int numLayers;
-	Vector3D color;
-	char* ID;
+  Texture() {}
+  Texture(const GLuint index);
 
-	texture_s(){numLayers = 0;color = Vector3D(255,255,255);}
+	std::vector<GLuint> layer;
+	Vector3D color = Vector3D(255, 255, 255);
+	std::string ID;
 };
 
-extern texture_s nullTexture;
+extern Texture nullTexture;
 
 //AUX_RGBImageRec *LoadBMP(char *Filename);					// Loads A Bitmap Image
 //int LoadGLTextures(texture_s *textures, char *filename);	// Load Bitmaps And Convert To Textures

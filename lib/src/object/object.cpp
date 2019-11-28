@@ -18,17 +18,13 @@ bool bGravityOn = false;
 GLfloat gravityAcc = 9.8f;
 Vector3D gravityDir;
 
-//Object Container--------------------------------
-
-
-
 //SINGLE OBJECT----------------------------
-Object::Object(float m) : mass(new Mass(m)), texture(NULL), isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
+Object::Object(float m) : mass(new Mass(m)), isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
 {
 	bMovable = false;
-	m_basis.A[0] = X;
-	m_basis.A[1] = Y;
-	m_basis.A[2] = Z;
+	basis.A[0] = X;
+	basis.A[1] = Y;
+	basis.A[2] = Z;
 }
 
 //Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
@@ -46,7 +42,7 @@ Object::Object(const Object &obj)
 Object& Object::operator = (const Object& obj)
 {
     mass = new Mass(*obj.mass);									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
-    objType = obj.objType;
+    type = obj.type;
     texture = obj.texture;
     moveForce = obj.moveForce;							//force acting on object
     isTouching = obj.isTouching;							//object is touching something
@@ -75,12 +71,17 @@ Object::~Object()
 //	delete texture;
 }
 
+void Object::addTexture()
+{
+  this->texture = std::make_shared<Texture>();
+}
+
 void Object::init()								// this method will call the init() method of every mass
 {
 	m_touchedObjects.clear();
 	mass->init();						// call init() method of the mass
-	if(bGravityOn)
-	{
+  if(bGravityOn)
+  {
 //        gravityVec =
 
 	}
@@ -131,11 +132,11 @@ void* Object::getProperty(int idx, dataType &type)
 		type = tpMASS;
 		break;
 	case 1:
-		ptr = &objType;
+		ptr = &type;
 		type = tpSHAPE;
 		break;
 	case 2:
-		ptr = texture;
+		ptr = texture.get();
 		type = tpTEXTURE;
 		break;
 	case 3:
@@ -186,7 +187,12 @@ void* Object::getProperty(int idx, dataType &type)
 		break;
 	}
 
-	return ptr;
+  return ptr;
+}
+
+bool Object::hasTexture()
+{
+  return this->texture != nullptr;
 }
 
 void Object::setPosition(Vector3D position)

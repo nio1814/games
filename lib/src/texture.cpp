@@ -6,8 +6,6 @@
 
 #include <cstring>
 
-texture_s nullTexture;
-
 /*AUX_RGBImageRec *LoadBMP(char *Filename)				// Loads A Bitmap Image
 {
 	FILE *File=NULL;									// File Handle
@@ -29,9 +27,8 @@ texture_s nullTexture;
 }*/
 
 
-int LoadGLTextures(texture_s* textureholder, char *filename)                                    // Load Bitmaps And Convert To Textures
+int LoadGLTextures(Texture* textureholder, char *filename)                                    // Load Bitmaps And Convert To Textures
 {
-	int textIdx = textureholder->numLayers;
     int Status=false;									// Status Indicator
 #if 0
 //    AUX_RGBImageRec *TextureImage[1];						// Create Storage Space For The Textures
@@ -43,7 +40,10 @@ int LoadGLTextures(texture_s* textureholder, char *filename)                    
         (TextureImage[2]=LoadBMP("Data/EnvRoll.bmp")))	// Load the Wall Texture*/
 	{   
         Status=true;									// Set The Status To TRUE
-		glGenTextures(1, &textureholder->layer[textIdx]);					// Create The Texture
+    GLuint textureIndex;
+    //glGenTextures(1, &textureholder->layer[textIdx]);					// Create The Texture
+    glGenTextures(1, &textureIndex);
+    textureholder->layer.push_back(textureIndex);
 		//for (int loop=0; loop<3; loop++)				// Loop Through 5 Textures
 		//{
 			glBindTexture(GL_TEXTURE_2D, textureholder->layer[textIdx]);
@@ -105,3 +105,8 @@ int LoadGLTextures()                                    // Load Bitmaps And Conv
 	return Status;										// Return The Status
 }
 */
+
+Texture::Texture(const GLuint index)
+{
+  this->layer.push_back(index);
+}

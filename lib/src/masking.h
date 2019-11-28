@@ -31,6 +31,6 @@ extern int sss;
 bool LoadGLTextures(GLuint *texture, char filePath[]);
 //int LoadGLTextures(Animation *aData, char filePath[], int ID);
 //int LoadGLTextures();								// Load Bitmaps And Convert To Textures
-bool loadGLTexture(GLuint* texture, QString filename);
+GLuint loadGLTexture(const std::string filename);
 
 #endif

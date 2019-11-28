@@ -114,7 +114,7 @@ void Object::init(GLfloat wid, GLfloat hei, type oType, int ident)
 	calcBoundaries();
 	diag = dist(pos.x, pos.y + .5f*dimension.y, pos.x + .5f*dimension.x, pos.y + dimension.y);
 	
-	objType = oType;
+	type = oType;
 		
 	switch(oType)
 	{
@@ -209,7 +209,7 @@ Object& Object::operator= (Object obj)				// operator= sets values of v to this 
 	}
 	
 	this->person	= obj.person;
-	this->objType	= obj.objType;
+	this->type	= obj.type;
 	this->shotType	= obj.shotType;
 	this->blkType	= obj.blkType;
 	this->numPlayer = obj.numPlayer;

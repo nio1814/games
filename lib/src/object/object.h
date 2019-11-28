@@ -62,28 +62,13 @@ public:
 
   void setPosition(Vector3D position);
   void setGravity(const Vector3D gravity);
-
-	Mass* mass;									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
-	Shape objType; 
-	texture_s* texture;
-	Vector3D moveForce;							//force acting on object
-	bool isTouching;							//object is touching something
-	bool isTouching3ds;
-	objP3ds touchObj3ds;
-//	objP *touches;								//other objects this object is touching
-//	void* touches2[NUMSHAPES];
-//	int totalTouches;
-//	int numTouches[NUMSHAPES];
-	bool bDraw;
-	bool bDetect;
-	bool bCollide;
-	bool bVisible;
-	bool bMovable;								//object can move
 	
 //	Object();
     Object(float m=1);							// Constructor creates some masses with mass values m
     Object(const Object& obj);
 	~Object();
+
+  void addTexture();
 
     Object& operator= (const Object& obj);
 
@@ -131,9 +116,28 @@ public:
 //	virtual void collide(const object_sphere* sphere){};
 //	virtual void collide(const object_plane* plane){};
 //	virtual void collide(const object_line* line){};
+  Mass* mass;									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
+  bool bDraw;
+  bool bMovable;								//object can move
+  Shape type;
+  Vector3D moveForce;							//force acting on object
+  std::shared_ptr<Texture> texture;
+protected:
+  bool hasTexture();
 
-	matrix2D3 m_basis;
+  matrix2D3 basis;
   std::vector<Pointer> m_touchedObjects;
+private:
+  bool isTouching;							//object is touching something
+  bool isTouching3ds;
+  objP3ds touchObj3ds;
+  //	objP *touches;								//other objects this object is touching
+  //	void* touches2[NUMSHAPES];
+  //	int totalTouches;
+  //	int numTouches[NUMSHAPES];
+  bool bDetect;
+  bool bCollide;
+  bool bVisible;
 };
 
 //Single Triangle

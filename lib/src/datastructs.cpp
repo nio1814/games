@@ -81,9 +81,9 @@ void pointerTree::addLeaf(void* input, dataType tp, string name)
 				ptr[numLeaf].val = input;
 				ptr[numLeaf].ID = name.append(" (object)");
 				ptr[numLeaf].addLeaf(objectPtr->mass, tpMASS, " mass");
-				ptr[numLeaf].addLeaf(&objectPtr->objType, tpSHAPE, " object type");
+				ptr[numLeaf].addLeaf(&objectPtr->type, tpSHAPE, " object type");
 				ptr[numLeaf].addLeaf(&objectPtr->bMovable, tpBOOL, " movable");
-				switch(objectPtr->objType)
+				switch(objectPtr->type)
 				{
 					case SPHERE:
 					case PLANE:

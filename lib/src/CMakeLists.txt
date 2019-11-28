@@ -30,6 +30,7 @@ set(SRC
 	glwidget.cpp
 	tga.cpp
   model3d.cpp
+  texture.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

@@ -43,9 +43,10 @@ Vector3D::Vector3D(float x, float y, float z)			// Constructor that initializes 
 
 Vector3D& Vector3D::operator= (const Vector3D &v)				// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
 {
-	x = v.x;
-	y = v.y;
-	z = v.z;
+	this->x = v.x;
+  this->y = v.y;
+  this->z = v.z;
+
 	return *this;
 }
 

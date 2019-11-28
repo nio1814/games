@@ -125,7 +125,7 @@ class Object								// Create A Structure For Our Player
 	actionTiming actionTime[20];
 
 	character person;
-	type objType;
+	type type;
 	shots shotType;
 	block blkType;
 	playerNum numPlayer;

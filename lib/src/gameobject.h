@@ -21,6 +21,7 @@ enum gameMode{gmMENU, gmPLAY};
 
 class gameObj
 {
+private:
     int numLevels();
 
 	int numPlayers;
@@ -28,9 +29,9 @@ class gameObj
 	object_plane* planePlayer;
 	Shape playerShape;
 	
-    int m_currentLevelIndex;
   std::vector<std::shared_ptr<Level>> levels;
 	
+  int m_currentLevelIndex;
 	bool paused;
 	gameMode gMode;
 	int numMenus;
@@ -41,7 +42,7 @@ class gameObj
 //	font_s font;
 //	font3d_s font3d;
 	
-	texture_s alltexture[MAXTEXTURE];
+	std::vector<Texture> textures;
 	int numTextures;
 	
 public:
@@ -54,7 +55,7 @@ public:
 	bool loadLevel();
   std::shared_ptr<Level> currentLevel();
 	bool unloadLevel();
-  texture_s* addTexture(char *filename);
+  Texture addTexture(const std::string filename);
 	void setPlayerShape(Shape pShape);
 	void addPlayer(object_plane *plane);
     void run(Mouse* ms, void (*commandFcn)(gameObj* gm, Mouse* ms), GLfloat delta);

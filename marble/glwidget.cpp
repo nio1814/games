@@ -168,19 +168,19 @@ void GLWidget::initializeObjects()
 	//MAKE LEVEL1
 	//level1.levelNum = 1;
 	//level1.allObj = allObjects;
-    texture_s* tile1txr = game.addTexture(":Data/Envwall.bmp");//, "tile1");
+  Texture tile1txr = game.addTexture(":Data/Envwall.bmp");//, "tile1");
 	//texture_s* balltxr = level1.addTexture("Data/Ball.bmp", "Data/EnvRoll.bmp", "ball");
-    texture_s* wall1txr = game.addTexture(":Data/wall.bmp");//, "wall");
+  Texture wall1txr = game.addTexture(":Data/wall.bmp");//, "wall");
 
 	//numExtraSpheres = 0;
 	//gravityON = false;
 	//currentgravity = 0;
 
-	game.addMenu("Marble Game");
+	this->game.addMenu("Marble Game");
     //game->addLevel(0);
 //    game->addLevel(1);
 //    game->addLevel(2);
-	game.addLevel(createLevel1());
+	this->game.addLevel(createLevel1());
 
 	//level1.allObj.spheres->objs[1].texture[1] = texture[1];
 	//level1.allObj.spheres->objs[1].texture[2] = texture[2];

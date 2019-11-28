@@ -109,10 +109,10 @@ void checkTouch(Object &moveObj, const Object &obj2)
 		
 		if(touchExists(moveObj, obj2))				//topleft
 		{
-			if(obj2.objType != tpSHOT)
+			if(obj2.type != tpSHOT)
 			{
 				//move object to the correct position
-				if(inLineY && (moveObj.objType != tpSHOT) && (!lTouch || !rTouch))
+				if(inLineY && (moveObj.type != tpSHOT) && (!lTouch || !rTouch))
 				{
 					//(bottom)above obj2, and moved down from last instance
 					if( (fabs(moveObj.posMin.y - obj2.posMax.y) < TOUCHNBHD) && isMoreUp && toUp && (moveObj.pos.y <= moveObj.posOld.y))
@@ -142,12 +142,12 @@ void checkTouch(Object &moveObj, const Object &obj2)
 					}
 				}
 
-				if(inLineX && (moveObj.objType != tpSHOT) )
+				if(inLineX && (moveObj.type != tpSHOT) )
 				{
 					//(left)to right of obj2, and moved left from last instance
 					if( (fabs(moveObj.posMin.x - obj2.posMax.x) < TOUCHNBHD) && isMoreRight && (moveObj.posMin.x <= moveObj.posMinOld.x))
 					{
-						if(obj2.isSolid && (obj2.objType == tpGROUND))
+						if(obj2.isSolid && (obj2.type == tpGROUND))
 							moveObj.pos.x = obj2.posMax.x + .5f*moveObj.dimension.x;
 						if(!lTouch)
 						{
@@ -183,11 +183,11 @@ void checkTouch(Object &moveObj, const Object &obj2)
 					}
 				}
 
-				if(moveObj.objType == tpSHOT)
+				if(moveObj.type == tpSHOT)
 				{
-					if( ((obj2.objType == tpPLAYER) && !obj2.state[actATTACK1] && (moveObj.parent->objType == tpENEMY)) ||
-						((obj2.objType == tpENEMY) && (moveObj.parent->objType == tpPLAYER)) ||
-						(obj2.objType == tpGROUND))
+					if( ((obj2.type == tpPLAYER) && !obj2.state[actATTACK1] && (moveObj.parent->type == tpENEMY)) ||
+						((obj2.type == tpENEMY) && (moveObj.parent->type == tpPLAYER)) ||
+						(obj2.type == tpGROUND))
 					{
 						moveObj.active = false;
 					}
@@ -195,8 +195,8 @@ void checkTouch(Object &moveObj, const Object &obj2)
 			}
 			else
 			{
-				if( ((moveObj.objType == tpPLAYER) && (moveObj.parent->objType == tpENEMY)) ||
-					((moveObj.objType == tpENEMY) && (moveObj.parent->objType == tpPLAYER)) )
+				if( ((moveObj.type == tpPLAYER) && (moveObj.parent->type == tpENEMY)) ||
+					((moveObj.type == tpENEMY) && (moveObj.parent->type == tpPLAYER)) )
 				{
 					collide(moveObj, obj2);
 				}
@@ -382,8 +382,8 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 		}
 		//jumping off the wall
 		else if(moveObj.canWallClimb &&
-				((moveObj.isTouching[LSIDE] && moveObj.touchObj[LSIDE]->objType == tpGROUND ) 
-				||(moveObj.isTouching[RSIDE] && moveObj.touchObj[RSIDE]->objType == tpGROUND ))
+				((moveObj.isTouching[LSIDE] && moveObj.touchObj[LSIDE]->type == tpGROUND ) 
+				||(moveObj.isTouching[RSIDE] && moveObj.touchObj[RSIDE]->type == tpGROUND ))
 				)
 		{
 			moveObj.projectile = false;
@@ -484,8 +484,8 @@ void updatePlayerMove(Object &moveObj, GLfloat dt)
 			}
 			thisAct = actSHOOT;
 		}
-		else if( (((playerPress(numPlayer, btnRIGHT) && moveObj.isTouching[RSIDE] && moveObj.touchObj[RSIDE]->objType == tpGROUND) && (moveObj.posMax.y - .25f*moveObj.dimension.y) < moveObj.touchObj[RSIDE]->posMax.y)
-				|| ((playerPress(numPlayer, btnLEFT) && moveObj.isTouching[LSIDE]) && moveObj.touchObj[LSIDE]->objType == tpGROUND && (moveObj.posMax.y - .25f*moveObj.dimension.y) < moveObj.touchObj[LSIDE]->posMax.y)
+		else if( (((playerPress(numPlayer, btnRIGHT) && moveObj.isTouching[RSIDE] && moveObj.touchObj[RSIDE]->type == tpGROUND) && (moveObj.posMax.y - .25f*moveObj.dimension.y) < moveObj.touchObj[RSIDE]->posMax.y)
+				|| ((playerPress(numPlayer, btnLEFT) && moveObj.isTouching[LSIDE]) && moveObj.touchObj[LSIDE]->type == tpGROUND && (moveObj.posMax.y - .25f*moveObj.dimension.y) < moveObj.touchObj[LSIDE]->posMax.y)
 				&& !moveObj.isTouching[BSIDE]) && !doneAction[actWALL] )
 			thisAct = actWALL;
 		else if( ((playerPress(numPlayer, btnRIGHT) && moveObj.isTouching[RSIDE]) || (playerPress(numPlayer, btnLEFT) && moveObj.isTouching[LSIDE]))
@@ -856,7 +856,7 @@ void updateObjectMove(Object &moveObj, GLfloat dt)
 	}
 
 	//yMov -= 1.2f*resetVal;
-	if((moveObj.isTouching[BSIDE]) || (moveObj.objType == tpSHOT))
+	if((moveObj.isTouching[BSIDE]) || (moveObj.type == tpSHOT))
 		moveObj.accel.y = 0.0f;
 	moveObj.vel.y = moveObj.vel.y + moveObj.accel.y*dt;
 	yMoveTo = moveObj.pos.y + moveObj.vel.y*dt;
@@ -1040,7 +1040,7 @@ void collide(Object &obj1, const Object &obj2, touch side)
 	
 	if((side == LSIDE) || (side == RSIDE))
 	{
-		if((obj2.objType == tpGROUND))
+		if((obj2.type == tpGROUND))
 		{
 			if(movingTowardsLR)
 			{
@@ -1072,7 +1072,7 @@ void collide(Object &obj1, const Object &obj2, touch side)
 				obj1.isTouching[LSIDE] = false;
 		}
 
-		if(obj2.objType == tpSHOT)
+		if(obj2.type == tpSHOT)
 		{
 			if(obj1.state[actATTACK1])
 			{
@@ -1086,7 +1086,7 @@ void collide(Object &obj1, const Object &obj2, touch side)
 	}
 	else if((side == BSIDE) || (side == TSIDE))
 	{
-		if(obj2.objType == tpGROUND)
+		if(obj2.type == tpGROUND)
 		{
 			if(movingTowardsUD)
 			{
@@ -1114,7 +1114,7 @@ void collide(Object &obj1, const Object &obj2, touch side)
 				obj1.isTouching[BSIDE] = false;
 		}
 
-		if(obj2.objType == tpSHOT)
+		if(obj2.type == tpSHOT)
 		{
 			if(obj1.state[actATTACK1])
 			{
@@ -1148,7 +1148,7 @@ void collide(Object &obj1, const Object &obj2)
 	Object* obj2ptr = getObject(obj2.index);
     QTime clock;
 	
-	if(obj2.objType == tpSHOT)
+	if(obj2.type == tpSHOT)
 	{
 		if(obj1.state[actATTACK1])
 		{

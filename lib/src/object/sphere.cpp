@@ -73,7 +73,7 @@ void drawSphere(int subDivisions)
 object_sphere::object_sphere(float mass, float rad, const Vector3D position) : Object(mass),
   radius(rad)
 {
-  objType = SPHERE;
+  type = SPHERE;
     /*quad = gluNewQuadric();								// Create A New Quadratic
   gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
     gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
@@ -96,9 +96,6 @@ void object_sphere::solve()													//gravitational force will be applied th
 
 void object_sphere::draw()
 {
-  bool textureExists = texture!=NULL;
-  //int numTexture = texture->numLayers;
-
   glColor4f(1.0f, 1.0f, 1.0f, .9f);						// Set Color To White
   //glColor3ub(texture->color.x, texture->color.y, texture->color.z);
   glEnable(GL_LIGHTING);
@@ -111,9 +108,9 @@ void object_sphere::draw()
   //glRotatef(xrot,1.0f,0.0f,0.0f);						// Rotate On The X Axis By xrot
   //glRotatef(yrot,0.0f,1.0f,0.0f);						// Rotate On The Y Axis By yrot
   //glRotatef(zrot,0.0f,0.0f,1.0f);						// Rotate On The Y Axis By yrot
-  if(textureExists)
+  if(hasTexture())
   {
-    glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 2 (1)
+    glBindTexture(GL_TEXTURE_2D, this->texture->layer[0]);			// Select Texture 2 (1)
 
 //	gluSphere(quad, radius, 32, 16);						// Draw First Sphere
 

@@ -6,7 +6,7 @@ object_plane::object_plane(float mass, float wid, float len, float phi, float th
   width(wid), length(len), angles(Vector2D(phi, theta))
 {
 //	object_plane();
-  objType = PLANE;
+  type = PLANE;
   makeBase(&mAxis);
 }
 
@@ -15,9 +15,9 @@ object_plane::object_plane(float width, float length, Vector3D position, Vector3
 {
   norm.unitize();
   normal = norm;
-  objType = PLANE;
+  type = PLANE;
   mass->pos = position;
-  m_basis = basis;
+  basis = basis;
   orient(norm);
 }
 
@@ -116,12 +116,12 @@ void object_plane::flipBase()
 void object_plane::orient(const Vector3D& norm)
 {
   normal = norm;
-  Vector3D sphericalCoords = m_basis.cartesianToSpherical(norm);
-  wvec = m_basis.A[0].rotate3D(m_basis.A[1], sphericalCoords.z);
-  wvec = wvec.rotate3D(m_basis.A[2], sphericalCoords.y);
+  Vector3D sphericalCoords = basis.cartesianToSpherical(norm);
+  wvec = basis.A[0].rotate3D(basis.A[1], sphericalCoords.z);
+  wvec = wvec.rotate3D(basis.A[2], sphericalCoords.y);
 
 //	lvec = m_basis.A[1].rotate3D(m_basis.A[1], sphericalCoords.z);
-  lvec = m_basis.A[1].rotate3D(m_basis.A[2], sphericalCoords.y);
+  lvec = basis.A[1].rotate3D(basis.A[2], sphericalCoords.y);
 
   return;
 }
