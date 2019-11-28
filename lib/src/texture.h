@@ -14,6 +14,7 @@ struct Texture
 {
   Texture() {}
   Texture(const GLuint index);
+  bool hasTextures();
 
 	std::vector<GLuint> layer;
 	Vector3D color = Vector3D(255, 255, 255);

@@ -110,3 +110,8 @@ Texture::Texture(const GLuint index)
 {
   this->layer.push_back(index);
 }
+
+bool Texture::hasTextures()
+{
+  return !this->layer.empty();
+}

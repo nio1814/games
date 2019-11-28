@@ -193,8 +193,6 @@ void GLWidget::initializeObjects()
 
 //	ball = game->levels[game->currentLevel].ball;
   this->ball = std::dynamic_pointer_cast<object_sphere>(this->game.currentLevel()->player);
-	
-	return;
 }
 
 void DrawObject()										// Draw Our Ball

@@ -110,11 +110,11 @@ void object_sphere::draw()
   //glRotatef(zrot,0.0f,0.0f,1.0f);						// Rotate On The Y Axis By yrot
   if(hasTexture())
   {
-    glBindTexture(GL_TEXTURE_2D, this->texture->layer[0]);			// Select Texture 2 (1)
+    glBindTexture(GL_TEXTURE_2D, this->texture.layer[0]);			// Select Texture 2 (1)
 
 //	gluSphere(quad, radius, 32, 16);						// Draw First Sphere
 
-    glBindTexture(GL_TEXTURE_2D, texture->layer[1]);			// Select Texture 3 (2)
+    glBindTexture(GL_TEXTURE_2D, texture.layer[1]);			// Select Texture 3 (2)
   }
   glColor4f(1.0f, 1.0f, 1.0f, 0.4f);					// Set Color To White With 40% Alpha
   //glColor3ub(texture->color.x, texture->color.y, texture->color.z);

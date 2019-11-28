@@ -21,8 +21,7 @@ std::shared_ptr<Level> createLevel1()
     {
         sphere = std::make_shared<object_sphere>(std::abs(.70f*cos((float)rand())), std::abs(.50f*cos((float)rand()))+.1f);
         sphere->mass->pos = Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand()));
-        sphere->addTexture();
-        sphere->texture->color = Vector3D(rand()%256, rand()%256, rand()%256);
+        sphere->texture.color = Vector3D(rand()%256, rand()%256, rand()%256);
         level->addObject(sphere);
 //                allObj.addSpheres(fabs(.70f*cos((float)rand())), fabs(.50f*cos((float)rand()))+.1f,  Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand())));
 //                allObj.setColor(SPHERE, i, Vector3D(rand()%256, rand()%256, rand()%256) );

@@ -71,11 +71,6 @@ Object::~Object()
 //	delete texture;
 }
 
-void Object::addTexture()
-{
-  this->texture = std::make_shared<Texture>();
-}
-
 void Object::init()								// this method will call the init() method of every mass
 {
 	m_touchedObjects.clear();
@@ -136,7 +131,7 @@ void* Object::getProperty(int idx, dataType &type)
 		type = tpSHAPE;
 		break;
 	case 2:
-		ptr = texture.get();
+    ptr = &texture;
 		type = tpTEXTURE;
 		break;
 	case 3:
@@ -192,7 +187,7 @@ void* Object::getProperty(int idx, dataType &type)
 
 bool Object::hasTexture()
 {
-  return this->texture != nullptr;
+  return this->texture.hasTextures();
 }
 
 void Object::setPosition(Vector3D position)

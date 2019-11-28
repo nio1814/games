@@ -38,7 +38,6 @@ object_plane& object_plane::operator = (const object_plane& plane)
 void object_plane::draw()
 {
   Vector3D v;							//keeps coords of vertex for drawing
-  bool textureExists = texture!=NULL;
   //int numTexture = texture->numLayers;
 
   glEnable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
@@ -48,8 +47,8 @@ void object_plane::draw()
 
   glPushMatrix();
 
-  if(textureExists)
-    glBindTexture(GL_TEXTURE_2D, texture->layer[0]);			// Select Texture 1 (0)
+  if(this->hasTexture())
+    glBindTexture(GL_TEXTURE_2D, this->texture.layer[0]);			// Select Texture 1 (0)
   glBegin(GL_QUADS);									// Begin Drawing A Quad
     //glNormal3f(0.0f, 1.0f, 0.0f);						// Normal Pointing Up
     glNormal3f(normal.x, normal.y, normal.z);						// Normal Pointing Up

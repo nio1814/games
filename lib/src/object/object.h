@@ -68,8 +68,6 @@ public:
     Object(const Object& obj);
 	~Object();
 
-  void addTexture();
-
     Object& operator= (const Object& obj);
 
 	virtual void init();							// this method will call the init() method of every mass
@@ -121,7 +119,7 @@ public:
   bool bMovable;								//object can move
   Shape type;
   Vector3D moveForce;							//force acting on object
-  std::shared_ptr<Texture> texture;
+  Texture texture;
 protected:
   bool hasTexture();
 
