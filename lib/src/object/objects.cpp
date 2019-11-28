@@ -60,6 +60,18 @@ void Objects::simulate(float dt)					// Iterate the masses by the change in time
     object->mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
 }
 
+void Objects::detectCollisions()
+{
+  for (int index1 = 0; index1 < this->objects.size(); index1++)
+  {
+    std::shared_ptr<Object> object1 = this->objects[index1];
+    for (int index2 = index1 + 1; index2 < this->objects.size(); index2++)
+    {
+      std::shared_ptr<Object> object2 = this->objects[index2];
+    }
+  }
+}
+
 void Objects::run(const float timeDelta)
 {
   for (Object::Pointer object : this->objects)

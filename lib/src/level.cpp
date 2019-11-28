@@ -10,10 +10,10 @@ Level::Level()
 {
     started = false;
     numPlayers = 0;
-    majAxis = Vector3D(0,0,1);
+    majorAxis = Vector3D(0,0,1);
     bGravity = false;
     gravityM = 9.81;
-    gravityV = majAxis*gravityM;
+    gravityV = majorAxis*gravityM;
     //numTextures = 0;
 
     lights = NULL;
@@ -40,7 +40,7 @@ Level::Level(int players)
 
 void Level::setMajAxis(Vector3D axis)
 {
-    majAxis = axis;
+    majorAxis = axis;
     objects.majorAxis = axis;
 
     return;
@@ -54,7 +54,6 @@ bool Level::create(int index)
 //	numExtraSpheres = 0;
 
     GLfloat sqr3 = sqrtf(3.0f);
-    object_plane plane;
 	matrix2D3 basis;
 
     switch(index)
@@ -66,14 +65,14 @@ bool Level::create(int index)
             cameras.addPoint(Vector3D(5,5,2), Vector3D(-5,0,3), Z, DEFFOLLOWDIST);
             cameras.camview = FIRST;
             loadmap(":Data/model/myschool3.3ds", 1.5f);
-            majAxis = Z;
+            majorAxis = Z;
             status = true;
             break;
         case 3:
             loadmap(":Data/model/map1.3ds", 1.0f);
             cameras.addPoint(Vector3D(5,5,2),Vector3D(-5,0,3), Z, DEFFOLLOWDIST);
             cameras.camview = FIRST;
-            majAxis = Z;
+            majorAxis = Z;
             status = true;
             break;
     }
@@ -185,7 +184,7 @@ Vector3D Level::setCam(const Vector3D& pos, GLfloat delta, GLfloat objvel)
     }
     else if(cameras.camview == FIRST)
     {
-    camera->look += (pos.proj(majAxis) - camera->look.proj(majAxis))*.95f*delta;
+    camera->look += (pos.proj(majorAxis) - camera->look.proj(majorAxis))*.95f*delta;
         cam2look = camera->look - camera->pos;
     camera->pos = pos;
 
@@ -194,7 +193,7 @@ Vector3D Level::setCam(const Vector3D& pos, GLfloat delta, GLfloat objvel)
             camRotate = 100*delta;
         else if(isKeys(Qt::Key_Right))
             camRotate = -100*delta;
-        cam2look = cam2look.rotate3D(majAxis, camRotate);
+        cam2look = cam2look.rotate3D(majorAxis, camRotate);
         camera->look = cam2look + camera->pos;
     }
 
@@ -315,7 +314,7 @@ void Level::run(GLfloat dt)
         sprintf(timetext, "%.2f", timer);
     }
 
-    gravityVec = majAxis*-1;
+    gravityVec = majorAxis*-1;
 //    gravityVec = majAxis*0;
 //    updateCam();
   setCam(player->mass->pos, dt, player->mass->vel.length());
@@ -347,7 +346,7 @@ void Level::run3ds()
 
 void Level::draw()
 {
-  glLookAt(this->camera()->pos.toQVector3D(), player->mass->pos.toQVector3D(), majAxis.toQVector3D());
+  glLookAt(this->camera()->pos.toQVector3D(), player->mass->pos.toQVector3D(), majorAxis.toQVector3D());
 //    world3ds.Render_3ds();
     objects.draw();
 

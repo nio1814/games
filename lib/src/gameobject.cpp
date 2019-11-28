@@ -80,30 +80,6 @@ void gameObj::addLevel(std::shared_ptr<Level> level)
 	return success;
 }*/
 
-Texture gameObj::addTexture(const std::string filename)
-{
-	bool success = false;
-	string errString;
-
-//	success = LoadGLTextures(&alltexture[numTextures++], filename);
-//    success = LoadGLTextures(&alltexture[numTextures++].layer[0], filename);
-  const GLuint textureIndex = loadGLTexture(filename);
-
-  Texture texture;
-  if(textureIndex < 0)
-  {
-    errString = "Texture file failed to load "+(string)filename;
-//		MessageBox(NULL, errString.c_str() , TEXT("Texture Loading"), MB_ICONERROR | MB_OK);
-        qErrnoWarning(errString.c_str());
-    return Texture();
-  }
-	else
-  {
-    this->textures.push_back(Texture(textureIndex));
-    return this->textures.back();
-  }
-}
-
 void gameObj::setPlayerShape(Shape pShape)
 {
 	playerShape = pShape;

@@ -2,8 +2,8 @@
 //#include <gl\gl.h>										// Header File For The OpenGL32 Library
 //#include <gl\glu.h>										// Header File For The GLu32 Library
 
-#include "texture.h"
-
+#include "texture.h"
+#include <QImage>
 #include <cstring>
 
 /*AUX_RGBImageRec *LoadBMP(char *Filename)				// Loads A Bitmap Image
@@ -109,6 +109,41 @@ int LoadGLTextures()                                    // Load Bitmaps And Conv
 Texture::Texture(const GLuint index)
 {
   this->layer.push_back(index);
+}
+
+Texture::Texture(const std::string filename)
+{
+  //	texture = QGLWidget::bindTexture(QImage(filename), GL_TEXTURE_2D);
+#if (QT_VERSION >= 0x050500)
+  QImage image = QImage(filename.c_str()).convertToFormat(QImage::Format_RGBA8888);
+#else
+  QImage image = QGLWidget::convertToGLFormat(QImage(filename.c_str()));
+#endif
+
+  if (image.isNull())
+  {
+
+    qErrnoWarning("Failed to open file %s\n", filename);
+  }
+  else
+  {
+    GLuint textureIndex;
+    glGenTextures(1, &textureIndex);
+    glBindTexture(GL_TEXTURE_2D, textureIndex);
+    int textureType;
+    if (image.hasAlphaChannel())
+      textureType = GL_RGBA;
+    else
+      textureType = GL_RGB;
+    glTexImage2D(GL_TEXTURE_2D, 0, textureType, image.width(), image.height(), 0, textureType, GL_UNSIGNED_BYTE, image.bits());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    /*QGLWidget *qgl;
+    *texture = qgl->bindTexture(QImage(filename), GL_TEXTURE_2D);*/
+    this->layer.push_back(textureIndex);
+  }
 }
 
 bool Texture::hasTextures()

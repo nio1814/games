@@ -168,9 +168,7 @@ void GLWidget::initializeObjects()
 	//MAKE LEVEL1
 	//level1.levelNum = 1;
 	//level1.allObj = allObjects;
-  Texture tile1txr = game.addTexture(":Data/Envwall.bmp");//, "tile1");
 	//texture_s* balltxr = level1.addTexture("Data/Ball.bmp", "Data/EnvRoll.bmp", "ball");
-  Texture wall1txr = game.addTexture(":Data/wall.bmp");//, "wall");
 
 	//numExtraSpheres = 0;
 	//gravityON = false;
@@ -338,9 +336,9 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
     if (isKeys(Qt::Key_J))		xrotspeed -= 0.08f;			// Up Arrow Pressed (Decrease xrotspeed)
 
   if (isKeys(Qt::Key_A))
-    camera->pos += level->majAxis*0.05f;				// 'A' Key Pressed ... Zoom In
+    camera->pos += level->majorAxis * 0.05f;				// 'A' Key Pressed ... Zoom In
   if (isKeys(Qt::Key_Z))
-    camera->pos -= level->majAxis*0.05f;				// 'Z' Key Pressed ... Zoom Out
+    camera->pos -= level->majorAxis * 0.05f;				// 'Z' Key Pressed ... Zoom Out
 
     if (isKeys(Qt::Key_PageUp))		ballHeight +=0.03f;				// Page Up Key Pressed Move Ball Up
     if (isKeys(Qt::Key_PageDown))		ballHeight -=0.03f;				// Page Down Key Pressed Move Ball Down

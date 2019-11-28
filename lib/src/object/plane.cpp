@@ -2,12 +2,12 @@
 
 const float EPSILON = 1E-7;
 
-object_plane::object_plane(float mass, float wid, float len, float phi, float theta, Vector3D mAxis) : Object(mass),
+object_plane::object_plane(float mass, float wid, float len, float phi, float theta, Vector3D majorAxis) : Object(mass),
   width(wid), length(len), angles(Vector2D(phi, theta))
 {
 //	object_plane();
   type = PLANE;
-  makeBase(&mAxis);
+  makeBase(majorAxis);
 }
 
 object_plane::object_plane(float width, float length, Vector3D position, Vector3D norm, matrix2D3 basis) : Object(1),
@@ -33,6 +33,12 @@ object_plane& object_plane::operator = (const object_plane& plane)
     angles = plane.angles;
 
     return *this;
+}
+
+void object_plane::setNormal(const Vector3D normal, const Vector3D majorAxis)
+{
+  this->normal = normal;
+  this->makeBase(majorAxis);
 }
 
 void object_plane::draw()
@@ -76,19 +82,19 @@ void object_plane::draw()
   glDisable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
 }
 
-void object_plane::makeBase(const Vector3D* mAxis)
+void object_plane::makeBase(const Vector3D& majorAxis)
 {
-  if(*mAxis == Z)
+  if(majorAxis == Z)
   {
     wvec = X.rotate3D(Z, angles.x);							//rotate x by phi
     lvec = (Y.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);	//rotate y down by phi then theta
   }
-  else if(*mAxis == Y)
+  else if(majorAxis == Y)
   {
     wvec = Z.rotate3D(Y, angles.x);
     lvec = (X.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);
   }
-  else if(*mAxis == X)
+  else if(majorAxis == X)
   {
     wvec = Y.rotate3D(X, angles.x);
     lvec = (Z.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);

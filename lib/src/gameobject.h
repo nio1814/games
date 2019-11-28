@@ -56,7 +56,6 @@ public:
 	bool loadLevel();
   std::shared_ptr<Level> currentLevel();
 	bool unloadLevel();
-  Texture addTexture(const std::string filename);
 	void setPlayerShape(Shape pShape);
 	void addPlayer(object_plane *plane);
     void run(Mouse* ms, void (*commandFcn)(gameObj* gm, Mouse* ms), GLfloat delta);

@@ -14,6 +14,8 @@ struct Texture
 {
   Texture() {}
   Texture(const GLuint index);
+  Texture(const std::string filename);
+  
   bool hasTextures();
 
 	std::vector<GLuint> layer;

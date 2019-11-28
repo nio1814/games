@@ -35,6 +35,7 @@ public:
   void draw();					//
   void simulate(float dt);				// Iterate the masses by the change in time
 //  virtual void operate(const object_holder *allObjs);// The complete procedure of Objects
+  void detectCollisions();
   void run(const float timeDelta);
 private:
   std::vector<Object::Pointer> objects;

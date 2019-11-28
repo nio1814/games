@@ -75,34 +75,3 @@ bool LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And
 
 	return Status;								// Return The Status
 }
-
-GLuint loadGLTexture(const std::string filename)
-{
-  GLuint textureIndex;
-//	texture = QGLWidget::bindTexture(QImage(filename), GL_TEXTURE_2D);
-  QImage image = QGLWidget::convertToGLFormat(QImage(filename.c_str()));
-    if(image.isNull())
-    {
-        qErrnoWarning("Failed to open file %s\n", filename);
-        return -1;
-    }
-    else
-    {
-        glGenTextures(1, &textureIndex);
-        glBindTexture(GL_TEXTURE_2D, textureIndex);
-        int textureType;
-        if(image.hasAlphaChannel())
-            textureType = GL_RGBA;
-        else
-            textureType = GL_RGB;
-        glTexImage2D(GL_TEXTURE_2D, 0, textureType, image.width(), image.height(), 0, textureType, GL_UNSIGNED_BYTE, image.bits());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-        /*QGLWidget *qgl;
-        *texture = qgl->bindTexture(QImage(filename), GL_TEXTURE_2D);*/
-      return textureIndex;
-    }
-}
-
