@@ -5,15 +5,19 @@
 std::shared_ptr<Level> createLevel1()
 {
   std::shared_ptr<Level> level = std::make_shared<Level>();
+  level->majAxis = Y;
+  const Vector3D gravity = level->majAxis * -9.8f;
 
   std::shared_ptr<object_sphere> sphere = std::make_shared<object_sphere>(2.0f, .55f);
   sphere->mass->pos = Vector3D(-1.0f,1.5f,0.0f);
+  sphere->setGravity(gravity);
   level->objects.addObject(sphere);
 //            allObj.addSpheres(2.0f, .55f,   Vector3D(-1.0f,1.5f,0.0f));
 
   level->player = std::make_shared<object_sphere>(1.0f, .35f);
   level->player->mass->pos = Vector3D(1, 2, 1.5);
   level->player->mass->elas = .5;
+  level->player->setGravity(gravity);
 //            allObj.addSpheres(1.0f, .35f,   Vector3D(1, 2, 1.5));
   level->objects.addObject(level->player);
 
@@ -21,6 +25,7 @@ std::shared_ptr<Level> createLevel1()
     {
         sphere = std::make_shared<object_sphere>(std::abs(.70f*cos((float)rand())), std::abs(.50f*cos((float)rand()))+.1f);
         sphere->mass->pos = Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand()));
+        sphere->setGravity(gravity);
         sphere->texture.color = Vector3D(rand()%256, rand()%256, rand()%256);
         level->addObject(sphere);
 //                allObj.addSpheres(fabs(.70f*cos((float)rand())), fabs(.50f*cos((float)rand()))+.1f,  Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand())));
@@ -33,7 +38,6 @@ std::shared_ptr<Level> createLevel1()
       //level1.player1 = ball;
       //ball->texture = balltxr;
 
-  level->majAxis = Y;
 //  level->objects.majorAxis = majAxis;
 
   matrix2D3 basis;

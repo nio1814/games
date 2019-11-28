@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 if(MSVC)
   add_compile_options(/W1 /WX)
 else()
-  add_compile_options(-Wall -Wextra -Werror)
+  add_compile_options(-Wall -Wextra -Werror -fsanitize=address)
 endif()
 
 add_subdirectory(lib/src)

@@ -22,6 +22,7 @@ enum gameMode{gmMENU, gmPLAY};
 class gameObj
 {
 private:
+  using CommandFunction = void* (gameObj* gm, Mouse* ms);
     int numLevels();
 
 	int numPlayers;

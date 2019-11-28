@@ -40,7 +40,7 @@ public:
 
     std::shared_ptr<Object> player;
     CameraPoints cameras;
-    Vector3D majAxis;
+    Vector3D majorAxis;
     Objects objects;
 private:
     std::shared_ptr<CameraPoint> camera();
