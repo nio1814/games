@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-class object_plane;
+class Plane;
 
 class Objects
 {
@@ -19,8 +19,8 @@ public:
 
   //virtual void addObject(int numOfMasses, float m);
   Object::Pointer addObject(Object::Pointer object);
-  std::shared_ptr<object_plane> addPlane(const float mass, const float width, const float length, const float phi, const float theta, const Vector3D majorAxis);
-  std::shared_ptr<object_plane> addPlane(const float width, const float length, const Vector3D position, const Vector3D normal, const matrix2D3 basis);
+  std::shared_ptr<Plane> addPlane(const float mass, const float width, const float length, const float phi, const float theta, const Vector3D majorAxis);
+  std::shared_ptr<Plane> addPlane(const float width, const float length, const Vector3D position, const Vector3D normal, const matrix2D3 basis);
 
   Vector3D majorAxis;
   matrix2D3 m_basis;

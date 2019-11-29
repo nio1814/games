@@ -5,7 +5,7 @@
 #include "plane.h"
 
 
-class object_planes : public Objects<object_plane>
+class object_planes : public Objects<Plane>
 {
   public:
   //object_plane *objs;

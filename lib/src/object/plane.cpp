@@ -2,7 +2,7 @@
 
 const float EPSILON = 1E-7;
 
-object_plane::object_plane(float mass, float wid, float len, float phi, float theta, Vector3D majorAxis) : Object(mass),
+Plane::Plane(float mass, float wid, float len, float phi, float theta, Vector3D majorAxis) : Object(mass),
   width(wid), length(len), angles(Vector2D(phi, theta))
 {
 //	object_plane();
@@ -10,7 +10,7 @@ object_plane::object_plane(float mass, float wid, float len, float phi, float th
   makeBase(majorAxis);
 }
 
-object_plane::object_plane(float width, float length, Vector3D position, Vector3D norm, matrix2D3 basis) : Object(1),
+Plane::Plane(float width, float length, Vector3D position, Vector3D norm, matrix2D3 basis) : Object(1),
   width(width), length(length)//, m_basis(basis)
 {
   norm.unitize();
@@ -21,7 +21,7 @@ object_plane::object_plane(float width, float length, Vector3D position, Vector3
   orient(norm);
 }
 
-object_plane& object_plane::operator = (const object_plane& plane)
+Plane& Plane::operator = (const Plane& plane)
 {
     Object::operator =(plane);
 
@@ -35,13 +35,13 @@ object_plane& object_plane::operator = (const object_plane& plane)
     return *this;
 }
 
-void object_plane::setNormal(const Vector3D normal, const Vector3D majorAxis)
+void Plane::setNormal(const Vector3D normal, const Vector3D majorAxis)
 {
   this->normal = normal;
   this->makeBase(majorAxis);
 }
 
-void object_plane::draw()
+void Plane::draw()
 {
   Vector3D v;							//keeps coords of vertex for drawing
   //int numTexture = texture->numLayers;
@@ -82,7 +82,7 @@ void object_plane::draw()
   glDisable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
 }
 
-void object_plane::makeBase(const Vector3D& majorAxis)
+void Plane::makeBase(const Vector3D& majorAxis)
 {
   if(majorAxis == Z)
   {
@@ -108,7 +108,7 @@ void object_plane::makeBase(const Vector3D& majorAxis)
   return;
 }
 
-void object_plane::flipBase()
+void Plane::flipBase()
 {
   Vector3D temp;
   temp = lvec;
@@ -118,7 +118,7 @@ void object_plane::flipBase()
   return;
 }
 
-void object_plane::orient(const Vector3D& norm)
+void Plane::orient(const Vector3D& norm)
 {
   normal = norm;
   Vector3D sphericalCoords = basis.cartesianToSpherical(norm);
@@ -147,7 +147,7 @@ void object_plane::orient(const Vector3D& norm)
   return detect;
 }*/
 
-void object_plane::rotate(const Vector3D &axis, GLfloat degrees)
+void Plane::rotate(const Vector3D &axis, GLfloat degrees)
 {
   normal = normal.rotate3D(axis, degrees);
   wvec = wvec.rotate3D(axis, degrees);
@@ -156,20 +156,20 @@ void object_plane::rotate(const Vector3D &axis, GLfloat degrees)
     return;
 }
 
-void object_plane::rotateAroundNormal(GLfloat degrees)
+void Plane::rotateAroundNormal(GLfloat degrees)
 {
   return rotate(normal, degrees);
 }
 
-bool object_plane::detectCollision(std::shared_ptr<const Object> object)
+bool Plane::detectCollision(std::shared_ptr<const Object> object)
 {
   if(this->type != object->type)
     return false;
 
-  return this->detectCollision(std::dynamic_pointer_cast<const object_plane>(object));
+  return this->detectCollision(std::dynamic_pointer_cast<const Plane>(object));
 }
 
-bool object_plane::inPlane(const Vector3D *v)
+bool Plane::inPlane(const Vector3D *v)
 {
   bool in = false;
   Vector3D planeBasisv = v->decompose(wvec, lvec, normal);
@@ -178,7 +178,7 @@ bool object_plane::inPlane(const Vector3D *v)
   return in;
 }
 
-bool object_plane::atSurface(const Vector3D *v)
+bool Plane::atSurface(const Vector3D *v)
 {
   bool atSurf = false;
   Vector3D planeBasisv = v->decompose(wvec, lvec, normal);
@@ -188,7 +188,7 @@ bool object_plane::atSurface(const Vector3D *v)
   return atSurf;
 }
 
-bool object_plane::isAbove(const Vector3D *v) const
+bool Plane::isAbove(const Vector3D *v) const
 {
   bool above = false;
   Vector3D planeBasisv = v->decompose(wvec, lvec, normal);
@@ -198,7 +198,7 @@ bool object_plane::isAbove(const Vector3D *v) const
   return above;
 }
 
-std::shared_ptr<object_plane> copyPlane(std::shared_ptr<const object_plane> plane)
+std::shared_ptr<Plane> copyPlane(std::shared_ptr<const Plane> plane)
 {
-  return std::make_shared<object_plane>(*plane);
+  return std::make_shared<Plane>(*plane);
 }

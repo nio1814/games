@@ -38,7 +38,7 @@ bool		fullscreen=true;							// Fullscreen Flag Set To Fullscreen Mode By Defaul
 //object_holder allObjects;
 //object_holder menu;
 
-object_plane* floors;
+Plane* floors;
 //object_sphere* ball = new object_sphere(1.0f, .35f);
 //object_plane* floors = new object_plane(1,4,4,0);
 //level level1;

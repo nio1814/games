@@ -90,7 +90,7 @@ void gameObj::setPlayerShape(Shape pShape)
 			players = new object_sphere[MAXPLAYERS];
 			break;
 		case PLANE:
-			players = new object_plane[MAXPLAYERS];
+      players = new Plane[MAXPLAYERS];
 			break;
 		default:
 			break;
@@ -99,10 +99,10 @@ void gameObj::setPlayerShape(Shape pShape)
 	return;
 }
 
-void gameObj::addPlayer(object_plane* plane)
+void gameObj::addPlayer(Plane* plane)
 {
 	setPlayerShape(PLANE);
-	planePlayer = static_cast<object_plane*>(plane);
+  planePlayer = static_cast<Plane*>(plane);
 	
 
 	return;

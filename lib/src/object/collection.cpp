@@ -51,14 +51,14 @@ object_sphere* object_holder::addSpheres(float mass, float radius, Vector3D base
   return sphereout;
 }
 
-void object_holder::addPlane(const object_plane &plane)
+void object_holder::addPlane(const Plane &plane)
 {
     planes.addObject(plane);
 }
 
-object_plane* object_holder::addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir, float distBetween)
+Plane* object_holder::addPlanes(int numObjs, float mass, float wid, float len, float ph, float th, Vector3D basePos, Vector3D offDir, float distBetween)
 {
-  object_plane* planeout = NULL;
+  Plane* planeout = NULL;
 
   planes.addObjects(numObjs, mass, wid, len, ph, th, this, basePos, offDir, distBetween, majorAxis);
   numObjects += numObjs;
@@ -66,9 +66,9 @@ object_plane* object_holder::addPlanes(int numObjs, float mass, float wid, float
   return planeout;
 }
 
-object_plane* object_holder::addPlanes(float mass, float wid, float len, float ph, float th, Vector3D basePos)
+Plane* object_holder::addPlanes(float mass, float wid, float len, float ph, float th, Vector3D basePos)
 {
-  object_plane* planeout = NULL;
+  Plane* planeout = NULL;
 
   planes.addObjects(1, mass, wid, len, ph, th, this, basePos, Vector3D(0,0,0), 0, majorAxis);
   numObjects++;
@@ -231,7 +231,7 @@ object_sphere* object_holder::getSphere(int index) const
 //    return &spheres[index];
 }
 
-object_plane* object_holder::getPlane(int index) const
+Plane* object_holder::getPlane(int index) const
 {
   return planes.objs[index];
 }

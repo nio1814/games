@@ -47,7 +47,7 @@ std::shared_ptr<Level> createLevel1()
   level->objects.m_basis = basis;
 
 //  level.objects.addPlanes(1,1,8,8,0,0,  Vector3D(0,0,0));
-  std::shared_ptr<object_plane> plane = level->objects.addPlane(1,8,8,0,0, Vector3D(0,0,0));
+  std::shared_ptr<Plane> plane = level->objects.addPlane(1,8,8,0,0, Vector3D(0,0,0));
               //allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
   plane->setNormal(Vector3D(0, 1, 0), level->majorAxis);
   //			allObj.setTexture(PLANE, 0, tile1txr);
@@ -62,7 +62,7 @@ std::shared_ptr<Level> createLevel1()
   //            allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
   //            allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
 //  allObj.addPlane(plane);
-  std::shared_ptr<object_plane> nextPlane = copyPlane(plane);
+  std::shared_ptr<Plane> nextPlane = copyPlane(plane);
   nextPlane->mass->pos = Vector3D(4, 1, 0);
   level->addObject(nextPlane);
 
@@ -84,7 +84,7 @@ std::shared_ptr<Level> createLevel1()
 
   //			allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
   //            allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
-  nextPlane = std::dynamic_pointer_cast<object_plane>(level->objects.last());
+  nextPlane = std::dynamic_pointer_cast<Plane>(level->objects.last());
   nextPlane->setPosition(Vector3D(3,1,-4));
   nextPlane->orient(Z);
 //  allObj.addPlane(plane);

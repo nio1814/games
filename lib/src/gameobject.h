@@ -27,7 +27,7 @@ private:
 
 	int numPlayers;
 	void* players;
-	object_plane* planePlayer;
+  Plane* planePlayer;
 	Shape playerShape;
 	
   std::vector<std::shared_ptr<Level>> levels;
@@ -57,7 +57,7 @@ public:
   std::shared_ptr<Level> currentLevel();
 	bool unloadLevel();
 	void setPlayerShape(Shape pShape);
-	void addPlayer(object_plane *plane);
+  void addPlayer(Plane *plane);
     void run(Mouse* ms, void (*commandFcn)(gameObj* gm, Mouse* ms), GLfloat delta);
   void render();
 };

@@ -13,17 +13,17 @@ Object::Pointer Objects::addObject(Object::Pointer object)
   return object;
 }
 
-std::shared_ptr<object_plane> Objects::addPlane(const float mass, const float width, const float length, const float phi, const float theta, const Vector3D majorAxis)
+std::shared_ptr<Plane> Objects::addPlane(const float mass, const float width, const float length, const float phi, const float theta, const Vector3D majorAxis)
 {
-  std::shared_ptr<object_plane> plane = std::make_shared<object_plane>(mass, width, length, phi, theta, majorAxis);
+  std::shared_ptr<Plane> plane = std::make_shared<Plane>(mass, width, length, phi, theta, majorAxis);
   this->addObject(plane);
 
   return plane;
 }
 
-std::shared_ptr<object_plane> Objects::addPlane(const float width, const float length, const Vector3D position, const Vector3D normal, const matrix2D3 basis)
+std::shared_ptr<Plane> Objects::addPlane(const float width, const float length, const Vector3D position, const Vector3D normal, const matrix2D3 basis)
 {
-  std::shared_ptr<object_plane> plane = std::make_shared<object_plane>(width, length, position, normal, basis);
+  std::shared_ptr<Plane> plane = std::make_shared<Plane>(width, length, position, normal, basis);
   this->addObject(plane);
 
   return plane;

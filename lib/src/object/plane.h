@@ -4,7 +4,7 @@
 #include "object.h"
 
 
-class object_plane : public Object
+class Plane : public Object
 {
 public:
   float width, length;
@@ -13,11 +13,11 @@ public:
 //	bool touching;
 
 //	object_plane();
-  object_plane(float mass=1, float wid=1, float len=1, float phi=0, float theta=0, Vector3D majorAxis=Z);
-  object_plane(float width, float length, Vector3D position, Vector3D normal=Z, Vector3D basisAxis=Z);
-  object_plane(float width, float length, Vector3D position, Vector3D normal, matrix2D3 basis);
+  Plane(float mass=1, float wid=1, float len=1, float phi=0, float theta=0, Vector3D majorAxis=Z);
+  Plane(float width, float length, Vector3D position, Vector3D normal=Z, Vector3D basisAxis=Z);
+  Plane(float width, float length, Vector3D position, Vector3D normal, matrix2D3 basis);
 
-    object_plane& operator = (const object_plane& plane);
+  Plane& operator = (const Plane& plane);
 
   void setNormal(const Vector3D normal, const Vector3D majorAxis);
   void flipBase();
@@ -37,6 +37,6 @@ private:
   bool isAbove(const Vector3D *v) const;
 };
 
-std::shared_ptr<object_plane> copyPlane(std::shared_ptr<const object_plane> plane);
+std::shared_ptr<Plane> copyPlane(std::shared_ptr<const Plane> plane);
 
 #endif // PLANE_H
