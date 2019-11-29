@@ -161,6 +161,14 @@ void object_plane::rotateAroundNormal(GLfloat degrees)
   return rotate(normal, degrees);
 }
 
+bool object_plane::detectCollision(std::shared_ptr<const Object> object)
+{
+  if(this->type != object->type)
+    return false;
+
+  return this->detectCollision(std::dynamic_pointer_cast<const object_plane>(object));
+}
+
 bool object_plane::inPlane(const Vector3D *v)
 {
   bool in = false;

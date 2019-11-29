@@ -15,7 +15,8 @@ public:
 
   virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
   virtual void draw();
-  virtual bool detectCollision(const std::shared_ptr<object_sphere> obj2);
+  virtual bool detectCollision(const std::shared_ptr<const Object> object);
+  virtual bool detectCollision(const std::shared_ptr<const object_sphere> sphere);
 //  virtual bool detectCollision(const object_plane* plane);
   //virtual bool doCollisions(const object_holder *allObjs);
   virtual void collide(const object_sphere *sphere2);

@@ -144,7 +144,15 @@ void object_sphere::draw()
   glDisable(GL_TEXTURE_2D);							// Disable 2D Texture Mapping
 }
 
-bool object_sphere::detectCollision(const std::shared_ptr<object_sphere> obj2)
+bool object_sphere::detectCollision(const std::shared_ptr<const Object> object)
+{
+  if(object->type!=this->type)
+    return false;
+
+  return this->detectCollision(std::dynamic_pointer_cast<const object_sphere>(object));
+}
+
+bool object_sphere::detectCollision(const std::shared_ptr<const object_sphere> sphere)
 {
   bool detect = false;
 
@@ -153,13 +161,13 @@ bool object_sphere::detectCollision(const std::shared_ptr<object_sphere> obj2)
 
 //  if(!isSame(self, obj2->self))
 //  {
-    vecToSphere = mass->pos - obj2->mass->pos;
+    vecToSphere = mass->pos - sphere->mass->pos;
     dist = vecToSphere.length();
 
-    if(dist < (radius + obj2->radius))
+    if(dist < (radius + sphere->radius))
     {
       detect = true;
-      m_touchedObjects.push_back(obj2);
+      touchedObjects.push_back(sphere);
       //p.index = sidx;
       //p.shape = SPHERE;
       //p.holder = allobj;

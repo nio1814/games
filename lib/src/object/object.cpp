@@ -59,7 +59,7 @@ Object& Object::operator = (const Object& obj)
     bVisible = obj.bVisible;
     bMovable = obj.bMovable;
 
-    m_touchedObjects = obj.m_touchedObjects;
+    touchedObjects = obj.touchedObjects;
 
     return *this;
 }
@@ -73,7 +73,7 @@ Object::~Object()
 
 void Object::init()								// this method will call the init() method of every mass
 {
-	m_touchedObjects.clear();
+	touchedObjects.clear();
 	mass->init();						// call init() method of the mass
   if(bGravityOn)
   {

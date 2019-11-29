@@ -24,9 +24,12 @@ public:
   void rotate(const Vector3D& axis, GLfloat degrees);
   void orient(const Vector3D& norm);
   void rotateAroundNormal(GLfloat degrees);
+
+  virtual bool detectCollision(std::shared_ptr<const Object> object);
 private:
   virtual void draw();
   //virtual bool doCollisions(const object_holder *allObjs);
+
   //make length and width vectors by rotating from major axis
   void makeBase(const Vector3D &majorAxis);
   bool inPlane(const Vector3D *v);

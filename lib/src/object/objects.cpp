@@ -68,6 +68,9 @@ void Objects::detectCollisions()
     for (int index2 = index1 + 1; index2 < this->objects.size(); index2++)
     {
       std::shared_ptr<Object> object2 = this->objects[index2];
+      bool touching;
+      if (object1->type == object2->type)
+        touching = object1->detectCollision(object2);
     }
   }
 }

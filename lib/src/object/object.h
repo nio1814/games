@@ -90,7 +90,7 @@ public:
 
 //	virtual void operate(const object_holder *allObjs);
 	virtual void* getProperty(int idx, dataType &type);
-//	virtual bool detectCollision(const object_holder* objs);
+	virtual bool detectCollision(std::shared_ptr<const Object> object) = 0;
 //  virtual bool detectCollision(const object_sphere* obj2)
 //  {
 //    Q_UNUSED(obj2);
@@ -124,7 +124,7 @@ protected:
   bool hasTexture();
 
   matrix2D3 basis;
-  std::vector<Pointer> m_touchedObjects;
+  std::vector<std::shared_ptr<const Object>> touchedObjects;
 private:
   bool isTouching;							//object is touching something
   bool isTouching3ds;
