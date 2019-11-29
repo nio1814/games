@@ -30,7 +30,6 @@ extern GLfloat gravityAcc;
 
 
 #define MAXTEXTURE 100
-enum Shape{PLANE, SPHERE, LINE, BOX, TRI};
 #define NUMSHAPES 5
 enum BoxSide{bTOP, bBOTTOM, bLEFT, bRIGHT, bFRONT, bBACK};
 enum triPoint{triMID, triEND1, triEND2};
@@ -59,6 +58,8 @@ class Object
 {
 public:
   using Pointer = std::shared_ptr<Object>;
+  using ConstPointer = std::shared_ptr<const Object>;
+  enum Shape{PLANE, SPHERE, LINE, BOX, TRI};
 
   void setPosition(Vector3D position);
   void setGravity(const Vector3D gravity);
@@ -89,8 +90,9 @@ public:
     }
 
 //	virtual void operate(const object_holder *allObjs);
-	virtual void* getProperty(int idx, dataType &type);
-	virtual bool detectCollision(std::shared_ptr<const Object> object) = 0;
+  virtual void* getProperty(int idx, dataType &shape);
+	virtual bool detectCollision(std::shared_ptr<Object> object) = 0;
+  bool touching(ConstPointer object);
 //  virtual bool detectCollision(const object_sphere* obj2)
 //  {
 //    Q_UNUSED(obj2);
@@ -110,21 +112,24 @@ public:
 //  }
 
 //	virtual void collisions();
-  virtual void collide(const Object* otherObject){Q_UNUSED(otherObject)}
+  virtual void collide(ConstPointer object) = 0;
 //	virtual void collide(const object_sphere* sphere){};
 //	virtual void collide(const object_plane* plane){};
 //	virtual void collide(const object_line* line){};
+  void addTouchedObject(Pointer object);
+  void clearTouchedObjects();
+  
   Mass* mass;									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
   bool bDraw;
   bool bMovable;								//object can move
-  Shape type;
+  Shape shape;
   Vector3D moveForce;							//force acting on object
   Texture texture;
+  std::vector<std::shared_ptr<const Object>> touchedObjects;
 protected:
   bool hasTexture();
 
   matrix2D3 basis;
-  std::vector<std::shared_ptr<const Object>> touchedObjects;
 private:
   bool isTouching;							//object is touching something
   bool isTouching3ds;

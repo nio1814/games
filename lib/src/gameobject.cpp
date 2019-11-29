@@ -80,16 +80,16 @@ void gameObj::addLevel(std::shared_ptr<Level> level)
 	return success;
 }*/
 
-void gameObj::setPlayerShape(Shape pShape)
+void gameObj::setPlayerShape(Object::Shape pShape)
 {
 	playerShape = pShape;
 	
 	switch(pShape)
 	{
-		case SPHERE:
+    case Object::SPHERE:
 			players = new object_sphere[MAXPLAYERS];
 			break;
-		case PLANE:
+    case Object::PLANE:
       players = new Plane[MAXPLAYERS];
 			break;
 		default:
@@ -101,7 +101,7 @@ void gameObj::setPlayerShape(Shape pShape)
 
 void gameObj::addPlayer(Plane* plane)
 {
-	setPlayerShape(PLANE);
+  setPlayerShape(Object::PLANE);
   planePlayer = static_cast<Plane*>(plane);
 	
 

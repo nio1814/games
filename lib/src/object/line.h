@@ -19,7 +19,7 @@ public:
   virtual void draw();
   virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
   //virtual bool doCollisions(const object_holder *allObjs);
-  virtual void* getProperty(int idx, dataType &type);
+  virtual void* getProperty(int idx, dataType &shape);
   void initGeo();
   void calcGeo();
   Vector3D calcVertexVel(int vnum);

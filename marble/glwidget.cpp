@@ -50,7 +50,7 @@ static GLfloat LightPos[] = {4.0f, 4.0f, 6.0f, 1.0f};	// Light Position
 
 //GLUquadricObj	*q;										// Quadratic For Drawing A Sphere
 
-Vector2D WindowSize = Vector2D(1024,768);
+Vector2D WindowSize = Vector2D(1024, 768);
 GLfloat		xrot		=  0.0f;						// X Rotation
 GLfloat		yrot		=  0.0f;						// Y Rotation
 GLfloat		xrotspeed	=  0.0f;						// X Rotation Speed
@@ -105,7 +105,7 @@ QSize GLWidget::minimumSizeHint() const
 
 QSize GLWidget::sizeHint() const
 {
-	return QSize(500,300);
+	return QSize(1000,700);
 }
 
 void GLWidget::resizeGL(GLsizei w, GLsizei h)		// Resize And Initialize The GL Window

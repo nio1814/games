@@ -77,8 +77,7 @@ public:
 
 	Vector3D operator- () const;						// operator- is used to set this Vector3D's x, y, and z to the negative of them.
 	float length() const;								// length() returns the length of this Vector3D		   		
-	float dot(const Vector3D *v) const;						//calculate dot product
-	float dot(Vector3D v) const;						//calculate dot product
+  float dot(const Vector3D &v) const;						//calculate dot product
 	float angle(const Vector3D &v);					//calculate the angle between another vector(degrees)
 	Vector3D proj(const Vector3D &v) const;
 	Vector3D proj(const Vector3D &v1, const Vector3D &v2) const;
@@ -127,7 +126,7 @@ public:
 	matrix2D3(const Vector3D &r1, const  Vector3D &r2, const  Vector3D &r3);
 	matrix2D3& operator= (matrix2D3 m);
 	
-	Vector3D transform(const Vector3D* vec);
+  Vector3D transform(const Vector3D &vec);
 	Vector3D cartesianToSpherical(Vector3D cartesian);
 };
 

@@ -68,13 +68,13 @@ void menuTree::addLeaf(void* input, dataType tp, string name)
 				ptr[numLeaf].val = input;
 				ptr[numLeaf].ID = name.append(" (object)");
 				ptr[numLeaf].addLeaf(objectPtr->mass, tpMASS, " mass");
-				ptr[numLeaf].addLeaf(&objectPtr->type, tpSHAPE, " object type");
+				ptr[numLeaf].addLeaf(&objectPtr->shape, tpSHAPE, " object type");
 				ptr[numLeaf].addLeaf(&objectPtr->bMovable, tpBOOL, " movable");
-				switch(objectPtr->type)
+				switch(objectPtr->shape)
 				{
-					case SPHERE:
-					case PLANE:
-					case LINE:
+          case Object::SPHERE:
+					case Object::PLANE:
+					case Object::LINE:
 					default:
 						break;
 				}

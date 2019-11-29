@@ -10,8 +10,6 @@ class Objects
 public:
     int size() const;								// number of masses in this container
     Object::Pointer last();
-
-  Shape objType;
 //	QVector<QPointer<T> > objs;
 
 //  Objects();

@@ -25,7 +25,10 @@ public:
   void orient(const Vector3D& norm);
   void rotateAroundNormal(GLfloat degrees);
 
-  virtual bool detectCollision(std::shared_ptr<const Object> object);
+  virtual bool detectCollision(std::shared_ptr<Object> object);
+  virtual bool detectCollision(std::shared_ptr<Plane> plane);
+
+  virtual void collide(ConstPointer object);
 private:
   virtual void draw();
   //virtual bool doCollisions(const object_holder *allObjs);

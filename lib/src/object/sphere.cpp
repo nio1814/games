@@ -73,7 +73,7 @@ void drawSphere(int subDivisions)
 object_sphere::object_sphere(float mass, float rad, const Vector3D position) : Object(mass),
   radius(rad)
 {
-  type = SPHERE;
+  shape = SPHERE;
     /*quad = gluNewQuadric();								// Create A New Quadratic
   gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
     gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
@@ -144,9 +144,9 @@ void object_sphere::draw()
   glDisable(GL_TEXTURE_2D);							// Disable 2D Texture Mapping
 }
 
-bool object_sphere::detectCollision(const std::shared_ptr<const Object> object)
+bool object_sphere::detectCollision(const std::shared_ptr<Object> object)
 {
-  if(object->type!=this->type)
+  if(object->shape != this->shape)
     return false;
 
   return this->detectCollision(std::dynamic_pointer_cast<const object_sphere>(object));
@@ -177,34 +177,11 @@ bool object_sphere::detectCollision(const std::shared_ptr<const object_sphere> s
   return detect;
 }
 
-//bool object_sphere::detectCollision(const object_plane *plane)
-//{
-//  bool detect = false;
-
-//  Vector3D vecToPlane = mass->pos - plane->mass->pos;
-//  GLfloat normDist = fabs(vecToPlane.dot(plane->normal));
-//          //normToPlane = normToPlane.length();
-
-//  if(normDist <= radius)
-//  {
-//     GLfloat wDist = fabs(vecToPlane.dot(plane->wvec));
-//    if(wDist<=.5f*plane->width)
-//    {
-//      GLfloat lDist = fabs(vecToPlane.dot(plane->lvec));
-//      if(lDist<=.5f*plane->length)
-//      {
-//        detect = true;
-//        m_touchedObjects.append(plane);
-////                p.index = pidx;
-////                p.shape = plane->objType;
-////                p.holder = allobj;
-//        //p.holder = reinterpret_cast<object_holder*>(allobj);
-//      }
-//    }
-//  }
-
-//  return detect;
-//}
+void object_sphere::collide(Object::ConstPointer object)
+{
+  if(object->shape == Object::SPHERE)
+    this->collide(std::dynamic_pointer_cast<const object_sphere>(object));
+}
 
 /*bool object_sphere::doCollisions(const object_holder *allObjs)
 {
@@ -225,7 +202,7 @@ bool object_sphere::detectCollision(const std::shared_ptr<const object_sphere> s
   return detect;
 }*/
 
-void object_sphere::collide(const object_sphere *sphere2)
+void object_sphere::collide(std::shared_ptr<const object_sphere> sphere)
 {
   Mass *mass1, *mass2;
   GLfloat m1, m2, v1normMag;
@@ -233,17 +210,17 @@ void object_sphere::collide(const object_sphere *sphere2)
   Vector3D sforce = mass->force;
 
   mass1 = mass;
-  mass2 = sphere2->mass;
+  mass2 = sphere->mass;
 
   m1 = mass1->m;
   m2 = mass2->m;
   v1 = mass1->vel;
   v2 = mass2->vel;
-  v1normMag = fabs(v1.dot(&sphereNorm));
+  v1normMag = fabs(v1.dot(sphereNorm));
   sphereNorm = (mass1->pos - mass2->pos);
   sphereNorm/sphereNorm.length();
 
-  if(sphere2->bMovable)
+  if(sphere->bMovable)
     v1 = v1*((m1-m2)/(m1+m2)) + v2*(2*m2/(m1+m2));
   else
     v1 += sphereNorm*(mass1->elas)*v1normMag*2;
@@ -256,59 +233,8 @@ void object_sphere::collide(const object_sphere *sphere2)
 
   mass1->velnew = v1;
   mass = mass1;
-  sforce += sphereNorm*(fabs(sphereNorm.dot(&sforce)));
+  sforce += sphereNorm*(fabs(sphereNorm.dot(sforce)));
   mass->forcenew = sforce;
 
   return;
 }
-
-//void object_sphere::collide(const object_plane *plane)
-//{
-//  GLfloat MINBOUNCEVEL = .1f;
-
-//  Mass *mass1, *mass2;
-//  GLfloat m1, m2, v1normMag;
-//  Vector3D v1, v2, vpara, planeNorm;
-//  int awayDir;
-
-//  Vector3D sforce = mass->force;
-
-//  mass1 = mass;
-//  mass2 = plane->mass;
-
-//  m1 = mass1->m;
-//  m2 = mass2->m;
-//  v1 = mass1->vel;
-//  v2 = mass2->vel;
-
-//  /*if(plane->isAbove(&mass->pos))
-//    planeNorm = plane->normal;
-//  else
-//    planeNorm = plane->normal*-1;*/
-//  planeNorm = (mass1->pos - mass2->pos).proj(plane->normal);
-//  planeNorm.unitize();
-//  v1normMag = fabs(v1.dot(&planeNorm));
-
-//  if(fabs(v1.length()) < MINBOUNCEVEL)
-//    v1 -= v1;
-//  else if(plane->bMovable)
-//    v1 = v1*((m1-m2)/(m1+m2)) + v2*(2*m2/(m1+m2));
-//  else
-//    v1 += planeNorm*(1+mass1->elas)*v1normMag;
-
-//  mass1->velnew = v1;
-//  mass = mass1;
-//  sforce += planeNorm*(fabs(planeNorm.dot(&sforce)));
-//  mass->forcenew = sforce;
-
-//  mass->pos += planeNorm*(radius - planeNorm.dot(mass1->pos-mass2->pos));
-
-//  vpara = v1 - v1.proj(Y);
-
-////	sphere->xrotspeed = vpara.dot(&Vector3D(0,0,1))/(sphere->radius*2*PI);
-//  mass->avelnew = vpara.dot(Vector3D(0,0,1))/(radius*2*PI);
-////	sphere->zrotspeed = vpara.dot(&Vector3D(-1,0,0))/(sphere->radius*2*PI);
-//  mass->avelnew += vpara.dot(Vector3D(-1,0,0))/(radius*2*PI);
-
-//  return;
-//}

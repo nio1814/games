@@ -142,12 +142,7 @@ float Vector3D::length() const							// length() returns the length of this Vect
 	return sqrtf(x*x + y*y + z*z);
 }
 
-float Vector3D::dot(const Vector3D *v) const							// length() returns the length of this Vector3D
-{
-	return x*v->x + y*v->y + z*v->z;
-}
-
-float Vector3D::dot(Vector3D v)	const							// length() returns the length of this Vector3D
+float Vector3D::dot(const Vector3D& v)	const							// length() returns the length of this Vector3D
 {
 	return x*v.x + y*v.y + z*v.z;
 }			   		
@@ -218,7 +213,7 @@ Vector3D Vector3D::rotate3D(const Vector3D &vin, float angle) const
 		//T = matrix2D3(&Vector3D(cosang,0,-sinang), &Vector3D(0,1,0), &Vector3D(sinang,0,cosang));
 	}
 
-	vout = T.transform(this);
+  vout = T.transform(*this);
 
 	return vout;
 }
@@ -614,7 +609,7 @@ matrix2D3::matrix2D3(const Vector3D &r1, const Vector3D &r2, const Vector3D &r3)
 	A[2] = r3;
 }
 	
-Vector3D matrix2D3::transform(const Vector3D* in)
+Vector3D matrix2D3::transform(const Vector3D& in)
 {
 	Vector3D out;
 

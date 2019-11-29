@@ -6,7 +6,7 @@ object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) :
 {
 //	Object();
 //	object_line();
-  type = LINE;
+  shape = LINE;
   vertex[0] = v1;
   vertex[1] = v2;
   width = 15;

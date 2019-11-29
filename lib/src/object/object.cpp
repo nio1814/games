@@ -42,7 +42,7 @@ Object::Object(const Object &obj)
 Object& Object::operator = (const Object& obj)
 {
     mass = new Mass(*obj.mass);									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
-    type = obj.type;
+    shape = obj.shape;
     texture = obj.texture;
     moveForce = obj.moveForce;							//force acting on object
     isTouching = obj.isTouching;							//object is touching something
@@ -183,6 +183,22 @@ void* Object::getProperty(int idx, dataType &type)
 	}
 
   return ptr;
+}
+
+bool Object::touching(ConstPointer object)
+{
+  return std::find(this->touchedObjects.cbegin(), this->touchedObjects.cend(), object) != this->touchedObjects.cend();
+}
+
+void Object::addTouchedObject(Pointer object)
+{
+  if (!this->touching(object))
+    this->touchedObjects.push_back(object);
+}
+
+void Object::clearTouchedObjects()
+{
+  this->touchedObjects.clear();
 }
 
 bool Object::hasTexture()

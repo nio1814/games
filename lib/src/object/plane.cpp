@@ -6,7 +6,7 @@ Plane::Plane(float mass, float wid, float len, float phi, float theta, Vector3D 
   width(wid), length(len), angles(Vector2D(phi, theta))
 {
 //	object_plane();
-  type = PLANE;
+  shape = PLANE;
   makeBase(majorAxis);
 }
 
@@ -15,7 +15,7 @@ Plane::Plane(float width, float length, Vector3D position, Vector3D norm, matrix
 {
   norm.unitize();
   normal = norm;
-  type = PLANE;
+  shape = PLANE;
   mass->pos = position;
   basis = basis;
   orient(norm);
@@ -161,12 +161,23 @@ void Plane::rotateAroundNormal(GLfloat degrees)
   return rotate(normal, degrees);
 }
 
-bool Plane::detectCollision(std::shared_ptr<const Object> object)
+bool Plane::detectCollision(std::shared_ptr<Object> object)
 {
-  if(this->type != object->type)
+  if(this->shape != object->shape)
     return false;
 
-  return this->detectCollision(std::dynamic_pointer_cast<const Plane>(object));
+  return this->detectCollision(std::dynamic_pointer_cast<Plane>(object));
+}
+
+bool Plane::detectCollision(std::shared_ptr<Plane> plane)
+{
+  Q_UNUSED(plane);
+  return false;
+}
+
+void Plane::collide(Object::ConstPointer object)
+{
+  Q_UNUSED(object);
 }
 
 bool Plane::inPlane(const Vector3D *v)
