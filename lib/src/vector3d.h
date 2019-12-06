@@ -9,7 +9,9 @@
 
 **************************************************************************/
 
+#include <vector>
 #include <math.h>
+
 
 class QVector3D;
 
@@ -58,7 +60,7 @@ public:
 	float z;									// the z value of this Vector3D
 
 	Vector3D();									// Constructor to set x = y = z = 0
-
+  Vector3D(const std::vector<float>& vector);
 	Vector3D(float x, float y, float z);			// Constructor that initializes this Vector3D to the intended values of x, y and z
 	Vector3D(int angx, int angy, int angz, float length);	//constructor from angles
 	Vector3D& operator= (const Vector3D &v);			// operator= sets values of v to this Vector3D. example: v1 = v2 means that values of v2 are set onto v1
@@ -77,6 +79,7 @@ public:
 
 	Vector3D operator- () const;						// operator- is used to set this Vector3D's x, y, and z to the negative of them.
 	float length() const;								// length() returns the length of this Vector3D		   		
+  bool isNull();
   float dot(const Vector3D &v) const;						//calculate dot product
 	float angle(const Vector3D &v);					//calculate the angle between another vector(degrees)
 	Vector3D proj(const Vector3D &v) const;
@@ -123,10 +126,13 @@ public:
 	Vector3D A[3];								//matrix rows
 
 	matrix2D3(){}
-	matrix2D3(const Vector3D &r1, const  Vector3D &r2, const  Vector3D &r3);
+  matrix2D3(const Vector3D &v1, const  Vector3D &v2, const  Vector3D &v3, const bool asRows);
+  matrix2D3(const std::vector<float> values);
 	matrix2D3& operator= (matrix2D3 m);
+  float at(int row, int column) const;
 	
-  Vector3D transform(const Vector3D &vec);
+  void transpose();
+  Vector3D transform(const Vector3D &vec) const;
 	Vector3D cartesianToSpherical(Vector3D cartesian);
 };
 

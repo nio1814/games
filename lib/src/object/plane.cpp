@@ -2,44 +2,61 @@
 
 const float EPSILON = 1E-7;
 
-Plane::Plane(float mass, float wid, float len, float phi, float theta, Vector3D majorAxis) : Object(mass),
-  width(wid), length(len), angles(Vector2D(phi, theta))
+Plane::Plane(float wid, float len, float phi, float theta, Vector3D axis) : Object(),
+  width(wid),
+  length(len)//, angles(Vector2D(phi, theta))
 {
 //	object_plane();
   shape = PLANE;
-  makeBase(majorAxis);
+  orient(axis, theta, phi);
 }
 
-Plane::Plane(float width, float length, Vector3D position, Vector3D norm, matrix2D3 basis) : Object(1),
+Plane::Plane(float width, float length, Vector3D position, const Vector3D &up, const Vector3D &toRight) :
+  Object(position),
   width(width), length(length)//, m_basis(basis)
 {
-  norm.unitize();
-  normal = norm;
+//  norm.unitize();
+//  normal = norm;
   shape = PLANE;
-  mass->pos = position;
-  basis = basis;
-  orient(norm);
+//  mass->pos = position;
+//  normal = normal;
+  orient(up, toRight);
 }
 
 Plane& Plane::operator = (const Plane& plane)
 {
     Object::operator =(plane);
-
+  this->quaternion = plane.quaternion;
     width = plane.width;
     length = plane.length;
-    normal = plane.normal;
-    wvec = plane.wvec;
-    lvec = plane.lvec;
-    angles = plane.angles;
+//    normal = plane.normal;
+//    wvec = plane.wvec;
+//    lvec = plane.lvec;
+//    angles = plane.angles;
 
     return *this;
 }
 
-void Plane::setNormal(const Vector3D normal, const Vector3D majorAxis)
+Vector3D Plane::normal() const
 {
-  this->normal = normal;
-  this->makeBase(majorAxis);
+  return this->quaternion.rotate(Z);
 }
+
+Vector3D Plane::right()
+{
+  return this->quaternion.rotate(X);
+}
+
+Vector3D Plane::forward()
+{
+  return this->quaternion.rotate(Y);
+}
+
+//void Plane::setNormal(const Vector3D normal, const Vector3D majorAxis)
+//{
+//  this->normal = normal;
+//  this->makeBase(majorAxis);
+//}
 
 void Plane::draw()
 {
@@ -49,7 +66,7 @@ void Plane::draw()
   glEnable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
   glEnable(GL_TEXTURE_2D);							// Enable 2D Texture Mapping
   glPushMatrix();
-  glTranslatef(mass->pos.x, mass->pos.y, mass->pos.z);
+  glTranslatef(this->pos.x, this->pos.y, this->pos.z);
 
   glPushMatrix();
 
@@ -57,79 +74,101 @@ void Plane::draw()
     glBindTexture(GL_TEXTURE_2D, this->texture.layer[0]);			// Select Texture 1 (0)
   glBegin(GL_QUADS);									// Begin Drawing A Quad
     //glNormal3f(0.0f, 1.0f, 0.0f);						// Normal Pointing Up
-    glNormal3f(normal.x, normal.y, normal.z);						// Normal Pointing Up
+    glNormal3f(this->normal().x, this->normal().y, this->normal().z);						// Normal Pointing Up
     glColor3ub(0, 59, 255);
     glTexCoord2f(0.0f, 1.0f);					// Bottom Left Of Texture
-    v = (-wvec*width + lvec*length)*.5f;
+    v = (-this->right()*width + this->forward()*length)*.5f;
     glVertex3f(v.x, v.y, v.z);					// Bottom Left Corner Of Floor
 
     glTexCoord2f(0.0f, 0.0f);					// Top Left Of Texture
-    v = (-wvec*width - lvec*length)*.5f;
+    v = (-this->right()*width - this->forward()*length)*.5f;
     glVertex3f(v.x, v.y, v.z);					// Top Left Corner Of Floor
 
     glTexCoord2f(1.0f, 0.0f);					// Top Right Of Texture
-    v = (wvec*width - lvec*length)*.5f;
+    v = (this->right()*width - this->forward()*length)*.5f;
     glVertex3f(v.x, v.y, v.z);					// Top Right Corner Of Floor
 
     glTexCoord2f(1.0f, 1.0f);					// Bottom Right Of Texture
-    v = (wvec*width + lvec*length)*.5f;
+    v = (this->right()*width + this->forward()*length)*.5f;
     glVertex3f(v.x, v.y, v.z);					// Bottom Right Corner Of Floor
   glEnd();
 
   glPopMatrix();
-    glTranslatef(-mass->pos.x, -mass->pos.y, -mass->pos.z);
+    glTranslatef(-this->pos.x, -this->pos.y, -this->pos.z);
   glPopMatrix();
   glDisable(GL_LIGHTING);								// Since We Use Blending, We Disable Lighting
 }
 
-void Plane::makeBase(const Vector3D& majorAxis)
+void Plane::orient(const matrix2D3 &basis)
 {
+  this->quaternion = Quaternion(basis).inverse();
+}
+
+void Plane::orient(const Vector3D &up, const Vector3D &toRight, Vector3D toFront)
+{
+  if(toFront.isNull())
+    toFront = Cross(up, toRight);
+  orient(matrix2D3(toRight, toFront, up, false));
+}
+
+void Plane::orient(const Vector3D& majorAxis, const float theta, const float phi)
+{
+  Vector3D toRight;
+  Vector3D toFront;
+
   if(majorAxis == Z)
   {
-    wvec = X.rotate3D(Z, angles.x);							//rotate x by phi
-    lvec = (Y.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);	//rotate y down by phi then theta
+    toRight = X.rotate3D(Z, theta);							//rotate x by phi
+    toFront = (Y.rotate3D(Y, theta)).rotate3D(toRight, phi);	//rotate y down by phi then theta
   }
   else if(majorAxis == Y)
   {
-    wvec = Z.rotate3D(Y, angles.x);
-    lvec = (X.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);
+    toRight = Z.rotate3D(Y, theta);
+    toFront = (X.rotate3D(Y, theta)).rotate3D(toRight, phi);
   }
   else if(majorAxis == X)
   {
-    wvec = Y.rotate3D(X, angles.x);
-    lvec = (Z.rotate3D(Y, angles.x)).rotate3D(wvec,angles.y);
+    toRight = Y.rotate3D(X, theta);
+    toFront = (Z.rotate3D(Y, theta)).rotate3D(toRight, phi);
   }
   else
     //msgbox('incorrect major axis');
     return;
 
-  normal = Cross(wvec, lvec);
+  const Vector3D up = Cross(toRight, toFront);
+  orient(up, toRight, toFront);
+  //  return;
+}
 
-  return;
+Vector3D Plane::basisPosition(const Vector3D point) const
+{
+  const Vector3D offset = point - this->pos;
+
+  return this->quaternion.rotate(offset);
 }
 
 void Plane::flipBase()
 {
-  Vector3D temp;
-  temp = lvec;
-  lvec = wvec;
-  wvec = temp;
+//  Vector3D temp;
+//  temp = lvec;
+//  lvec = wvec;
+//  wvec = temp;
 
-  return;
+//  return;
 }
 
-void Plane::orient(const Vector3D& norm)
-{
-  normal = norm;
-  Vector3D sphericalCoords = basis.cartesianToSpherical(norm);
-  wvec = basis.A[0].rotate3D(basis.A[1], sphericalCoords.z);
-  wvec = wvec.rotate3D(basis.A[2], sphericalCoords.y);
+//void Plane::orient(const Vector3D& norm)
+//{
+//  normal = norm;
+//  Vector3D sphericalCoords = basis.cartesianToSpherical(norm);
+//  wvec = basis.A[0].rotate3D(basis.A[1], sphericalCoords.z);
+//  wvec = wvec.rotate3D(basis.A[2], sphericalCoords.y);
 
-//	lvec = m_basis.A[1].rotate3D(m_basis.A[1], sphericalCoords.z);
-  lvec = basis.A[1].rotate3D(basis.A[2], sphericalCoords.y);
+////	lvec = m_basis.A[1].rotate3D(m_basis.A[1], sphericalCoords.z);
+//  lvec = basis.A[1].rotate3D(basis.A[2], sphericalCoords.y);
 
-  return;
-}
+//  return;
+//}
 
 /*bool object_plane::doCollisions(const object_holder *allObjs)
 {
@@ -149,16 +188,13 @@ void Plane::orient(const Vector3D& norm)
 
 void Plane::rotate(const Vector3D &axis, GLfloat degrees)
 {
-  normal = normal.rotate3D(axis, degrees);
-  wvec = wvec.rotate3D(axis, degrees);
-  lvec = lvec.rotate3D(axis, degrees);
+  Quaternion rotation(axis, degrees);
 
-    return;
 }
 
 void Plane::rotateAroundNormal(GLfloat degrees)
 {
-  return rotate(normal, degrees);
+  return this->rotate(this->normal(), degrees);
 }
 
 bool Plane::detectCollision(std::shared_ptr<Object> object)
@@ -180,33 +216,25 @@ void Plane::collide(Object::ConstPointer object)
   Q_UNUSED(object);
 }
 
-bool Plane::inPlane(const Vector3D *v)
+bool Plane::inPlane(const Vector3D& v)
 {
-  bool in = false;
-  Vector3D planeBasisv = v->decompose(wvec, lvec, normal);
+  const Vector3D relativePosition = this->basisPosition(v);
 
-  in = (fabs(planeBasisv.x) < .5f*width) && (fabs(planeBasisv.y) < .5f*length);
-  return in;
+  return (std::abs(relativePosition.x) < .5f*width) && (std::abs(relativePosition.y) < .5f*length);
 }
 
-bool Plane::atSurface(const Vector3D *v)
+bool Plane::atSurface(const Vector3D& point)
 {
-  bool atSurf = false;
-  Vector3D planeBasisv = v->decompose(wvec, lvec, normal);
+  const Vector3D relativePosition = this->basisPosition(point);
 
-  atSurf = (fabs(planeBasisv.z) < EPSILON);
-
-  return atSurf;
+  return relativePosition.z < EPSILON;
 }
 
-bool Plane::isAbove(const Vector3D *v) const
+bool Plane::isAbove(const Vector3D& point) const
 {
-  bool above = false;
-  Vector3D planeBasisv = v->decompose(wvec, lvec, normal);
+  const Vector3D relativePosition = this->basisPosition(point);
 
-  above = (planeBasisv.z > 0.0f);
-
-  return above;
+  return relativePosition.z > EPSILON;
 }
 
 std::shared_ptr<Plane> copyPlane(std::shared_ptr<const Plane> plane)

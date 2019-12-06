@@ -317,7 +317,7 @@ void Level::run(GLfloat dt)
     gravityVec = majorAxis*-1;
 //    gravityVec = majAxis*0;
 //    updateCam();
-  setCam(player->mass->pos, dt, player->mass->vel.length());
+  setCam(player->pos, dt, player->vel.length());
     run3ds();
     objects.run(dt);
 
@@ -346,7 +346,7 @@ void Level::run3ds()
 
 void Level::draw()
 {
-  glLookAt(this->camera()->pos.toQVector3D(), player->mass->pos.toQVector3D(), majorAxis.toQVector3D());
+  glLookAt(this->camera()->pos.toQVector3D(), player->pos.toQVector3D(), majorAxis.toQVector3D());
 //    world3ds.Render_3ds();
     objects.draw();
 

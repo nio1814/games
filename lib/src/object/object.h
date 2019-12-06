@@ -54,20 +54,20 @@ struct objP3ds						//pointer to a 3ds object
 
 
 //single object
-class Object
+class Object : public Mass
 {
 public:
   using Pointer = std::shared_ptr<Object>;
   using ConstPointer = std::shared_ptr<const Object>;
   enum Shape{PLANE, SPHERE, LINE, BOX, TRI};
 
-  void setPosition(Vector3D position);
+//  void setPosition(Vector3D position);
   void setGravity(const Vector3D gravity);
 	
 //	Object();
-    Object(float m=1);							// Constructor creates some masses with mass values m
+   Object(const Vector3D &position=Vector3D(), const float mass=1);							// Constructor creates some masses with mass values m
     Object(const Object& obj);
-	~Object();
+//	~Object();
 
     Object& operator= (const Object& obj);
 
@@ -81,7 +81,7 @@ public:
 	{												// 
 	}
 
-	virtual void simulate(float dt);				// Iterate the masses by the change in time
+//	virtual void simulate(float dt);				// Iterate the masses by the change in time
 
     virtual void rotate(Vector3D axis, GLfloat degrees)
     {
@@ -119,7 +119,6 @@ public:
   void addTouchedObject(Pointer object);
   void clearTouchedObjects();
   
-  Mass* mass;									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
   bool bDraw;
   bool bMovable;								//object can move
   Shape shape;

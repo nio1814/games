@@ -20,10 +20,11 @@ class Mass
 {
 public:
     Mass(const Mass& mass);
+    Mass(const Vector3D& position, const float mass=1);
     Mass& operator = (const Mass& mass);
 
 	float m;									// The mass value
-	float elas;
+  float elasticity;
 	Vector3D dir;								// direction of mass
 	Vector3D pos, posnew, dpos;						// Position in space
 	Vector3D vel, velnew;						// Velocity

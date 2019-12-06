@@ -27,11 +27,23 @@ Vector3D::Vector3D()									// Constructor to set x = y = z = 0
 	z = 0;
 }
 
+Vector3D::Vector3D(const std::vector<float>& vector)
+{
+  if(vector.size() == 3)
+  {
+    this->x = vector[0];
+    this->y = vector[1];
+    this->z = vector[2];
+  }
+  else
+    throw std::runtime_error("Must initialize Vector3D with 3 elements");
+}
+
 Vector3D::Vector3D(int angx, int angy, int angz, float length)
 {
-	x = length*cos(angx*DEG2RAD);
-	y = length*cos(angy*DEG2RAD);
-	z = length*cos(angz*DEG2RAD);
+  x = length*cos(angx*DEGREES_TO_RADIANS);
+  y = length*cos(angy*DEGREES_TO_RADIANS);
+  z = length*cos(angz*DEGREES_TO_RADIANS);
 }
 
 Vector3D::Vector3D(float x, float y, float z)			// Constructor that initializes this Vector3D to the intended values of x, y and z
@@ -139,7 +151,12 @@ Vector3D Vector3D::operator- ()	const					// operator- is used to set this Vecto
 
 float Vector3D::length() const							// length() returns the length of this Vector3D
 {
-	return sqrtf(x*x + y*y + z*z);
+  return sqrtf(x*x + y*y + z*z);
+}
+
+bool Vector3D::isNull()
+{
+  return this->length() == 0;
 }
 
 float Vector3D::dot(const Vector3D& v)	const							// length() returns the length of this Vector3D
@@ -191,25 +208,25 @@ Vector3D Vector3D::rotate3D(const Vector3D &vin, float angle) const
 	GLfloat angrad, cosang, sinang, t;
 	//bool arbitrary = false;
 
-	angrad = angle*DEG2RAD;
+  angrad = angle*DEGREES_TO_RADIANS;
 	cosang = cos(angrad);
 	sinang = sin(angrad);
 	v = vin.unit();
 	if(v.length() < EPS)
-		T = matrix2D3(X, Y, Z);
+    T = matrix2D3(X, Y, Z, true);
 	else if(v == X)
-		T = matrix2D3(X, Vector3D(0,cosang,-sinang), Vector3D(0,sinang,cosang));
+    T = matrix2D3(X, Vector3D(0,cosang,-sinang), Vector3D(0,sinang,cosang), true);
 	else if(v == Y)
-		T = matrix2D3(Vector3D(cosang,0,sinang), Y, Vector3D(-sinang,0,cosang));
+    T = matrix2D3(Vector3D(cosang,0,sinang), Y, Vector3D(-sinang,0,cosang), true);
 	else if(v == Z)
-		T = matrix2D3(Vector3D(cosang,-sinang,0), Vector3D(sinang,cosang,0), Z);
+    T = matrix2D3(Vector3D(cosang,-sinang,0), Vector3D(sinang,cosang,0), Z, true);
 	else
 	{
 	//	arbitrary = true;
 		t = 1 - cosang;
-		T = matrix2D3(Vector3D(t*v.x*v.x+cosang, t*v.x*v.y-sinang*v.z, t*v.x*v.z+sinang*v.y),
-			Vector3D(t*v.x*v.y+sinang*v.z, t*v.y*v.y+cosang, t*v.y*v.z-sinang*v.x),
-			Vector3D(t*v.x*v.z-sinang*v.y, t*v.y*v.z+sinang*v.x, t*v.z*v.z+cosang));
+    T = matrix2D3(Vector3D(t*v.x*v.x+cosang, t*v.x*v.y-sinang*v.z, t*v.x*v.z+sinang*v.y),
+      Vector3D(t*v.x*v.y+sinang*v.z, t*v.y*v.y+cosang, t*v.y*v.z-sinang*v.x),
+      Vector3D(t*v.x*v.z-sinang*v.y, t*v.y*v.z+sinang*v.x, t*v.z*v.z+cosang), true);
 		//T = matrix2D3(&Vector3D(cosang,0,-sinang), &Vector3D(0,1,0), &Vector3D(sinang,0,cosang));
 	}
 
@@ -602,22 +619,39 @@ VectorND::~VectorND()
 }
 
 //MATRIX
-matrix2D3::matrix2D3(const Vector3D &r1, const Vector3D &r2, const Vector3D &r3)
+matrix2D3::matrix2D3(const Vector3D &v1, const Vector3D &v2, const Vector3D &v3, const bool asRows)
 {
-	A[0] = r1;
-	A[1] = r2;
-	A[2] = r3;
+  this->A[0] = v1;
+  this->A[1] = v2;
+  this->A[2] = v3;
+
+  if(!asRows)
+  {
+
+  }
 }
-	
-Vector3D matrix2D3::transform(const Vector3D& in)
+
+matrix2D3::matrix2D3(const std::vector<float> values)
 {
-	Vector3D out;
+  if(values.size() == 9)
+  {
+    A[0] = {values[0], values[1], values[2]};
+    A[1] = {values[3], values[4], values[5]};
+    A[2] = {values[6], values[7], values[8]};
+  }
+  else
+    throw std::runtime_error("Must initialize matrix2D3 with 9 elements");
+}
 
-	out.x = A[0].dot(in);
-	out.y = A[1].dot(in);
-	out.z = A[2].dot(in);
+Vector3D matrix2D3::transform(const Vector3D& in) const
+{
+  Vector3D out;
 
-	return out;
+  out.x = A[0].dot(in);
+  out.y = A[1].dot(in);
+  out.z = A[2].dot(in);
+
+  return out;
 }
 
 Vector3D matrix2D3::cartesianToSpherical(Vector3D cartesian)
@@ -640,6 +674,30 @@ matrix2D3& matrix2D3::operator= (matrix2D3 m)
 	A[2] = m.A[2];
 	
 	return *this;
+}
+
+float matrix2D3::at(int rowIndex, int columnIndex) const
+{
+  switch (columnIndex) {
+    case 0:
+      return this->A[rowIndex].x;
+      break;
+    case 1:
+      return this->A[rowIndex].y;
+      break;
+    case 2:
+      return this->A[rowIndex].z;
+      break;
+    }
+  throw std::runtime_error("Invalid column index");
+}
+
+void matrix2D3::transpose()
+{
+  Vector3D rows[3];
+  for(int row=0; row<3; row++)
+      rows[row] = Vector3D(this->at(0, row), this->at(1, row), this->at(2, row));
+  matrix2D3(rows[0], rows[1], rows[2], true);
 }
 
 Vector3D Cross(const Vector3D& vVector1, const Vector3D& vVector2)

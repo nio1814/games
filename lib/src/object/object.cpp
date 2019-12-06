@@ -19,12 +19,14 @@ GLfloat gravityAcc = 9.8f;
 Vector3D gravityDir;
 
 //SINGLE OBJECT----------------------------
-Object::Object(float m) : mass(new Mass(m)), isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
+Object::Object(const Vector3D& position, const float mass) :
+  Mass(position, mass),
+  isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
 {
-	bMovable = false;
-	basis.A[0] = X;
-	basis.A[1] = Y;
-	basis.A[2] = Z;
+  bMovable = false;
+  basis.A[0] = X;
+  basis.A[1] = Y;
+  basis.A[2] = Z;
 }
 
 //Object::Object(float m) : Object()			// Constructor creates some masses with mass values m
@@ -41,7 +43,7 @@ Object::Object(const Object &obj)
 
 Object& Object::operator = (const Object& obj)
 {
-    mass = new Mass(*obj.mass);									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
+//    mass = new Mass(*obj.mass);									// masses are held by pointer to pointer. (Here Mass** represents a 1 dimensional array)
     shape = obj.shape;
     texture = obj.texture;
     moveForce = obj.moveForce;							//force acting on object
@@ -64,17 +66,17 @@ Object& Object::operator = (const Object& obj)
     return *this;
 }
 
-Object::~Object()
-{
-	delete mass;				// Create a Mass as a pointer and put it in the array
+//Object::~Object()
+//{
+//	delete mass;				// Create a Mass as a pointer and put it in the array
 //	delete touches;
 //	delete texture;
-}
+//}
 
 void Object::init()								// this method will call the init() method of every mass
 {
 	touchedObjects.clear();
-	mass->init();						// call init() method of the mass
+//	mass->init();						// call init() method of the mass
   if(bGravityOn)
   {
 //        gravityVec =
@@ -82,10 +84,10 @@ void Object::init()								// this method will call the init() method of every m
 	}
 }
 
-void Object::simulate(float dt)					// Iterate the masses by the change in time
-{
-	mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
-}
+//void Object::simulate(float dt)					// Iterate the masses by the change in time
+//{
+//	mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
+//}
 
 //void Object::operate(const object_holder *allObjs)					// The complete procedure of Objects
 //{
@@ -122,11 +124,11 @@ void* Object::getProperty(int idx, dataType &type)
 
 	switch(idx)
 	{
-	case 0:
-		ptr = mass;
-		type = tpMASS;
-		break;
-	case 1:
+//  case 0:
+//    ptr = mass;
+//    type = tpMASS;
+//    break;
+  case 1:
 		ptr = &type;
 		type = tpSHAPE;
 		break;
@@ -206,15 +208,10 @@ bool Object::hasTexture()
   return this->texture.hasTextures();
 }
 
-void Object::setPosition(Vector3D position)
-{
-  mass->pos = position;
-}
-
 void Object::setGravity(const Vector3D gravity)
 {
 //  mass->force ;
-  mass->forcenew = mass->force = gravity * mass->m;
+  forcenew = force = gravity * m;
 }
 
 //bool Object::detectCollision(const object_holder* objs)

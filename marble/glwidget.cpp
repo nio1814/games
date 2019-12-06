@@ -324,7 +324,7 @@ void GLWidget::processKeyboard()							// Process Keyboard Results
 {
 	Vector3D forward, toleft;
 //	forward = camToLook.unit();
-  forward = (ball->mass->pos - this->game.currentLevel()->cameras.current()->pos).unit();
+  forward = (ball->pos - this->game.currentLevel()->cameras.current()->pos).unit();
 	forward.y = 0;
 	toleft = forward.rotate3D(Y, 90);
   std::shared_ptr<Level> level = game.currentLevel();
@@ -391,7 +391,7 @@ void GLWidget::process()
 
 	processKeyboard();
 
-	GLfloat zc = .01f*ball->mass->vel.dot(Vector3D(0,0,1));
+  GLfloat zc = .01f*ball->vel.dot(Vector3D(0,0,1));
 	zCam += zc;
 	zLook += zc;
 	gravityV = Vector3D(0,1,0)*currentgravity;

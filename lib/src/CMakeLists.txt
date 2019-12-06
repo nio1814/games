@@ -31,6 +31,7 @@ set(SRC
 	tga.cpp
   model3d.cpp
   texture.cpp
+  quaternion.cpp
 )
 
 set(CMAKE_AUTOMOC ON)

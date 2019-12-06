@@ -70,7 +70,8 @@ void drawSphere(int subDivisions)
 }
 
 
-object_sphere::object_sphere(float mass, float rad, const Vector3D position) : Object(mass),
+object_sphere::object_sphere(float mass, float rad, const Vector3D position) :
+  Object(position, mass),
   radius(rad)
 {
   shape = SPHERE;
@@ -78,7 +79,7 @@ object_sphere::object_sphere(float mass, float rad, const Vector3D position) : O
   gluQuadricNormals(quad, GL_SMOOTH);					// Generate Smooth Normals For The Quad
     gluQuadricTexture(quad, GL_TRUE);						// Enable Texture Coords For The Quad*/
   bMovable = true;
-  this->mass->pos = position;
+  this->pos = position;
 }
 
 object_sphere::~object_sphere()
@@ -89,7 +90,7 @@ object_sphere::~object_sphere()
 void object_sphere::solve()													//gravitational force will be applied therefore we need a "solve" method.
 {
   //mass->applyForce(Vector3D(0.0f, gravity, 0.0f) * mass->m);				//gravitational force is as F = m * g. (mass times the gravitational acceleration)
-  mass->applyForce(moveForce/mass->m);
+  this->applyForce(moveForce/this->m);
   //mass->applyForce(mass->force);
   moveForce = Vector3D(0,0,0);
 }
@@ -102,7 +103,7 @@ void object_sphere::draw()
   glEnable(GL_TEXTURE_2D);							// Enable 2D Texture Mapping
 
   glPushMatrix();
-  glTranslatef(mass->pos.x, mass->pos.y, mass->pos.z);
+  glTranslatef(this->pos.x, this->pos.y, this->pos.z);
 
   glPushMatrix();
   //glRotatef(xrot,1.0f,0.0f,0.0f);						// Rotate On The X Axis By xrot
@@ -138,7 +139,7 @@ void object_sphere::draw()
   glDisable(GL_BLEND);
   glDisable(GL_LIGHTING);
   glPopMatrix();
-  glTranslatef(-mass->pos.x, -mass->pos.y, -mass->pos.z);
+  glTranslatef(-this->pos.x, -this->pos.y, -this->pos.z);
   glPopMatrix();
 
   glDisable(GL_TEXTURE_2D);							// Disable 2D Texture Mapping
@@ -161,7 +162,7 @@ bool object_sphere::detectCollision(const std::shared_ptr<const object_sphere> s
 
 //  if(!isSame(self, obj2->self))
 //  {
-    vecToSphere = mass->pos - sphere->mass->pos;
+    vecToSphere = this->pos - sphere->pos;
     dist = vecToSphere.length();
 
     if(dist < (radius + sphere->radius))
@@ -204,37 +205,32 @@ void object_sphere::collide(Object::ConstPointer object)
 
 void object_sphere::collide(std::shared_ptr<const object_sphere> sphere)
 {
-  Mass *mass1, *mass2;
   GLfloat m1, m2, v1normMag;
   Vector3D v1, v2, sphereNorm;
-  Vector3D sforce = mass->force;
+  Vector3D sforce = this->force;
 
-  mass1 = mass;
-  mass2 = sphere->mass;
-
-  m1 = mass1->m;
-  m2 = mass2->m;
-  v1 = mass1->vel;
-  v2 = mass2->vel;
+  m1 = this->m;
+  v1 = this->vel;
+  m2 = sphere->m;
+  v2 = sphere->vel;
   v1normMag = fabs(v1.dot(sphereNorm));
-  sphereNorm = (mass1->pos - mass2->pos);
+  sphereNorm = (this->pos - sphere->pos);
   sphereNorm/sphereNorm.length();
 
   if(sphere->bMovable)
     v1 = v1*((m1-m2)/(m1+m2)) + v2*(2*m2/(m1+m2));
   else
-    v1 += sphereNorm*(mass1->elas)*v1normMag*2;
+    v1 += sphereNorm*(sphere->elasticity)*v1normMag*2;
 
 //	s1->xrotspeed = v1.dot(&Vector3D(1,0,0));
-  mass1->avelnew = v1.dot(Vector3D(1,0,0));
+  this->avelnew = v1.dot(Vector3D(1,0,0));
 //	s1->yrotspeed = v1.dot(&Vector3D(0,1,0));
-  mass1->avelnew += v1.dot(Vector3D(0,1,0));
+  this->avelnew += v1.dot(Vector3D(0,1,0));
   //s1->zrotspeed = v1.dot(&Vector3D(0,0,1));
 
-  mass1->velnew = v1;
-  mass = mass1;
+  this->velnew = v1;
   sforce += sphereNorm*(fabs(sphereNorm.dot(sforce)));
-  mass->forcenew = sforce;
+  this->forcenew = sforce;
 
   return;
 }

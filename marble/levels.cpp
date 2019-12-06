@@ -9,14 +9,14 @@ std::shared_ptr<Level> createLevel1()
   const Vector3D gravity = level->majorAxis * -9.8f;
 
   std::shared_ptr<object_sphere> sphere = std::make_shared<object_sphere>(2.0f, .55f);
-  sphere->mass->pos = Vector3D(-1.0f,1.5f,0.0f);
+  sphere->pos = Vector3D(-1.0f,1.5f,0.0f);
   sphere->setGravity(gravity);
   level->addObject(sphere);
 //            allObj.addSpheres(2.0f, .55f,   Vector3D(-1.0f,1.5f,0.0f));
 
   level->player = std::make_shared<object_sphere>(1.0f, .35f);
-  level->player->mass->pos = Vector3D(1, 2, 1.5);
-  level->player->mass->elas = .5;
+  level->player->pos = Vector3D(1, 2, 1.5);
+  level->player->elasticity = .5;
   level->player->setGravity(gravity);
 //            allObj.addSpheres(1.0f, .35f,   Vector3D(1, 2, 1.5));
   level->objects.addObject(level->player);
@@ -24,7 +24,7 @@ std::shared_ptr<Level> createLevel1()
     for(int i=0; i<rand()%15; i++)
     {
       std::shared_ptr<object_sphere> sphere = std::make_shared<object_sphere>(std::abs(.70f*cos((float)rand())), std::abs(.50f*cos((float)rand()))+.1f);
-        sphere->mass->pos = Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand()));
+        sphere->pos = Vector3D(3*cos((float)rand()), 4*fabs(cos((float)rand())), 3*cos((float)rand()));
         sphere->setGravity(gravity);
         sphere->texture.color = Vector3D(rand()%256, rand()%256, rand()%256);
         level->addObject(sphere);
@@ -47,30 +47,32 @@ std::shared_ptr<Level> createLevel1()
   level->objects.m_basis = basis;
 
 //  level.objects.addPlanes(1,1,8,8,0,0,  Vector3D(0,0,0));
-  std::shared_ptr<Plane> plane = level->objects.addPlane(1,8,8,0,0, Vector3D(0,0,0));
+  std::shared_ptr<Plane> plane = level->objects.addPlane(8,8, {0,0,0}, 0,0, Y);
               //allObj.setNormal(PLANE, 0, Vector3D(0,1,0));
-  plane->setNormal(Vector3D(0, 1, 0), level->majorAxis);
+//  plane->setNormal(Vector3D(0, 1, 0), level->majorAxis);
   //			allObj.setTexture(PLANE, 0, tile1txr);
   //plane->texture = Texture tile1txr = game.addTexture(":Data/Envwall.bmp");
   plane->texture = Texture(":Data/Envwall.bmp");
   //            allObj.addPlanes(3,1,8,2,0,0, Vector3D(-4,1,0));
   //            allObj.setNormal(PLANE, 1, Vector3D(1,0,0));
-  plane = level->objects.addPlane(1, 8, 2, 0, 0, Vector3D(-4, 1, 0));
+  plane = level->objects.addPlane(8, 2, Vector3D(-4, 1, 0), X, Z);
 //  plane = object_plane(2,8,Vector3D(-4,1,0),X,basis);
 //  allObj.addPlane(plane);
-  level->objects.addPlane(2, 8, Vector3D(-4, 1, 0), X, basis);
+//  level->objects.addPlane(2, 8, Vector3D(-4, 1, 0), X, Y);
   //            allObj.setPos(PLANE, 2,  Vector3D(4,1,0));
   //            allObj.setNormal(PLANE, 2, Vector3D(-1,0,0));
 //  allObj.addPlane(plane);
+
   std::shared_ptr<Plane> nextPlane = copyPlane(plane);
-  nextPlane->mass->pos = Vector3D(4, 1, 0);
+  nextPlane->pos = Vector3D(4, 1, 0);
   level->addObject(nextPlane);
 
   //            allObj.setPos(PLANE, 3,  Vector3D(0,1,4));
   nextPlane = copyPlane(plane);
-  nextPlane->setPosition(Vector3D(0,1,4));
+  nextPlane->pos = Vector3D(0,1,4);
+  nextPlane->orient(Z, X);
   //            allObj.setNormal(PLANE, 3, Vector3D(0,0,-1));
-  nextPlane->rotate(Y,90);
+//  nextPlane->rotate(Y,90);
   //            allObj.flipBase(PLANE, 3);
 //  allObj.addPlane(plane);
   level->addObject(nextPlane);
@@ -80,13 +82,13 @@ std::shared_ptr<Level> createLevel1()
   //            allObj.setNormal(PLANE, 4, Vector3D(0,0,1));
 //  plane = object_plane(2,2,Vector3D(-3,1,-4), Z, basis);
 //  allObj.addPlane(plane);
-  level->objects.addPlane(2, 2, Vector3D(-3, 1, -4), Z, basis);
+  level->objects.addPlane(2, 2, Vector3D(-3, 1, -4), Z, X);
 
   //			allObj.setPos(PLANE, 5,  Vector3D(3,1,-4));
   //            allObj.setNormal(PLANE, 5, Vector3D(0,0,1));
   nextPlane = std::dynamic_pointer_cast<Plane>(level->objects.last());
-  nextPlane->setPosition(Vector3D(3,1,-4));
-  nextPlane->orient(Z);
+  nextPlane->pos = Vector3D(3,1,-4);
+//  nextPlane->orient(Z);
 //  allObj.addPlane(plane);
   level->addObject(nextPlane);
 
@@ -98,27 +100,27 @@ std::shared_ptr<Level> createLevel1()
   //			plane.setPosition(Vector3D(0,-.98f,-8.9f));
 //  plane = object_plane(10,4,Vector3D(0,-.98f,-8.9f),Vector3D(0,1,-.2), basis);
 //  allObj.addPlane(plane);
-  level->objects.addPlane(10,4,Vector3D(0,-.98f,-8.9f),Vector3D(0,1,-.2), basis);
+  level->objects.addPlane(10,4,Vector3D(0,-.98f,-8.9f),Vector3D(0,1,-.2), Z);
 
   //			allObj.addPlanes(1,4,4,0,0,  Vector3D(0,-1.96f,-15.8f));
   //        allObj.setTexture(PLANE, 7, wall1txr);
 //  plane = object_plane(4,4,Vector3D(0,-1.96f,-15.8f),majAxis,basis);
   //			plane.setPosition(Vector3D(0,-1.96f,-15.8f));
 //  allObj.addPlane(plane);
-  level->objects.addPlane(4,4,Vector3D(0,-1.96f,-15.8f), level->majorAxis, basis);
+  level->objects.addPlane(4,4,Vector3D(0,-1.96f,-15.8f), level->majorAxis, X);
 
   /*allObj.addPlanes(2,1,4,2,0,0,  Vector3D(0,-.96f,-17.8f));
       allObj.setNormal(PLANE, 8, Vector3D(0,0,1));
   allObj.flipBase(PLANE, 8);*/
 //  plane = object_plane(2,4,Vector3D(0,-.96f,-17.8f),Z,basis);
 //  allObj.addPlane(plane);
-  plane = level->objects.addPlane(2,4,Vector3D(0,-.96f,-17.8f),Z,basis);
+  plane = level->objects.addPlane(2,4,Vector3D(0,-.96f,-17.8f), Z, Y);
 
 //  /*allObj.setPos(PLANE, 9,  Vector3D(2,-.96f,-15.8f));
 //  allObj.setNormal(PLANE, 9, Vector3D(-1,0,0));*/
   plane = copyPlane(plane);
-  plane->setPosition(Vector3D(2,-.96f,-15.8f));
-  plane->orient(-X);
+  plane->pos = Vector3D(2,-.96f,-15.8f);
+//  plane->orient(-X);
   plane->rotateAroundNormal(90);
 //  allObj.addPlane(plane);
   level->objects.addObject(plane);
@@ -129,37 +131,37 @@ std::shared_ptr<Level> createLevel1()
 //  //        allObj.setTexture(PLANE, 10, wall1txr);
 //  plane = object_plane(20,4, Vector3D(-11.8f,-3.92f,-15.8f), Vector3D(-.2f,1.0f,0.0f), basis);
 //  allObj.addPlane(plane);
-  level->objects.addPlane(20, 4, Vector3D(-11.8f, -3.92f, -15.8f), Vector3D(-.2f, 1.0f, 0.0f), basis);
+  level->objects.addPlane(20, 4, Vector3D(-11.8f, -3.92f, -15.8f), Vector3D(-.2f, 1.0f, 0.0f), Z);
 
 //  /*allObj.addPlanes(1,4,4,0,0,  Vector3D(-23.6f,-5.88f,-15.8f));
 //  allObj.setNormal(PLANE, 11, Vector3D(0.0f, 1.0f, 0.0f));*/
 //  //        allObj.setTexture(PLANE, 11, wall1txr);*/
 //  plane = object_plane(4,4, Vector3D(-23.6f,-5.88f,-15.8f), Y, basis);
 //  allObj.addPlane(plane);
-  level->objects.addPlane(4, 4, Vector3D(-23.6f, -5.88f, -15.8f), Y, basis);
+  level->objects.addPlane(4, 4, Vector3D(-23.6f, -5.88f, -15.8f), Y, X);
 
 //  /*allObj.addPlanes(10,1,4,1,0,0, Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f));
 //  allObj.setNormal(PLANE, 12, Vector3D(1.0f, sqrt(3), 0.0f));*/
 //  plane = object_plane(4,1,Vector3D( -25.6f-sqr3/4, -5.63f, -15.8f), Vector3D(1.0f, sqrt(3), 0.0f), basis);
 //  plane.flipBase();
 //  allObj.addPlane(plane);
-  plane = level->objects.addPlane(4, 1, Vector3D(-25.6f - std::sqrt(3) / 4, -5.63f, -15.8f), Vector3D(1.0f, sqrt(3), 0.0f), basis);
+  plane = level->objects.addPlane(4, 1, Vector3D(-25.6f - std::sqrt(3) / 4, -5.63f, -15.8f), Vector3D(1.0f, sqrt(3), 0.0f), Z);
   plane->flipBase();
 
 //  /*allObj.setPos(PLANE,13,  Vector3D(-23.6f, -5.63f, -17.8f-sqr3/4));
 //      allObj.setNormal(PLANE, 13, Vector3D(0.0f, sqr3, 1.0f));
 //  allObj.flipBase(PLANE, 13);*/
   plane = copyPlane(plane);
-  plane->setPosition(Vector3D(-23.6f, -5.63f, -17.8f- std::sqrt(3) /4));
-  plane->orient(Vector3D(0.0f, std::sqrt(3), 1.0f));
+  plane->pos = Vector3D(-23.6f, -5.63f, -17.8f- std::sqrt(3) /4);
+//  plane->orient(Vector3D(0.0f, std::sqrt(3), 1.0f));
 //  allObj.addPlane(plane);
   level->addObject(plane);
 
 //  /*allObj.setPos(PLANE,14,  Vector3D(-25.6f-sqr3/2-.25f, -5.38f+sqr3/4, -15.8f));
 //  allObj.setNormal(PLANE, 14, Vector3D(sqrt(3), 1.0f, 0.0f));*/
   plane = copyPlane(plane);
-  plane->setPosition(Vector3D(-25.6f- std::sqrt(3) /2-.25f, -5.38f+ std::sqrt(3) /4, -15.8f));
-  plane->orient(Vector3D(sqrt(3), 1.0f, 0.0f));
+  plane->pos = Vector3D(-25.6f- std::sqrt(3) /2-.25f, -5.38f+ std::sqrt(3) /4, -15.8f);
+//  plane->orient(Vector3D(sqrt(3), 1.0f, 0.0f));
 //  allObj.addPlane(plane);
   level->addObject(plane);
 
@@ -167,10 +169,10 @@ std::shared_ptr<Level> createLevel1()
 //      allObj.setNormal(PLANE, 15, Vector3D(0.0f, 1.0f, sqr3));
 //  allObj.flipBase(PLANE, 15);*/
   plane = copyPlane(plane);
-  plane->setPosition(Vector3D(-23.6f, -5.38f+ std::sqrt(3) /4, -17.8f- std::sqrt(3) /2-.25f));
-  plane->orient(Vector3D(0.0f, 1.0f, std::sqrt(3)));
+  plane->pos = Vector3D(-23.6f, -5.38f+ std::sqrt(3) /4, -17.8f- std::sqrt(3) /2-.25f);
+//  plane->orient(Vector3D(0.0f, 1.0f, std::sqrt(3)));
 //  allObj.addPlane(plane);
-  level->addObject(plane);
+//  level->addObject(plane);
 //  /*allObj.setPos(PLANE,16,  Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));
 //  allObj.setNormal(PLANE, 16, Vector3D(1.0f, 0.0f, 0.0f));*/
 //  plane.setPosition(Vector3D(-25.6f-sqr3/2-.5f,-5.38f+sqr3/2+.5f,-15.8f));

@@ -8,17 +8,17 @@
 
 bool detectCollision(std::shared_ptr<object_sphere> sphere, std::shared_ptr<Plane> plane)
 {
-  Vector3D toPlane = sphere->mass->pos - plane->mass->pos;
-  if (!plane->normal.length())
+  Vector3D toPlane = sphere->pos - plane->pos;
+  if (!plane->normal().length())
     return false;
-  GLfloat normalDistance = std::abs(toPlane.dot(plane->normal));
+  GLfloat normalDistance = std::abs(toPlane.dot(plane->normal()));
   
   if (normalDistance <= sphere->radius)
   {
-    GLfloat wDist = fabs(toPlane.dot(plane->wvec));
+    GLfloat wDist = fabs(toPlane.dot(plane->right()));
     if (wDist <= .5f * plane->width)
     {
-      GLfloat lDist = fabs(toPlane.dot(plane->lvec));
+      GLfloat lDist = fabs(toPlane.dot(plane->forward()));
       if (lDist <= .5f * plane->length)
       {
         //detect = true;
@@ -51,24 +51,20 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
 {
   GLfloat MINBOUNCEVEL = .1f;
 
-  Mass* mass1, * mass2;
   GLfloat m1, m2, v1normMag;
   Vector3D v1, v2, vpara, planeNorm;
   int awayDir;
 
-  mass1 = sphere->mass;
-  mass2 = plane->mass;
-
-  m1 = mass1->m;
-  m2 = mass2->m;
-  v1 = mass1->vel;
-  v2 = mass2->vel;
+  m1 = sphere->m;
+  m2 = plane->m;
+  v1 = sphere->vel;
+  v2 = plane->vel;
 
   /*if(plane->isAbove(&mass->pos))
     planeNorm = plane->normal;
   else
     planeNorm = plane->normal*-1;*/
-  planeNorm = (mass1->pos - mass2->pos).proj(plane->normal);
+  planeNorm = (sphere->pos - plane->pos).proj(plane->normal());
   planeNorm.unitize();
   v1normMag = fabs(v1.dot(planeNorm));
 
@@ -77,19 +73,19 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
   else if (plane->bMovable)
     v1 = v1 * ((m1 - m2) / (m1 + m2)) + v2 * (2 * m2 / (m1 + m2));
   else
-    v1 += planeNorm * (1 + mass1->elas) * v1normMag;
+    v1 += planeNorm * (1 + sphere->elasticity) * v1normMag;
 
-  sphere->mass->velnew = v1;
-  sphere->mass->force += planeNorm * std::abs(planeNorm.dot(sphere->mass->force));
+  sphere->velnew = v1;
+  sphere->force += planeNorm * std::abs(planeNorm.dot(sphere->force));
 
-  sphere->mass->pos += planeNorm * (sphere->radius - planeNorm.dot(mass1->pos - mass2->pos));
+  sphere->pos += planeNorm * (sphere->radius - planeNorm.dot(sphere->pos - plane->pos));
 
   vpara = v1 - v1.proj(Y);
 
   //	sphere->xrotspeed = vpara.dot(&Vector3D(0,0,1))/(sphere->radius*2*PI);
-  sphere->mass->avelnew = vpara.dot(Vector3D(0, 0, 1)) / (sphere->radius * 2 * M_PI);
+  sphere->avelnew = vpara.dot(Vector3D(0, 0, 1)) / (sphere->radius * 2 * M_PI);
   //	sphere->zrotspeed = vpara.dot(&Vector3D(-1,0,0))/(sphere->radius*2*PI);
-  sphere->mass->avelnew += vpara.dot(Vector3D(-1, 0, 0)) / (sphere->radius * 2 * M_PI);
+  sphere->avelnew += vpara.dot(Vector3D(-1, 0, 0)) / (sphere->radius * 2 * M_PI);
 }
 
 
@@ -110,17 +106,17 @@ Object::Pointer Objects::addObject(Object::Pointer object)
   return object;
 }
 
-std::shared_ptr<Plane> Objects::addPlane(const float mass, const float width, const float length, const float phi, const float theta, const Vector3D majorAxis)
+std::shared_ptr<Plane> Objects::addPlane(const float width, const float length, const Vector3D& position, const float phi, const float theta, const Vector3D majorAxis)
 {
-  std::shared_ptr<Plane> plane = std::make_shared<Plane>(mass, width, length, phi, theta, majorAxis);
+  std::shared_ptr<Plane> plane = std::make_shared<Plane>(width, length, phi, theta, majorAxis);
   this->addObject(plane);
 
   return plane;
 }
 
-std::shared_ptr<Plane> Objects::addPlane(const float width, const float length, const Vector3D position, const Vector3D normal, const matrix2D3 basis)
+std::shared_ptr<Plane> Objects::addPlane(const float width, const float length, const Vector3D& position, const Vector3D normal, const Vector3D& right)
 {
-  std::shared_ptr<Plane> plane = std::make_shared<Plane>(width, length, position, normal, basis);
+  std::shared_ptr<Plane> plane = std::make_shared<Plane>(width, length, position, normal, right);
   this->addObject(plane);
 
   return plane;
@@ -154,7 +150,7 @@ void Objects::simulate(float dt)					// Iterate the masses by the change in time
   //	for (int a = 0; a < numOfMasses; ++a)		// We will iterate every mass
   //  for(int a=0; a<objs.size(); a++)
   for (Object::Pointer object : this->objects)
-    object->mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
+    object->simulate(dt);				// Iterate the mass and obtain new position and new velocity
 }
 
 void Objects::detectCollisions()

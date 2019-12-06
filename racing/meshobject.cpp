@@ -91,7 +91,7 @@ void doCollision(MeshObject* obj1, const MeshObject* obj2, const Vector3D& point
 	rCom2pt2 = point - obj2->mass->pos;
 
 	vrel = v11 + rCom2pt1*w11 - v21 - rCom2pt2*w21;
-	j = (-(1+obj1->mass->elas)*(vrel.dot(norm))/(1/m1 + Cross(rCom2pt1,norm).dot(Cross(rCom2pt1,norm))/I1));
+	j = (-(1+obj1->mass->elasticity)*(vrel.dot(norm))/(1/m1 + Cross(rCom2pt1,norm).dot(Cross(rCom2pt1,norm))/I1));
 
 	v12 = v11 + norm*(j/m1);
 	w12 = (obj1->mass->axis*w11 + obj1->mass->axis*Cross(rCom2pt1,norm*j).length()/I1).length();

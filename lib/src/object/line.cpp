@@ -1,7 +1,7 @@
 #include "line.h"
 
 object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) :
-  Object(mass),
+  Object(Vector3D(), mass),
   centerOfMassFraction(cmf)
 {
 //	Object();
@@ -20,16 +20,16 @@ void object_line::initGeo()
   length = (vertex[1] - vertex[0]).length();
   normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
-  mass->pos = vertex[0] + (vertex[1] - vertex[0]) * centerOfMassFraction;
-  mass->I = mass->m*pow(length,2)/12.0f;
+  this->pos = vertex[0] + (vertex[1] - vertex[0]) * centerOfMassFraction;
+  this->I = this->m*pow(length,2)/12.0f;
   return;
 }
 
 void object_line::calcGeo()
 {
-  lvec = lvec.rotate3D(mass->axis, mass->dtheta);
-  vertex[0] = mass->pos - (lvec*length*centerOfMassFraction);
-  vertex[1] = mass->pos + (lvec*length*(1-centerOfMassFraction));
+  lvec = lvec.rotate3D(this->axis, this->dtheta);
+  vertex[0] = this->pos - (lvec*length*centerOfMassFraction);
+  vertex[1] = this->pos + (lvec*length*(1-centerOfMassFraction));
   normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
   return;
@@ -37,7 +37,7 @@ void object_line::calcGeo()
 
 void object_line::solve()													//gravitational force will be applied therefore we need a "solve" method.
 {
-  mass->applyForce(moveForce/mass->m);
+  this->applyForce(moveForce/this->m);
   calcGeo();
   moveForce = Vector3D(0,0,0);
 }
@@ -136,20 +136,20 @@ Vector3D object_line::calcVertexVel(int vnum)
   Vector3D linVel, rotVel, velDir, velOut;
   GLfloat armLength;		//distance from com to vertex
 
-  linVel = mass->vel;
+  linVel = this->vel;
   switch(vnum)
   {
     case 0:
       armLength = centerOfMassFraction*length;
-      velDir = Cross(mass->axis,vertex[0]-vertex[1]);
+      velDir = Cross(this->axis,vertex[0]-vertex[1]);
       velDir.unitize();
-      rotVel = velDir*armLength*mass->avel;
+      rotVel = velDir*armLength*this->avel;
       break;
     case 1:
       armLength = (1.0f-centerOfMassFraction)*length;
-      velDir = Cross(mass->axis, vertex[1]-vertex[0]);
+      velDir = Cross(this->axis, vertex[1]-vertex[0]);
       velDir.unitize();
-      rotVel = velDir*armLength*mass->avel;
+      rotVel = velDir*armLength*this->avel;
       break;
     default:
       break;

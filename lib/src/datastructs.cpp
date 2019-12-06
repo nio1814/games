@@ -60,7 +60,7 @@ void pointerTree::addLeaf(void* input, dataType tp, string name)
 				ptr[numLeaf].val = input;
 				ptr[numLeaf].ID = name.append(" (massobject)");
 				ptr[numLeaf].addLeaf(&massPtr->m, tpFLOAT, "mass");
-				ptr[numLeaf].addLeaf(&massPtr->elas, tpFLOAT, "elasticity");
+				ptr[numLeaf].addLeaf(&massPtr->elasticity, tpFLOAT, "elasticity");
 				ptr[numLeaf].addLeaf(&massPtr->dir, tpVECTOR3D, "direction");
 				ptr[numLeaf].addLeaf(&massPtr->pos, tpVECTOR3D, "position");
 				ptr[numLeaf].addLeaf(&massPtr->vel, tpVECTOR3D, "velocity");
@@ -80,7 +80,7 @@ void pointerTree::addLeaf(void* input, dataType tp, string name)
 				objectPtr = static_cast<Object*>(input);
 				ptr[numLeaf].val = input;
 				ptr[numLeaf].ID = name.append(" (object)");
-				ptr[numLeaf].addLeaf(objectPtr->mass, tpMASS, " mass");
+//				ptr[numLeaf].addLeaf(objectPtr->mass, tpMASS, " mass");
 				ptr[numLeaf].addLeaf(&objectPtr->shape, tpSHAPE, " object type");
 				ptr[numLeaf].addLeaf(&objectPtr->bMovable, tpBOOL, " movable");
 				switch(objectPtr->shape)

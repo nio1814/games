@@ -146,8 +146,8 @@ void CubeWindow::runMouse()
 	cam->pos = cam->look + look2cam.unit()*cam->followDist;
 
 	Vector2D screenDimGL;
-	screenDimGL.x = 2*cam->followDist*tan(fovAngle.x*DEG2RAD/2.0f);
-	screenDimGL.y = 2*cam->followDist*tan(fovAngle.y*DEG2RAD/2.0f);
+	screenDimGL.x = 2*cam->followDist*tan(fovAngle.x*DEGREES_TO_RADIANS/2.0f);
+	screenDimGL.y = 2*cam->followDist*tan(fovAngle.y*DEGREES_TO_RADIANS/2.0f);
 
 	Vector2D mousePtInSpace;
 	mousePtInSpace.x = ((mos->x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;

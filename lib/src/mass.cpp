@@ -23,7 +23,7 @@ Vector3D gravityVec = Y*-9.81;
 Mass::Mass(float m)								// Constructor
 {
 	this->m = m;
-	elas = DEFAULTELASTICITY;
+  elasticity = DEFAULTELASTICITY;
 	dir.y = 1.0f;
 	I = DEFAULTINERTIA;
 	theta = dtheta = 0.0f;
@@ -33,13 +33,20 @@ Mass::Mass(float m)								// Constructor
 
 Mass::Mass(const Mass &mass)
 {
-    *this = mass;
+  *this = mass;
+}
+
+Mass::Mass(const Vector3D &position, const float mass) :
+  pos(position),
+  m(mass)
+{
+
 }
 
 Mass& Mass::operator= (const Mass& mass)
 {
     m = mass.m;
-    elas = mass.elas;
+    elasticity = mass.elasticity;
     dir = mass.dir;								// direction of mass
     pos = mass.pos;
     posnew = mass.posnew;
