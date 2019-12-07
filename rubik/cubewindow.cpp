@@ -110,9 +110,9 @@ void CubeWindow::runMouse()
 	Vector3D mouseMove;
 	bool wasRotating = rcube.isRotating;
 
-	if(mos->isBtns(Qt::LeftButton) && !isKeys(Qt::Key_Control))
+	if(mouse->isBtns(Qt::LeftButton) && !isKeys(Qt::Key_Control))
 	{
-		mouseMove = Vector3D(mos->x-mos->xOld, mos->yOld-mos->y, 0);	//find movement in screen coords
+		mouseMove = Vector3D(mouse->x-mouse->xOld, mouse->yOld-mouse->y, 0);	//find movement in screen coords
 		GLfloat len = mouseMove.length();
 		if(mouseMove.length() > 2.0f)
 		{
@@ -121,28 +121,28 @@ void CubeWindow::runMouse()
 			rcube.twistCube(cam->pos, moslook, mouseMove);
 		}
 	}
-	else if(mos->isBtns(Qt::RightButton) || mos->isBtns(Qt::LeftButton))
+	else if(mouse->isBtns(Qt::RightButton) || mouse->isBtns(Qt::LeftButton))
 	{
-		if(mos->y != mos->yOld)
+		if(mouse->y != mouse->yOld)
 		{
-			look2cam = look2cam.rotate3D(toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
-			cam->up = cam->up.rotate3D(toSideDir,(mos->yOld-mos->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+			look2cam = look2cam.rotate3D(toSideDir,(mouse->yOld-mouse->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
+			cam->up = cam->up.rotate3D(toSideDir,(mouse->yOld-mouse->y)*DEFMOUSETHROTTLEY*CAMOVESPEED);
 			camposOld = cam->pos;
 			cam->pos = cam->look + look2cam;
 		}
 
 		cam2look = cam->cam2look();
 		toSideDir = cam->dir2RSide();
-		if(mos->x != mos->xOld)
+		if(mouse->x != mouse->xOld)
 		{
-			look2cam = look2cam.rotate3D(cam->up,-(mos->x-mos->xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
+			look2cam = look2cam.rotate3D(cam->up,-(mouse->x-mouse->xOld)*DEFMOUSETHROTTLEX*1.3f*CAMOVESPEED);
 			camposOld = cam->pos;
 			cam->pos = cam->look + look2cam;
 		}
 	}
 
 	static GLfloat origFollowDist = cam->followDist;
-	cam->followDist = origFollowDist*exp(-mos->wheel*.0007f);
+	cam->followDist = origFollowDist*exp(-mouse->wheel*.0007f);
 	cam->pos = cam->look + look2cam.unit()*cam->followDist;
 
 	Vector2D screenDimGL;
@@ -150,8 +150,8 @@ void CubeWindow::runMouse()
 	screenDimGL.y = 2*cam->followDist*tan(fovAngle.y*DEGREES_TO_RADIANS/2.0f);
 
 	Vector2D mousePtInSpace;
-	mousePtInSpace.x = ((mos->x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;
-	mousePtInSpace.y = ((m_windowSizeY/2-mos->y)/(float)m_windowSizeY)*screenDimGL.y;
+	mousePtInSpace.x = ((mouse->x-m_windowSizeX/2)/(float)m_windowSizeX)*screenDimGL.x;
+	mousePtInSpace.y = ((m_windowSizeY/2-mouse->y)/(float)m_windowSizeY)*screenDimGL.y;
 	moslook = cam->dir2RSide()*mousePtInSpace.x+cam->up*mousePtInSpace.y;
 
 	if(!wasRotating && rcube.isRotating)

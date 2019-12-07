@@ -35,8 +35,6 @@ Vector3D Simulation::setCam()
   if(!this->cameraFollowObject)
     return Vector3D();
 
-    CameraPoint* cam = &cameras->current();
-    CameraPoint* nextcam;
 	Vector3D cam2cam, cam2obj, cam2look;
 	Vector3D pos, look;						//final cam position and look positions
 	Vector3D alongv, movepos;
@@ -48,16 +46,11 @@ Vector3D Simulation::setCam()
 
 	camRotate = 0;
 
-    if(cameras->currentIndex == cameras->numPoints()-1)
-	{
-		nextcam = cam;
-	}
-	else
-		nextcam = &cameras->points[cameras->currentIndex+1];
+  std::shared_ptr<const CameraPoint> nextcam = cameras->currentIndex == cameras->numPoints() - 1 ? this->cameras->current() : this->cameras->points[cameras->currentIndex + 1];
 
-  objpos = this->cameraFollowObject->mass->pos;
-  objvel = this->cameraFollowObject->mass->vel.length();
-  cam2obj = this->cameraFollowObject->mass->pos - cam->pos;
+  objpos = this->cameraFollowObject->pos;
+  objvel = this->cameraFollowObject->vel.length();
+  cam2obj = this->cameraFollowObject->pos - this->cameras->current->pos;
 
 	/*cam2cam = nextcam->pos - cam->pos;
 	camdist = cam2cam.length();

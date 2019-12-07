@@ -24,8 +24,11 @@ public:
     GLWidget(QWidget *parent);
     ~GLWidget();
 
+    QSize minimumSizeHint() const;
+    QSize sizeHint() const;
+
 protected:
-    void initializeGL();
+    virtual void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
 
@@ -40,7 +43,7 @@ protected:
 
 	bool lightActive;
 	CameraPoint* cam;
-	Mouse* mos;
+  Mouse* mouse;
 	Vector3D moslook;
 	QPointer<QTimer> m_timer;
 	Vector2D fovAngle;

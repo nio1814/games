@@ -81,7 +81,7 @@ public:
 	{												// 
 	}
 
-//	virtual void simulate(float dt);				// Iterate the masses by the change in time
+  void simulate(const float dt);				// Iterate the masses by the change in time
 
     virtual void rotate(Vector3D axis, GLfloat degrees)
     {
@@ -93,6 +93,7 @@ public:
   virtual void* getProperty(int idx, dataType &shape);
 	virtual bool detectCollision(std::shared_ptr<Object> object) = 0;
   bool touching(ConstPointer object);
+  bool touching();
 //  virtual bool detectCollision(const object_sphere* obj2)
 //  {
 //    Q_UNUSED(obj2);
@@ -140,6 +141,7 @@ private:
   bool bDetect;
   bool bCollide;
   bool bVisible;
+  Vector3D gravity;
 };
 
 //Single Triangle

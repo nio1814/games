@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPointer>
 
-class GLWidget;
+class Window;
 
 class MainWindow : public QMainWindow
 {
@@ -13,7 +14,7 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 private:
-    GLWidget *gl;
+    QPointer<Window> window;
 };
 
 #endif // MAINWINDOW_H

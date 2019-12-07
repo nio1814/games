@@ -53,7 +53,7 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
 
   GLfloat m1, m2, v1normMag;
   Vector3D v1, v2, vpara, planeNorm;
-  int awayDir;
+  //int awayDir;
 
   m1 = sphere->m;
   m2 = plane->m;
@@ -150,7 +150,9 @@ void Objects::simulate(float dt)					// Iterate the masses by the change in time
   //	for (int a = 0; a < numOfMasses; ++a)		// We will iterate every mass
   //  for(int a=0; a<objs.size(); a++)
   for (Object::Pointer object : this->objects)
+  {
     object->simulate(dt);				// Iterate the mass and obtain new position and new velocity
+  }
 }
 
 void Objects::detectCollisions()
@@ -189,6 +191,7 @@ void Objects::run(const float timeDelta)
 
   for (Object::Pointer object : this->objects)
   {
+    object->solve();
     object->simulate(timeDelta);
   }
 }

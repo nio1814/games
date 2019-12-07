@@ -21,7 +21,10 @@ Vector3D gravityDir;
 //SINGLE OBJECT----------------------------
 Object::Object(const Vector3D& position, const float mass) :
   Mass(position, mass),
-  isTouching(false), isTouching3ds(false), bDraw(true), bDetect(true)
+  bDraw(true),
+  isTouching(false),
+  isTouching3ds(false),
+  bDetect(true)
 {
   bMovable = false;
   basis.A[0] = X;
@@ -36,7 +39,7 @@ Object::Object(const Vector3D& position, const float mass) :
 //	mass = new Mass(m);				// Create a Mass as a pointer and put it in the array
 //}
 
-Object::Object(const Object &obj)
+Object::Object(const Object &obj) : Mass()
 {
     *this = obj;
 }
@@ -84,10 +87,11 @@ void Object::init()								// this method will call the init() method of every m
 	}
 }
 
-//void Object::simulate(float dt)					// Iterate the masses by the change in time
-//{
-//	mass->simulate(dt);				// Iterate the mass and obtain new position and new velocity
-//}
+void Object::simulate(const float dt)					// Iterate the masses by the change in time
+{
+  this->forcenew += this->gravity;
+  Mass::simulate(dt);				// Iterate the mass and obtain new position and new velocity
+}
 
 //void Object::operate(const object_holder *allObjs)					// The complete procedure of Objects
 //{
@@ -192,6 +196,11 @@ bool Object::touching(ConstPointer object)
   return std::find(this->touchedObjects.cbegin(), this->touchedObjects.cend(), object) != this->touchedObjects.cend();
 }
 
+bool Object::touching()
+{
+  return this->touchedObjects.size() > 0;
+}
+
 void Object::addTouchedObject(Pointer object)
 {
   if (!this->touching(object))
@@ -211,7 +220,8 @@ bool Object::hasTexture()
 void Object::setGravity(const Vector3D gravity)
 {
 //  mass->force ;
-  forcenew = force = gravity * m;
+  this->gravity = gravity;
+//  forcenew = force = this->gravity * m;
 }
 
 //bool Object::detectCollision(const object_holder* objs)

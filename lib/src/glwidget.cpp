@@ -22,7 +22,7 @@ GLWidget::GLWidget(QWidget *parent)
 
 	fovAngle = Vector2D(0.0f,45.0f);
 	cam = new CameraPoint(Vector3D(0.0f,0.0f,6.0f),Vector3D(0,0,0),Y,6.0f);
-    mos = new Mouse(m_windowSizeX,m_windowSizeY);
+    mouse = new Mouse(m_windowSizeX,m_windowSizeY);
 	m_timer = new QTimer;
 
     light.pos = Vector3D(rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2,rand()*5.0f/RAND_MAX+2);
@@ -50,6 +50,16 @@ GLWidget::~GLWidget()
 	delete cam;
 }
 
+QSize GLWidget::minimumSizeHint() const
+{
+	return QSize(40,30);
+}
+
+QSize GLWidget::sizeHint() const
+{
+	return QSize(1000,700);
+}
+
 void GLWidget::initializeGL()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -75,8 +85,8 @@ void GLWidget::resizeGL(int w, int h)
 
 	m_windowSizeX = w;
     m_windowSizeY = h;
-    mos->screenWidth = w;
-    mos->screenHeight = h;
+    mouse->screenWidth = w;
+    mouse->screenHeight = h;
 
 	glViewport(0,0,w,h);						// Reset The Current Viewport
 
@@ -131,7 +141,7 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    mos->btnDown(event->button());
+    mouse->btnDown(event->button());
 //    mos->updatePos(event->pos());
 
     return;
@@ -139,7 +149,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    mos->updatePos(event->pos());
+    mouse->updatePos(event->pos());
 
     emit runMouse();
     emit animate();
@@ -149,15 +159,15 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    mos->btnUp(event->button());
+    mouse->btnUp(event->button());
 
     return;
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-    mos->wheelOld = mos->wheel;
-    mos->wheel += event->delta();
+    mouse->wheelOld = mouse->wheel;
+    mouse->wheel += event->delta();
 
     emit runMouse();
     emit animate();
