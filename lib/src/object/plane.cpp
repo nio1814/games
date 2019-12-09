@@ -107,7 +107,7 @@ void Plane::orient(const matrix2D3 &basis)
 void Plane::orient(const Vector3D &up, const Vector3D &toRight, Vector3D toFront)
 {
   if(toFront.isNull())
-    toFront = Cross(up, toRight);
+    toFront = Cross(up.unit(), toRight.unit());
   orient(matrix2D3(toRight, toFront, up, false));
 }
 
@@ -135,7 +135,7 @@ void Plane::orient(const Vector3D& majorAxis, const float theta, const float phi
     //msgbox('incorrect major axis');
     return;
 
-  const Vector3D up = Cross(toRight, toFront);
+  const Vector3D up = Cross(toRight.unit(), toFront.unit());
   orient(up, toRight, toFront);
   //  return;
 }
