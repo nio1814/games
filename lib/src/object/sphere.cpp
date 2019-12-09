@@ -145,7 +145,7 @@ void object_sphere::draw()
   glDisable(GL_TEXTURE_2D);							// Disable 2D Texture Mapping
 }
 
-bool object_sphere::detectCollision(const std::shared_ptr<Object> object)
+bool object_sphere::detectCollision(std::shared_ptr<Object> object)
 {
   if(object->shape != this->shape)
     return false;

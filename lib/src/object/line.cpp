@@ -1,6 +1,6 @@
 #include "line.h"
 
-object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) :
+Line::Line(float mass, Vector3D v1, Vector3D v2, float cmf) :
   Object(Vector3D(), mass),
   centerOfMassFraction(cmf)
 {
@@ -14,7 +14,7 @@ object_line::object_line(float mass, Vector3D v1, Vector3D v2, float cmf) :
     bMovable = true;
 }
 
-void object_line::initGeo()
+void Line::initGeo()
 {
   lvec = (vertex[1] - vertex[0]).unit();
   length = (vertex[1] - vertex[0]).length();
@@ -25,7 +25,7 @@ void object_line::initGeo()
   return;
 }
 
-void object_line::calcGeo()
+void Line::calcGeo()
 {
   lvec = lvec.rotate3D(this->axis, this->dtheta);
   vertex[0] = this->pos - (lvec*length*centerOfMassFraction);
@@ -35,14 +35,32 @@ void object_line::calcGeo()
   return;
 }
 
-void object_line::solve()													//gravitational force will be applied therefore we need a "solve" method.
+void Line::solve()													//gravitational force will be applied therefore we need a "solve" method.
 {
   this->applyForce(moveForce/this->m);
   calcGeo();
   moveForce = Vector3D(0,0,0);
 }
 
-void object_line::draw()
+bool Line::detectCollision(Object::Pointer object)
+{
+  if(object->shape != this->shape)
+    return false;
+
+  return this->detectCollision(std::dynamic_pointer_cast<Line>(object));
+}
+
+bool Line::detectCollision(std::shared_ptr<Line> line)
+{
+  return false;
+}
+
+void Line::collide(Object::ConstPointer line)
+{
+
+}
+
+void Line::draw()
 {
   calcGeo();
   glLineWidth(4);
@@ -56,7 +74,7 @@ void object_line::draw()
   return;
 }
 
-void* object_line::getProperty(int idx, dataType &type)
+void* Line::getProperty(int idx, dataType &type)
 {
   void* ptr = NULL;
 
@@ -131,7 +149,7 @@ void* object_line::getProperty(int idx, dataType &type)
 }
 
 
-Vector3D object_line::calcVertexVel(int vnum)
+Vector3D Line::calcVertexVel(int vnum)
 {
   Vector3D linVel, rotVel, velDir, velOut;
   GLfloat armLength;		//distance from com to vertex

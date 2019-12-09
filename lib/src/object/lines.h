@@ -4,7 +4,7 @@
 #include "line.h"
 #include "objects.h"
 
-class object_lines : public Objects<object_line>
+class object_lines : public Objects<Line>
 {
   public:
   object_lines();

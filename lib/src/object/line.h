@@ -4,7 +4,7 @@
 #include "object.h"
 
 
-class object_line : public Object
+class Line : public Object
 {
 public:
   Vector3D vertex[2];										//vertices
@@ -15,9 +15,12 @@ public:
 
 //	object_line();
 //	object_line(float mass, Vector3D v1, Vector3D v2);			//input mass and 2 vertices
-  object_line(float mass=1, Vector3D v1=Vector3D(0,0,0), Vector3D v2=Z, float cmf=.5);			//input mass and 2 vertices and
+  Line(float mass=1, Vector3D v1=Vector3D(0,0,0), Vector3D v2=Z, float cmf=.5);			//input mass and 2 vertices and
   virtual void draw();
   virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
+  bool detectCollision(Object::Pointer object);
+  bool detectCollision(std::shared_ptr<Line> line);
+  void collide(Object::ConstPointer line);
   //virtual bool doCollisions(const object_holder *allObjs);
   virtual void* getProperty(int idx, dataType &shape);
   void initGeo();

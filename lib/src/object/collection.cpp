@@ -76,9 +76,9 @@ Plane* object_holder::addPlanes(float mass, float wid, float len, float ph, floa
   return planeout;
 }
 
-object_line* object_holder::addLines(int numObjs, float mass, Vector3D v1, Vector3D v2, float cmf, Vector3D offsetDir, float offsetDist)
+Line* object_holder::addLines(int numObjs, float mass, Vector3D v1, Vector3D v2, float cmf, Vector3D offsetDir, float offsetDist)
 {
-  object_line* lineout = NULL;
+  Line* lineout = NULL;
 
   lines.addObjects(numObjs, mass, v1, v2, cmf, this, offsetDir, offsetDist);
   numObjects += numObjs;
@@ -236,7 +236,7 @@ Plane* object_holder::getPlane(int index) const
   return planes.objs[index];
 }
 
-object_line* object_holder::getLine(int index) const
+Line* object_holder::getLine(int index) const
 {
   return lines.objs[index];
 }

@@ -50,7 +50,7 @@ Vector3D Simulation::setCam()
 
   objpos = this->cameraFollowObject->pos;
   objvel = this->cameraFollowObject->vel.length();
-  cam2obj = this->cameraFollowObject->pos - this->cameras->current->pos;
+  cam2obj = this->cameraFollowObject->pos - this->cameras->current()->pos;
 
 	/*cam2cam = nextcam->pos - cam->pos;
 	camdist = cam2cam.length();
@@ -66,15 +66,11 @@ Vector3D Simulation::setCam()
 		case FOLLOW:
 //			glPrintHead(3,3,"Follow Cam",15);
       if(this->cameraFollowObject->moveForce == Vector3D(0,0,0))
-			{
-				movepos = objpos - cam2obj.unit()*cam->followDist;
-			}
+        movepos = objpos - cam2obj.unit()*this->cameras->current()->followDist;
 			else
-			{
-        movepos = objpos - (this->cameraFollowObject->moveForce.unit()*cam->followDist + cam2obj.unit()*cam->followDist)/2;
-			}
-			cam->pos += (movepos - cam->pos)*.2f*delta*objvel;
-			cam->look += (objpos - cam->look)*.7f*delta*objvel;
+        movepos = objpos - (this->cameraFollowObject->moveForce.unit()*this->cameras->current()->followDist + cam2obj.unit()*this->cameras->current()->followDist)/2;
+      this->cameras->current()->pos += (movepos - this->cameras->current()->pos)*.2f*delta*objvel;
+      this->cameras->current()->look += (objpos - this->cameras->current()->look)*.7f*delta*objvel;
 
 			//look = obj->mass->pos.proj(&nextcam->look, &cam->look);
 			
@@ -82,36 +78,36 @@ Vector3D Simulation::setCam()
 			break;
 		case LOCKED:
 //			glPrintHead(3,3,"Locked Cam",15);
-			cam->look += (objpos - cam->look)*.7f*delta*objvel;
+      this->cameras->current()->look += (objpos - this->cameras->current()->look)*.7f*delta*objvel;
 			break;
 		case CAMERAMODE:
 //			glPrintHead(3,3,"Camera Mode",15);
-			look = cam->look;
-			pos = cam->pos;
+      look = this->cameras->current()->look;
+      pos = this->cameras->current()->pos;
 			break;
 		case DEBUGMODE:
 //			glPrintHead(3,3,"Debug Mode",15);
 			break;
 		case FIRST:
 //			glPrintHead(3,3,"First Person",15);
-			cam->look += (objpos.proj(majAxis) - cam->look.proj(majAxis))*.95f*delta;
-			cam2look = cam->look - cam->pos;
-			cam->pos = objpos;
+      this->cameras->current()->look += (objpos.proj(majAxis) - this->cameras->current()->look.proj(majAxis))*.95f*delta;
+      cam2look = this->cameras->current()->look - this->cameras->current()->pos;
+      this->cameras->current()->pos = objpos;
 			//cam->pos += (objpos - cam->pos)*1.95f*delta;
             if(isKeys(Qt::Key_Left))
 				camRotate = 100*delta;
             else if(isKeys(Qt::Key_Right))
 				camRotate = -100*delta;
             cam2look = cam2look.rotate3D(majAxis, camRotate);
-			cam->look = cam2look + cam->pos;
+      this->cameras->current()->look = cam2look + this->cameras->current()->pos;
 			break;
 		default:
 //			glPrintHead(3,3,"No View",15);
 			break;
 	}
 
-    glLookAt(cam->pos.toQVector3D(), cam->look.toQVector3D(), cam->up.toQVector3D());
-	cam2look = cam->look - cam->pos;
+    glLookAt(this->cameras->current()->pos.toQVector3D(), this->cameras->current()->look.toQVector3D(), this->cameras->current()->up.toQVector3D());
+  cam2look = this->cameras->current()->look - this->cameras->current()->pos;
 
 	return cam2look;
 }
