@@ -1,9 +1,9 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QtGlobal>
+#include "simulation.h"
 
-class Simulation;
+#include <QtGlobal>
 
 #if (QT_VERSION >= 0x050500)
 #include "qopenglwidget.h"
@@ -16,7 +16,6 @@ class GLWidget : public QGLWidget
     Q_OBJECT
 public:
     GLWidget(QWidget *parent=0);
-    ~GLWidget();
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 protected:
@@ -26,7 +25,7 @@ protected:
 public slots:
     void animate();
 private:
-    Simulation* sim;
+    Simulation simulation;
     qint64 previousRunTime;
 };
 

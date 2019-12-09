@@ -16,28 +16,26 @@ GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 #endif
 {
-    sim = new Simulation;
-
     const Vector3D gravity = Z * -2;
 
-    Object::Pointer object = sim->allObj.addObject(std::make_shared<Line>(1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f));
+    Object::Pointer object = simulation.allObj.addObject(std::make_shared<Line>(1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f));
     object->setGravity(gravity);
     object->pos = Vector3D();
 //    sim->allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
 //    sim->allObj.addSpheres(1,1,Vector3D(0,0,5));
-    object = sim->allObj.addObject(std::make_shared<object_sphere>(1, 1, Vector3D(0,0,5)));
+    object = simulation.allObj.addObject(std::make_shared<object_sphere>(1, 1, Vector3D(0,0,5)));
     object->elasticity = .5;
     object->setGravity(gravity);
 //    sim->cameraFollowObject = object;
 //    sim->allObj.spheres.objs[0]->mass->elas = .5f;
 //	sim->allObj.addPlanes(1, 10, 11, 11, 0, 159, Vector3D(1,-3,2));
-  sim->cameraFollowObject = sim->allObj.addPlane(11, 11, Vector3D(1,-3,2), 0, 159, Z);
+  simulation.cameraFollowObject = simulation.allObj.addPlane(11, 11, Vector3D(1,-3,2), 0, 159, Z);
 //	sim->allObj.addPlanes(1, 10, 10, 5, 0, 20, Vector3D(0,5,-5));
-  sim->allObj.addPlane(10, 5, Vector3D(0,5,-5), 0, 20, Z);
+  simulation.allObj.addPlane(10, 5, Vector3D(0,5,-5), 0, 20, Z);
 //	sim->allObj.addPlanes(1, 10, 10, 25, 0, 0, Vector3D(0,-6,-7));
-  sim->allObj.addPlane(10, 25, Vector3D(0,-6,-7), 0, 0, Z);
-	sim->cameras->addPoint(Vector3D(20, 0, 0), Vector3D(0,-.5,2), Vector3D(0,0,1), 5.0f);
-    sim->cameras->camview = CAMERAMODE;
+  simulation.allObj.addPlane(10, 25, Vector3D(0,-6,-7), 0, 0, Z);
+  simulation.cameras->addPoint(Vector3D(20, 0, 0), Vector3D(0,-.5,2), Vector3D(0,0,1), 5.0f);
+    simulation.cameras->camview = CAMERAMODE;
 //    sim->allObj.makeTree();
 //    sim->allObj.tree->ID = "holder";
 
@@ -50,11 +48,6 @@ GLWidget::GLWidget(QWidget *parent)
 //    joystick = new joystick_s;
     bGravityOn = true;
     gravityON = true;
-}
-
-GLWidget::~GLWidget()
-{
-    delete sim;
 }
 
 QSize GLWidget::minimumSizeHint() const
@@ -118,7 +111,7 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    sim->draw();
+    simulation.draw();
 
     return;
 }
@@ -129,7 +122,7 @@ void GLWidget::animate()
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
     const qint64 timeDelta = this->previousRunTime > 0 ? std::min((int)(currentTime - this->previousRunTime), 100) : 0;
 
-    sim->run(timeDelta * 1e-3);
+    simulation.run(timeDelta * 1e-3);
     this->previousRunTime = currentTime;
 
     update();
