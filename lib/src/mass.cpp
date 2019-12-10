@@ -112,6 +112,7 @@ void Mass::simulate(float dt)
 	dir = dir.rotate3D(axis, dtheta);
 
   this->forcenew = {0, 0, 0};
+
   velnew = vel;
 }
 

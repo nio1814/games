@@ -118,18 +118,18 @@ void Plane::orient(const Vector3D& majorAxis, const float theta, const float phi
 
   if(majorAxis == Z)
   {
-    toRight = X.rotate3D(Z, theta);							//rotate x by phi
-    toFront = (Y.rotate3D(Y, theta)).rotate3D(toRight, phi);	//rotate y down by phi then theta
+    toRight = X.rotate3D(Z, phi);							//rotate x by phi
+    toFront = (Y.rotate3D(Z, phi)).rotate3D(toRight, theta);	//rotate y down by phi then theta
   }
   else if(majorAxis == Y)
   {
-    toRight = Z.rotate3D(Y, theta);
-    toFront = (X.rotate3D(Y, theta)).rotate3D(toRight, phi);
+    toRight = Z.rotate3D(Y, phi);
+    toFront = (X.rotate3D(Y, phi)).rotate3D(toRight, theta);
   }
   else if(majorAxis == X)
   {
-    toRight = Y.rotate3D(X, theta);
-    toFront = (Z.rotate3D(Y, theta)).rotate3D(toRight, phi);
+    toRight = Y.rotate3D(X, phi);
+    toFront = (Z.rotate3D(X, phi)).rotate3D(toRight, theta);
   }
   else
     //msgbox('incorrect major axis');

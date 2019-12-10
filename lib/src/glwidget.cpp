@@ -57,11 +57,14 @@ QSize GLWidget::minimumSizeHint() const
 
 QSize GLWidget::sizeHint() const
 {
-	return QSize(1000,700);
+  return QSize(this->WIDTH_DEFAULT, this->HEIGHT_DEFAULT);
 }
 
 void GLWidget::initializeGL()
 {
+  glEnable(GL_BLEND);									// Enable Blending       (disable alpha testing)
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Enable Alpha Blending (disable alpha testing)
+
 	glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glClearColor(0.2f, 0.2f, 0.2f, 0.5f);				// Black Background
@@ -71,6 +74,8 @@ void GLWidget::initializeGL()
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glEnable(GL_LIGHTING);
+  glEnable(GL_COLOR_MATERIAL);
+  glColorMaterial(GL_FRONT,GL_AMBIENT_AND_DIFFUSE);
 
     light.enable();
     lightActive = false;

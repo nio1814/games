@@ -46,16 +46,6 @@ Window::Window(QWidget *parent) :
     gravityON = true;
 }
 
-QSize Window::minimumSizeHint() const
-{
-    return QSize(50, 50);
-}
-
-QSize Window::sizeHint() const
-{
-    return QSize(1000, 800);
-}
-
 void Window::initializeGL()
 {
     glEnable(GL_BLEND);									// Enable Blending       (disable alpha testing)
@@ -86,21 +76,21 @@ void Window::initializeGL()
     return;
 }
 
-void Window::resizeGL(int w, int h)
-{
-    h = qMax(1,h);
-
-    glViewport (0, 0, (GLsizei)(w), (GLsizei)(h));				// Reset The Current Viewport
-    glMatrixMode (GL_PROJECTION);										// Select The Projection Matrix
-    glLoadIdentity ();													// Reset The Projection Matrix
-    glPerspective (45.0f, (GLfloat)(w)/(GLfloat)(h),			// Calculate The Aspect Ratio Of The Window
-                    1.0f, 100.0f);
-
-    glMatrixMode (GL_MODELVIEW);				// Select The Modelview Matrix
-    glLoadIdentity ();							// Reset The Modelview Matrix
-
-	return;
-}
+//void Window::resizeGL(int w, int h)
+//{
+//    h = qMax(1,h);
+//
+//    glViewport (0, 0, (GLsizei)(w), (GLsizei)(h));				// Reset The Current Viewport
+//    glMatrixMode (GL_PROJECTION);										// Select The Projection Matrix
+//    glLoadIdentity ();													// Reset The Projection Matrix
+//    glPerspective (45.0f, (GLfloat)(w)/(GLfloat)(h),			// Calculate The Aspect Ratio Of The Window
+//                    1.0f, 100.0f);
+//
+//    glMatrixMode (GL_MODELVIEW);				// Select The Modelview Matrix
+//    glLoadIdentity ();							// Reset The Modelview Matrix
+//
+//	return;
+//}
 
 void Window::paintGL()
 {

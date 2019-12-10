@@ -9,7 +9,7 @@
 bool detectCollision(std::shared_ptr<object_sphere> sphere, std::shared_ptr<Plane> plane)
 {
   Vector3D toPlane = sphere->pos - plane->pos;
-  if(plane->normal().length() < 1e7)
+  if(plane->normal().length() < 1e-7)
     return false;
   GLfloat normalDistance = std::abs(toPlane.dot(plane->normal()));
   
@@ -52,7 +52,7 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
   GLfloat MINBOUNCEVEL = .1f;
 
   GLfloat m1, m2, v1normMag;
-  Vector3D v1, v2, vpara, planeNorm;
+  Vector3D v1, v2, vpara;
   //int awayDir;
 
   m1 = sphere->m;
@@ -64,8 +64,7 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
     planeNorm = plane->normal;
   else
     planeNorm = plane->normal*-1;*/
-  planeNorm = (sphere->pos - plane->pos).proj(plane->normal());
-  planeNorm.unitize();
+  const Vector3D planeNorm = (sphere->pos - plane->pos).proj(plane->normal()).unit();
   v1normMag = fabs(v1.dot(planeNorm));
 
   if (fabs(v1.length()) < MINBOUNCEVEL)

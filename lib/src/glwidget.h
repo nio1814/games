@@ -49,6 +49,8 @@ protected:
 	Vector2D fovAngle;
 	int m_windowSizeX;
 	int m_windowSizeY;
+  const int WIDTH_DEFAULT = 1000;
+  const int HEIGHT_DEFAULT = 800;
 signals:
 
 public slots:
