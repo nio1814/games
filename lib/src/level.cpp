@@ -53,7 +53,7 @@ bool Level::create(int index)
 
 //	numExtraSpheres = 0;
 
-    GLfloat sqr3 = sqrtf(3.0f);
+//    GLfloat sqr3 = sqrtf(3.0f);
 	matrix2D3 basis;
 
     switch(index)
@@ -102,11 +102,11 @@ bool Level::create(int index)
     objvel = obj->mass->vel.length();
     cam2obj = obj->mass->pos - cam->pos;
 
-    /*cam2cam = nextcam->pos - cam->pos;
+    cam2cam = nextcam->pos - cam->pos;
     camdist = cam2cam.length();
     alongv = cam2obj.proj(&cam2cam)*.1f;
-    cam->movepos = cam->pos + alongv;*/
-/*	if(view == FOLLOW)
+    cam->movepos = cam->pos + alongv;
+    if(view == FOLLOW)
     {
         if(obj->moveForce == Vector3D(0,0,0))
         {

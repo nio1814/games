@@ -52,12 +52,13 @@ bool Line::detectCollision(Object::Pointer object)
 
 bool Line::detectCollision(std::shared_ptr<Line> line)
 {
+  Q_UNUSED(line);
   return false;
 }
 
 void Line::collide(Object::ConstPointer line)
 {
-
+  Q_UNUSED(line);
 }
 
 void Line::draw()

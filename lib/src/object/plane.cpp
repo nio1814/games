@@ -2,7 +2,7 @@
 
 const float EPSILON = 1E-7;
 
-Plane::Plane(float wid, float len, float phi, float theta, Vector3D axis) : Object(),
+Plane::Plane(float wid, float len, const Vector3D &position, float phi, float theta, Vector3D axis) : Object(position),
   width(wid),
   length(len)//, angles(Vector2D(phi, theta))
 {
@@ -11,7 +11,7 @@ Plane::Plane(float wid, float len, float phi, float theta, Vector3D axis) : Obje
   orient(axis, theta, phi);
 }
 
-Plane::Plane(float width, float length, Vector3D position, const Vector3D &up, const Vector3D &toRight) :
+Plane::Plane(float width, float length, const Vector3D &position, const Vector3D &up, const Vector3D &toRight) :
   Object(position),
   width(width), length(length)//, m_basis(basis)
 {

@@ -56,7 +56,7 @@ bool LoadGLTextures(GLuint *texture, char filePath[])								// Load Bitmaps And
 				//glTexImage2D(GL_TEXTURE_2D, 0, 3, TextureImage[loop].width, TextureImage[loop].height,
 				//	0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[loop].data);
 
-				int e = glGetError();
+//				int e = glGetError();
 			}
 		}
 	}

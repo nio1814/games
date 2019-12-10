@@ -1,21 +1,16 @@
-#ifndef GLWIDGET_H
-#define GLWIDGET_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include "simulation.h"
 
-#include <QtGlobal>
+#include "glwidget.h"
 
-#if (QT_VERSION >= 0x050500)
-#include "qopenglwidget.h"
-class GLWidget : public QOpenGLWidget
-#else
-#include <QtOpenGL/QGLWidget>
-class GLWidget : public QGLWidget
-#endif
+class Window : public GLWidget
 {
     Q_OBJECT
 public:
-    GLWidget(QWidget *parent=0);
+    Window(QWidget *parent=0);
+    ~Window(){};
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 protected:
@@ -29,4 +24,4 @@ private:
     qint64 previousRunTime;
 };
 
-#endif // GLWIDGET_H
+#endif

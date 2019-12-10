@@ -302,8 +302,8 @@ void Window::processKeyboard()							// Process Keyboard Results
   if (isKeys(Qt::Key_Z))
     camera->pos -= level->majorAxis * 0.05f;				// 'Z' Key Pressed ... Zoom Out
 
-    if (isKeys(Qt::Key_PageUp))		ballHeight +=0.03f;				// Page Up Key Pressed Move Ball Up
-    if (isKeys(Qt::Key_PageDown))		ballHeight -=0.03f;				// Page Down Key Pressed Move Ball Down
+  if (isKeys(Qt::Key_PageUp))		ballHeight +=0.03f;				// Page Up Key Pressed Move Ball Up
+  if (isKeys(Qt::Key_PageDown))		ballHeight -=0.03f;				// Page Down Key Pressed Move Ball Down
 
 	/*if (keys[VK_UP])		ball->moveForce -= Vector3D(0.0, 0.0, 2.0);				// Page Down Key Pressed Move Ball Down
 	if (keys[VK_DOWN])		ball->moveForce += Vector3D(0.0, 0.0, 2.0);				// Page Down Key Pressed Move Ball Down
@@ -335,6 +335,8 @@ void Window::processKeyboard()							// Process Keyboard Results
 			case LOCKED:
 				newView = FIRST;
 				break;
+      default:
+        break;
 		}
     this->game.currentLevel()->cameras.camview = newView;
 	}

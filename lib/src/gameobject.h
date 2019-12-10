@@ -50,7 +50,7 @@ public:
 	gameObj();
 	~gameObj();
 	
-  bool addMenu(char* mTitle);
+  bool addMenu(const string mTitle);
     void addLevel(std::shared_ptr<Level> level);
 //    bool addLevel(char* file, float scale, Vector3D initCamPos, Vector3D initLookPos, Vector3D upDir, CameraView view);
 	bool loadLevel();

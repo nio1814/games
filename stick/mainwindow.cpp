@@ -1,15 +1,15 @@
 #include "mainwindow.h"
 
-#include "glwidget.h"
+#include "window.h"
 
 #include <qtimer.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-	gl = new GLWidget(this);
+  window = QPointer<Window>(new Window(this));
 	
-	setCentralWidget(gl);
+  setCentralWidget(window);
 	centralWidget()->setFocus();
 	
     QTimer *timer = new QTimer(this);

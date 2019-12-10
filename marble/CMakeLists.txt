@@ -14,8 +14,6 @@ set(SRC
   levels.cpp
 )
 
-set(CMAKE_AUTOMOC ON)
-
 add_executable(${PROJECT} ${SRC} marble.qrc)
 
 qt5_use_modules(${PROJECT} Widgets OpenGL)

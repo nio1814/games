@@ -2,7 +2,7 @@
 //#include <gl\gl.h>										// Header File For The OpenGL32 Library
 //#include <gl\glu.h>										// Header File For The GLu32 Library
 
-#include "texture.h"
+#include "texture.h"
 #include <QImage>
 #include <cstring>
 
@@ -27,9 +27,9 @@
 }*/
 
 
-int LoadGLTextures(Texture* textureholder, char *filename)                                    // Load Bitmaps And Convert To Textures
-{
-    int Status=false;									// Status Indicator
+//int LoadGLTextures(Texture* textureholder, char *filename)                                    // Load Bitmaps And Convert To Textures
+//{
+//    int Status=false;									// Status Indicator
 #if 0
 //    AUX_RGBImageRec *TextureImage[1];						// Create Storage Space For The Textures
     int loop=0;
@@ -66,8 +66,8 @@ int LoadGLTextures(Texture* textureholder, char *filename)                      
 	}
 	
 #endif
-	return Status;										// Return The Status
-}
+//	return Status;										// Return The Status
+//}
 
 
 /*

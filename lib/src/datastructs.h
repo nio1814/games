@@ -28,17 +28,17 @@ class NodeClass
 
     //A simple reader function that returns the value of the val member.
     const T &getVal() const;
-	virtual void addLeaf(T input, dataType tp, string name){return;}
+  virtual void addLeaf(T input, dataType tp, string name) = 0;
 
  // private:
     T val; 				//The value contained in "this" node
-	int numLeaf;
-	int currentLeaf;
+  int numLeaf = 0;
+  int currentLeaf = 0;
 	dataType type;
 	string ID;
-	int level;				//level of node in the tree
+  int level = 0;				//level of node in the tree
     NodeClass< T > *ptr; //Points to the next node in the structure
-	NodeClass< T > *parent;
+  NodeClass< T > *parent;
 
     //A writer function that sets the ptr member to the parameter passed in.
     //Note: this is a PRIVATE member function, indicating that only other
@@ -54,7 +54,6 @@ class NodeClass
 /********* NodeClass Member Function Definitions ************/
 template < class T >
 NodeClass<T>::NodeClass()
-	:numLeaf(0), parent(NULL), ptr(NULL), currentLeaf(0), level(0)
 {}
 
 template < class T >

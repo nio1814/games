@@ -12,8 +12,8 @@ public:
 //	bool touching;
 
 //	object_plane();
-  Plane(float wid=1, float len=1, float phi=0, float theta=0, Vector3D axis=Z);
-  Plane(float width, float length, Vector3D position, const Vector3D& up, const Vector3D& toRight);
+  Plane(float wid=1, float len=1, const Vector3D& position=Vector3D(), float phi=0, float theta=0, Vector3D axis=Z);
+  Plane(float width, float length, const Vector3D& position, const Vector3D& up, const Vector3D& toRight);
 
   Plane& operator = (const Plane& plane);
 

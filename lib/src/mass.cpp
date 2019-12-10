@@ -37,8 +37,8 @@ Mass::Mass(const Mass &mass)
 }
 
 Mass::Mass(const Vector3D &position, const float mass) :
-  pos(position),
-  m(mass)
+  m(mass),
+  pos(position)
 {
 
 }

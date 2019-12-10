@@ -32,7 +32,6 @@ bool MeshModel::loadFile(QString filename)
 {
 	bool status=false;
 
-	const int maxLength = 256;
 //	char tempString[maxLength];
 	GLfloat vert[3];
 	GLfloat norm[3];
@@ -320,6 +319,7 @@ void MeshModel::translateTo(const Vector3D* pos)
 
 MeshVert* MeshModel::getVert(int t, int v) const
 {
+  Q_UNUSED(t);
 	MeshVert* vertOut;
 
 	vertOut = &verts[tris->vIndex[v]];

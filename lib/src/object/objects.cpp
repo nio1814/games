@@ -9,7 +9,7 @@
 bool detectCollision(std::shared_ptr<object_sphere> sphere, std::shared_ptr<Plane> plane)
 {
   Vector3D toPlane = sphere->pos - plane->pos;
-  if (!plane->normal().length())
+  if(plane->normal().length() < 1e7)
     return false;
   GLfloat normalDistance = std::abs(toPlane.dot(plane->normal()));
   
@@ -108,7 +108,7 @@ Object::Pointer Objects::addObject(Object::Pointer object)
 
 std::shared_ptr<Plane> Objects::addPlane(const float width, const float length, const Vector3D& position, const float phi, const float theta, const Vector3D majorAxis)
 {
-  std::shared_ptr<Plane> plane = std::make_shared<Plane>(width, length, phi, theta, majorAxis);
+  std::shared_ptr<Plane> plane = std::make_shared<Plane>(width, length, position, phi, theta, majorAxis);
   this->addObject(plane);
 
   return plane;
@@ -160,10 +160,10 @@ void Objects::detectCollisions()
   for (Object::Pointer object : this->objects)
     object->clearTouchedObjects();
 
-  for (int index1 = 0; index1 < this->objects.size(); index1++)
+  for (size_t index1 = 0; index1 < this->objects.size(); index1++)
   {
     std::shared_ptr<Object> object1 = this->objects[index1];
-    for (int index2 = index1 + 1; index2 < this->objects.size(); index2++)
+    for (size_t index2 = index1 + 1; index2 < this->objects.size(); index2++)
     {
       std::shared_ptr<Object> object2 = this->objects[index2];
       if (object1->shape == object2->shape)

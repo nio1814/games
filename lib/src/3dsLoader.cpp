@@ -81,7 +81,7 @@ void C3dsLoader::Render_3ds()
 						glTexCoord2f(pObject->pTexVerts[ index ].x, pObject->pTexVerts[ index ].y);
 					}
 				} else {
-					int msize = m3DModel.pMaterials.size();
+//					int msize = m3DModel.pMaterials.size();
 					//if(m3DModel.pMaterials.size() < pObject->materialID) 
 					//if(msize < pObject->materialID) 
 					//{
@@ -111,7 +111,6 @@ void C3dsLoader::Texture_3ds(unsigned int textureArray[], const char* strFileNam
 //	AUX_RGBImageRec *pBitMap = NULL;
 	FILE *pFile = NULL;									
 	unsigned char *pJpeg = NULL;
-	int type;
 	//CJPEGFile jpeg;
 	char tempstring[5] = {0};
 	
@@ -131,7 +130,6 @@ void C3dsLoader::Texture_3ds(unsigned int textureArray[], const char* strFileNam
 		if(pFile)										
 		{
 //			pBitMap = auxDIBImageLoad(FilePath);
-			type = 1;
 		}
 		else											
 		{											

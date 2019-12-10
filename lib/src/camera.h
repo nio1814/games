@@ -10,6 +10,8 @@
 #include <vector3d.h>
 #include "qtgl.h"
 
+#include <memory>
+
 #define DEFFOLLOWDIST	10
 #define DEFNUMCAMS	20
 #define NUMCAMVIEWS	5

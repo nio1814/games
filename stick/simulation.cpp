@@ -39,17 +39,16 @@ Vector3D Simulation::setCam()
 	Vector3D pos, look;						//final cam position and look positions
 	Vector3D alongv, movepos;
 	Vector3D objpos;
-	GLfloat camdist, objvel, camRotate;
 
     Vector3D majAxis = Vector3D(0,0,1);
     GLfloat delta = .05;
 
-	camRotate = 0;
+  GLfloat camRotate = 0;
 
   std::shared_ptr<const CameraPoint> nextcam = cameras->currentIndex == cameras->numPoints() - 1 ? this->cameras->current() : this->cameras->points[cameras->currentIndex + 1];
 
   objpos = this->cameraFollowObject->pos;
-  objvel = this->cameraFollowObject->vel.length();
+  const GLfloat objvel = this->cameraFollowObject->vel.length();
   cam2obj = this->cameraFollowObject->pos - this->cameras->current()->pos;
 
 	/*cam2cam = nextcam->pos - cam->pos;

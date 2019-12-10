@@ -1,4 +1,4 @@
-#include "glwidget.h"
+#include "window.h"
 
 #include "qtgl.h"
 #include "simulation.h"
@@ -9,12 +9,8 @@
 #include <QTimer>
 #include <QDateTime>
 
-GLWidget::GLWidget(QWidget *parent)
-#if (QT_VERSION >= 0x050500)
-        : QOpenGLWidget(parent)
-#else
-    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
-#endif
+Window::Window(QWidget *parent) :
+  GLWidget(parent)
 {
     const Vector3D gravity = Z * -2;
 
@@ -50,17 +46,17 @@ GLWidget::GLWidget(QWidget *parent)
     gravityON = true;
 }
 
-QSize GLWidget::minimumSizeHint() const
+QSize Window::minimumSizeHint() const
 {
     return QSize(50, 50);
 }
 
-QSize GLWidget::sizeHint() const
+QSize Window::sizeHint() const
 {
     return QSize(1000, 800);
 }
 
-void GLWidget::initializeGL()
+void Window::initializeGL()
 {
     glEnable(GL_BLEND);									// Enable Blending       (disable alpha testing)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	// Enable Alpha Blending (disable alpha testing)
@@ -90,7 +86,7 @@ void GLWidget::initializeGL()
     return;
 }
 
-void GLWidget::resizeGL(int w, int h)
+void Window::resizeGL(int w, int h)
 {
     h = qMax(1,h);
 
@@ -106,7 +102,7 @@ void GLWidget::resizeGL(int w, int h)
 	return;
 }
 
-void GLWidget::paintGL()
+void Window::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -116,7 +112,7 @@ void GLWidget::paintGL()
     return;
 }
 
-void GLWidget::animate()
+void Window::animate()
 {
 //    int dt = qobject_cast<QTimer*>(sender())->interval();
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();

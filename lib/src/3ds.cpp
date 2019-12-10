@@ -115,8 +115,8 @@ void CLoad3DS::CleanUp()
 
 void CLoad3DS::ProcessNextChunk(t3DModel *pModel, tChunk *pPreviousChunk)
 {
-	t3DObject newObject = {0};					// This is used to add to our object list
-	tMaterialInfo newTexture = {0};				// This is used to add to our material list
+  t3DObject newObject;					// This is used to add to our object list
+  tMaterialInfo newTexture;				// This is used to add to our material list
 	unsigned int version = 0;					// This will hold the file version
 	int buffer[50000] = {0};					// This is used to read past unwanted data
 
@@ -772,6 +772,7 @@ void CLoad3DS::ComputeNormals(t3DModel *pModel)
 
 void CreateTexture(GLuint textureArray[], char* strFileName, int textureID)
 {
+  Q_UNUSED(strFileName);
     /*AUX_RGBImageRec *pBitmap = NULL;
 	
 	if(!strFileName)									// Return from the function if no file name was passed in

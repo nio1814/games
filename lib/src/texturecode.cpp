@@ -107,6 +107,8 @@ typedef struct tagBITMAPCOREHEADER { // bmch
 
 bool TextureLoadBMP(texture_t *tex, char *filename)			// Loads A TGA File Into Memory
 {
+  Q_UNUSED(tex);
+  Q_UNUSED(filename);
 	bool status = false;
 /*	BITMAPFILEHEADER	bmfh;
 

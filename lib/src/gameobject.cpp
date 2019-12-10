@@ -161,7 +161,7 @@ void gameObj::render()
     }
 }
 	
-bool gameObj::addMenu(char* mTitle)
+bool gameObj::addMenu(const std::string mTitle)
 {
 	bool success = false;
 	

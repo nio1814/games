@@ -33,14 +33,14 @@ GLWidget::GLWidget(QWidget *parent)
 	light.diffuse = Vector3D(1,1,1);
 	light.specular = Vector3D(1,1,1);*/
 
-	GLfloat LightAmbient[]=		{ 0.1f, 0.1f, 0.1f, 1.0f };
-	GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat LightPosition[]=	{ 5.0f, 5.0f, 6.0f, 1.0f };
+  GLfloat LightAmbient[]=		{ 0.1f, 0.1f, 0.1f, 1.0f };
+  GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f };
+  GLfloat LightPosition[]=	{ 5.0f, 5.0f, 6.0f, 1.0f };
 
-	//glEnable(GL_LIGHT1);
-//	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
-//	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
-//	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
+  glEnable(GL_LIGHT1);
+  glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
+  glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
 
 //    SetCursorPos(m_windowSizeX/2, m_windowSizeY/2);
 }
