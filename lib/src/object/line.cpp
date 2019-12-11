@@ -7,8 +7,8 @@ Line::Line(float mass, Vector3D v1, Vector3D v2, float cmf) :
 //	Object();
 //	object_line();
   shape = LINE;
-  vertex[0] = v1;
-  vertex[1] = v2;
+  vertices[0] = v1;
+  vertices[1] = v2;
   width = 15;
   initGeo();
     bMovable = true;
@@ -16,11 +16,11 @@ Line::Line(float mass, Vector3D v1, Vector3D v2, float cmf) :
 
 void Line::initGeo()
 {
-  lvec = (vertex[1] - vertex[0]).unit();
-  length = (vertex[1] - vertex[0]).length();
+  lvec = (vertices[1] - vertices[0]).unit();
+  length = (vertices[1] - vertices[0]).length();
   normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
-  this->pos = vertex[0] + (vertex[1] - vertex[0]) * centerOfMassFraction;
+  this->pos = vertices[0] + (vertices[1] - vertices[0]) * centerOfMassFraction;
   this->I = this->m*pow(length,2)/12.0f;
   return;
 }
@@ -28,8 +28,8 @@ void Line::initGeo()
 void Line::calcGeo()
 {
   lvec = lvec.rotate3D(this->axis, this->dtheta);
-  vertex[0] = this->pos - (lvec*length*centerOfMassFraction);
-  vertex[1] = this->pos + (lvec*length*(1-centerOfMassFraction));
+  vertices[0] = this->pos - (lvec*length*centerOfMassFraction);
+  vertices[1] = this->pos + (lvec*length*(1-centerOfMassFraction));
   normal = Z - Z.proj(lvec);							//make normal vector starting from Z
 
   return;
@@ -68,8 +68,8 @@ void Line::draw()
   glBegin(GL_LINES);								//horizontal line
     glNormal3f(normal.x, normal.y, normal.z);	//normal vector to line points up
     glColor3ub(255, 255, 255);					// Set Color To White
-    glVertex3f(vertex[0].x, vertex[0].y, vertex[0].z);
-    glVertex3f(vertex[1].x, vertex[1].y, vertex[1].z);
+    glVertex3f(vertices[0].x, vertices[0].y, vertices[0].z);
+    glVertex3f(vertices[1].x, vertices[1].y, vertices[1].z);
   glEnd();
 
   return;
@@ -86,7 +86,7 @@ void* Line::getProperty(int idx, dataType &type)
     switch(idx)
     {
     case 14:
-      ptr = &vertex[0];
+      ptr = &vertices[0];
       type = tpVECTOR3D;
       break;
     /*case 15:
@@ -149,24 +149,30 @@ void* Line::getProperty(int idx, dataType &type)
   return ptr;
 }
 
+void Line::addTouchedObject(Object::Pointer object, const int vertexIndex)
+{
+  Object::addTouchedObject(object);
+  this->touchingVertexIndex[object] = vertexIndex;
+}
 
-Vector3D Line::calcVertexVel(int vnum)
+
+Vector3D Line::vertexVelocity(int vertexIndex)
 {
   Vector3D linVel, rotVel, velDir, velOut;
   GLfloat armLength;		//distance from com to vertex
 
   linVel = this->vel;
-  switch(vnum)
+  switch(vertexIndex)
   {
     case 0:
       armLength = centerOfMassFraction*length;
-      velDir = Cross(this->axis,vertex[0]-vertex[1]);
+      velDir = Cross(this->axis,vertices[0]-vertices[1]);
       velDir.unitize();
       rotVel = velDir*armLength*this->avel;
       break;
     case 1:
       armLength = (1.0f-centerOfMassFraction)*length;
-      velDir = Cross(this->axis, vertex[1]-vertex[0]);
+      velDir = Cross(this->axis, vertices[1]-vertices[0]);
       velDir.unitize();
       rotVel = velDir*armLength*this->avel;
       break;

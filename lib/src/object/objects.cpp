@@ -2,6 +2,7 @@
 
 #include "plane.h"
 #include "sphere.h"
+#include "line.h"
 
 #include <cmath>
 
@@ -37,6 +38,22 @@ bool detectCollision(std::shared_ptr<object_sphere> sphere, std::shared_ptr<Plan
   return false;
 }
 
+bool detectCollision(std::shared_ptr<Line> line, std::shared_ptr<Plane> plane)
+{
+  for(int n=0; n<2; n++)
+  {
+    const Vector3D vertex = line->vertices[n];
+    if (plane->inPlane(vertex) && plane->withinProximity(vertex))
+    {
+      line->addTouchedObject(plane, n);
+      plane->addTouchedObject(line);
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool detectCollision(Object::Pointer object1, Object::Pointer object2)
 {
   if (object1->shape == Object::SPHERE && object2->shape == Object::PLANE)
@@ -64,20 +81,22 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
     planeNorm = plane->normal;
   else
     planeNorm = plane->normal*-1;*/
-  const Vector3D planeNorm = (sphere->pos - plane->pos).proj(plane->normal()).unit();
-  v1normMag = fabs(v1.dot(planeNorm));
+  Vector3D planeNormal = plane->normal();
+  if (!plane->above(sphere->pos))
+    planeNormal *= -1;
+  v1normMag = std::abs(v1.dot(plane->normal()));
 
   if (fabs(v1.length()) < MINBOUNCEVEL)
     v1 -= v1;
   else if (plane->bMovable)
     v1 = v1 * ((m1 - m2) / (m1 + m2)) + v2 * (2 * m2 / (m1 + m2));
   else
-    v1 += planeNorm * (1 + sphere->elasticity) * v1normMag;
+    v1 += planeNormal * (1 + sphere->elasticity) * v1normMag;
 
   sphere->velnew = v1;
-  sphere->force += planeNorm * std::abs(planeNorm.dot(sphere->force));
+  sphere->force += plane->normal() * std::abs(planeNormal.dot(sphere->force));
 
-  sphere->pos += planeNorm * (sphere->radius - planeNorm.dot(sphere->pos - plane->pos));
+  sphere->pos += planeNormal * (sphere->radius - planeNormal.dot(sphere->pos - plane->pos));
 
   vpara = v1 - v1.proj(Y);
 
@@ -87,11 +106,18 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
   sphere->avelnew += vpara.dot(Vector3D(-1, 0, 0)) / (sphere->radius * 2 * M_PI);
 }
 
+void collide(std::shared_ptr<Line> line, std::shared_ptr<const Plane> plane)
+{
+  const Vector3D normalVelocity = line->vertexVelocity(line->touchingVertexIndex[plane]);
+}
+
 
 void collide(Object::Pointer object1, Object::ConstPointer object2)
 {
-  if (object1->shape == Object::SPHERE && object2->shape == Object::PLANE)
+  if(object1->shape == Object::SPHERE && object2->shape == Object::PLANE)
     collide(std::dynamic_pointer_cast<object_sphere>(object1), std::dynamic_pointer_cast<const Plane>(object2));
+  else if(object1->shape == Object::LINE && object2->shape == Object::PLANE)
+    collide(std::dynamic_pointer_cast<Line>(object1), std::dynamic_pointer_cast<const Plane>(object2));
 }
 
 Object::Pointer Objects::addObject(Object::Pointer object)

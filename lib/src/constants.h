@@ -4,7 +4,7 @@
 #include "vector3d.h"
 
 #define PI 3.1415926535
-static const float DEGREES_TO_RADIANS = 0.0174532;
+static const float DEGREES_TO_RADIANS = 0.0174532f;
 #define RAD2DEG 57.2957795
 #define GRAVITY -9.81
 #define MAXDELTA .08f

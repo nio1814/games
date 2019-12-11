@@ -29,6 +29,9 @@ public:
 
   virtual void collide(ConstPointer object);
   void orient(const Vector3D& up, const Vector3D& toRight, Vector3D toFront=Vector3D());
+  bool withinProximity(const Vector3D &point, const float proximity=1e-3);
+  bool inPlane(const Vector3D &point);
+  bool above(const Vector3D &point) const;
 private:
   virtual void draw();
   //virtual bool doCollisions(const object_holder *allObjs);
@@ -37,9 +40,6 @@ private:
   void orient(const matrix2D3& basis);
   void orient(const Vector3D &majorAxis, const float theta, const float phi);
   Vector3D basisPosition(const Vector3D point) const;
-  bool inPlane(const Vector3D &point);
-  bool atSurface(const Vector3D &point);
-  bool isAbove(const Vector3D &point) const;
 };
 
 std::shared_ptr<Plane> copyPlane(std::shared_ptr<const Plane> plane);

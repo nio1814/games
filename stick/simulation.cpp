@@ -41,7 +41,7 @@ Vector3D Simulation::setCam()
 	Vector3D objpos;
 
     Vector3D majAxis = Vector3D(0,0,1);
-    GLfloat delta = .05;
+  GLfloat delta = .05f;
 
   GLfloat camRotate = 0;
 

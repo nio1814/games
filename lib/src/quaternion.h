@@ -11,7 +11,7 @@ public:
   Quaternion(const matrix2D3 matrix);
   Quaternion(const Vector3D axis, const float degrees);
 
-  Quaternion inverse();
+  Quaternion inverse() const;
   Vector3D rotate(const Vector3D& vector) const;
 
   float w = 1;

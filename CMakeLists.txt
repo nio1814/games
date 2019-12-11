@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 if(MSVC)
-  add_compile_options(/W1 /WX)
+  add_compile_options(/W2 /WX)
   add_definitions(-D_USE_MATH_DEFINES)
 else()
   add_compile_options(-Wall -Wextra -Werror)

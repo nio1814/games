@@ -12,7 +12,7 @@ Level::Level()
     numPlayers = 0;
     majorAxis = Vector3D(0,0,1);
     bGravity = false;
-    gravityM = 9.81;
+    gravityM = 9.81f;
     gravityV = majorAxis*gravityM;
     //numTextures = 0;
 
@@ -218,7 +218,7 @@ void Level::updateCam()
             //cam->look += (cam->pos.proj(&majAxis) - cam->look.proj(&majAxis))*.95f*delta;
             break;
         case FOLLOW:
-      this->camera()->pos += camToLook*(camToLook.length() - this->camera()->followDist)*.01;
+      this->camera()->pos += camToLook*(camToLook.length() - this->camera()->followDist)*.01f;
             break;
         default:
 //			MessageBox(NULL,"Invalid Camera View.","ERROR",MB_OK | MB_ICONINFORMATION);

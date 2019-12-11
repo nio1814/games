@@ -1,6 +1,6 @@
 #include "plane.h"
 
-const float EPSILON = 1E-7;
+const float EPSILON = 1E-7f;
 
 Plane::Plane(float wid, float len, const Vector3D &position, float phi, float theta, Vector3D axis) : Object(position),
   width(wid),
@@ -101,7 +101,7 @@ void Plane::draw()
 
 void Plane::orient(const matrix2D3 &basis)
 {
-  this->quaternion = Quaternion(basis).inverse();
+  this->quaternion = Quaternion(basis);
 }
 
 void Plane::orient(const Vector3D &up, const Vector3D &toRight, Vector3D toFront)
@@ -119,7 +119,7 @@ void Plane::orient(const Vector3D& majorAxis, const float theta, const float phi
   if(majorAxis == Z)
   {
     toRight = X.rotate3D(Z, phi);							//rotate x by phi
-    toFront = (Y.rotate3D(Z, phi)).rotate3D(toRight, theta);	//rotate y down by phi then theta
+    toFront = (Y.rotate3D(Z, phi)).rotate3D(toRight, -theta);	//rotate y down by phi then theta
   }
   else if(majorAxis == Y)
   {
@@ -144,7 +144,7 @@ Vector3D Plane::basisPosition(const Vector3D point) const
 {
   const Vector3D offset = point - this->pos;
 
-  return this->quaternion.rotate(offset);
+  return this->quaternion.inverse().rotate(offset);
 }
 
 void Plane::flipBase()
@@ -223,14 +223,14 @@ bool Plane::inPlane(const Vector3D& v)
   return (std::abs(relativePosition.x) < .5f*width) && (std::abs(relativePosition.y) < .5f*length);
 }
 
-bool Plane::atSurface(const Vector3D& point)
+bool Plane::withinProximity(const Vector3D &point, const float proximity)
 {
   const Vector3D relativePosition = this->basisPosition(point);
 
-  return relativePosition.z < EPSILON;
+  return std::abs(relativePosition.z) < proximity;
 }
 
-bool Plane::isAbove(const Vector3D& point) const
+bool Plane::above(const Vector3D& point) const
 {
   const Vector3D relativePosition = this->basisPosition(point);
 

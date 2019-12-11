@@ -58,7 +58,7 @@ Quaternion::Quaternion(const Vector3D axis, const float degrees)
   this->w = std::cos(radians/2);
 }
 
-Quaternion Quaternion::inverse()
+Quaternion Quaternion::inverse() const
 {
   Quaternion inverted(*this);
   inverted.x *= -1;

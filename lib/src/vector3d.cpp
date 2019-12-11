@@ -13,7 +13,7 @@
 
 #include "qtgl.h"
 
-const float EPSILON = 1e-1;
+const float EPSILON = (float)1e-1;
 
 //Define global axes
 extern const Vector3D X = Vector3D(1.0f,0.0f,0.0f);

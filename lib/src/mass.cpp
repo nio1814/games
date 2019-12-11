@@ -16,9 +16,9 @@ const float DEFAULTELASTICITY = .95f;
 const float DEFAULTINERTIA = 1;
 
 bool gravityON = false;
-float gravityMag = 9.81;
+float gravityMag = 9.81f;
 //extern float gravityMag = 0;
-Vector3D gravityVec = Y*-9.81;
+Vector3D gravityVec = Y*-9.81f;
 
 Mass::Mass(float m)								// Constructor
 {

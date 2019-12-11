@@ -1,7 +1,7 @@
 #include "sphere.h"
 
-#define SPHERE_X .525731112119133606
-#define SPHERE_Z .850650808352039932
+const float SPHERE_X = .525731112119133606f;
+const float SPHERE_Z = .850650808352039932f;
 
 static GLfloat vdata[12][3] = {
    {-SPHERE_X, 0.0, SPHERE_Z}, {SPHERE_X, 0.0, SPHERE_Z}, {-SPHERE_X, 0.0, -SPHERE_Z}, {SPHERE_X, 0.0, -SPHERE_Z},

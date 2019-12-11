@@ -7,7 +7,7 @@
 class Line : public Object
 {
 public:
-  Vector3D vertex[2];										//vertices
+  Vector3D vertices[2];										//vertices
   float length, width;
   float centerOfMassFraction;												//com location(as fraction from v1 to v2)
   Vector3D normal, lvec;
@@ -23,9 +23,12 @@ public:
   void collide(Object::ConstPointer line);
   //virtual bool doCollisions(const object_holder *allObjs);
   virtual void* getProperty(int idx, dataType &shape);
+  void addTouchedObject(Object::Pointer object, const int vertexIndex);
+  Vector3D vertexVelocity(int vertexIndex);
+  std::map<Object::ConstPointer, int> touchingVertexIndex;
+private:
   void initGeo();
   void calcGeo();
-  Vector3D calcVertexVel(int vnum);
 
 //  virtual void collide(const object_plane* plane, const Vector3D &contactPoint, const Vector3D &contactNormal);
 
