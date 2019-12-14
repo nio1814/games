@@ -16,7 +16,7 @@ Window::Window(QWidget *parent) :
 
     Object::Pointer object = simulation.allObj.addObject(std::make_shared<Line>(1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f));
     object->setGravity(gravity);
-    object->pos = Vector3D();
+    //object->pos = Vector3D();
 //    sim->allObj.addLines(1, 1.0f,Vector3D(0,2,3), Vector3D(0,0,5), .5f);
 //    sim->allObj.addSpheres(1,1,Vector3D(0,0,5));
     object = simulation.allObj.addObject(std::make_shared<object_sphere>(1, 1, Vector3D(0,0,5)));
@@ -30,7 +30,7 @@ Window::Window(QWidget *parent) :
   simulation.allObj.addPlane(10, 5, Vector3D(0,5,-5), 0, 20, Z);
 //	sim->allObj.addPlanes(1, 10, 10, 25, 0, 0, Vector3D(0,-6,-7));
   simulation.allObj.addPlane(10, 25, Vector3D(0,-6,-7), 0, 0, Z);
-  simulation.cameras->addPoint(Vector3D(20, 0, 0), Vector3D(0,-.5,2), Vector3D(0,0,1), 5.0f);
+  simulation.cameras->addPoint(Vector3D(20, 0, 10), Vector3D(0,-.5,2), Vector3D(0,0,1), 5.0f);
     simulation.cameras->camview = CAMERAMODE;
 //    sim->allObj.makeTree();
 //    sim->allObj.tree->ID = "holder";

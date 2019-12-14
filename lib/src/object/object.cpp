@@ -322,43 +322,6 @@ void Object::setGravity(const Vector3D gravity)
 	return detect;
 }*/
 
-//void object_line::collide(const object_plane* plane, const Vector3D& contactPoint, const Vector3D& contactNormal)
-//{
-//	Vector3D t;						//lever arm and torque
-//	Vector3D rComP, rpp;			//vector to contact point
-//	Vector3D vLine1, vLine2; 			//linear and angular velocities
-//	GLfloat wLine1, wLine2;
-//	Vector3D vp1, vp2;			//linear and angular velocities
-//	GLfloat wp1, wp2;
-//	Vector3D vcp;
-//	GLfloat rLine, rp;						//distance of com to cp
-//	GLfloat mLine, mPlane, ILine, IPlane;
-//	GLfloat j;
-//	Vector3D rotateAxis;
-
-//	mLine = mass->m;
-//	ILine = mass->I;
-//	vLine1 = mass->vel;
-//	wLine1 = mass->avel;
-
-//	rComP = contactPoint - mass->pos;
-//	rLine = rComP.length();
-//	rotateAxis = Cross(rComP, contactNormal);
-
-//	vcp = vLine1 + Cross(rComP, mass->axis)*wLine1;
-
-//	j = (-(1 + mass->elas)*(vLine1.dot(contactNormal))/(1/mLine + Cross(rComP,contactNormal).dot(Cross(rComP,contactNormal))/ILine));
-
-//	vLine2 = vLine1 + contactNormal*j/mLine;
-//	wLine2 = (mass->axis*wLine1 + rotateAxis*Cross(rComP,(contactNormal*j)).length()/ILine).length();
-
-//	mass->velnew = vLine2;
-//	mass->avelnew = wLine2;
-//	//lobj->mass->torquenew += Cross(&rpLine, &cn);
-//	mass->axis = (mass->axis*wLine1 + rotateAxis*wLine2).unit();
-
-//	return;
-//}
 
 
 

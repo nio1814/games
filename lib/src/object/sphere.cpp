@@ -90,7 +90,7 @@ object_sphere::~object_sphere()
 void object_sphere::solve()													//gravitational force will be applied therefore we need a "solve" method.
 {
   //mass->applyForce(Vector3D(0.0f, gravity, 0.0f) * mass->m);				//gravitational force is as F = m * g. (mass times the gravitational acceleration)
-  this->applyForce(moveForce/this->m);
+  this->applyForce(moveForce/this->mass);
   //mass->applyForce(mass->force);
   moveForce = Vector3D(0,0,0);
 }
@@ -209,9 +209,9 @@ void object_sphere::collide(std::shared_ptr<const object_sphere> sphere)
   Vector3D v1, v2, sphereNorm;
   Vector3D sforce = this->force;
 
-  m1 = this->m;
+  m1 = this->mass;
   v1 = this->vel;
-  m2 = sphere->m;
+  m2 = sphere->mass;
   v2 = sphere->vel;
   v1normMag = fabs(v1.dot(sphereNorm));
   sphereNorm = (this->pos - sphere->pos);
@@ -223,9 +223,9 @@ void object_sphere::collide(std::shared_ptr<const object_sphere> sphere)
     v1 += sphereNorm*(sphere->elasticity)*v1normMag*2;
 
 //	s1->xrotspeed = v1.dot(&Vector3D(1,0,0));
-  this->avelnew = v1.dot(Vector3D(1,0,0));
+  this->angularVelocityNext = v1.dot(Vector3D(1,0,0));
 //	s1->yrotspeed = v1.dot(&Vector3D(0,1,0));
-  this->avelnew += v1.dot(Vector3D(0,1,0));
+  this->angularVelocityNext += v1.dot(Vector3D(0,1,0));
   //s1->zrotspeed = v1.dot(&Vector3D(0,0,1));
 
   this->velnew = v1;

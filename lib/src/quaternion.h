@@ -7,12 +7,15 @@ class Quaternion
 {
 public:
   Quaternion(){};
+
   Quaternion(const float w, const float x, const float y, const float z);
   Quaternion(const matrix2D3 matrix);
   Quaternion(const Vector3D axis, const float degrees);
+  Quaternion(const Vector3D& from, const Vector3D& to);
 
   Quaternion inverse() const;
   Vector3D rotate(const Vector3D& vector) const;
+  void normalize();
 
   float w = 1;
   float x = 0;

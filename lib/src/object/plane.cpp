@@ -42,6 +42,15 @@ Vector3D Plane::normal() const
   return this->quaternion.rotate(Z);
 }
 
+Vector3D Plane::normal(const Vector3D& point) const
+{
+  Vector3D planeNormal = this->normal();
+  if (!this->above(point))
+    planeNormal *= -1;
+
+  return planeNormal;
+}
+
 Vector3D Plane::right()
 {
   return this->quaternion.rotate(X);

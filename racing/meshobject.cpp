@@ -80,10 +80,10 @@ void doCollision(MeshObject* obj1, const MeshObject* obj2, const Vector3D& point
 	Vector3D rCom2pt1, rCom2pt2;
 	Vector3D temp;
 
-	m1 = obj1->mass->m;
-	I1 = obj1->mass->I;
-	w11 = obj1->mass->avel;
-	w21 = obj2->mass->avel;
+	m1 = obj1->mass->mass;
+	I1 = obj1->mass->momentOfInertia;
+	w11 = obj1->mass->angularVelocity;
+	w21 = obj2->mass->angularVelocity;
 	v11 = obj1->mass->vel;
 	v21 = obj2->mass->vel;
 
@@ -97,7 +97,7 @@ void doCollision(MeshObject* obj1, const MeshObject* obj2, const Vector3D& point
 	w12 = (obj1->mass->axis*w11 + obj1->mass->axis*Cross(rCom2pt1,norm*j).length()/I1).length();
 
 	obj1->mass->vel = v12;
-	obj1->mass->avel = w12/6.283185307;
+	obj1->mass->angularVelocity = w12/6.283185307;
 
 	return;
 }

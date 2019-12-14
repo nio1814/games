@@ -7,38 +7,29 @@ Line::Line(float mass, Vector3D v1, Vector3D v2, float cmf) :
 //	Object();
 //	object_line();
   shape = LINE;
-  vertices[0] = v1;
-  vertices[1] = v2;
   width = 15;
-  initGeo();
     bMovable = true;
+  this->momentOfInertia = this->mass * std::pow(length,2)/12.0f;
+  const Vector3D vertexOneToTwo = v2 - v1;
+  this->length = vertexOneToTwo.length();
+  this->orientation = Quaternion(Z, vertexOneToTwo);
+  this->pos = v1 + this->vector()*this->centerOfMassFraction*this->length;
 }
 
-void Line::initGeo()
+Vector3D Line::vertex(const int index)
 {
-  lvec = (vertices[1] - vertices[0]).unit();
-  length = (vertices[1] - vertices[0]).length();
-  normal = Z - Z.proj(lvec);							//make normal vector starting from Z
+  if (index > 1)
+    throw std::runtime_error(QString("Invalid vertex index %1").arg(index).toStdString().c_str());
 
-  this->pos = vertices[0] + (vertices[1] - vertices[0]) * centerOfMassFraction;
-  this->I = this->m*pow(length,2)/12.0f;
-  return;
-}
+  const float distanceToVertexFactor = index==0 ? centerOfMassFraction : 1 - centerOfMassFraction;
+  const Vector3D centerOfMassToVertexDirection = index== 0 ? -this->direction() : this->direction();
 
-void Line::calcGeo()
-{
-  lvec = lvec.rotate3D(this->axis, this->dtheta);
-  vertices[0] = this->pos - (lvec*length*centerOfMassFraction);
-  vertices[1] = this->pos + (lvec*length*(1-centerOfMassFraction));
-  normal = Z - Z.proj(lvec);							//make normal vector starting from Z
-
-  return;
+  return this->pos + centerOfMassToVertexDirection * distanceToVertexFactor * this->length;
 }
 
 void Line::solve()													//gravitational force will be applied therefore we need a "solve" method.
 {
-  this->applyForce(moveForce/this->m);
-  calcGeo();
+  this->applyForce(moveForce/this->mass);
   moveForce = Vector3D(0,0,0);
 }
 
@@ -61,15 +52,26 @@ void Line::collide(Object::ConstPointer line)
   Q_UNUSED(line);
 }
 
+
+Vector3D Line::vector()
+{
+  return this->direction() * this->length;
+}
+
+Vector3D Line::direction()
+{
+  return this->orientation.rotate(Z);
+}
+
 void Line::draw()
 {
-  calcGeo();
+//  calcGeo();
   glLineWidth(4);
   glBegin(GL_LINES);								//horizontal line
-    glNormal3f(normal.x, normal.y, normal.z);	//normal vector to line points up
+//    glNormal3f(normal.x, normal.y, normal.z);	//normal vector to line points up
     glColor3ub(255, 255, 255);					// Set Color To White
-    glVertex3f(vertices[0].x, vertices[0].y, vertices[0].z);
-    glVertex3f(vertices[1].x, vertices[1].y, vertices[1].z);
+    glVertex3f(this->vertex(0).x, this->vertex(0).y, this->vertex(0).z);
+    glVertex3f(this->vertex(1).x, this->vertex(1).y, this->vertex(1).z);
   glEnd();
 
   return;
@@ -86,7 +88,7 @@ void* Line::getProperty(int idx, dataType &type)
     switch(idx)
     {
     case 14:
-      ptr = &vertices[0];
+      ptr = &this->vertex(0);
       type = tpVECTOR3D;
       break;
     /*case 15:
@@ -166,15 +168,15 @@ Vector3D Line::vertexVelocity(int vertexIndex)
   {
     case 0:
       armLength = centerOfMassFraction*length;
-      velDir = Cross(this->axis,vertices[0]-vertices[1]);
+      velDir = Cross(this->axis,this->vertex(0) - this->vertex(1));
       velDir.unitize();
-      rotVel = velDir*armLength*this->avel;
+      rotVel = velDir*armLength*this->angularVelocity;
       break;
     case 1:
       armLength = (1.0f-centerOfMassFraction)*length;
-      velDir = Cross(this->axis, vertices[1]-vertices[0]);
+      velDir = Cross(this->axis, this->vertex(1) - this->vertex(0));
       velDir.unitize();
-      rotVel = velDir*armLength*this->avel;
+      rotVel = velDir*armLength*this->angularVelocity;
       break;
     default:
       break;

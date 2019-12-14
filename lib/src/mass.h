@@ -23,19 +23,21 @@ public:
     Mass(const Vector3D& position, const float mass=1);
     Mass& operator = (const Mass& mass);
 
-	float m;									// The mass value
-  float elasticity;
+  float mass;									// The mass value
+  float elasticity = 1;
 	Vector3D dir;								// direction of mass
 	Vector3D pos, posnew, dpos;						// Position in space
 	Vector3D vel, velnew;						// Velocity
 	Vector3D force, forcenew;					// Force applied on this mass at an instance
-	float I;									//momment of inertia
+  float momentOfInertia;									//momment of inertia
 	float theta, dtheta;						//angle of mass
-	float avel, avelnew;						//angular velocity
-	float torque, torquenew;
+  float angularVelocity = 0;
+  float angularVelocityNext = 0;						//angular velocity
+  float torque = 0;
+  float torquenew = 0;
 	Vector3D axis;								//axis of rotation
 
-	Mass(float m=1);								// Constructor
+  Mass(float mass=1);								// Constructor
 
 	/*
 	  void applyForce(Vector3D force) method is used to add external force to the mass. 

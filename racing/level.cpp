@@ -171,9 +171,9 @@ void Level::updateObjects(GLfloat dt)
 	//player->mass->velnew = player->mass->vel.proj(&player->mass->dir);
 	dragForce = -player->mass->vel.unit()*pow(player->mass->vel.length(),2)*DRAGCONST;
 	player->mass->applyForce(dragForce);
-	if(fabs(player->mass->avel)>1e-3)
+	if(fabs(player->mass->angularVelocity)>1e-3)
 	{
-		aFrictionTorque = -5*player->mass->avel/fabs(player->mass->avel);
+		aFrictionTorque = -5*player->mass->angularVelocity/fabs(player->mass->angularVelocity);
 		player->mass->applyTorque(aFrictionTorque);
 	}
 

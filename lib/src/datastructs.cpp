@@ -59,7 +59,7 @@ void pointerTree::addLeaf(void* input, dataType tp, string name)
 				massPtr = static_cast<Mass*>(input);
 				ptr[numLeaf].val = input;
 				ptr[numLeaf].ID = name.append(" (massobject)");
-				ptr[numLeaf].addLeaf(&massPtr->m, tpFLOAT, "mass");
+				ptr[numLeaf].addLeaf(&massPtr->mass, tpFLOAT, "mass");
 				ptr[numLeaf].addLeaf(&massPtr->elasticity, tpFLOAT, "elasticity");
 				ptr[numLeaf].addLeaf(&massPtr->dir, tpVECTOR3D, "direction");
 				ptr[numLeaf].addLeaf(&massPtr->pos, tpVECTOR3D, "position");
@@ -68,9 +68,9 @@ void pointerTree::addLeaf(void* input, dataType tp, string name)
 				//ptr[numLeaf].addLeaf(input->m, tpVECTOR3D);
 				//ptr[numLeaf].addLeaf(input->m, tpVECTOR3D);
 				//ptr[numLeaf].addLeaf(input->m, tpVECTOR3D);
-				ptr[numLeaf].addLeaf(&massPtr->I, tpFLOAT, "inertia");
+				ptr[numLeaf].addLeaf(&massPtr->momentOfInertia, tpFLOAT, "inertia");
 				ptr[numLeaf].addLeaf(&massPtr->theta, tpFLOAT, "theta");
-				ptr[numLeaf].addLeaf(&massPtr->avel, tpFLOAT, "angular velocity");
+				ptr[numLeaf].addLeaf(&massPtr->angularVelocity, tpFLOAT, "angular velocity");
 				ptr[numLeaf].addLeaf(&massPtr->torque, tpFLOAT, "torque");
 				ptr[numLeaf].addLeaf(&massPtr->axis, tpVECTOR3D, "rotation axis");
 				//ptr[numLeaf].addLeaf(input->m, tpVECTOR3D);

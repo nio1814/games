@@ -18,6 +18,7 @@ public:
   Plane& operator = (const Plane& plane);
 
   Vector3D normal() const;
+  Vector3D normal(const Vector3D& point) const;
   Vector3D right();
   Vector3D forward();
   void flipBase();
@@ -29,7 +30,7 @@ public:
 
   virtual void collide(ConstPointer object);
   void orient(const Vector3D& up, const Vector3D& toRight, Vector3D toFront=Vector3D());
-  bool withinProximity(const Vector3D &point, const float proximity=1e-3);
+  bool withinProximity(const Vector3D &point, const float proximity=1e-1);
   bool inPlane(const Vector3D &point);
   bool above(const Vector3D &point) const;
 private:

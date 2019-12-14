@@ -42,7 +42,7 @@ bool detectCollision(std::shared_ptr<Line> line, std::shared_ptr<Plane> plane)
 {
   for(int n=0; n<2; n++)
   {
-    const Vector3D vertex = line->vertices[n];
+    const Vector3D vertex = line->vertex(n);
     if (plane->inPlane(vertex) && plane->withinProximity(vertex))
     {
       line->addTouchedObject(plane, n);
@@ -60,6 +60,10 @@ bool detectCollision(Object::Pointer object1, Object::Pointer object2)
     return detectCollision(std::dynamic_pointer_cast<object_sphere>(object1), std::dynamic_pointer_cast<Plane>(object2));
   else if(object2->shape == Object::SPHERE && object1->shape == Object::PLANE)
     return detectCollision(std::dynamic_pointer_cast<object_sphere>(object2), std::dynamic_pointer_cast<Plane>(object1));
+  else if (object2->shape == Object::LINE && object1->shape == Object::PLANE)
+    return detectCollision(std::dynamic_pointer_cast<Line>(object2), std::dynamic_pointer_cast<Plane>(object1));
+  else if (object1->shape == Object::LINE && object2->shape == Object::PLANE)
+    return detectCollision(std::dynamic_pointer_cast<Line>(object1), std::dynamic_pointer_cast<Plane>(object2));
 
   return false;
 }
@@ -72,8 +76,8 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
   Vector3D v1, v2, vpara;
   //int awayDir;
 
-  m1 = sphere->m;
-  m2 = plane->m;
+  m1 = sphere->mass;
+  m2 = plane->mass;
   v1 = sphere->vel;
   v2 = plane->vel;
 
@@ -101,16 +105,51 @@ void collide(std::shared_ptr<object_sphere> sphere, std::shared_ptr<const Plane>
   vpara = v1 - v1.proj(Y);
 
   //	sphere->xrotspeed = vpara.dot(&Vector3D(0,0,1))/(sphere->radius*2*PI);
-  sphere->avelnew = vpara.dot(Vector3D(0, 0, 1)) / (sphere->radius * 2 * M_PI);
+  sphere->angularVelocityNext = vpara.dot(Vector3D(0, 0, 1)) / (sphere->radius * 2 * M_PI);
   //	sphere->zrotspeed = vpara.dot(&Vector3D(-1,0,0))/(sphere->radius*2*PI);
-  sphere->avelnew += vpara.dot(Vector3D(-1, 0, 0)) / (sphere->radius * 2 * M_PI);
+  sphere->angularVelocityNext += vpara.dot(Vector3D(-1, 0, 0)) / (sphere->radius * 2 * M_PI);
 }
 
 void collide(std::shared_ptr<Line> line, std::shared_ptr<const Plane> plane)
 {
-  const Vector3D normalVelocity = line->vertexVelocity(line->touchingVertexIndex[plane]);
-}
+//  Vector3D t;						//lever arm and torque
+//  Vector3D rComP, rpp;			//vector to contact point
+//  Vector3D vLine1, vLine2; 			//linear and angular velocities
+//  GLfloat wLine1, wLine2;
+//  Vector3D vp1, vp2;			//linear and angular velocities
+//  GLfloat wp1, wp2;
+//  Vector3D vcp;
+//  GLfloat rLine, rp;						//distance of com to cp
+//  GLfloat mLine, mPlane, ILine, IPlane;
+//  GLfloat j;
+//  Vector3D rotateAxis;
 
+  //mLine = mass->m;
+  //ILine = mass->I;
+  //vLine1 = mass->vel;
+  //wLine1 = mass->avel;
+
+  const int vertexIndex = line->touchingVertexIndex[plane];
+  //const Vector3D rComP = line->vertices[vertexIndex] - line->pos;
+  const Vector3D centerOfMassToContact = line->vertex(vertexIndex) - line->pos;
+  //rLine = rComP.length();
+  const Vector3D rotationAxis = centerOfMassToContact.unit();
+
+  //vcp = line->vel + Cross(rComP, mass->axis)*wLine1;
+
+  //const float j = (-(1 + line->elasticity)*(line->vel.dot(plane->normal()))/(1/line->mass + Cross(rComP, plane->normal()).dot(Cross(rComP, plane->normal()))/line->momentOfInertia));
+  const float j = (-(1 + line->elasticity)*(line->vel.dot(plane->normal())) / (1/line->mass + Cross(centerOfMassToContact, plane->normal(line->pos)).dot(Cross(centerOfMassToContact, plane->normal(line->pos)))/line->momentOfInertia));
+
+  line->velnew = line->vel + plane->normal()*j / line->mass;
+  line->angularVelocityNext = (line->axis*line->angularVelocity + rotationAxis*Cross(centerOfMassToContact, (plane->normal(line->pos) *j)).length()/ line->momentOfInertia).length();
+
+  //line->velnew = vLine2;
+  //line->avelnew = wLine2;
+  //lobj->mass->torquenew += Cross(&rpLine, &cn);
+  line->axis = (line->axis*line->angularVelocity + rotationAxis* line->angularVelocityNext).unit();
+
+  //return;
+}
 
 void collide(Object::Pointer object1, Object::ConstPointer object2)
 {

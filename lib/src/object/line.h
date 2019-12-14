@@ -2,20 +2,22 @@
 #define LINE_H
 
 #include "object.h"
-
+#include "quaternion.h"
 
 class Line : public Object
 {
 public:
-  Vector3D vertices[2];										//vertices
   float length, width;
   float centerOfMassFraction;												//com location(as fraction from v1 to v2)
-  Vector3D normal, lvec;
-  Vector2D anglesSph;										//spherical angles(phi, theta)
+  Quaternion orientation;
 
 //	object_line();
 //	object_line(float mass, Vector3D v1, Vector3D v2);			//input mass and 2 vertices
   Line(float mass=1, Vector3D v1=Vector3D(0,0,0), Vector3D v2=Z, float cmf=.5);			//input mass and 2 vertices and
+
+  Vector3D vertex(const int index);
+  Vector3D vector();
+  Vector3D direction();
   virtual void draw();
   virtual void solve();									//gravitational force will be applied therefore we need a "solve" method.
   bool detectCollision(Object::Pointer object);
@@ -27,9 +29,6 @@ public:
   Vector3D vertexVelocity(int vertexIndex);
   std::map<Object::ConstPointer, int> touchingVertexIndex;
 private:
-  void initGeo();
-  void calcGeo();
-
 //  virtual void collide(const object_plane* plane, const Vector3D &contactPoint, const Vector3D &contactNormal);
 
   QList<Vector3D> contactPoints;

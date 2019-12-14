@@ -58,6 +58,34 @@ Quaternion::Quaternion(const Vector3D axis, const float degrees)
   this->w = std::cos(radians/2);
 }
 
+//http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
+Quaternion::Quaternion(const Vector3D& from, const Vector3D& to)
+{
+  const float normProduct = std::sqrt(from.dot(from) * to.dot(to));
+  this->w = normProduct + from.dot(to);
+  Vector3D axis;
+
+  if (this->w < 1.e-6f * normProduct)
+  {
+    /* If from and to are exactly opposite, rotate 180 degrees
+     * around an arbitrary orthogonal axis. Axis normalisation
+     * can happen later, when we normalise the quaternion. */
+    this->w = 0.0f;
+    axis = abs(from.x) > abs(from.z) ? Vector3D(-from.y, from.x, 0.f) : Vector3D(0.f, -from.z, from.y);
+  }
+  else
+  {
+    /* Otherwise, build quaternion the standard way. */
+    axis = Cross(from, to);
+  }
+
+  this->x = axis.x;
+  this->y = axis.y;
+  this->z = axis.z;
+
+  this->normalize();
+}
+
 Quaternion Quaternion::inverse() const
 {
   Quaternion inverted(*this);
@@ -71,6 +99,15 @@ Quaternion Quaternion::inverse() const
 Vector3D Quaternion::rotate(const Vector3D &vector) const
 {
   return this->rotationMatrix().transform(vector);
+}
+
+void Quaternion::normalize()
+{
+  const float scale = 1 / std::sqrt(x*x + y*y + z*z + w*w);
+  this->w *= scale;
+  this->x *= scale;
+  this->y *= scale;
+  this->z *= scale;
 }
 
 matrix2D3 Quaternion::rotationMatrix() const
@@ -89,3 +126,4 @@ matrix2D3 Quaternion::rotationMatrix() const
                          2*xy + 2*zw, 1 - 2*xx - 2*zz, 2*yz - 2*xw,
                          2*xz - 2*yw, 2*yz + 2*xw, 1 - 2*xx - 2*yy});
 }
+
